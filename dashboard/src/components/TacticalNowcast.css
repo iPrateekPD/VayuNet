@@ -1,0 +1,1147 @@
+/* =========================================================
+   Tactical Nowcast — Dedicated High-Precision Command Console
+   Matches exact layout, colors, typography, and controls from mockup
+   ========================================================= */
+
+.tactical-nowcast-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 54px);
+  background-color: #060d19;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* 3-Column Main Grid Layout */
+.tactical-grid-layout {
+  display: grid;
+  grid-template-columns: 275px 1fr 340px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 10px 12px;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Shared Panel Base */
+.tac-card {
+  background: #091322;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   LEFT SIDEBAR
+   ========================================================= */
+.tac-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 3px;
+}
+
+.tac-left-col::-webkit-scrollbar {
+  width: 4px;
+}
+.tac-left-col::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+}
+
+/* Location Card */
+.tac-location-card {
+  padding: 10px 12px;
+}
+
+.tac-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  letter-spacing: 0.2px;
+}
+
+.tac-search-box {
+  display: flex;
+  align-items: center;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 5px 8px;
+  gap: 7px;
+}
+
+.tac-search-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.tac-search-input {
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+}
+
+.tac-search-clear,
+.tac-search-locate {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.tac-search-clear:hover,
+.tac-search-locate:hover {
+  color: #38bdf8;
+}
+
+/* Mini Locator Map */
+.tac-locator-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  background: rgba(2, 6, 23, 0.6);
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tac-mini-map-svg {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.tac-locator-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tac-locator-state {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.tac-locator-city {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tac-locator-coords {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: #64748b;
+}
+
+/* Hazard Layers */
+.tac-layers-card {
+  padding: 10px 12px;
+}
+
+.tac-layers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.tac-layer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+  user-select: none;
+  cursor: pointer;
+}
+
+.tac-layer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-layer-icon {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.tac-layer-name {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+/* Custom Checkbox Toggle Switch */
+.tac-switch {
+  position: relative;
+  width: 28px;
+  height: 16px;
+  background: #1e293b;
+  border-radius: 10px;
+  transition: background 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tac-switch.active {
+  background: #2563eb;
+}
+
+.tac-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.tac-switch.active .tac-switch-thumb {
+  transform: translateX(12px);
+}
+
+/* Quick Presets */
+.tac-presets-card {
+  padding: 10px 12px;
+}
+
+.tac-presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tac-preset-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.tac-preset-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+}
+
+.tac-preset-btn.active {
+  background: #1d4ed8;
+  color: #ffffff;
+  border-color: rgba(59, 130, 246, 0.5);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.4);
+}
+
+/* Live Data Feed */
+.tac-feed-card {
+  padding: 10px 12px;
+  margin-top: auto;
+}
+
+.tac-feed-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+}
+
+.tac-feed-pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+  animation: tacPulse 2s infinite;
+}
+
+@keyframes tacPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.tac-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tac-feed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.tac-feed-source {
+  color: #cbd5e1;
+}
+
+.tac-feed-time {
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+}
+
+/* =========================================================
+   CENTER MAP COLUMN
+   ========================================================= */
+.tac-center-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tac-map-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 380px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #020617;
+}
+
+/* Top Floating Time Step Pills */
+.tac-map-top-bar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.tac-time-pills {
+  display: flex;
+  gap: 4px;
+  background: rgba(8, 15, 29, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+}
+
+.tac-time-pill-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tac-time-pill-btn:hover {
+  color: #ffffff;
+}
+
+.tac-time-pill-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+}
+
+.tac-live-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 15, 29, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  color: #94a3b8;
+  pointer-events: auto;
+}
+
+.tac-live-text-dot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.tac-live-dot {
+  width: 6px;
+  height: 6px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+/* Left Floating Map Controls Bar */
+.tac-map-controls-bar {
+  position: absolute;
+  top: 60px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 15, 29, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.tac-map-tool-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tac-map-tool-btn:last-child {
+  border-bottom: none;
+}
+
+.tac-map-tool-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Map Bottom Left Intensity Legend */
+.tac-map-intensity-legend {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(8, 15, 29, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  z-index: 1000;
+  width: 220px;
+}
+
+.tac-legend-title {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.tac-legend-ramp {
+  height: 8px;
+  width: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, 
+    #0284c7 0%, 
+    #06b6d4 15%, 
+    #10b981 30%, 
+    #eab308 50%, 
+    #f97316 70%, 
+    #ef4444 85%, 
+    #ec4899 100%
+  );
+  margin-bottom: 4px;
+}
+
+.tac-legend-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Map Bottom Right Scale Bar */
+.tac-map-scale-bar {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(8, 15, 29, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tac-scale-lines {
+  display: flex;
+  width: 120px;
+  height: 4px;
+  border: 1px solid #94a3b8;
+  border-top: none;
+}
+
+.tac-scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  width: 120px;
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Forecast Timeline Dock (Below Map) */
+.tac-timeline-dock {
+  background: #091322;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tac-dock-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.tac-dock-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tac-play-btn {
+  width: 38px;
+  height: 38px;
+  background: #2563eb;
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.tac-play-btn:hover {
+  transform: scale(1.05);
+}
+
+.tac-filmstrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.tac-thumb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.tac-thumb-box {
+  width: 54px;
+  height: 40px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: #040914;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tac-thumb-item.active .tac-thumb-box {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.tac-thumb-radar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tac-thumb-label {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.tac-thumb-item.active .tac-thumb-label {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.tac-dock-info-box {
+  flex: 1;
+  background: rgba(2, 6, 23, 0.4);
+  border-radius: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tac-dock-info-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-dock-forecast-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tac-dock-peak-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.tac-dock-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+   ========================================================= */
+.tac-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+}
+
+.tac-right-col::-webkit-scrollbar {
+  width: 4px;
+}
+.tac-right-col::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+/* Crimson Highest Threat Card */
+.tac-threat-card {
+  background: linear-gradient(180deg, rgba(153, 27, 27, 0.35) 0%, rgba(69, 10, 10, 0.2) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+}
+
+.tac-threat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tac-threat-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ef4444;
+  letter-spacing: 0.5px;
+}
+
+.tac-threat-forecast-pill {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  color: #cbd5e1;
+}
+
+.tac-threat-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.tac-threat-icon-box {
+  color: #ef4444;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+}
+
+.tac-threat-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.tac-threat-headline {
+  font-size: 17px;
+  font-weight: 800;
+  color: #ef4444;
+  letter-spacing: 0.3px;
+  line-height: 1.15;
+}
+
+.tac-threat-subheadline {
+  font-size: 17px;
+  font-weight: 800;
+  color: #ef4444;
+  letter-spacing: 0.3px;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+
+.tac-threat-place {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tac-threat-narrative {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.tac-threat-chips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.tac-chip-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 3px;
+}
+
+.tac-chip-icon {
+  color: #38bdf8;
+  margin-bottom: 2px;
+}
+
+.tac-chip-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tac-chip-label {
+  font-size: 9px;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+.tac-dispatch-cap-btn {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+  transition: all 0.15s;
+}
+
+.tac-dispatch-cap-btn:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 18px rgba(239, 68, 68, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Other Hazards Card */
+.tac-other-hazards-card {
+  padding: 14px;
+}
+
+.tac-card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tac-view-all-link {
+  font-size: 11px;
+  color: #38bdf8;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tac-view-all-link:hover {
+  text-decoration: underline;
+}
+
+.tac-hazard-item-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.tac-hazard-item-row:last-child {
+  margin-bottom: 0;
+}
+
+.tac-hazard-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+}
+
+.tac-hazard-name-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.tac-hazard-eta {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tac-hazard-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-hazard-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tac-hazard-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.tac-hazard-pct {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  width: 28px;
+  text-align: right;
+}
+
+/* Recommended Actions */
+.tac-actions-card {
+  padding: 14px;
+}
+
+.tac-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tac-action-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tac-action-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tac-action-text {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   BOTTOM ROW PANELS
+   ========================================================= */
+.tac-bottom-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 12px;
+  min-height: 115px;
+}
+
+/* Key Metrics Box */
+.tac-metrics-card {
+  padding: 12px 14px;
+}
+
+.tac-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.tac-metric-tile {
+  background: rgba(2, 6, 23, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tac-metric-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tac-metric-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.tac-metric-unit {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.tac-metric-label {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Potentially Affected Areas */
+.tac-affected-card {
+  padding: 12px 14px;
+}
+
+.tac-affected-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin-top: 6px;
+}
+
+.tac-affected-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+}
+
+.tac-affected-name {
+  color: #cbd5e1;
+}
+
+.tac-affected-sev {
+  color: #94a3b8;
+  font-size: 10.5px;
+}
+
+/* Recent Alerts */
+.tac-alerts-card {
+  padding: 12px 14px;
+}
+
+.tac-alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.tac-alert-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.tac-alert-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tac-alert-time {
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  width: 54px;
+}
+
+.tac-alert-text {
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chamoli Pin & Callouts */
+.tac-chamoli-callout-card {
+  background: rgba(9, 19, 34, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), 0 0 10px rgba(239, 68, 68, 0.3);
+  font-family: inherit;
+  min-width: 110px;
+}
+
+.tac-callout-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.tac-callout-city {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tac-callout-badge {
+  background: #ef4444;
+  color: #ffffff;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.tac-callout-eta {
+  font-size: 10px;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Flow Arrow Box */
+.tac-flow-label-card {
+  background: rgba(8, 15, 29, 0.90);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+
+/* Town & Mountain Markers */
+.tac-town-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+.tac-peak-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
