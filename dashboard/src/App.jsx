@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { RISK_ZONES, TIME_STEPS, EVENT_META } from './mockData';
 import MapView from './components/MapView';
 import PredictionPanel from './components/PredictionPanel';
@@ -12,10 +12,11 @@ import HomePage, { INDIAN_LANGUAGES } from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import CitizenPortal from './components/CitizenPortal';
 import TacticalNowcastView from './components/TacticalNowcastView';
-import DiagnosticsView from './components/DiagnosticsView';
-import ForensicsView from './components/ForensicsView';
-import AlertHubView from './components/AlertHubView';
-import SystemView from './components/SystemView';
+import AnalysisView from './components/AnalysisView';
+import EventsView from './components/EventsView';
+import AlertsView from './components/AlertsView';
+import SystemDrawer from './components/SystemDrawer';
+import './components/OperationsPortal.css';
 
 function App() {
   const getViewFromLocation = () => {
@@ -23,15 +24,37 @@ function App() {
     const pathname = window.location.pathname.toLowerCase();
     if (hash.includes('login') || pathname.includes('login')) return 'login';
     if (hash.includes('warning') || hash.includes('citizen') || pathname.includes('warning') || pathname.includes('citizen')) return 'citizen';
-    if (hash.includes('portal') || pathname.includes('portal')) return 'portal';
+    if (
+      hash.includes('portal') || pathname.includes('portal') ||
+      hash.includes('operations') || pathname.includes('operations') ||
+      hash.includes('dashboard') || pathname.includes('dashboard') ||
+      hash.includes('diagnostics') || pathname.includes('diagnostics') ||
+      hash.includes('forensics') || pathname.includes('forensics')
+    ) return 'portal';
     return 'home';
   };
 
   // Navigation layer: 'home' | 'login' | 'citizen' | 'portal'
   const [view, setView] = useState(getViewFromLocation);
 
-  // Authenticated Portal Tab: 'nowcast' | 'diagnostics' | 'forensics' | 'alerts' | 'system'
-  const [portalTab, setPortalTab] = useState('nowcast');
+  const getTabFromLocation = () => {
+    const hash = window.location.hash.toLowerCase();
+    const pathname = window.location.pathname.toLowerCase();
+    if (hash.includes('analysis') || hash.includes('diagnostics') || hash.includes('xai') || pathname.includes('analysis') || pathname.includes('diagnostics')) return 'analysis';
+    if (hash.includes('events') || hash.includes('forensics') || hash.includes('replays') || pathname.includes('events') || pathname.includes('forensics')) return 'events';
+    if (hash.includes('alerts') || pathname.includes('alerts')) return 'alerts';
+    return 'nowcast';
+  };
+
+  // Authenticated Portal Tab: 'nowcast' | 'analysis' | 'events' | 'alerts'
+  const [portalTab, setPortalTab] = useState(getTabFromLocation);
+  const [isSystemDrawerOpen, setIsSystemDrawerOpen] = useState(() => {
+    const h = window.location.hash.toLowerCase();
+    return h.includes('system') || h.includes('telemetry');
+  });
+  const [isOperatorMenuOpen, setIsOperatorMenuOpen] = useState(false);
+  const operatorMenuRef = useRef(null);
+
   const [currentUser, setCurrentUser] = useState({ 
     user: 'DEOC-KANGRA-04', 
     role: 'Incident Commander',
@@ -72,7 +95,6 @@ function App() {
   };
 
   const handleAutoTrack = () => {
-    // Automated detection of highest active threat zone
     const target = TACTICAL_LOCATIONS[0];
     setSelectedLocation(target.id);
     setMapCenter(target.center);
@@ -85,10 +107,30 @@ function App() {
     setTimeout(() => setToast(null), 3500);
   }, []);
 
-  // Hash-based & PopState URL synchronization for true page separation
+  // Close operator dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (operatorMenuRef.current && !operatorMenuRef.current.contains(e.target)) {
+        setIsOperatorMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Hash-based & PopState URL synchronization
   useEffect(() => {
     const handleUrlChange = () => {
-      setView(getViewFromLocation());
+      const v = getViewFromLocation();
+      setView(v);
+      if (v === 'portal') {
+        const t = getTabFromLocation();
+        setPortalTab(t);
+        const h = window.location.hash.toLowerCase();
+        if (h.includes('system') || h.includes('telemetry')) {
+          setIsSystemDrawerOpen(true);
+        }
+      }
     };
 
     window.addEventListener('hashchange', handleUrlChange);
@@ -104,7 +146,12 @@ function App() {
     if (newView === 'home') window.location.hash = '#/';
     else if (newView === 'login') window.location.hash = '#/login';
     else if (newView === 'citizen') window.location.hash = '#/warnings';
-    else if (newView === 'portal') window.location.hash = '#/portal';
+    else if (newView === 'portal') window.location.hash = '#/operations/nowcast';
+  };
+
+  const handleTabSwitch = (newTab) => {
+    setPortalTab(newTab);
+    window.location.hash = `#/operations/${newTab}`;
   };
 
   const handleSignOut = () => {
@@ -201,98 +248,158 @@ function App() {
   // 4. AUTHENTICATED OPERATIONAL LAYER
   return (
     <div className="app">
-      {/* GLOBAL PORTAL TOP NAVIGATION */}
-      <div className="portal-top-bar">
-        <div className="home-brand" style={{ cursor: 'pointer' }} onClick={() => navigateTo('home')} title="Return to VAYUNET Home">
-          <div className="home-logo">
-            <img src="/VAYUNET_LOGO.png" alt="VAYUNET Logo" className="home-logo-img" />
-          </div>
-          <div className="brand-titles-group">
-            <div className="brand-row">
-              <span className="home-title">VAYUNET</span>
-              <span className="gov-sovereign-pill">🇮🇳 MoES · NCMRWF</span>
+      {/* OPERATIONS PORTAL HEADER (EXACT SAME CLASSES, SIZES, SHAPES & COLORS AS HOMEPAGE) */}
+      <nav className="home-nav nav-scrolled" style={{ position: 'relative', top: 0, zIndex: 1000, width: '100%', borderBottom: '1px solid rgba(56, 189, 248, 0.16)' }}>
+        <div className="home-nav-inner" style={{ maxWidth: '100%', padding: '0 20px' }}>
+          {/* Brand Left */}
+          <div className="home-brand" onClick={() => navigateTo('home')} title="Return to VAYUNET Home">
+            <div className="home-logo">
+              <img src="/VAYUNET_LOGO.png" alt="VAYUNET Logo" className="home-logo-img" />
             </div>
-            <div className="home-dept">Weather Intelligence for a Safer India</div>
+            <div className="brand-titles-group">
+              <div className="brand-row">
+                <span className="home-title">VAYUNET</span>
+                <span className="gov-sovereign-pill">🇮🇳 MoES · NCMRWF</span>
+              </div>
+              <div className="home-dept">Weather Intelligence for a Safer India</div>
+            </div>
           </div>
-        </div>
 
-        {/* Tab Switcher — ECMWF style: text-only, no emoji */}
-        <div className="portal-tabs">
-          {[
-            { key: 'nowcast',     label: 'Tactical Nowcast' },
-            { key: 'diagnostics', label: 'Diagnostics / XAI' },
-            { key: 'forensics',   label: 'Forensics Replay' },
-            { key: 'alerts',      label: 'Alert Hub — CAP' },
-            { key: 'system',      label: 'System Telemetry' },
-          ].map(({ key, label }) => (
+          {/* Middle Things: Operations Capsule Nav Links */}
+          <div className="home-nav-links-capsule">
+            {[
+              { key: 'nowcast',  label: 'NOWCAST' },
+              { key: 'analysis', label: 'ANALYSIS' },
+              { key: 'events',   label: 'EVENTS' },
+              { key: 'alerts',   label: 'ALERTS' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                className={`nav-link-item ${portalTab === key ? 'active' : ''}`}
+                onClick={() => handleTabSwitch(key)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Right Side Things: Button shape, size, color keep same */}
+          <div className="home-nav-actions">
+            {/* Language Selector */}
+            <div className="home-lang-wrap">
+              <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <select 
+                className="home-lang-select" 
+                value={portalLanguage} 
+                onChange={(e) => {
+                  setPortalLanguage(e.target.value);
+                  const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
+                  showToast(`Language switched to ${sel?.label || e.target.value}`);
+                }}
+                aria-label="Select Language"
+              >
+                {INDIAN_LANGUAGES.map(lang => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* System Status (exact btn-secondary-nav shape, size, color) */}
             <button
-              key={key}
-              className={`portal-tab-btn ${portalTab === key ? 'active' : ''}`}
-              onClick={() => setPortalTab(key)}
+              className="btn-secondary-nav"
+              onClick={() => setIsSystemDrawerOpen(true)}
+              title="Open System Status & Health Drawer"
             >
-              {label}
+              <span className="nav-btn-pulse-dot" style={{ background: '#22c55e', boxShadow: '0 0 8px #22c55e' }}></span>
+              <span style={{ color: '#86efac' }}>System Operational</span>
             </button>
-          ))}
-        </div>
 
-        {/* Status & User — right side */}
-        <div className="portal-actions-right">
-          <div className="status-dot">
-            <span className="dot" style={{ background: backendStatus === 'online' ? 'var(--sev-low)' : 'var(--sev-moderate)' }} />
-            {backendStatus === 'online' ? 'API :8000' : 'API Connecting...'}
-          </div>
-
-          <span className="portal-user-badge" title={`${currentUser.role} · ${currentUser.unit || ''}`}>
-            {currentUser.user}
-          </span>
-
-          {/* 1. Language Dropdown */}
-          <div className="home-lang-wrap">
-            <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="2" y1="12" x2="22" y2="12"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-            <select 
-              className="home-lang-select" 
-              value={portalLanguage} 
-              onChange={(e) => {
-                setPortalLanguage(e.target.value);
-                const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                showToast(`Language switched to ${sel?.label || e.target.value}`);
-              }}
-              aria-label="Select Language"
+            {/* Public Warnings (exact btn-secondary-nav shape, size, color) */}
+            <button
+              className="btn-secondary-nav"
+              onClick={() => navigateTo('citizen')}
+              title="Open Citizen Public Warning Portal"
             >
-              {INDIAN_LANGUAGES.map(lang => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.label}
-                </option>
-              ))}
-            </select>
+              <span className="nav-btn-pulse-dot"></span>
+              <span>Public Warnings ↗</span>
+            </button>
+
+            {/* Operator Menu (exact btn-primary-nav shape, size, color) */}
+            <div className="ops-operator-dropdown-wrap" ref={operatorMenuRef} style={{ position: 'relative' }}>
+              <button
+                className="btn-primary-nav"
+                onClick={() => setIsOperatorMenuOpen(!isOperatorMenuOpen)}
+                title="Operator & System Settings"
+              >
+                <span>{currentUser.user} ▾</span>
+              </button>
+
+              {isOperatorMenuOpen && (
+                <div className="ops-operator-menu">
+                  <div className="ops-menu-header">
+                    <div className="ops-menu-user">{currentUser.user}</div>
+                    <div className="ops-menu-role">{currentUser.role} · {currentUser.unit}</div>
+                  </div>
+
+                  <button
+                    className="ops-menu-item"
+                    onClick={() => {
+                      setIsOperatorMenuOpen(false);
+                      setIsSystemDrawerOpen(true);
+                    }}
+                  >
+                    <span>🖥️</span>
+                    <span>System Status & Telemetry</span>
+                  </button>
+
+                  <button
+                    className="ops-menu-item"
+                    onClick={() => {
+                      setIsOperatorMenuOpen(false);
+                      setIsSystemDrawerOpen(true);
+                    }}
+                  >
+                    <span>📡</span>
+                    <span>Ingested Data Sources</span>
+                  </button>
+
+                  <div className="ops-menu-divider" />
+
+                  <button
+                    className="ops-menu-item"
+                    onClick={() => {
+                      setIsOperatorMenuOpen(false);
+                      handleHomeAndLogout();
+                    }}
+                  >
+                    <span>🏠</span>
+                    <span>Return to Public Home</span>
+                  </button>
+
+                  <button
+                    className="ops-menu-item ops-menu-item-danger"
+                    onClick={() => {
+                      setIsOperatorMenuOpen(false);
+                      handleSignOut();
+                    }}
+                  >
+                    <span>⎋</span>
+                    <span>Sign Out (Lock Console)</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-
-          {/* 2. Public Warnings Radar Button */}
-          <button 
-            className="btn-secondary-nav" 
-            onClick={() => navigateTo('citizen')} 
-            title="Open Public Warnings"
-          >
-            <span className="nav-btn-pulse-dot"></span>
-            <span>Public Warnings ↗</span>
-          </button>
-
-          {/* 3. Home Option (Logs out of operations and navigates to Home) */}
-          <button 
-            className="btn-primary-nav" 
-            onClick={handleHomeAndLogout} 
-            title="Log Out & Return to Home"
-          >
-            <span>Home</span>
-          </button>
         </div>
-      </div>
+      </nav>
 
-      {/* RENDER ACTIVE TAB */}
+      {/* RENDER ACTIVE OPERATIONS VIEW */}
       {portalTab === 'nowcast' && (
         <TacticalNowcastView
           showToast={showToast}
@@ -317,10 +424,16 @@ function App() {
         />
       )}
 
-      {portalTab === 'diagnostics' && <DiagnosticsView currentData={currentData} />}
-      {portalTab === 'forensics' && <ForensicsView />}
-      {portalTab === 'alerts' && <AlertHubView showToast={showToast} />}
-      {portalTab === 'system' && <SystemView backendOnline={backendStatus === 'online'} />}
+      {portalTab === 'analysis' && <AnalysisView currentData={currentData} />}
+      {portalTab === 'events' && <EventsView />}
+      {portalTab === 'alerts' && <AlertsView showToast={showToast} />}
+
+      {/* SYSTEM STATUS & TELEMETRY UTILITY DRAWER */}
+      <SystemDrawer
+        isOpen={isSystemDrawerOpen}
+        onClose={() => setIsSystemDrawerOpen(false)}
+        backendOnline={backendStatus === 'online'}
+      />
 
       {/* TOAST NOTIFICATION */}
       {toast && (
