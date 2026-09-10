@@ -6,10 +6,6 @@ import {
   BASE_MAP_PROVIDERS,
   WeatherLayerProvider,
   FORECAST_TIME_STEPS,
-  IMD_DWR_NETWORK,
-  NATIONAL_AWS_STATIONS,
-  SYNOPTIC_PRESSURE_SYSTEM,
-  WIND_STREAMLINES,
 } from '../services/weatherService';
 
 // Fix default leaflet marker icon issue in bundlers

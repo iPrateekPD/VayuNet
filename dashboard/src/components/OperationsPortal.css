@@ -1326,3 +1326,133 @@
     gap: 14px;
   }
 }
+
+/* ==========================================================================
+   4-STAGE OPERATIONAL PIPELINE STRIP (SEE ➔ UNDERSTAND ➔ PROVE ➔ ACT)
+   ========================================================================== */
+.ops-pipeline-strip {
+  background: #050c18;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
+  padding: 6px 20px;
+  position: relative;
+  z-index: 990;
+}
+
+.ops-pipeline-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 100%;
+}
+
+.ops-pipeline-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ops-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #38bdf8;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ops-pipeline-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: opsPipPulse 2s infinite ease-in-out;
+}
+
+@keyframes opsPipPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.ops-pipeline-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ops-pipeline-steps::-webkit-scrollbar {
+  display: none;
+}
+
+.ops-pipeline-sep {
+  color: rgba(148, 163, 184, 0.4);
+  font-size: 13px;
+  user-select: none;
+}
+
+.ops-pipeline-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 28, 52, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 4px 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--ops-font-sans);
+}
+
+.ops-pipeline-chip:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #f1f5f9;
+}
+
+.ops-pipeline-chip.active {
+  background: rgba(2, 132, 199, 0.18);
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+  color: #ffffff;
+}
+
+.ops-chip-num {
+  font-family: var(--ops-font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.ops-pipeline-chip.active .ops-chip-num {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.ops-chip-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.ops-chip-desc {
+  font-size: 10.5px;
+  color: #64748b;
+  display: inline;
+}
+
+.ops-pipeline-chip.active .ops-chip-desc {
+  color: #93c5fd;
+}
+
+@media (max-width: 900px) {
+  .ops-chip-desc {
+    display: none;
+  }
+}
+

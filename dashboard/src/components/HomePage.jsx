@@ -319,21 +319,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         }
       );
 
-      gsap.fromTo(
-        '.fusion-bottom-pipeline',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.fusion-bottom-pipeline',
-            start: 'top 88%',
-          },
-        }
-      );
-
       // 5. Section 03: Operational Workflow
       gsap.fromTo(
         '.workflow-header-wrap',
@@ -361,21 +346,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           scrollTrigger: {
             trigger: '.workflow-steps-horizontal',
             start: 'top 80%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.workflow-bottom-capsule',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.workflow-bottom-capsule',
-            start: 'top 88%',
           },
         }
       );

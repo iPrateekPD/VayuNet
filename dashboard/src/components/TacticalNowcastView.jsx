@@ -23,6 +23,67 @@ function MapController({ center, zoom }) {
   return null;
 }
 
+// Map custom zoom buttons
+function MapZoomButtons() {
+  const map = useMap();
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '18px',
+      left: '18px',
+      zIndex: 1000,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '5px'
+    }}>
+      <button
+        type="button"
+        onClick={() => map.zoomIn()}
+        title="Zoom In"
+        style={{
+          width: '32px',
+          height: '32px',
+          background: 'rgba(7, 14, 27, 0.92)',
+          border: '1px solid rgba(255, 255, 255, 0.22)',
+          borderRadius: '6px',
+          color: '#ffffff',
+          fontSize: '18px',
+          fontWeight: '700',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.6)'
+        }}
+      >
+        +
+      </button>
+      <button
+        type="button"
+        onClick={() => map.zoomOut()}
+        title="Zoom Out"
+        style={{
+          width: '32px',
+          height: '32px',
+          background: 'rgba(7, 14, 27, 0.92)',
+          border: '1px solid rgba(255, 255, 255, 0.22)',
+          borderRadius: '6px',
+          color: '#ffffff',
+          fontSize: '18px',
+          fontWeight: '700',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.6)'
+        }}
+      >
+        −
+      </button>
+    </div>
+  );
+}
+
 // Custom DivIcon creator
 function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   return L.divIcon({
@@ -33,7 +94,17 @@ function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   });
 }
 
-export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
+const TIME_STEPS = ['Now', '+1h', '+2h', '+3h', '+4h', '+6h'];
+
+const SECTOR_OPTIONS = [
+  'Chamoli, Uttarakhand',
+  'Kangra, Himachal Pradesh',
+  'Rudraprayag, Uttarakhand',
+  'Pithoragarh, Uttarakhand',
+  'Uttarkashi, Uttarakhand',
+];
+
+export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavigateTab }) {
   const [selectedStep, setSelectedStep] = useState('+2h');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSectorOpen, setIsSectorOpen] = useState(false);
@@ -47,25 +118,15 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
     rivers: true,        // Hydrological River Network
   });
 
-  const timeSteps = ['Now', '+1h', '+2h', '+3h', '+4h', '+6h'];
-
-  const sectorOptions = [
-    'Chamoli, Uttarakhand',
-    'Kangra, Himachal Pradesh',
-    'Rudraprayag, Uttarakhand',
-    'Pithoragarh, Uttarakhand',
-    'Uttarkashi, Uttarakhand',
-  ];
-
   // Playback simulation timer
   useEffect(() => {
     let timer;
     if (isPlaying) {
       timer = setInterval(() => {
         setSelectedStep((prev) => {
-          const idx = timeSteps.indexOf(prev);
-          const nextIdx = (idx + 1) % timeSteps.length;
-          return timeSteps[nextIdx];
+          const idx = TIME_STEPS.indexOf(prev);
+          const nextIdx = (idx + 1) % TIME_STEPS.length;
+          return TIME_STEPS[nextIdx];
         });
       }, 1600);
     }
@@ -148,13 +209,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
     [30.258, 79.217] // joins Karnaprayag
   ];
 
-  // Downstream flow vector coordinates along Alaknanda River
-  const flowArrowCoords = [
-    [30.385, 79.300],
-    [30.340, 79.270],
-    [30.295, 79.240],
-  ];
-
   // Tactical Town and Peak Points
   const tacticalPoints = [
     { name: 'Badrinath', coords: [30.744, 79.493] },
@@ -189,7 +243,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
 
               {isSectorOpen && (
                 <div className="tac-clean-sector-menu">
-                  {sectorOptions.map((opt) => (
+                  {SECTOR_OPTIONS.map((opt) => (
                     <div
                       key={opt}
                       className={`tac-clean-sector-option ${selectedSector === opt ? 'active' : ''}`}
@@ -208,7 +262,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
 
             {/* Timesteps Filter Pills */}
             <div className="tac-clean-timesteps-group">
-              {timeSteps.map((step) => (
+              {TIME_STEPS.map((step) => (
                 <button
                   key={step}
                   type="button"
@@ -306,11 +360,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
           <MapContainer
             center={chamoliCenter}
             zoom={9}
-            scrollWheelZoom={true}
+            scrollWheelZoom={false}
             className="tac-clean-leaflet-container"
             zoomControl={false}
           >
             <MapController center={chamoliCenter} zoom={9} />
+            <MapZoomButtons />
 
             {/* Base Satellite Imagery */}
             <TileLayer
@@ -591,15 +646,34 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
             </div>
           </div>
 
-          {/* Dispatch CAP Alert Button */}
-          <button
-            type="button"
-            className="tac-clean-dispatch-btn"
-            onClick={handleDispatch}
-          >
-            <span style={{ fontSize: '15px' }}>((●))</span>
-            <span>Dispatch CAP Alert  →</span>
-          </button>
+          {/* Connective Operational Actions */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '14px' }}>
+            <button
+              type="button"
+              className="tac-clean-investigate-btn"
+              onClick={() => onNavigateTab && onNavigateTab('analysis')}
+              title="Examine CTT, IWV, CAPE and atmospheric drivers in Analysis view"
+            >
+              <span>🔬</span>
+              <span>Investigate Drivers (Why?) →</span>
+            </button>
+
+            <button
+              type="button"
+              className="tac-clean-dispatch-btn"
+              onClick={() => {
+                if (onNavigateTab) {
+                  onNavigateTab('alerts');
+                } else {
+                  handleDispatch();
+                }
+              }}
+              title="Open Alert & Incident Command to broadcast CAP 1.2 payload"
+            >
+              <span style={{ fontSize: '15px' }}>((●))</span>
+              <span>Prepare & Dispatch Alert (Act) →</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -619,7 +693,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
             </button>
 
             <div className="tac-clean-filmstrip">
-              {timeSteps.map((step) => (
+              {TIME_STEPS.map((step) => (
                 <div
                   key={step}
                   className={`tac-clean-thumb-box ${selectedStep === step ? 'active' : ''}`}
@@ -681,8 +755,8 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast }) {
               type="button"
               className="tac-clean-next-btn"
               onClick={() => {
-                const idx = timeSteps.indexOf(selectedStep);
-                setSelectedStep(timeSteps[(idx + 1) % timeSteps.length]);
+                const idx = TIME_STEPS.indexOf(selectedStep);
+                setSelectedStep(TIME_STEPS[(idx + 1) % TIME_STEPS.length]);
               }}
               title="Next timestep"
             >
