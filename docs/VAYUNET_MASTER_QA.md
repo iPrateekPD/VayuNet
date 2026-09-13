@@ -324,7 +324,7 @@ The classic **Problem $\rightarrow$ Gap Analysis $\rightarrow$ Solution $\righta
 * **In Speaker Notes:** Detailed scientific justifications, dataset citations, and disaster case-study details.
 
 ### What should the presenter say for each slide?
-Focus strictly on **The Problem $\rightarrow$ How we solve it $\rightarrow$ Why existing tools couldn't do it $\rightarrow$ The human impact**. Word-for-word scripts (timed 30–45s) are provided for each slide in [`slide.md`](file:///Users/prateekpd/Projects/SIH/MAIN/slide.md).
+Focus strictly on **The Problem $\rightarrow$ How we solve it $\rightarrow$ Why existing tools couldn't do it $\rightarrow$ The human impact**. Word-for-word scripts (timed 30–45s) are provided for each slide in [`docs/presentation/slide.md`](file:///Users/prateekpd/Projects/SIH/MAIN/docs/presentation/slide.md).
 
 ---
 

@@ -244,7 +244,11 @@ MAIN/
 │   │   └── mockData.js                 # Realistic meteorological time-series for 14 hazard zones
 │   ├── package.json
 │   └── vite.config.js
-├── docs/                           # Complete technical documentation suite (01-09, implementation, README)
+├── docs/                           # Technical documentation suite (01-10, guides, QA, implementation)
+│   ├── presentation/               # SIH presentation decks, slide scripts (slide.md), and pitch PDFs
+│   ├── AI_MODEL_TRAINING_AND_DATASET_GUIDE.md # Standalone AI model training & dataset handover spec
+│   ├── VAYUNET_MASTER_QA.md        # Master Project Context File: 10 Q&A sections & judge defense guide
+│   └── implementation.md           # [THIS FILE] Dual-phase master technical specification
 ├── src/                            # [SCAFFOLDED] Python backend modules for Phase 2 deep learning
 │   ├── ingestion/                  # MOSDAC INSAT & IMDAA downloaders
 │   ├── preprocessing/              # Grid alignment, normalization, CartoDEM slope extraction
@@ -253,17 +257,16 @@ MAIN/
 │   ├── training/                   # PyTorch Lightning training loops, focal loss, checkpoints
 │   ├── evaluation/                 # CSI, POD, FAR validation scripts
 │   └── inference/                  # Low-latency inference runtime & ONNX/TorchServe exports
-├── VAYUNET_MASTER_QA.md            # Master Project Context File: 10 Q&A sections & judge defense guide
-├── slide.md                        # Complete 14-slide PPT presentation content & speaker notes
-├── implementation.md               # [THIS FILE] Dual-phase master technical specification
-└── requirements.txt                # Full Python dependencies (PyTorch, FastAPI, xarray, captum)
+├── tests/                          # Automated test suite (physics bounds, loss functions, models)
+├── requirements.txt                # Full Python dependencies (PyTorch, FastAPI, xarray, captum)
+└── README.md
 ```
 
 ### 5.2 Current Progress Checklist
 
 - [x] **SIH Problem Statement & Architecture Alignment** (SIH26077, MoES / NCMRWF).
-- [x] **Complete 14-Slide Presentation Content (`slide.md`)** with speaker notes, metrics, and visual diagrams.
-- [x] **Master Project Q&A & Context Guide (`VAYUNET_MASTER_QA.md`)** for comprehensive technical grounding.
+- [x] **Complete 14-Slide Presentation Content (`docs/presentation/slide.md`)** with speaker notes, metrics, and visual diagrams.
+- [x] **Master Project Q&A & Context Guide (`docs/VAYUNET_MASTER_QA.md`)** for comprehensive technical grounding.
 - [x] **Phase 1 Production Frontend Web Application (`dashboard/`) — 100% READY FOR DEMO**:
   - [x] **National Sovereign Homepage (`/#/` / `HomePage.jsx`)**: Radar hero map, live alert ticker marquee, cascade hazard cards with micro-charts, data sources grid, and sovereign credentials.
   - [x] **Citizen Public Warning Portal (`/#/warnings` / `CitizenPortal.jsx`)**: Hyper-local GPS/manual selector, threat gauge, 12-language support, safety checklists, emergency shelters, and 1-tap SOS calls.

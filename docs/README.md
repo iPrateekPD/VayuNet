@@ -19,7 +19,11 @@ Welcome to the comprehensive technical documentation for **VAYUNET**, the sovere
 | **[07-implementation-phases.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/07-implementation-phases.md)** | Project Roadmap & Milestones | Dual-phase strategy: Phase 1 Prototype Demo vs. Phase 2 Full AI Engine |
 | **[08-testing-strategy.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/08-testing-strategy.md)** | Testing, Quality Assurance & Benchmarks | Physics bounds tests, API contracts, CSI/POD/FAR metrics, sensor degradation |
 | **[09-deep-gap-analysis-and-innovation-thesis.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/09-deep-gap-analysis-and-innovation-thesis.md)** | Gap Analysis, Failure Modes & Innovation Thesis | Failure points of existing systems, Indian constraints, 500-team differentiator |
+| **[10-ai-model-architecture-deep-dive.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/10-ai-model-architecture-deep-dive.md)** | Deep Learning Architecture & Mathematical Formulations | Spatiotemporal cross-attention, DEM fusion, loss functions, CSI benchmarks |
+| **[AI_MODEL_TRAINING_AND_DATASET_GUIDE.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/AI_MODEL_TRAINING_AND_DATASET_GUIDE.md)** | Sovereign AI Training & Dataset Handover Spec | Multi-modal dataset acquisition, preprocessing pipeline, training regimen |
+| **[VAYUNET_MASTER_QA.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/VAYUNET_MASTER_QA.md)** | Master Project Context File & Evaluator Defense Guide | 10 exhaustive Q&A sections for SIH evaluator cross-examination |
 | **[implementation.md](file:///Users/prateekpd/Projects/SIH/MAIN/docs/implementation.md)** | Master Dual-Phase Implementation Blueprint | Complete technical masterfile and operational status tracker |
+| **[presentation/](file:///Users/prateekpd/Projects/SIH/MAIN/docs/presentation/)** | SIH Presentation Deck & Pitch Materials | 14-slide deck (`slide.md`), pitch PDFs, and slide generation prompts |
 
 ---
 

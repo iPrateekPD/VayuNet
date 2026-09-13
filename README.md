@@ -69,8 +69,13 @@ MAIN/
 │   └── package.json
 ├── data/                  # Geospatial data processing pipelines (raw, interim, processed)
 ├── docs/                  # Technical design briefs, specifications, and presentation deck
+│   ├── presentation/      # SIH presentation decks, slide scripts (slide.md), and pitch PDFs
+│   ├── AI_MODEL_TRAINING_AND_DATASET_GUIDE.md # Standalone AI model training & dataset handover spec
+│   ├── VAYUNET_MASTER_QA.md # Master project Q&A and judge defense guide
+│   └── 01-10-*.md         # Engineering specifications and deep-dive briefs
 ├── notebooks/             # Exploratory analysis & model validation Jupyter notebooks
 ├── src/                   # Core ML training, feature extraction, and physics-informed models
+├── tests/                 # Unit, integration, and physics-bounds test suite
 ├── requirements.txt       # Python backend dependencies
 └── README.md
 ```

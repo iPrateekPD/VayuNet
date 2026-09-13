@@ -57,7 +57,7 @@ To secure maximum evaluation scoring during the initial video submission while g
   * [x] **Stage 4: ALERTS (ACT) (`AlertsView.jsx`)**: Incident queue, real-time ITU-T X.1303 / CAP 1.2 XML generator, multi-agency broadcast matrix, live dispatch with audio sirens, delivery audit log.
   * [x] **Slide-Out Telemetry Drawer (`TelemetryDrawer.jsx`)**: Instant multi-sensor telemetry diagnostics.
   * [x] **Working FastAPI Backend Service (`api/main.py`)**: Endpoints on `:8000` (`/api/health`, `/api/hazards/live`, `/api/hazards/historical/{id}`, `/api/nowcast/predict`, `/api/alerts/broadcast`).
-  * [x] **Verified Presentation Deck & Evaluator Q&A**: 14-slide PPT narrative (`slide.md`) and exhaustive judge defense masterfile (`VAYUNET_MASTER_QA.md`).
+  * [x] **Verified Presentation Deck & Evaluator Q&A**: 14-slide PPT narrative (`docs/presentation/slide.md`) and exhaustive judge defense masterfile (`docs/VAYUNET_MASTER_QA.md`).
 
 ---
 
