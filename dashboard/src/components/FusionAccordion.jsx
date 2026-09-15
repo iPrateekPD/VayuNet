@@ -69,6 +69,9 @@ export default function FusionAccordion({ onEnterPortal }) {
   // Mobile open state map: tracks open cards on mobile
   const [mobileOpenCards, setMobileOpenCards] = useState({ 0: true });
 
+  // Desktop active hovered index
+  const [desktopHoveredIdx, setDesktopHoveredIdx] = useState(null);
+
   // Check reduced motion preference
   const isReducedMotion = () =>
     typeof window !== 'undefined' &&
@@ -78,6 +81,7 @@ export default function FusionAccordion({ onEnterPortal }) {
   // Direct GSAP expansion on desktop
   const expandCard = useCallback((idx) => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+    setDesktopHoveredIdx(idx);
     const reduced = isReducedMotion();
     const duration = reduced ? 0.05 : 0.65;
 
@@ -192,9 +196,9 @@ export default function FusionAccordion({ onEnterPortal }) {
 
         if (imageRefs.current[i]) {
           gsap.to(imageRefs.current[i], {
-            opacity: 0.35,
-            scale: 0.93,
-            x: 6,
+            opacity: 0.6,
+            scale: 1,
+            x: 0,
             duration: reduced ? 0.05 : 0.5,
             ease: 'power3.out',
           });
@@ -216,6 +220,7 @@ export default function FusionAccordion({ onEnterPortal }) {
   // Restore all cards to resting dimensions on container mouseleave (desktop)
   const restoreAllCards = useCallback(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+    setDesktopHoveredIdx(null);
     const reduced = isReducedMotion();
     const duration = reduced ? 0.05 : 0.65;
 
@@ -445,12 +450,14 @@ export default function FusionAccordion({ onEnterPortal }) {
       >
         {SOVEREIGN_STREAMS.map((stream, idx) => {
           const isMobileActive = !!mobileOpenCards[idx];
+          const isExpanded = desktopHoveredIdx === idx;
+          const isContracted = desktopHoveredIdx !== null && desktopHoveredIdx !== idx;
 
           return (
             <div
               key={stream.id}
               ref={(el) => (cardRefs.current[idx] = el)}
-              className={`fusion-accordion-card ${isMobileActive ? 'is-mobile-active' : ''}`}
+              className={`fusion-accordion-card ${isMobileActive ? 'is-mobile-active' : ''} ${isExpanded ? 'is-expanded' : ''} ${isContracted ? 'is-contracted' : ''}`}
               style={{ background: stream.accentTint }}
               onMouseEnter={() => expandCard(idx)}
               onFocus={() => expandCard(idx)}

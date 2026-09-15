@@ -7055,7 +7055,7 @@ html {
 /* Right Media Column - Clean embedded visualization */
 .fusion-card-media-col {
   width: 38%;
-  min-width: 110px;
+  min-width: 100px;
   max-width: 250px;
   flex-shrink: 0;
   margin: 14px 14px 14px 0;
@@ -7066,7 +7066,10 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.06);
   opacity: 0.65;
   transform: scale(0.95);
-  will-change: transform, opacity;
+  will-change: transform, opacity, width;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s ease,
+              border-color 0.4s ease;
 }
 
 .fusion-media-frame {
@@ -7083,7 +7086,7 @@ html {
   object-position: center;
   display: block;
   filter: saturate(0.85) contrast(0.95);
-  transition: filter 0.4s ease;
+  transition: filter 0.4s ease, opacity 0.4s ease;
 }
 
 .fusion-accordion-card:hover .fusion-media-img {
@@ -7093,9 +7096,10 @@ html {
 .fusion-media-vignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(4, 11, 24, 0.2) 0%, rgba(4, 11, 24, 0.88) 100%),
-              linear-gradient(90deg, rgba(4, 11, 24, 0.5) 0%, transparent 60%);
+  background: linear-gradient(180deg, rgba(4, 11, 24, 0.15) 0%, rgba(4, 11, 24, 0.88) 100%),
+              linear-gradient(90deg, rgba(4, 11, 24, 0.7) 0%, transparent 60%);
   pointer-events: none;
+  transition: background 0.4s ease;
 }
 
 .fusion-media-chip {
@@ -7113,27 +7117,113 @@ html {
   padding: 3px 7px;
   border-radius: 5px;
   pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Responsive - Tablet */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .fusion-accordion-container {
-    gap: 14px;
-    min-height: 400px;
+/* ============================================================
+   Desktop Accordion Contracted vs Expanded Card Refinements
+   (Solves cramped text and image overlapping in non-hovered cards)
+   ============================================================ */
+@media (min-width: 768px) {
+  /* When a card is contracted because another card is expanded */
+  .fusion-accordion-card.is-contracted {
+    cursor: pointer;
   }
 
-  .fusion-card-left-col {
-    padding: 18px 14px 18px 18px;
+  .fusion-accordion-card.is-contracted .fusion-card-left-col {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 22px 16px 20px 20px !important;
+    z-index: 2 !important;
+    position: relative !important;
   }
 
-  .fusion-card-title {
-    font-size: 16px;
+  .fusion-accordion-card.is-contracted .fusion-card-topbar {
+    gap: 6px !important;
+    margin-bottom: 10px !important;
   }
 
-  .fusion-card-media-col {
-    width: 32%;
-    min-width: 100px;
-    margin: 12px 12px 12px 0;
+  .fusion-accordion-card.is-contracted .fusion-agency-pill {
+    padding: 3px 8px !important;
+    font-size: 9.5px !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+  }
+
+  .fusion-accordion-card.is-contracted .fusion-card-title {
+    font-size: 17px !important;
+    line-height: 1.22 !important;
+    white-space: normal !important;
+  }
+
+  .fusion-accordion-card.is-contracted .fusion-card-sub {
+    font-size: 9.5px !important;
+    letter-spacing: 0.7px !important;
+  }
+
+  .fusion-accordion-card.is-contracted .fusion-card-quick-stat {
+    font-size: 9.5px !important;
+    margin-top: 4px !important;
+  }
+
+  /* Contracted Media: Positions as an ambient right-side background with a smooth gradient fade */
+  .fusion-accordion-card.is-contracted .fusion-card-media-col {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 60% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 0 20px 20px 0 !important;
+    border: none !important;
+    background: transparent !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 100%) !important;
+    mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 100%) !important;
+  }
+
+  .fusion-accordion-card.is-contracted .fusion-media-vignette {
+    background: linear-gradient(90deg, rgba(8, 18, 36, 0.96) 0%, rgba(8, 18, 36, 0.5) 45%, transparent 100%),
+                linear-gradient(180deg, rgba(4, 11, 24, 0.2) 0%, rgba(4, 11, 24, 0.9) 100%) !important;
+  }
+
+  .fusion-accordion-card.is-contracted .fusion-media-img {
+    filter: saturate(0.7) contrast(0.9) brightness(0.85) !important;
+  }
+
+  /* Hide chip tag on contracted cards so it never collides with agency badge */
+  .fusion-accordion-card.is-contracted .fusion-media-chip {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-4px) !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+  }
+
+  /* Active Expanded Card */
+  .fusion-accordion-card.is-expanded .fusion-card-left-col {
+    flex: 0 0 58% !important;
+    width: 58% !important;
+    max-width: 58% !important;
+  }
+
+  .fusion-accordion-card.is-expanded .fusion-card-media-col {
+    position: relative !important;
+    width: 38% !important;
+    max-width: 250px !important;
+    margin: 14px 14px 14px 0 !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  .fusion-accordion-card.is-expanded .fusion-media-chip {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s !important;
   }
 }
 
