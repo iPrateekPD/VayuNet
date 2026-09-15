@@ -685,7 +685,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               <div className="national-data-sources-row">
                 <div className="national-data-item">
                   <div className="national-data-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M13 7 9 3 5 7l4 4" />
                       <path d="m17 11 4 4-4 4-4-4" />
                       <path d="m8 12 4 4 6-6-4-4Z" />
@@ -703,7 +703,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
                 <div className="national-data-item">
                   <div className="national-data-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
                     </svg>
                   </div>
@@ -717,7 +717,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
                 <div className="national-data-item">
                   <div className="national-data-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 20L12 4L21 20H3Z" />
                       <path d="M9 20L12 14L15 20" />
                     </svg>
@@ -1162,7 +1162,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             {/* Col 1: Brand & Sovereign Mandate */}
             <div className="cp-footer-col cp-footer-brand-col">
               <div className="cp-footer-brand">
-                <div className="home-logo" style={{ width: 38, height: 38 }}>
+                <div className="home-logo" style={{ width: 52, height: 52 }}>
                   <img src="/VAYUNET_LOGO.png" alt="VAYUNET Logo" className="home-logo-img" />
                 </div>
                 <div>
