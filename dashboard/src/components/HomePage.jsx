@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroMap from './HeroMap';
+import FusionAccordion from './FusionAccordion';
 import {
   WEATHER_LAYERS,
   FORECAST_TIME_STEPS,
@@ -304,16 +305,16 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       );
 
       gsap.fromTo(
-        '.data-source-card',
+        '.fusion-accordion-card',
         { opacity: 0, y: 35 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
-          stagger: 0.14,
-          ease: 'power2.out',
+          duration: 0.8,
+          stagger: 0.12,
+          ease: 'power3.out',
           scrollTrigger: {
-            trigger: '.data-sources-grid',
+            trigger: '.fusion-accordion-container',
             start: 'top 82%',
           },
         }
@@ -1410,195 +1411,9 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       </section>
 
       {/* ============================================================
-          6. NATIONAL DATA FUSION
+          6. NATIONAL DATA FUSION (INTERACTIVE HORIZONTAL ACCORDION)
           ============================================================ */}
-      <section id="data-fusion" className="section-data-fusion">
-        <div className="fusion-header-wrap">
-          <div className="fusion-header-left">
-            <div className="section-eyebrow">NATIONAL DATA FUSION</div>
-            <h2 className="fusion-title">
-              Multi-source.<br />
-              <span className="fusion-title-blue">One intelligence layer.</span>
-            </h2>
-            <p className="fusion-desc">
-              VAYUNET ingests three sovereign observation streams, harmonizing disparate
-              cadences and projections onto a unified 4 km WGS84 spatiotemporal grid.
-            </p>
-          </div>
-        </div>
-
-        <div className="data-sources-grid">
-          {/* Source 1: INSAT-3D / 3DR */}
-          <div className="data-source-card">
-            <div className="data-card-topbar">
-              <div className="data-card-icon-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2"/>
-                  <line x1="8" y1="21" x2="16" y2="21"/>
-                  <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-                <span className="data-card-badge">MOSDAC / ISRO</span>
-              </div>
-            </div>
-            
-            <div className="data-card-image-box">
-              <img src="/satellite_insat.jpg" alt="INSAT-3D/3DR Satellite Observations" className="data-card-img" />
-              <div className="data-card-img-vignette" />
-            </div>
-
-            <div className="data-card-body">
-              <div className="data-card-num">01</div>
-              <h3 className="data-card-title">INSAT-3D / 3DR</h3>
-              <div className="data-card-sub">Satellite Observations</div>
-              <p className="data-card-desc">
-                Geostationary multi-spectral radiances delivering rapid Cloud Top Temperature (CTT)
-                cooling rates, Water Vapor (6.7 µm) moisture pooling, and Thermal Infrared brightness temperatures.
-              </p>
-              
-              <div className="data-card-specs-v2">
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span>Temporal Cadence</span>
-                  </div>
-                  <strong>15 – 30 min</strong>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.93 19.07A10 10 0 0 1 12 2a10 10 0 0 1 7.07 17.07"/><path d="M8.46 15.54A5 5 0 0 1 12 6a5 5 0 0 1 3.54 9.54"/><circle cx="12" cy="12" r="2"/></svg>
-                    <span>Primary Channels</span>
-                  </div>
-                  <div className="spec-val-stacked">
-                    <strong>WV 6.7 µm · TIR 10.8 µm</strong>
-                    <span className="spec-subval">CAPE &gt; 1800 J/kg</span>
-                  </div>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
-                    <span>Resolution</span>
-                  </div>
-                  <strong>4 km (Sub-satellite)</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Source 2: IMDAA */}
-          <div className="data-source-card">
-            <div className="data-card-topbar">
-              <div className="data-card-icon-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-                </svg>
-                <span className="data-card-badge">NCMRWF</span>
-              </div>
-            </div>
-
-            <div className="data-card-image-box">
-              <img src="/imdaa_reanalysis.jpg" alt="IMDAA Atmospheric Reanalysis" className="data-card-img" />
-              <div className="data-card-img-vignette" />
-              <div className="imdaa-floating-legend">
-                <div className="imdaa-legend-item"><span className="legend-dot dot-blue" /> Moisture</div>
-                <div className="imdaa-legend-item"><span className="legend-dot dot-amber" /> CAPE</div>
-                <div className="imdaa-legend-item"><span className="legend-dot dot-green" /> Wind Shear</div>
-              </div>
-            </div>
-
-            <div className="data-card-body">
-              <div className="data-card-num">02</div>
-              <h3 className="data-card-title">IMDAA</h3>
-              <div className="data-card-sub">Atmospheric Reanalysis</div>
-              <p className="data-card-desc">
-                High-resolution regional reanalysis providing foundational thermodynamic
-                soundings: Convective Available Potential Energy (CAPE), Convective Inhibition
-                (CIN), and 0–6 km deep-layer vertical wind shear.
-              </p>
-
-              <div className="data-card-specs-v2">
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>Assimilation</span>
-                  </div>
-                  <strong>Hourly Regional Cycle</strong>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-                    <span>Key Variables</span>
-                  </div>
-                  <strong>CAPE · CIN · Shear · Moisture</strong>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    <span>Coverage</span>
-                  </div>
-                  <strong>Pan-India &amp; Indian Ocean</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Source 3: CartoDEM */}
-          <div className="data-source-card">
-            <div className="data-card-topbar">
-              <div className="data-card-icon-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="3 18 9 6 15 13 18 9 21 18 3 18"/>
-                </svg>
-                <span className="data-card-badge">ISRO / BHUVAN</span>
-              </div>
-              <span className="himalayas-badge">HIMALAYAS</span>
-            </div>
-
-            <div className="data-card-image-box">
-              <img src="/cartodem_terrain.jpg" alt="CartoDEM Terrain Intelligence" className="data-card-img" />
-              <div className="data-card-img-vignette" />
-              <div className="cartodem-elevation-legend">
-                <span className="elev-label">7,000 m</span>
-                <div className="elev-gradient-bar" />
-                <span className="elev-label">0 m</span>
-              </div>
-            </div>
-
-            <div className="data-card-body">
-              <div className="data-card-num">03</div>
-              <h3 className="data-card-title">CartoDEM</h3>
-              <div className="data-card-sub">Terrain Intelligence</div>
-              <p className="data-card-desc">
-                Sub-meter accurate 30 m Digital Elevation Model enabling hydrological basin demarcation,
-                slope steepness computation, aspect analysis, and D8 kinematic wave overland flow routing.
-              </p>
-
-              <div className="data-card-specs-v2">
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                    <span>Native Grid</span>
-                  </div>
-                  <strong>30 m Hydro-enforced</strong>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                    <span>Hydro Model</span>
-                  </div>
-                  <strong>D8 Flow Accumulation</strong>
-                </div>
-                <div className="spec-row-v2">
-                  <div className="spec-label-grp">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
-                    <span>Basin Matrix</span>
-                  </div>
-                  <strong>Himalayas &amp; Western Ghats</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FusionAccordion onEnterPortal={onEnterPortal} />
 
       {/* ============================================================
           7. OPERATIONAL WORKFLOW
