@@ -10,24 +10,24 @@
 }
 
 :root {
-  /* Backgrounds — deeper navy, no blue tint decoration */
-  --bg-primary:    #060d18;
-  --bg-secondary:  #0b1623;
-  --bg-surface:    #0f1d2e;
-  --bg-card:       #111f31;
-  --bg-card-hover: #162538;
-  --bg-inset:      #080f1c;
+  /* Backgrounds — Deep Abyssal Petrol Teal from VAYUNET Logo */
+  --bg-primary:    #030f14;
+  --bg-secondary:  #071a23;
+  --bg-surface:    #0a222e;
+  --bg-card:       #0d2735;
+  --bg-card-hover: #123344;
+  --bg-inset:      #020a0f;
 
-  /* Borders — very restrained (ECMWF rule: structure over decoration) */
-  --border:        rgba(255, 255, 255, 0.08);
-  --border-mid:    rgba(255, 255, 255, 0.14);
-  --border-bright: rgba(255, 255, 255, 0.22);
+  /* Borders — Ambient Atmospheric Teal Borders */
+  --border:        rgba(98, 192, 191, 0.12);
+  --border-mid:    rgba(98, 192, 191, 0.20);
+  --border-bright: rgba(98, 192, 191, 0.35);
 
-  /* Text — high-contrast cool whites and slates for superior readability */
-  --text-primary:   #edf2f9;
-  --text-secondary: #9bbcdb;
-  --text-muted:     #718da8;
-  --text-faint:     #4d6985;
+  /* Text — High-contrast Glacial Frost Cool Whites & Atmospheric Slate */
+  --text-primary:   #f0f8fa;
+  --text-secondary: #a2c8d5;
+  --text-muted:     #6d95a5;
+  --text-faint:     #426a7a;
 
   /* Hazard colors — used ONLY for meteorological data, never UI decoration */
   --hazard-thunder: #f59e0b;   /* Amber — convective */
@@ -41,9 +41,12 @@
   --sev-severe:   #ef4444;
   --sev-extreme:  #a855f7;
 
-  /* Accent — single operational accent, used very sparingly */
-  --accent:       #3b82f6;
-  --accent-dim:   rgba(59, 130, 246, 0.15);
+  /* Accent — VAYUNET Logo Signatures (Electric Azure & Biosphere Teal) */
+  --accent:          #0e97f3;
+  --accent-teal:     #239a7c;
+  --accent-mint:     #62c0bf;
+  --accent-gradient: linear-gradient(135deg, #0e97f3 0%, #239a7c 100%);
+  --accent-dim:      rgba(14, 151, 243, 0.15);
 
   /* Live / Status indicators */
   --live-red:     #ef4444;

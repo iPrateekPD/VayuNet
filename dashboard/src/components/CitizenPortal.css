@@ -1469,9 +1469,9 @@
 .cp-footer {
   margin-top: auto;
   width: 100%;
-  background: linear-gradient(180deg, #090e1a 0%, #05080f 100%);
-  border-top: 1px solid #1e293b;
-  color: #94a3b8;
+  background: linear-gradient(180deg, #04121a 0%, #020a0f 100%);
+  border-top: 1px solid rgba(98, 192, 191, 0.16);
+  color: #8da9b6;
   font-size: 13px;
   position: relative;
   z-index: 10;
@@ -1479,8 +1479,8 @@
 
 /* Row 1: Telemetry Ingest Strip */
 .cp-footer-telemetry {
-  background: rgba(15, 23, 42, 0.75);
-  border-bottom: 1px solid rgba(30, 41, 59, 0.8);
+  background: rgba(4, 18, 26, 0.85);
+  border-bottom: 1px solid rgba(98, 192, 191, 0.12);
   padding: 9px 24px;
   font-size: 11.5px;
 }
@@ -1527,13 +1527,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #94a3b8;
+  color: #8da9b6;
   font-size: 11px;
   flex-wrap: wrap;
 }
 
 .cp-telemetry-metrics strong {
-  color: #38bdf8;
+  color: #62c0bf;
   font-weight: 700;
 }
 
@@ -1612,7 +1612,7 @@
   left: 0;
   width: 24px;
   height: 2px;
-  background: #0284c7;
+  background: linear-gradient(90deg, #0e97f3 0%, #239a7c 100%);
   border-radius: 1px;
 }
 
@@ -1627,7 +1627,7 @@
 
 .cp-footer-link-list a,
 .cp-footer-btn-link {
-  color: #94a3b8;
+  color: #8da9b6;
   text-decoration: none;
   font-size: 12px;
   transition: all 0.15s ease;
@@ -1642,7 +1642,7 @@
 
 .cp-footer-link-list a:hover,
 .cp-footer-btn-link:hover {
-  color: #38bdf8;
+  color: #62c0bf;
   transform: translateX(3px);
 }
 

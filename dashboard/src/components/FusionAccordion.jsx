@@ -152,7 +152,7 @@ export default function FusionAccordion({ onEnterPortal }) {
           gsap.to(ctaLabelRefs.current[i], {
             opacity: 1,
             x: 2,
-            color: '#38bdf8',
+            color: '#62c0bf',
             duration: reduced ? 0.05 : 0.35,
             ease: 'power2.out',
           });
