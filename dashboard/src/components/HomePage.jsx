@@ -225,71 +225,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           stagger: 0.05,
           ease: 'power2.out',
         }, '-=0.4');
-      // 2. Section 01: Three Cascading Hazards
-      gsap.fromTo(
-        ['.hazards-header-left', '.hazards-header-right'],
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.section-hazards',
-            start: 'top 82%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.hazard-card-v3',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.75,
-          stagger: 0.15,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.hazards-cards-grid',
-            start: 'top 80%',
-          },
-        }
-      );
-
-      // Animate chart bars on scroll
-      gsap.fromTo(
-        '.convective-col .col-bar-fill',
-        { scaleY: 0, transformOrigin: 'bottom' },
-        {
-          scaleY: 1,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: 'back.out(1.5)',
-          scrollTrigger: {
-            trigger: '.convective-bars-wrap',
-            start: 'top 85%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.spectrum-bar',
-        { scaleY: 0, transformOrigin: 'bottom' },
-        {
-          scaleY: 1,
-          duration: 0.7,
-          stagger: 0.02,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.spectrum-bars-flex',
-            start: 'top 85%',
-          },
-        }
-      );
-
-      // 4. Section 02: Multi-Source National Data Fusion
+      // 2. Section 01: Multi-Source National Data Fusion
       gsap.fromTo(
         '.fusion-header-wrap',
         { opacity: 0, y: 25 },
@@ -320,7 +256,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         }
       );
 
-      // 5. Section 03: Operational Workflow
+      // 3. Section 02: Operational Workflow
       gsap.fromTo(
         '.workflow-header-wrap',
         { opacity: 0, y: 25 },
@@ -347,52 +283,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           scrollTrigger: {
             trigger: '.workflow-steps-horizontal',
             start: 'top 80%',
-          },
-        }
-      );
-
-      // 6. Section 04: National Impact
-      gsap.fromTo(
-        '.impact-header-wrap',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          scrollTrigger: {
-            trigger: '#impact',
-            start: 'top 82%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.impact-card-v3',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.15,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.impact-grid-v3',
-            start: 'top 80%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.portal-cta-banner-v3',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.portal-cta-banner-v3',
-            start: 'top 85%',
           },
         }
       );
@@ -456,7 +346,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       // Don't intercept if typing in an input
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
 
-      const sectionIds = ['hero-section', 'hazards', 'data-fusion', 'how-it-works', 'impact-section'];
+      const sectionIds = ['hero-section', 'data-fusion', 'how-it-works'];
       const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
       if (sections.length === 0) return;
 
@@ -494,7 +384,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
   // Track active section for navigation highlights and slide dots
   useEffect(() => {
-    const sectionIds = ['hero-section', 'hazards', 'data-fusion', 'how-it-works', 'impact-section'];
+    const sectionIds = ['hero-section', 'data-fusion', 'how-it-works'];
     const handleScroll = () => {
       setIsNavScrolled(window.scrollY > 30);
       if (window.scrollY < 200) {
@@ -595,10 +485,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           <div className="home-nav-links-capsule">
             {[
               { id: 'hero-section', label: t.home },
-              { id: 'hazards', label: t.hazards },
               { id: 'data-fusion', label: t.dataSources },
               { id: 'how-it-works', label: t.howItWorks },
-              { id: 'impact-section', label: t.impact },
             ].map(link => (
               <a
                 key={link.id}
@@ -699,10 +587,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               </div>
               <div className="mobile-nav-divider" />
               <a href="#hero-section" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{t.home}</a>
-              <a href="#hazards" onClick={() => { setMobileMenuOpen(false); document.getElementById('hazards')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.hazards}</a>
               <a href="#data-fusion" onClick={() => { setMobileMenuOpen(false); document.getElementById('data-fusion')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.dataSources}</a>
               <a href="#how-it-works" onClick={() => { setMobileMenuOpen(false); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.howItWorks}</a>
-              <a href="#impact-section" onClick={() => { setMobileMenuOpen(false); document.getElementById('impact-section')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.impact}</a>
               <div className="mobile-nav-divider" />
               <button
                 className="btn-secondary-nav mobile-nav-btn"
@@ -1127,291 +1013,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
 
       {/* ============================================================
-          5. THREE CASCADING HAZARDS
-          ============================================================ */}
-      <section id="hazards" className="section-hazards">
-        <div className="hazards-backdrop-overlay" />
-        <div className="hazards-inner-container">
-          <div className="hazards-header-wrap">
-            <div className="hazards-header-left">
-              <div className="section-eyebrow">THREE CASCADING HAZARDS</div>
-              <h2 className="hazards-title">
-                Different threats.<br />
-                <span className="hazards-title-blue">A connected future.</span>
-              </h2>
-              <p className="hazards-desc">
-                Severe thunderstorms, cloudbursts, and flash floods are linked by the same atmospheric
-                processes. VAYUNET unifies them into a single intelligence layer — from detection to early
-                action, for a more resilient India.
-              </p>
-            </div>
-          </div>
-
-          <div className="hazards-cards-grid">
-            {/* Card 1: Severe Thunderstorms */}
-            <div className="hazard-card-v3">
-              <div className="hazard-card-banner">
-                <img
-                  src="/hazard_thunderstorm.jpg"
-                  alt="Severe Thunderstorms"
-                  className="hazard-banner-img"
-                />
-                <div className="hazard-banner-vignette" />
-                <div className="hazard-badge badge-amber">
-                  CONVECTIVE TRIGGER
-                </div>
-              </div>
-
-              <div className="hazard-card-body">
-                <h3 className="hazard-v3-title">Severe Thunderstorms</h3>
-                <p className="hazard-v3-text">
-                  Convective storms, lightning, high winds and hail. Predicts atmospheric destabilization 2–6 hours before cloud breakout.
-                </p>
-
-                {/* Micro Chart: Convective Instability Profile */}
-                <div className="hazard-chart-container">
-                  <div className="chart-header-row">
-                    <span className="chart-header-title">CONVECTIVE INSTABILITY PROFILE</span>
-                  </div>
-                  <div className="convective-bars-wrap">
-                    {[
-                      { time: 'Now', val: '12%', h: 14, active: false },
-                      { time: '+1h', val: '38%', h: 38, active: true },
-                      { time: '+2h', val: '87%', h: 87, active: true, peak: true },
-                      { time: '+3h', val: '74%', h: 74, active: true },
-                      { time: '+4h', val: '32%', h: 32, active: true },
-                      { time: '+6h', val: '18%', h: 20, active: false }
-                    ].map((col, idx) => (
-                      <div key={idx} className="convective-col">
-                        <span className={`col-pct ${col.active ? 'pct-amber' : ''}`}>{col.val}</span>
-                        <div className="col-bar-bg">
-                          <div
-                            className={`col-bar-fill ${col.active ? (col.peak ? 'bar-peak-amber' : 'bar-amber') : 'bar-muted'}`}
-                            style={{ height: `${col.h}%` }}
-                          />
-                        </div>
-                        <span className="col-time">{col.time}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Footer Info */}
-                <div className="hazard-card-footer">
-                  <div className="hazard-footer-meta">
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                      <span><strong>Key Drivers:</strong> INSAT WV 6.7 µm + TIR 10.8 µm + CAPE &gt; 1800 J/kg</span>
-                    </div>
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                      <span><strong>Lead Time:</strong> 2 to 6 hours before lightning onset</span>
-                    </div>
-                  </div>
-                  <button
-                    className="hazard-action-circle"
-                    onClick={onEnterPortal}
-                    aria-label="Enter Operations Portal for Severe Thunderstorms"
-                    title="Enter Operations Portal"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Cloudbursts */}
-            <div className="hazard-card-v3">
-              <div className="hazard-card-banner">
-                <img
-                  src="/hazard_cloudburst.jpg"
-                  alt="Cloudbursts"
-                  className="hazard-banner-img"
-                />
-                <div className="hazard-banner-vignette" />
-                <div className="hazard-badge badge-blue">
-                  EXTREME PRECIPITATION
-                </div>
-              </div>
-
-              <div className="hazard-card-body">
-                <h3 className="hazard-v3-title">Cloudbursts</h3>
-                <p className="hazard-v3-text">
-                  Extreme localized rainfall over mountainous regions. Identifies microscale moisture entrapment producing &gt; 100 mm/hr in concentrated areas.
-                </p>
-
-                {/* Micro Chart: Rainfall Intensity Forecast */}
-                <div className="hazard-chart-container">
-                  <div className="chart-header-row">
-                    <span className="chart-header-title">RAINFALL INTENSITY FORECAST</span>
-                    <span className="chart-badge-peak">142 mm/hr PEAK</span>
-                  </div>
-                  <div className="rainfall-spectrum-outer">
-                    <div className="spectrum-yaxis">
-                      <span>150</span>
-                      <span>100</span>
-                      <span>50</span>
-                      <span>0</span>
-                    </div>
-                    <div className="spectrum-chart-area">
-                      <div className="spectrum-100-line" />
-                      <div className="spectrum-bars-flex">
-                        {[
-                          8, 10, 13, 16, 20, 25, 32, 40, 52, 68, 88, 110, 128, 142, 136, 122, 102, 80, 62, 48, 38, 30, 24, 18, 14, 11, 8
-                        ].map((mm, i) => {
-                          const heightPct = Math.min(100, Math.round((mm / 150) * 100));
-                          // Spectrum color calculation: Blue -> Cyan -> Orange -> Red
-                          let bg = '#2563eb';
-                          if (mm >= 130) bg = '#ef4444';
-                          else if (mm >= 100) bg = '#f97316';
-                          else if (mm >= 65) bg = '#fb923c';
-                          else if (mm >= 45) bg = '#38bdf8';
-                          else if (mm >= 25) bg = '#0284c7';
-                          return (
-                            <div key={i} className="spectrum-bar-slot">
-                              <div
-                                className="spectrum-bar"
-                                style={{
-                                  height: `${heightPct}%`,
-                                  background: bg,
-                                  boxShadow: mm >= 120 ? '0 0 6px rgba(239,68,68,0.5)' : 'none'
-                                }}
-                              />
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="spectrum-xaxis">
-                    <span>Now</span>
-                    <span>+1h</span>
-                    <span>+2h</span>
-                    <span>+3h</span>
-                    <span>+4h</span>
-                    <span>+6h</span>
-                  </div>
-                </div>
-
-                {/* Footer Info */}
-                <div className="hazard-card-footer">
-                  <div className="hazard-footer-meta">
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                      <span><strong>Key Drivers:</strong> IMDAA moisture flux + rapid CTT cooling &lt; −14 °C/hr</span>
-                    </div>
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                      <span><strong>Lead Time:</strong> 1 to 3 hours high-confidence window</span>
-                    </div>
-                  </div>
-                  <button
-                    className="hazard-action-circle"
-                    onClick={onEnterPortal}
-                    aria-label="Enter Operations Portal for Cloudbursts"
-                    title="Enter Operations Portal"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3: Flash Floods */}
-            <div className="hazard-card-v3">
-              <div className="hazard-card-banner">
-                <img
-                  src="/hazard_flashflood.jpg"
-                  alt="Flash Floods"
-                  className="hazard-banner-img"
-                />
-                <div className="hazard-banner-vignette" />
-                <div className="hazard-badge badge-cyan">
-                  TERRAIN COUPLING
-                </div>
-              </div>
-
-              <div className="hazard-card-body">
-                <h3 className="hazard-v3-title">Flash Floods</h3>
-                <p className="hazard-v3-text">
-                  Terrain-aware inundation and downstream routing. Fuses cloudburst probability grids with ISRO CartoDEM 30m D8 flow accumulation to map flood corridors in real time.
-                </p>
-
-                {/* Micro Chart: Hydrological Routing Profile */}
-                <div className="hazard-chart-container">
-                  <div className="chart-header-row">
-                    <span className="chart-header-title">HYDROLOGICAL ROUTING PROFILE</span>
-                    <span className="chart-badge-cyan">SURGE LAG: 42 MIN</span>
-                  </div>
-                  <div className="hydro-vector-wrapper">
-                    <svg viewBox="0 0 320 62" className="hydro-profile-svg" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id="hydroFillGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="rgba(56, 189, 248, 0.25)" />
-                          <stop offset="100%" stopColor="rgba(56, 189, 248, 0.02)" />
-                        </linearGradient>
-                      </defs>
-                      {/* Gradient area under the line */}
-                      <path
-                        d="M 12,18 C 50,18 75,34 105,38 C 135,42 165,52 195,50 C 230,48 260,46 308,48 L 308,62 L 12,62 Z"
-                        fill="url(#hydroFillGrad)"
-                      />
-                      {/* Flow line */}
-                      <path
-                        d="M 12,18 C 50,18 75,34 105,38 C 135,42 165,52 195,50 C 230,48 260,46 308,48"
-                        fill="none"
-                        stroke="#0ea5e9"
-                        strokeWidth="2.5"
-                      />
-                      {/* Nodes on the path with glowing orange dots like reference */}
-                      <circle cx="12" cy="18" r="3.5" fill="#f97316" stroke="#fff" strokeWidth="1" />
-                      <circle cx="105" cy="38" r="3.5" fill="#f97316" stroke="#fff" strokeWidth="1" />
-                      <circle cx="195" cy="50" r="3.5" fill="#38bdf8" stroke="#fff" strokeWidth="1.5" />
-                      <circle cx="308" cy="48" r="3.5" fill="#f97316" stroke="#fff" strokeWidth="1" />
-                    </svg>
-
-                    {/* Active Valley Nullah Pill indicator */}
-                    <div className="nullah-active-pill">
-                      Valley Nullah
-                    </div>
-                  </div>
-                  <div className="hydro-labels-row">
-                    <span>Ridge</span>
-                    <span>Gorge</span>
-                    <span className="active-nullah-tag">Valley Nullah</span>
-                    <span>Basin Flood</span>
-                  </div>
-                </div>
-
-                {/* Footer Info */}
-                <div className="hazard-card-footer">
-                  <div className="hazard-footer-meta">
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                      <span><strong>Key Drivers:</strong> CartoDEM 30m slope + D8 kinematic wave routing</span>
-                    </div>
-                    <div className="meta-line">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                      <span><strong>Lead Time:</strong> 2 to 4 hours advance downstream notification</span>
-                    </div>
-                  </div>
-                  <button
-                    className="hazard-action-circle"
-                    onClick={onEnterPortal}
-                    aria-label="Enter Operations Portal for Flash Floods"
-                    title="Enter Operations Portal"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          6. NATIONAL DATA FUSION (INTERACTIVE HORIZONTAL ACCORDION)
+          1. NATIONAL DATA FUSION (INTERACTIVE HORIZONTAL ACCORDION)
           ============================================================ */}
       <FusionAccordion onEnterPortal={onEnterPortal} />
 
@@ -1532,147 +1134,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       </section>
 
       {/* ============================================================
-          8. NATIONAL IMPACT & FOOTER
-          ============================================================ */}
-      <div id="impact-section" className="section-impact-wrapper">
-        <section id="impact" className="section-impact">
-        <div className="impact-header-wrap">
-          <div className="impact-header-left">
-            <div className="section-eyebrow">A SAFER INDIA</div>
-            <h2 className="impact-title">
-              From insight to <span className="impact-title-blue">impact.</span>
-            </h2>
-            <p className="impact-desc">
-              Bridging the fatal gap between meteorological observation and emergency action
-              with actionable lead time, disaster preparedness, and climate-resilient infrastructure.
-            </p>
-          </div>
-          <div className="impact-header-right">
-            <div className="impact-telemetry-map-box">
-              {/* Constellation network graphic over India */}
-              <svg viewBox="0 0 240 140" className="impact-constellation-svg">
-                <path d="M 40,40 Q 80,20 120,50 T 180,30" fill="none" stroke="rgba(56, 189, 248, 0.4)" strokeDasharray="3 3" />
-                <path d="M 60,90 Q 110,70 140,110 T 200,90" fill="none" stroke="rgba(56, 189, 248, 0.3)" />
-                <path d="M 120,50 L 140,110" fill="none" stroke="rgba(56, 189, 248, 0.5)" />
-                <path d="M 40,40 L 60,90" fill="none" stroke="rgba(56, 189, 248, 0.4)" />
-                <path d="M 180,30 L 200,90" fill="none" stroke="rgba(56, 189, 248, 0.4)" />
-                <circle cx="40" cy="40" r="3" fill="#38bdf8" />
-                <circle cx="120" cy="50" r="4" fill="#38bdf8" stroke="#fff" strokeWidth="1" />
-                <circle cx="180" cy="30" r="3" fill="#38bdf8" />
-                <circle cx="60" cy="90" r="3.5" fill="#38bdf8" />
-                <circle cx="140" cy="110" r="4" fill="#38bdf8" stroke="#fff" strokeWidth="1" />
-                <circle cx="200" cy="90" r="3" fill="#38bdf8" />
-              </svg>
-              <div className="impact-header-tags">
-                <span>EARLIER WARNINGS</span>
-                <span>SAFER COMMUNITIES</span>
-                <span>STRONGER INDIA</span>
-                <span className="telemetry-bar-divider" />
-                <span className="impact-resilience-quote">“From data to disaster resilience.”</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="impact-grid-v3">
-          {/* Card 1 */}
-          <div className="impact-card-v3">
-            <div className="impact-card-num-box">
-              <span className="impact-card-num">01</span>
-              <div className="impact-card-icon-circle">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-            </div>
-            <div className="impact-card-img-box">
-              <img src="/impact_rescue.jpg" alt="Lives Protected" className="impact-card-img" />
-              <div className="impact-card-img-overlay" />
-            </div>
-            <div className="impact-card-content">
-              <div className="impact-lead-tag">2 – 6 h Lead Time</div>
-              <h3 className="impact-card-heading">Lives Protected</h3>
-              <p className="impact-card-p">
-                Earlier action enables district emergency operation centers (EOCs) and first responders
-                to evacuate vulnerable riverbeds, divert mountain traffic, and stage rescue assets well
-                before catastrophic cloudburst runoff strikes.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className="impact-card-v3">
-            <div className="impact-card-num-box">
-              <span className="impact-card-num">02</span>
-              <div className="impact-card-icon-circle">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
-              </div>
-            </div>
-            <div className="impact-card-img-box">
-              <img src="/impact_precision.jpg" alt="Reduced Risk" className="impact-card-img" />
-              <div className="impact-card-img-overlay" />
-            </div>
-            <div className="impact-card-content">
-              <div className="impact-lead-tag">4 km Precision</div>
-              <h3 className="impact-card-heading">Reduced Risk</h3>
-              <p className="impact-card-p">
-                Hyper-local resolution eliminates the “crying wolf” effect of district-wide warnings.
-                Pinpointing specific valleys and mountain nullahs maintains public trust and ensures
-                rapid compliance with emergency bulletins.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="impact-card-v3">
-            <div className="impact-card-num-box">
-              <span className="impact-card-num">03</span>
-              <div className="impact-card-icon-circle">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
-              </div>
-            </div>
-            <div className="impact-card-img-box">
-              <img src="/hazard_cloudburst.jpg" alt="Stronger Resilience" className="impact-card-img" />
-              <div className="impact-card-img-overlay" />
-            </div>
-            <div className="impact-card-content">
-              <div className="impact-lead-tag">CAP 1.2 Ready</div>
-              <h3 className="impact-card-heading">Stronger Resilience</h3>
-              <p className="impact-card-p">
-                Standardized interoperability empowers national, state, and local agencies to safeguard
-                hydropower dams, highway corridors, and pilgrim routes against cascading multi-hazard catastrophes.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Real Data Real Impact CTA Box */}
-        <div className="portal-cta-banner-v3">
-          <div className="cta-banner-bg-earth">
-            <img src="/globe_asia_telemetry.jpg" alt="" className="cta-bg-earth-img" />
-            <div className="cta-bg-earth-vignette" />
-          </div>
-
-          <div className="cta-banner-left">
-            <div className="cta-banner-eyebrow">REAL DATA. REAL IMPACT.</div>
-            <h3 className="cta-banner-heading">Ready to inspect live hazard intelligence?</h3>
-            <p className="cta-banner-desc">
-              Access the full operations portal — Interactive GIS nowcast, XAI diagnostics,
-              forensic event playback, CAP alert dispatch hub, and system telemetry.
-            </p>
-          </div>
-
-          <div className="cta-banner-right">
-            <button className="btn-cta-enter-v3" onClick={onEnterPortal}>
-              Enter Operations Portal →
-            </button>
-            <button className="cta-link-public-warnings" onClick={onOpenPublicWarnings}>
-              View Public Warnings ↗
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          9. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)
+          3. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)
           ============================================================ */}
       <footer className="cp-footer">
         {/* Row 1: Live System Telemetry Strip */}
@@ -1792,7 +1254,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           </div>
         </div>
       </footer>
-      </div>
     </div>
   );
 }
