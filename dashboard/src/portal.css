@@ -745,10 +745,10 @@
   inset: 0;
   pointer-events: none;
   background: linear-gradient(90deg,
-    rgba(3, 11, 24, 0.97) 0%,
-    rgba(3, 11, 24, 0.90) 36%,
-    rgba(3, 11, 24, 0.48) 58%,
-    rgba(3, 11, 24, 0.12) 80%,
+    rgba(2, 10, 15, 0.98) 0%,
+    rgba(3, 15, 23, 0.92) 36%,
+    rgba(4, 21, 30, 0.55) 58%,
+    rgba(7, 37, 52, 0.16) 80%,
     transparent 100%
   );
   z-index: 2;
@@ -857,7 +857,10 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 20% 60%, rgba(14, 151, 243, 0.12) 0%, rgba(35, 154, 124, 0.08) 40%, transparent 65%);
+  background: 
+    radial-gradient(ellipse at 18% 55%, rgba(14, 151, 243, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse at 35% 82%, rgba(35, 154, 124, 0.11) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 22%, rgba(98, 192, 191, 0.06) 0%, transparent 45%);
   z-index: 1;
 }
 
@@ -6128,7 +6131,7 @@ html {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 100px);
-  background-color: #030b18;
+  background-color: #020a0f;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -8015,4 +8018,782 @@ html {
     gap: 16px;
   }
 }
+
+/* ============================================================
+   LIGHT MODE STYLING OVERRIDES (from vayunet-palette (1).css)
+   Activated when html[data-theme="light"] is set
+   ============================================================ */
+
+[data-theme="light"] {
+  background-color: var(--bg);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .home-page {
+  background-color: var(--bg);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .home-nav {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .home-brand-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .home-nav-links-capsule {
+  background: rgba(241, 245, 249, 0.95);
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .home-nav-links-capsule a {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .home-nav-links-capsule a:hover,
+[data-theme="light"] .home-nav-links-capsule a.active {
+  color: var(--primary-deep);
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .home-lang-picker-capsule {
+  background: rgba(241, 245, 249, 0.95);
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .home-lang-select {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .btn-secondary-nav {
+  background: rgba(25, 118, 210, 0.08);
+  border: 1px solid rgba(25, 118, 210, 0.3);
+  color: var(--primary);
+}
+
+[data-theme="light"] .btn-primary-nav {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+  color: #FFFFFF;
+}
+
+/* Light Mode Hero */
+[data-theme="light"] .home-hero-container {
+  background-color: #e2e8f0;
+}
+
+[data-theme="light"] .hero-text-readability-overlay {
+  background: linear-gradient(90deg,
+    rgba(248, 250, 252, 0.97) 0%,
+    rgba(248, 250, 252, 0.92) 36%,
+    rgba(248, 250, 252, 0.60) 58%,
+    rgba(248, 250, 252, 0.20) 80%,
+    transparent 100%
+  );
+}
+
+[data-theme="light"] .hero-eyebrow-tag {
+  color: var(--primary);
+}
+
+[data-theme="light"] .hero-headline {
+  color: #0F172A;
+}
+
+[data-theme="light"] .hero-headline-accent {
+  background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .hero-lead-text {
+  color: #475569;
+}
+
+[data-theme="light"] .btn-hero-portal {
+  background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(25, 118, 210, 0.35);
+}
+
+[data-theme="light"] .btn-hero-warnings {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
+}
+
+[data-theme="light"] .hero-mission-badge {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #E2E8F0;
+  color: #475569;
+}
+
+[data-theme="light"] .provenance-text-block strong {
+  color: #0F172A;
+}
+
+/* Light Mode Floating Map Controls */
+[data-theme="light"] .hero-compact-scrubber,
+[data-theme="light"] .map-precip-legend-v3,
+[data-theme="light"] .map-zoom-controls-panel,
+[data-theme="light"] .map-layer-panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="light"] .compact-scrubber-title,
+[data-theme="light"] .precip-legend-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .compact-scrubber-time {
+  color: #1976D2;
+}
+
+[data-theme="light"] .compact-scrubber-steps {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .compact-step-btn {
+  color: #64748B;
+}
+
+[data-theme="light"] .compact-step-btn:hover {
+  color: #0F172A;
+  background: #E2E8F0;
+}
+
+[data-theme="light"] .compact-step-btn.step-active {
+  background: #1976D2;
+  color: #FFFFFF;
+}
+
+[data-theme="light"] .zoom-ctrl-btn,
+[data-theme="light"] .layer-btn-v3 {
+  color: #475569;
+}
+
+[data-theme="light"] .zoom-ctrl-btn:hover,
+[data-theme="light"] .layer-btn-v3:hover {
+  color: #0F172A;
+  background: #F1F5F9;
+}
+
+[data-theme="light"] .layer-btn-v3.active {
+  background: rgba(25, 118, 210, 0.12);
+  border-color: #1976D2;
+  color: #1976D2;
+}
+
+[data-theme="light"] .btn-view-live-map {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #1976D2;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* Light Mode Sections */
+[data-theme="light"] .credibility-band {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .metric-label {
+  color: #64748B;
+}
+
+[data-theme="light"] .metric-val {
+  color: #0F172A;
+}
+
+[data-theme="light"] .metric-icon-box {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  color: var(--primary);
+}
+
+[data-theme="light"] .section-data-fusion {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .data-fusion-header h2 {
+  color: #0F172A;
+}
+
+[data-theme="light"] .data-fusion-header p {
+  color: #475569;
+}
+
+[data-theme="light"] .fusion-accordion-card {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .fusion-card-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .fusion-card-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .section-how-it-works {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .decision-step-v3 {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .workflow-step-num {
+  color: var(--primary);
+}
+
+[data-theme="light"] .workflow-step-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .workflow-step-desc {
+  color: #475569;
+}
+
+/* Light Mode Footer */
+[data-theme="light"] .cp-footer,
+[data-theme="light"] .home-footer-v3 {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .footer-v3-tagline,
+[data-theme="light"] .footer-nav-col a,
+[data-theme="light"] .footer-v3-copyright {
+  color: #64748B;
+}
+
+[data-theme="light"] .footer-nav-col h4,
+[data-theme="light"] .footer-v3-tagline strong {
+  color: #0F172A;
+}
+
+/* ============================================================
+   MOBILE HEADER & HERO PERFECTION (<768px)
+   Matches Reference Screenshot:
+   1. Clean Top Header: Logo + VAYUNET + Subtitle on left;
+      English dropdown + Hamburger button on right.
+   2. Sleek Weather Alert Ticker Card right below header.
+   3. Clean Hero Section: 2-line Eyebrow, 4-line Headline,
+      Lead Paragraph, Two Full-Width CTAs,
+      Interactive Map with Recenter FAB, and Provenance Bar.
+   ============================================================ */
+
+/* Desktop defaults for mobile-only items */
+.mobile-eyebrow-break {
+  display: none;
+}
+
+.ticker-mobile-preview {
+  display: none;
+}
+
+.mobile-hero-map-wrap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Page structure: Natural document flow */
+  .home-page {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background-color: var(--bg-primary, #020a0f) !important;
+  }
+
+  /* On mobile, disable hero-intro-active full-height lock & opacities */
+  .home-page.hero-intro-active #hero-section,
+  .home-page.hero-intro-active .home-hero-container {
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .home-page.hero-intro-active .hero-eyebrow-tag,
+  .home-page.hero-intro-active .hero-headline,
+  .home-page.hero-intro-active .hero-lead-text,
+  .home-page.hero-intro-active .hero-cta-group,
+  .home-page.hero-intro-active .hero-national-data-provenance,
+  .home-page.hero-intro-active .emergency-alert-ticker,
+  .home-page.hero-intro-active .home-nav {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* 1. Mobile Header: Sticky at top: 0 */
+  .home-nav {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 62px !important;
+    padding: 0 16px !important;
+    background: rgba(2, 10, 15, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 1000 !important;
+    box-sizing: border-box !important;
+  }
+
+  .home-nav-inner {
+    padding: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .home-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .home-logo {
+    width: 38px !important;
+    height: 38px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .home-logo-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .brand-titles-group {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .brand-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .home-title {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .gov-sovereign-pill {
+    display: none !important;
+  }
+
+  .home-dept {
+    font-size: 10px !important;
+    color: #94a3b8 !important;
+    margin-top: 2px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .home-nav-links-capsule {
+    display: none !important;
+  }
+
+  /* Right Header Actions: Only English capsule + Hamburger */
+  .home-nav-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .home-nav-actions .day-night-toggle,
+  .home-nav-actions .btn-secondary-nav,
+  .home-nav-actions .btn-primary-nav {
+    display: none !important;
+  }
+
+  .home-lang-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(4, 18, 28, 0.8) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-radius: 8px !important;
+    padding: 5px 8px 5px 9px !important;
+    height: 34px !important;
+    box-sizing: border-box !important;
+  }
+
+  .home-lang-icon {
+    width: 13px !important;
+    height: 13px !important;
+    color: #38bdf8 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .home-lang-select {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #f1f5f9 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    cursor: pointer !important;
+    padding-right: 2px !important;
+  }
+
+  .mobile-hamburger-btn {
+    display: flex !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 8px !important;
+    background: rgba(4, 18, 28, 0.8) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    color: #f1f5f9 !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* 2. Weather Alert Ticker: Directly below Header */
+  .emergency-alert-ticker {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: calc(100% - 32px) !important;
+    margin: 10px 16px 12px 16px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    background: rgba(24, 8, 10, 0.85) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    z-index: 90 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .ticker-badge {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    background: rgba(239, 68, 68, 0.25) !important;
+    border: 1px solid rgba(239, 68, 68, 0.5) !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .ticker-badge-text {
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+    color: #fca5a5 !important;
+    letter-spacing: 0.6px !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+  }
+
+  .ticker-pulse-beacon {
+    width: 6px !important;
+    height: 6px !important;
+    background: #ef4444 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 6px #ef4444 !important;
+  }
+
+  .ticker-track {
+    display: none !important;
+  }
+
+  .ticker-mobile-preview {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    cursor: pointer !important;
+  }
+
+  .ticker-mobile-text {
+    font-size: 11.5px !important;
+    color: #e2e8f0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-weight: 500 !important;
+  }
+
+  .ticker-mobile-arrow {
+    font-size: 15px !important;
+    color: #94a3b8 !important;
+    margin-left: 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .ticker-helpline-wrap {
+    display: none !important;
+  }
+
+  /* 3. Hero Section */
+  #hero-section {
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .home-hero-container {
+    height: auto !important;
+    min-height: auto !important;
+    background-color: #020a0f !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .hero-map-backdrop {
+    display: none !important;
+  }
+
+  .hero-text-readability-overlay {
+    display: none !important;
+  }
+
+  .home-hero-inner {
+    display: block !important;
+    padding: 12px 16px 24px 16px !important;
+    max-width: 100% !important;
+    pointer-events: auto !important;
+  }
+
+  .hero-left-content {
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  .hero-eyebrow-tag {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    font-family: var(--font-mono) !important;
+    letter-spacing: 2px !important;
+    color: #38bdf8 !important;
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .mobile-eyebrow-break {
+    display: block !important;
+  }
+
+  .hero-headline {
+    font-size: clamp(30px, 8.8vw, 36px) !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.5px !important;
+    color: #ffffff !important;
+    margin-bottom: 14px !important;
+  }
+
+  .hero-headline-accent {
+    background: linear-gradient(135deg, #38bdf8 0%, #34d399 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    display: inline-block !important;
+  }
+
+  .hero-lead-text {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    color: #94a3b8 !important;
+    margin-bottom: 20px !important;
+    font-weight: 400 !important;
+  }
+
+  .hero-cta-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+  }
+
+  .btn-hero-portal {
+    width: 100% !important;
+    height: 48px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    border-radius: 9px !important;
+    background: linear-gradient(135deg, #0e97f3 0%, #239a7c 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 16px rgba(14, 151, 243, 0.35) !important;
+    cursor: pointer !important;
+  }
+
+  .btn-hero-warnings {
+    width: 100% !important;
+    height: 48px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 9px !important;
+    background: rgba(4, 18, 28, 0.65) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+
+  .hero-mission-badge {
+    display: none !important;
+  }
+
+  /* Desktop floating panels completely hidden on mobile */
+  .hero-map-interactive-zone {
+    display: none !important;
+  }
+
+  .mobile-hero-map-block {
+    display: none !important;
+  }
+
+  /* Dedicated Mobile Map Wrap */
+  .mobile-hero-map-wrap {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 380px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+    margin-bottom: 20px !important;
+    background: #020712 !important;
+  }
+
+  .mobile-hero-map-wrap .hero-leaflet-wrapper,
+  .mobile-hero-map-wrap .hero-leaflet-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 12px !important;
+  }
+
+  .mobile-map-recenter-fab {
+    position: absolute !important;
+    bottom: 14px !important;
+    right: 14px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    background: rgba(4, 18, 28, 0.88) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1000 !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+    padding: 0 !important;
+  }
+
+  .subcontinent-map-quick-toggles {
+    display: none !important;
+  }
+
+  /* National Data Provenance Bar under map */
+  .hero-national-data-provenance {
+    display: block !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+    width: 100% !important;
+  }
+
+  .national-data-label {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    color: #64748b !important;
+    margin-bottom: 10px !important;
+    font-family: var(--font-mono) !important;
+  }
+
+  .national-data-sources-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 14px !important;
+    background: rgba(4, 18, 28, 0.55) !important;
+    border: 1px solid rgba(56, 189, 248, 0.16) !important;
+    border-radius: 9px !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .national-data-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .national-data-icon-box {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 6px !important;
+    background: rgba(56, 189, 248, 0.08) !important;
+    border: 1px solid rgba(56, 189, 248, 0.2) !important;
+    color: #38bdf8 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .national-data-title {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #f1f5f9 !important;
+    display: block !important;
+  }
+
+  .national-data-agency {
+    font-size: 9.5px !important;
+    color: #94a3b8 !important;
+    display: block !important;
+  }
+
+  .national-data-divider {
+    height: 24px !important;
+    width: 1px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+
 

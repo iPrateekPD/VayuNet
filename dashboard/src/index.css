@@ -10,60 +10,71 @@
 }
 
 :root {
-  /* Backgrounds — Deep Abyssal Petrol Teal from VAYUNET Logo */
-  --bg-primary:    #030f14;
-  --bg-secondary:  #071a23;
-  --bg-surface:    #0a222e;
-  --bg-card:       #0d2735;
-  --bg-card-hover: #123344;
-  --bg-inset:      #020a0f;
+  /* ============================================================
+     Light mode — public/citizen portal (from vayunet-palette (1).css)
+     ============================================================ */
+  --bg:               #F8FAFC;
+  --surface:          #FFFFFF;
+  --surface-elevated: #F1F5F9;
+  --border:           #E2E8F0;
+  --border-mid:       #CBD5E1;
+  --border-bright:    #94A3B8;
 
-  /* Borders — Ambient Atmospheric Teal Borders */
-  --border:        rgba(98, 192, 191, 0.12);
-  --border-mid:    rgba(98, 192, 191, 0.20);
-  --border-bright: rgba(98, 192, 191, 0.35);
+  --primary:          #1976D2;
+  --primary-deep:     #0D47A1;
+  --secondary:        #2E7D32;
+  --accent:           #29B6F6;
+  --accent-teal:      #2E7D32;
+  --accent-mint:      #29B6F6;
+  --accent-gradient:  linear-gradient(135deg, #1976D2 0%, #29B6F6 100%);
+  --accent-dim:       rgba(25, 118, 210, 0.10);
 
-  /* Text — High-contrast Glacial Frost Cool Whites & Atmospheric Slate */
-  --text-primary:   #f0f8fa;
-  --text-secondary: #a2c8d5;
-  --text-muted:     #6d95a5;
-  --text-faint:     #426a7a;
+  --text-primary:     #0F172A;
+  --text-secondary:   #475569;
+  --text-muted:       #64748B;
+  --text-faint:       #94A3B8;
 
-  /* Hazard colors — used ONLY for meteorological data, never UI decoration */
-  --hazard-thunder: #f59e0b;   /* Amber — convective */
-  --hazard-burst:   #3b82f6;   /* Blue — extreme rain */
-  --hazard-flood:   #06b6d4;   /* Cyan — inundation */
+  --severe:           #DC2626;
+  --warning:          #F59E0B;
+  --watch:            #CA8A04;
+  --safe:             #16A34A;
 
-  /* Severity — severity-coded elements ONLY */
-  --sev-low:      #22c55e;
-  --sev-moderate: #eab308;
-  --sev-high:     #f97316;
-  --sev-severe:   #ef4444;
-  --sev-extreme:  #a855f7;
+  /* Aliases for global compatibility */
+  --bg-primary:       var(--bg);
+  --bg-secondary:     var(--surface-elevated);
+  --bg-surface:       var(--surface);
+  --bg-card:          var(--surface);
+  --bg-card-hover:    var(--surface-elevated);
+  --bg-inset:         #EEF2F6;
 
-  /* Accent — VAYUNET Logo Signatures (Electric Azure & Biosphere Teal) */
-  --accent:          #0e97f3;
-  --accent-teal:     #239a7c;
-  --accent-mint:     #62c0bf;
-  --accent-gradient: linear-gradient(135deg, #0e97f3 0%, #239a7c 100%);
-  --accent-dim:      rgba(14, 151, 243, 0.15);
+  /* Meteorological Hazard colors */
+  --hazard-thunder:   #f59e0b;
+  --hazard-burst:     #1976D2;
+  --hazard-flood:     #0284c7;
+
+  /* Severity metrics */
+  --sev-low:          var(--safe);
+  --sev-moderate:     var(--watch);
+  --sev-high:         var(--warning);
+  --sev-severe:       var(--severe);
+  --sev-extreme:      #7c3aed;
 
   /* Live / Status indicators */
-  --live-red:     #ef4444;
-  --online-green: #10b981;
+  --live-red:         #DC2626;
+  --online-green:     #16A34A;
 
-  /* Typography — IBM Plex: scientific authority */
+  /* Typography */
   --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
-  /* Radii — tighter, crisper borders for precision scientific look */
+  /* Radii */
   --r-xs: 2px;
   --r-sm: 4px;
   --r-md: 6px;
   --r-lg: 8px;
   --r-xl: 10px;
 
-  /* Legacy compat aliases (existing components reference these) */
+  /* Legacy aliases */
   --thunderstorm:   var(--hazard-thunder);
   --cloudburst:     var(--hazard-burst);
   --flood:          var(--hazard-flood);
@@ -72,14 +83,74 @@
   --risk-high:      var(--sev-high);
   --risk-severe:    var(--sev-severe);
   --risk-extreme:   var(--sev-extreme);
-  --accent-blue:    var(--accent);
-  --accent-cyan:    #22d3ee;
-  --accent-teal:    #2dd4bf;
+  --accent-blue:    var(--primary);
+  --accent-cyan:    var(--accent);
   --radius-sm:      var(--r-sm);
   --radius-md:      var(--r-md);
   --radius-lg:      var(--r-lg);
-  --shadow-card:    0 2px 12px rgba(0,0,0,0.5);
-  --glow-blue:      none;
+  --shadow-card:    0 2px 12px rgba(15, 23, 42, 0.08);
+  --glow-blue:      0 0 16px rgba(25, 118, 210, 0.2);
+}
+
+[data-theme="dark"],
+.dark {
+  /* ============================================================
+     Dark mode — tactical command center (from vayunet-palette (1).css)
+     ============================================================ */
+  --bg:               #0B1220;
+  --surface:          #111827;
+  --surface-elevated: #1E293B;
+  --border:           #263449;
+  --border-mid:       rgba(56, 189, 248, 0.22);
+  --border-bright:    rgba(56, 189, 248, 0.45);
+
+  --primary:          #38BDF8;
+  --primary-deep:     #0EA5E9;
+  --secondary:        #34D399;
+  --accent:           #22D3EE;
+  --accent-teal:      #34D399;
+  --accent-mint:      #22D3EE;
+  --accent-gradient:  linear-gradient(135deg, #38BDF8 0%, #34D399 100%);
+  --accent-dim:       rgba(56, 189, 248, 0.15);
+
+  --text-primary:     #F1F5F9;
+  --text-secondary:   #94A3B8;
+  --text-muted:       #64748B;
+  --text-faint:       #475569;
+
+  --severe:           #F87171;
+  --warning:          #FBBF24;
+  --watch:            #FDE047;
+  --safe:             #4ADE80;
+
+  /* Aliases for global compatibility */
+  --bg-primary:       var(--bg);
+  --bg-secondary:     #070e1a;
+  --bg-surface:       var(--surface);
+  --bg-card:          var(--surface);
+  --bg-card-hover:    var(--surface-elevated);
+  --bg-inset:         #070d17;
+
+  /* Meteorological Hazard colors */
+  --hazard-thunder:   #f59e0b;
+  --hazard-burst:     #38bdf8;
+  --hazard-flood:     #22d3ee;
+
+  /* Severity metrics */
+  --sev-low:          var(--safe);
+  --sev-moderate:     var(--watch);
+  --sev-high:         var(--warning);
+  --sev-severe:       var(--severe);
+  --sev-extreme:      #c084fc;
+
+  /* Live / Status indicators */
+  --live-red:         #ef4444;
+  --online-green:     #34D399;
+
+  --accent-blue:      var(--primary);
+  --accent-cyan:      var(--accent);
+  --shadow-card:      0 2px 12px rgba(0, 0, 0, 0.5);
+  --glow-blue:        0 0 16px rgba(56, 189, 248, 0.25);
 }
 
 html, body {

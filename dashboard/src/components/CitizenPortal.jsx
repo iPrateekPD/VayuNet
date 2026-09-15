@@ -4,6 +4,7 @@ import L from 'leaflet';
 import gsap from 'gsap';
 import './CitizenPortal.css';
 import { INDIAN_LANGUAGES } from './HomePage';
+import DayNightToggle from './DayNightToggle';
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
 const LOCATION_DATABASE = {
@@ -240,7 +241,7 @@ function MapFlyController({ center, zoom }) {
   return null;
 }
 
-export default function CitizenPortal({ onBackHome, onEnterPortal }) {
+export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark', onToggleTheme }) {
   // Active selected location state (defaults to McLeodganj as seen in reference image)
   const [selectedId, setSelectedId] = useState('mcleodganj');
   const [searchQuery, setSearchQuery] = useState('');
@@ -520,6 +521,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             </div>
 
             <div className="home-nav-actions cp-nav-anim-item">
+              {/* Day / Night Theme Toggle */}
+              <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
+
               <div className="home-lang-wrap">
                 <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10"/>

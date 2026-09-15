@@ -16,9 +16,25 @@ import AnalysisView from './components/AnalysisView';
 import EventsView from './components/EventsView';
 import AlertsView from './components/AlertsView';
 import SystemDrawer from './components/SystemDrawer';
+import DayNightToggle from './components/DayNightToggle';
 import './components/OperationsPortal.css';
 
 function App() {
+  // Theme state: 'dark' | 'light'
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('vayunet-theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('vayunet-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const getViewFromLocation = () => {
     const hash = window.location.hash.toLowerCase();
     const pathname = window.location.pathname.toLowerCase();
@@ -202,6 +218,8 @@ function App() {
         <HomePage 
           onEnterPortal={() => navigateTo('login')}
           onOpenPublicWarnings={() => navigateTo('citizen')}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -215,6 +233,8 @@ function App() {
         <CitizenPortal 
           onBackHome={() => navigateTo('home')}
           onEnterPortal={() => navigateTo('login')}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -285,6 +305,9 @@ function App() {
 
           {/* Right Side Things: Button shape, size, color keep same */}
           <div className="home-nav-actions">
+            {/* Day / Night Theme Toggle */}
+            <DayNightToggle isDark={theme === 'dark'} onToggle={toggleTheme} />
+
             {/* Language Selector */}
             <div className="home-lang-wrap">
               <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

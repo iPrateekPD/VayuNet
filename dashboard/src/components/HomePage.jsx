@@ -3,6 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroMap from './HeroMap';
 import FusionAccordion from './FusionAccordion';
+import DayNightToggle from './DayNightToggle';
+import VayunetSplashIntro from './VayunetSplashIntro';
 import {
   WEATHER_LAYERS,
   FORECAST_TIME_STEPS,
@@ -26,7 +28,8 @@ export const INDIAN_LANGUAGES = [
   { code: 'AS', label: 'অসমীয়া — Assamese' },
 ];
 
-export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
+export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 'dark', onToggleTheme }) {
+  const [showSplash, setShowSplash] = useState(true);
   const [telemetryTime, setTelemetryTime] = useState('');
   const [displayDate, setDisplayDate] = useState('');
   const [activeLayer, setActiveLayer] = useState('precipitation');
@@ -149,6 +152,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   // GSAP subtle animations throughout the homepage
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // On mobile view, skip the desktop map zoom and reveal immediately
+      if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+        introCompleteRef.current = true;
+        setIsIntroComplete(true);
+        return;
+      }
+
       // 1. Initial State: Hide all other elements before map zooms into position on Earth
       gsap.set(['.emergency-alert-ticker', '.home-nav'], { opacity: 0, y: -25 });
       gsap.set('.hero-text-readability-overlay', { opacity: 0 });
@@ -176,7 +186,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       // Fast, silky smooth 60fps GPU zoom-in directly onto India
       const heroTl = gsap.timeline({
         defaults: { ease: 'power2.out' },
-        delay: 0.05,
+        delay: 2.0,
       });
 
       heroTl
@@ -410,61 +420,16 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   const activeLayerMeta = WEATHER_LAYERS.find(l => l.id === activeLayer) || WEATHER_LAYERS[0];
 
   return (
-    <div className={`home-page ${!isIntroComplete ? 'hero-intro-active' : ''}`}>
+    <>
+      {/* 2-Second Opening VAYUNET Logo Cinematic Splash */}
+      {showSplash && (
+        <VayunetSplashIntro onComplete={() => setShowSplash(false)} />
+      )}
+
+      <div className={`home-page ${!isIntroComplete ? 'hero-intro-active' : ''}`}>
 
       {/* ============================================================
-          1. LIVE EMERGENCY DISASTER / FLOOD WARNING NEWS TICKER
-          ============================================================ */}
-      <div className="emergency-alert-ticker" role="alert">
-        <div className="ticker-badge">
-          <span className="ticker-pulse-beacon" />
-          <span className="ticker-badge-text">{t.tickerTitle}</span>
-        </div>
-        <div className="ticker-track">
-          {/* Content duplicated for seamless infinite marquee loop */}
-          <div className="ticker-content">
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-          </div>
-        </div>
-        <div className="ticker-helpline-wrap">
-          <a href="tel:1078" className="ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
-            <span className="helpline-icon">🚨</span>
-            <span>NDMA Helpline: <strong>1078</strong></span>
-          </a>
-        </div>
-      </div>
-
-      {/* ============================================================
-          2. REDESIGNED SOVEREIGN PRIMARY NAVIGATION
+          1. REDESIGNED SOVEREIGN PRIMARY NAVIGATION
           ============================================================ */}
       <nav className={`home-nav ${isNavScrolled ? 'nav-scrolled' : ''}`}>
         <div className="home-nav-inner">
@@ -505,6 +470,9 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
           {/* Right Header Actions */}
           <div className="home-nav-actions">
+            {/* Day / Night Theme Toggle */}
+            <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
+
             {/* Language Option Dropdown */}
             <div className="home-lang-wrap">
               <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -567,6 +535,10 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         {mobileMenuOpen && (
           <div className="mobile-nav-drawer">
             <div className="mobile-nav-links">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
+                <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
+              </div>
               <div className="mobile-nav-lang-row">
                 <span>{language === 'HI' ? 'भाषा चुनें (Select Language):' : 'Select Language:'}</span>
                 <select 
@@ -614,6 +586,64 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         )}
       </nav>
 
+      {/* ============================================================
+          2. LIVE EMERGENCY DISASTER / FLOOD WARNING NEWS TICKER
+          ============================================================ */}
+      <div className="emergency-alert-ticker" role="alert">
+        <div className="ticker-badge">
+          <span className="ticker-pulse-beacon" />
+          <span className="ticker-badge-text">{t.tickerTitle}</span>
+        </div>
+        <div className="ticker-track">
+          {/* Content duplicated for seamless infinite marquee loop */}
+          <div className="ticker-content">
+            <span className="ticker-item red-alert">
+              <span className="alert-tag">{t.ticker1Tag}</span>
+              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+            <span className="ticker-item orange-alert">
+              <span className="alert-tag">{t.ticker2Tag}</span>
+              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+            <span className="ticker-item yellow-alert">
+              <span className="alert-tag">{t.ticker3Tag}</span>
+              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+            <span className="ticker-item red-alert">
+              <span className="alert-tag">{t.ticker1Tag}</span>
+              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+            <span className="ticker-item orange-alert">
+              <span className="alert-tag">{t.ticker2Tag}</span>
+              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+            <span className="ticker-item yellow-alert">
+              <span className="alert-tag">{t.ticker3Tag}</span>
+              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+            </span>
+            <span className="ticker-dot">•</span>
+          </div>
+        </div>
+
+        {/* Dedicated Mobile Clean Alert Row (matches reference) */}
+        <div className="ticker-mobile-preview" onClick={onOpenPublicWarnings}>
+          <span className="ticker-mobile-text">Heavy rainfall over Uttarakhand</span>
+          <span className="ticker-mobile-arrow">›</span>
+        </div>
+
+        <div className="ticker-helpline-wrap">
+          <a href="tel:1078" className="ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
+            <span className="helpline-icon">🚨</span>
+            <span>NDMA Helpline: <strong>1078</strong></span>
+          </a>
+        </div>
+      </div>
+
       {/* Floating Language Feedback Toast */}
       {toastMsg && (
         <div className="home-toast-pill">
@@ -650,7 +680,11 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
           {/* ===== LEFT COLUMN: Mission Briefing ===== */}
           <div className="hero-left-content">
-            <div className="hero-eyebrow-tag">REAL-TIME INSIGHTS. EARLIER ACTIONS.</div>
+            <div className="hero-eyebrow-tag">
+              <span>REAL-TIME INSIGHTS.</span>
+              <br className="mobile-eyebrow-break" />
+              <span>EARLIER ACTIONS.</span>
+            </div>
 
             <h1 className="hero-headline">
               Detect severe weather<br />
@@ -673,7 +707,32 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               </button>
             </div>
 
-            {/* Primary Action Info Pill */}
+            {/* Dedicated Mobile Interactive Map (Positioned cleanly between CTAs and Provenance bar) */}
+            <div className="mobile-hero-map-wrap">
+              <HeroMap
+                activeLayer={activeLayer}
+                scrubberIdx={scrubberIdx}
+                isMobile={true}
+                mapControllerRef={mobileMapControllerRef}
+              />
+              <button
+                type="button"
+                className="mobile-map-recenter-fab"
+                onClick={handleResetView}
+                title="Recenter Map to India"
+                aria-label="Recenter Map"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="7" />
+                  <line x1="12" y1="1" x2="12" y2="5" />
+                  <line x1="12" y1="19" x2="12" y2="23" />
+                  <line x1="1" y1="12" x2="5" y2="12" />
+                  <line x1="19" y1="12" x2="23" y2="12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Primary Action Info Pill (Desktop Only) */}
             <div className="hero-mission-badge">
               <span className="mission-badge-dot" />
               <span>Sovereign Earth Observation · AI Convective Intelligence</span>
@@ -996,16 +1055,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             </div>
           </div>
         </div>
-
-        {/* Dedicated Mobile Interactive Map (visible only on mobile viewports <768px) */}
-        <div className="mobile-hero-map-block">
-          <HeroMap
-            activeLayer={activeLayer}
-            scrubberIdx={scrubberIdx}
-            isMobile={true}
-            mapControllerRef={mobileMapControllerRef}
-          />
-        </div>
       </header>
 
     </div>
@@ -1255,5 +1304,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         </div>
       </footer>
     </div>
+  </>
   );
 }

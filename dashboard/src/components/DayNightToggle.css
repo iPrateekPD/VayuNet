@@ -1,0 +1,243 @@
+/* DayNightToggle.css — Pixel-perfect recreation of Day (Sun & Clouds) / Night (Moon & Stars) Switch */
+
+.day-night-toggle {
+  position: relative;
+  width: 68px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 999px;
+  transition: transform 0.15s ease;
+}
+
+.day-night-toggle:hover {
+  transform: scale(1.04);
+}
+
+.day-night-toggle:active {
+  transform: scale(0.98);
+}
+
+/* Outer Track Pill */
+.dnt-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+/* ============================================================
+   LIGHT MODE (DAY: Sun & Clouds)
+   ============================================================ */
+.day-night-toggle.is-light .dnt-track {
+  background: linear-gradient(180deg, #5baef8 0%, #89c8fb 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(91, 174, 248, 0.35);
+}
+
+/* Fluffy Cumulus Clouds */
+.dnt-clouds-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.4s ease;
+}
+
+.day-night-toggle.is-dark .dnt-clouds-wrap {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.day-night-toggle.is-light .dnt-clouds-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cloud puffs */
+.dnt-cloud {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 999px;
+}
+
+.dnt-cloud-1 {
+  width: 32px;
+  height: 14px;
+  left: 5px;
+  top: 6px;
+  opacity: 0.95;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.dnt-cloud-1::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  top: -6px;
+  left: 5px;
+}
+
+.dnt-cloud-1::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-radius: 50%;
+  top: -4px;
+  right: 5px;
+}
+
+.dnt-cloud-2 {
+  width: 24px;
+  height: 10px;
+  left: 1px;
+  bottom: 1px;
+  opacity: 0.85;
+}
+
+.dnt-cloud-2::before {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: #ffffff;
+  border-radius: 50%;
+  top: -5px;
+  left: 6px;
+}
+
+.dnt-cloud-3 {
+  width: 20px;
+  height: 8px;
+  left: 20px;
+  bottom: 0px;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   DARK MODE (NIGHT: Moon & Stars)
+   ============================================================ */
+.day-night-toggle.is-dark .dnt-track {
+  background: linear-gradient(180deg, #051727 0%, #09233a 100%);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Twinkling Stars */
+.dnt-stars-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.4s ease;
+}
+
+.day-night-toggle.is-light .dnt-stars-wrap {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.day-night-toggle.is-dark .dnt-stars-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dnt-star {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+.dnt-star-1 { width: 2.5px; height: 2.5px; right: 28px; top: 7px; opacity: 0.9; }
+.dnt-star-2 { width: 2px; height: 2px; right: 18px; top: 11px; opacity: 0.85; }
+.dnt-star-3 { width: 3px; height: 3px; right: 12px; top: 18px; opacity: 0.95; }
+.dnt-star-4 { width: 1.5px; height: 1.5px; right: 24px; top: 20px; opacity: 0.7; }
+.dnt-star-5 { width: 2px; height: 2px; right: 6px; top: 8px; opacity: 0.8; }
+.dnt-star-6 { width: 1.5px; height: 1.5px; right: 8px; top: 22px; opacity: 0.6; }
+.dnt-star-7 { width: 2.5px; height: 2.5px; right: 33px; top: 17px; opacity: 0.75; }
+.dnt-star-8 { width: 1px; height: 1px; right: 20px; top: 4px; opacity: 0.6; }
+
+/* ============================================================
+   SLIDING CELESTIAL DISC (Sun / Moon)
+   ============================================================ */
+.dnt-thumb {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+/* Night state: Disc is on the LEFT as the MOON */
+.day-night-toggle.is-dark .dnt-thumb {
+  transform: translateX(0px);
+  background: #e2edf7;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(226, 237, 247, 0.8), 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+/* Day state: Disc slides to the RIGHT as the SUN */
+.day-night-toggle.is-light .dnt-thumb {
+  transform: translateX(38px);
+  background: #ffea00;
+  border: 1px solid rgba(255, 245, 157, 0.8);
+  box-shadow: 0 0 12px #ffee55, 0 0 22px rgba(255, 234, 0, 0.75);
+}
+
+/* Moon Craters */
+.dnt-moon-craters {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.25s ease;
+}
+
+.day-night-toggle.is-light .dnt-moon-craters {
+  opacity: 0;
+}
+
+.day-night-toggle.is-dark .dnt-moon-craters {
+  opacity: 1;
+}
+
+.dnt-crater {
+  position: absolute;
+  background: #b5cedf;
+  border-radius: 50%;
+  box-shadow: inset 0.5px 0.5px 1px rgba(0, 0, 0, 0.25);
+}
+
+.dnt-crater-1 { width: 6px; height: 6px; top: 5px; left: 6px; }
+.dnt-crater-2 { width: 4.5px; height: 4.5px; bottom: 5px; left: 10px; }
+.dnt-crater-3 { width: 3.5px; height: 3.5px; top: 12px; left: 4px; }
+.dnt-crater-4 { width: 3px; height: 3px; top: 6px; right: 4px; }
+
+/* Sun Glow / Halo inside */
+.dnt-sun-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 35% 35%, #fffde7 0%, #ffee55 60%, #ffea00 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.day-night-toggle.is-light .dnt-sun-glow {
+  opacity: 1;
+}
