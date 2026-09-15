@@ -65,7 +65,9 @@ export default function FusionAccordion({ onEnterPortal }) {
   const specRefs = useRef([]);
   const imageRefs = useRef([]);
   const ctaLabelRefs = useRef([]);
-  const [mobileExpandedIdx, setMobileExpandedIdx] = useState(0);
+
+  // Mobile open state map: tracks open cards on mobile
+  const [mobileOpenCards, setMobileOpenCards] = useState({ 0: true });
 
   // Check reduced motion preference
   const isReducedMotion = () =>
@@ -211,7 +213,7 @@ export default function FusionAccordion({ onEnterPortal }) {
     });
   }, []);
 
-  // Restore all cards to resting dimensions on container mouseleave
+  // Restore all cards to resting dimensions on container mouseleave (desktop)
   const restoreAllCards = useCallback(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     const reduced = isReducedMotion();
@@ -283,9 +285,10 @@ export default function FusionAccordion({ onEnterPortal }) {
     });
   }, []);
 
-  // Mobile automatic scroll-driven expansion:
-  // In mobile view (< 768px), each card expands automatically as it enters the viewport focus area
-  // and closes as the user scrolls past it, providing a smooth continuous discovery flow.
+  // Mobile automatic scroll-driven downward expansion:
+  // As user scrolls down in phone mode (< 768px), each card detects when its top enters the focus
+  // zone and smoothly unfolds DOWNWARDS. Cards above remain open during downward scroll so the
+  // content never jumps or moves upward. When scrolling back up, cards below the screen fold back up.
   useEffect(() => {
     let ticking = false;
 
@@ -293,38 +296,38 @@ export default function FusionAccordion({ onEnterPortal }) {
       if (typeof window === 'undefined' || window.innerWidth >= 768) return;
       if (!containerRef.current) return;
 
-      const containerRect = containerRef.current.getBoundingClientRect();
       const windowH = window.innerHeight;
+      // Reveal threshold: when the card top is within the lower 30% of screen as user scrolls down
+      const revealThreshold = windowH * 0.72;
 
-      // Only calculate if the container is at least partially in the viewport
-      if (containerRect.bottom < 80 || containerRect.top > windowH - 80) {
-        return;
-      }
+      setMobileOpenCards((prev) => {
+        const next = { ...prev };
+        let changed = false;
 
-      // Target focus line in viewport (around 46% down from top where user naturally looks)
-      const targetFocusY = windowH * 0.46;
+        cardRefs.current.forEach((card, i) => {
+          if (!card) return;
+          const rect = card.getBoundingClientRect();
 
-      let closestIdx = -1;
-      let minDistance = Infinity;
-
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
-        const rect = card.getBoundingClientRect();
-        const cardCenter = (rect.top + rect.bottom) / 2;
-        const dist = Math.abs(cardCenter - targetFocusY);
-
-        // A card is a candidate if it intersects the readable zone of the screen
-        if (rect.top < windowH * 0.82 && rect.bottom > windowH * 0.18) {
-          if (dist < minDistance) {
-            minDistance = dist;
-            closestIdx = i;
+          // When scrolling down: card reaches reveal threshold -> smoothly unfold downwards
+          // Preceding cards remain open so the document height above the viewport never shrinks (zero upward jerk)
+          if (rect.top <= revealThreshold && rect.bottom > 40) {
+            if (!next[i]) {
+              next[i] = true;
+              changed = true;
+            }
           }
-        }
-      });
+          // When scrolling back UP: card moves completely below viewport -> fold closed
+          // Since this card is below the screen, folding it causes zero shift to anything visible
+          else if (rect.top > windowH * 0.94) {
+            if (next[i]) {
+              next[i] = false;
+              changed = true;
+            }
+          }
+        });
 
-      if (closestIdx !== -1) {
-        setMobileExpandedIdx((prev) => (prev === closestIdx ? prev : closestIdx));
-      }
+        return changed ? next : prev;
+      });
     };
 
     const onScroll = () => {
@@ -372,7 +375,10 @@ export default function FusionAccordion({ onEnterPortal }) {
 
   // Mobile accordion manual toggle
   const toggleMobileCard = (idx) => {
-    setMobileExpandedIdx((prev) => (prev === idx ? -1 : idx));
+    setMobileOpenCards((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
   };
 
   const handleCardClick = (idx) => {
@@ -438,7 +444,7 @@ export default function FusionAccordion({ onEnterPortal }) {
         aria-label="Sovereign observation streams horizontal accordion"
       >
         {SOVEREIGN_STREAMS.map((stream, idx) => {
-          const isMobileActive = mobileExpandedIdx === idx;
+          const isMobileActive = !!mobileOpenCards[idx];
 
           return (
             <div
@@ -491,6 +497,11 @@ export default function FusionAccordion({ onEnterPortal }) {
 
                     <div className="fusion-card-topbar-right">
                       <span className="fusion-card-idx">{stream.num}</span>
+                      <span className={`fusion-mobile-chevron ${isMobileActive ? 'is-open' : ''}`} aria-hidden="true">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </span>
                     </div>
                   </div>
 
@@ -527,7 +538,7 @@ export default function FusionAccordion({ onEnterPortal }) {
                     </div>
                   </div>
 
-                  {/* Bottom Action / CTA (Subtle text, no individual circular arrow buttons) */}
+                  {/* Bottom Action / CTA */}
                   <div className="fusion-card-bottom">
                     <div
                       ref={(el) => (ctaLabelRefs.current[idx] = el)}
