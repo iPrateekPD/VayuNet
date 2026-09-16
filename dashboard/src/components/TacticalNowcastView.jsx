@@ -548,8 +548,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
 
   return (
     <div className="tac-app-shell">
-      {/* ================= 1. DEDICATED LEFT VERTICAL RAIL (EXACTLY 4 MAP CONTROLS) ================= */}
-      <aside className="tac-left-rail">
+      {/* ================= OPERATIONAL BODY (Stops before the full-width footer) ================= */}
+      <div className="tac-operational-body">
+        {/* ================= 1. DEDICATED LEFT VERTICAL RAIL (EXACTLY 4 MAP CONTROLS) ================= */}
+        <aside className="tac-left-rail">
         <div className="tac-rail-tools">
           {/* 1. MAP (WHERE) */}
           <button
@@ -1632,12 +1634,15 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <span>Prepare &amp; Dispatch Alert (Act) →</span>
             </button>
           </div>
+          </div>
         </div>
       </div>
-
-        {/* ================= 3. INSTITUTIONAL FOOTER ================= */}
-        <InstitutionalFooter />
-      </div>
+      {/* END tac-main-dashboard */}
     </div>
+    {/* END tac-operational-body */}
+
+    {/* ================= 3. FULL-WIDTH INSTITUTIONAL FOOTER ================= */}
+    <InstitutionalFooter />
+  </div>
   );
 }
