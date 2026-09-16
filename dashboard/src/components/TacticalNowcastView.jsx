@@ -23,7 +23,7 @@ function MapController({ center, zoom }) {
   return null;
 }
 
-// Map Custom Right-Side Tool Controls (+, -, target recenter, layer/fullscreen)
+// Map Custom Right-Side Tool Controls (+, -, target recenter, fullscreen)
 function MapToolControls({ onRecenter, onToggleFullscreen }) {
   const map = useMap();
   return (
@@ -82,31 +82,216 @@ function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   });
 }
 
+// Helper to scale coordinates around a geographic center
+function scaleCoords(coords, factor, center = [30.41, 79.32]) {
+  return coords.map(([lat, lng]) => [
+    Number((center[0] + (lat - center[0]) * factor).toFixed(5)),
+    Number((center[1] + (lng - center[1]) * factor).toFixed(5)),
+  ]);
+}
+
 const TIME_STEPS = ['Now', '+1h', '+2h', '+3h', '+4h', '+5h', '+6h'];
 
-const SECTOR_OPTIONS = [
-  'Chamoli, Uttarakhand',
-  'Kangra, Himachal Pradesh',
-  'Rudraprayag, Uttarakhand',
-  'Pithoragarh, Uttarakhand',
-  'Uttarkashi, Uttarakhand',
+// Supported sector coordinates
+const SECTOR_COORDS = {
+  'Chamoli, Uttarakhand': [30.41, 79.32],
+  'Joshimath, Uttarakhand': [30.556, 79.566],
+  'Rudraprayag, Uttarakhand': [30.285, 78.981],
+  'Uttarkashi, Uttarakhand': [30.726, 78.435],
+  'Kangra, Himachal Pradesh': [32.099, 76.269],
+  'Wayanad, Kerala': [11.685, 76.132],
+  'Mumbai, Maharashtra': [19.076, 72.877],
+  'Pithoragarh, Uttarakhand': [29.582, 80.218],
+};
+
+const SECTOR_OPTIONS = Object.keys(SECTOR_COORDS);
+
+// Active Incidents Data
+const INCIDENTS_DATA = [
+  {
+    id: 'chamoli',
+    name: 'Chamoli, Uttarakhand',
+    center: [30.41, 79.32],
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH RISK',
+    riskColor: '#ef4444',
+    eta: '1h 45m',
+    rainfall: '124 mm',
+    confidence: '82%',
+    area: '412 km²',
+    narrative: 'Intense rainfall may cause sudden rises in rivers and flash flooding in downstream areas.',
+    action: 'Move away from riverbeds and low-lying areas.',
+    badge: 'HIGHEST THREAT',
+  },
+  {
+    id: 'joshimath',
+    name: 'Joshimath, Uttarakhand',
+    center: [30.556, 79.566],
+    hazard: 'HEAVY RAINFALL',
+    riskLevel: 'MODERATE RISK',
+    riskColor: '#f97316',
+    eta: '2h 30m',
+    rainfall: '82 mm',
+    confidence: '79%',
+    area: '260 km²',
+    narrative: 'High moisture condensation and slope runoff approaching vulnerable transit routes.',
+    action: 'Halt pilgrimage transit and avoid unstable hill slopes.',
+    badge: 'ACTIVE WATCH',
+  },
+  {
+    id: 'rudraprayag',
+    name: 'Rudraprayag, Uttarakhand',
+    center: [30.285, 78.981],
+    hazard: 'THUNDERSTORM',
+    riskLevel: 'WATCH',
+    riskColor: '#eab308',
+    eta: '3h 10m',
+    rainfall: '45 mm',
+    confidence: '71%',
+    area: '185 km²',
+    narrative: 'Convective cells generating localized lightning and brief torrential bursts.',
+    action: 'Seek indoor shelter away from open ridges and electrical poles.',
+    badge: 'ADVISORY',
+  },
+  {
+    id: 'uttarkashi',
+    name: 'Uttarkashi, Uttarakhand',
+    center: [30.726, 78.435],
+    hazard: 'CLOUDBURST WATCH',
+    riskLevel: 'ADVISORY',
+    riskColor: '#38bdf8',
+    eta: '4h 15m',
+    rainfall: '35 mm',
+    confidence: '68%',
+    area: '140 km²',
+    narrative: 'Atmospheric instability index rising above Bhagirathi catchment headwaters.',
+    action: 'Activate telemetry alerts and verify automated sirens.',
+    badge: 'MONITORING',
+  },
 ];
+
+// Timestep forecast telemetry variations for Chamoli
+const TIMESTEP_DATA = {
+  'Now': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'ACTIVE CONVECTIVE CORE',
+    eta: '0m (Live)',
+    rainfall: '42 mm',
+    arrival: 'Now Active',
+    confidence: '94%',
+    area: '210 km²',
+    scale: 0.78,
+    action: 'Immediate evacuation of Alaknanda riverbanks.',
+  },
+  '+1h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH SURGE INCOMING',
+    eta: '45m',
+    rainfall: '88 mm',
+    arrival: '45m',
+    confidence: '89%',
+    area: '320 km²',
+    scale: 0.90,
+    action: 'Clear low-lying bridges and drainage corridors.',
+  },
+  '+2h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH RISK',
+    eta: '1h 45m',
+    rainfall: '124 mm',
+    arrival: '1h 45m',
+    confidence: '82%',
+    area: '412 km²',
+    scale: 1.0,
+    action: 'Move away from riverbeds and low-lying areas.',
+  },
+  '+3h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'PEAK RUNOFF DISCHARGE',
+    eta: '2h 30m',
+    rainfall: '152 mm',
+    arrival: '2h 30m',
+    confidence: '76%',
+    area: '480 km²',
+    scale: 1.22,
+    action: 'Downstream dam gates throttling; alert Karnaprayag & Srinagar.',
+  },
+  '+4h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'RECEDING CONVECTIVE FLUX',
+    eta: '3h 45m',
+    rainfall: '110 mm',
+    arrival: '3h 45m',
+    confidence: '70%',
+    area: '520 km²',
+    scale: 1.15,
+    action: 'Monitor secondary slope saturation and mudflow risks.',
+  },
+  '+5h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'MODERATE RUNOFF',
+    eta: '4h 50m',
+    rainfall: '65 mm',
+    arrival: '4h 50m',
+    confidence: '64%',
+    area: '440 km²',
+    scale: 0.95,
+    action: 'Relief and search reconnaissance access clearance.',
+  },
+  '+6h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'RESIDUAL INUNDATION',
+    eta: '5h 55m',
+    rainfall: '35 mm',
+    arrival: '5h 55m',
+    confidence: '58%',
+    area: '310 km²',
+    scale: 0.72,
+    action: 'Assess infrastructure integrity along NH-7 corridor.',
+  },
+};
 
 export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavigateTab }) {
   const [selectedStep, setSelectedStep] = useState('+2h');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSectorOpen, setIsSectorOpen] = useState(false);
   const [selectedSector, setSelectedSector] = useState('Chamoli, Uttarakhand');
-  const [activeRailItem, setActiveRailItem] = useState('map');
+  const [activeRailItem, setActiveRailItem] = useState('map'); // 'map' | 'layers' | 'forecast' | 'rivers' | 'incidents' | 'bookmarks'
+  const [activePanel, setActivePanel] = useState(null); // 'layers' | 'rivers' | 'incidents' | 'bookmarks' | 'telemetry' | null
   const [basemap, setBasemap] = useState('satellite'); // 'satellite' | 'terrain' | 'hybrid'
+  const [selectedIncident, setSelectedIncident] = useState(INCIDENTS_DATA[0]);
+  const [isTimelineFocused, setIsTimelineFocused] = useState(false);
+  const [selectedTelemetrySource, setSelectedTelemetrySource] = useState(null);
+  const [newBookmarkText, setNewBookmarkText] = useState('');
   const mapCardRef = useRef(null);
+  const timelineCardRef = useRef(null);
 
-  // Layer switches
+  // Bookmarks with localStorage persistence
+  const [bookmarks, setBookmarks] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vayunet_saved_bookmarks');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn(e);
+    }
+    return [
+      'Chamoli, Uttarakhand',
+      'Joshimath, Uttarakhand',
+      'Wayanad, Kerala',
+      'Mumbai, Maharashtra',
+      'Kangra, Himachal Pradesh',
+    ];
+  });
+
+  // Layer switches (Interactive Map Layers)
   const [layers, setLayers] = useState({
     precip: true,
-    satellite: false,
-    terrain: true,
+    satellite: true,
+    terrain: false,
+    radar: false,
     rivers: true,
+    wind: false,
+    affectedArea: false,
   });
 
   // Coordinates for Chamoli, Uttarakhand
@@ -114,7 +299,16 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
   const [currentCenter, setCurrentCenter] = useState(chamoliCenter);
   const [currentZoom, setCurrentZoom] = useState(9);
 
-  // Playback simulation timer
+  // Persist bookmarks
+  useEffect(() => {
+    try {
+      localStorage.setItem('vayunet_saved_bookmarks', JSON.stringify(bookmarks));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [bookmarks]);
+
+  // Simulation Playback Loop (Now → +6h)
   useEffect(() => {
     let timer;
     if (isPlaying) {
@@ -124,21 +318,127 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
           const nextIdx = (idx + 1) % TIME_STEPS.length;
           return TIME_STEPS[nextIdx];
         });
-      }, 1600);
+      }, 1500);
     }
     return () => clearInterval(timer);
   }, [isPlaying]);
 
+  // Handle Layer Toggle
   const handleToggleLayer = (key) => {
-    setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
+    setLayers((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      // If satellite or terrain is toggled, synchronize basemap
+      if (key === 'satellite' && next.satellite) {
+        setBasemap('satellite');
+        next.terrain = false;
+      } else if (key === 'terrain' && next.terrain) {
+        setBasemap('terrain');
+        next.satellite = false;
+      }
+      return next;
+    });
+    if (showToast) showToast(`Layer "${key.toUpperCase()}" ${!layers[key] ? 'Enabled' : 'Disabled'}`);
   };
 
+  // 1. Sidebar MAP Button: Return to default map view
+  const handleRailMapClick = () => {
+    setActiveRailItem('map');
+    setActivePanel(null);
+    setCurrentCenter([...chamoliCenter]);
+    setCurrentZoom(9);
+    setBasemap('satellite');
+    setLayers((prev) => ({ ...prev, precip: true, satellite: true, terrain: false }));
+    if (showToast) showToast('Map view reset to default operational sector (Chamoli)');
+  };
+
+  // 2. Sidebar LAYERS Button: Toggle Map Layers floating drawer
+  const handleRailLayersClick = () => {
+    setActiveRailItem('layers');
+    setActivePanel((prev) => (prev === 'layers' ? null : 'layers'));
+  };
+
+  // 3. Sidebar FORECAST Button: Focus timeline dock and highlight
+  const handleRailForecastClick = () => {
+    setActiveRailItem('forecast');
+    setActivePanel(null);
+    setIsTimelineFocused(true);
+    timelineCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      setIsTimelineFocused(false);
+    }, 2800);
+    if (showToast) showToast(`Forecast timeline focused (${selectedStep} simulation)`);
+  };
+
+  // 4. Sidebar RIVERS Button: Toggle rivers and open river risk panel
+  const handleRailRiversClick = () => {
+    setActiveRailItem('rivers');
+    setLayers((prev) => {
+      const nextRivers = !prev.rivers;
+      if (showToast) showToast(nextRivers ? 'Rivers layer enabled' : 'Rivers layer hidden');
+      return { ...prev, rivers: nextRivers };
+    });
+    setActivePanel((prev) => (prev === 'rivers' ? null : 'rivers'));
+  };
+
+  // 5. Sidebar INCIDENTS Button: Open active incident drawer
+  const handleRailIncidentsClick = () => {
+    setActiveRailItem('incidents');
+    setActivePanel((prev) => (prev === 'incidents' ? null : 'incidents'));
+  };
+
+  // 6. Sidebar BOOKMARKS Button: Open saved locations drawer
+  const handleRailBookmarksClick = () => {
+    setActiveRailItem('bookmarks');
+    setActivePanel((prev) => (prev === 'bookmarks' ? null : 'bookmarks'));
+  };
+
+  // Select incident from drawer or threat list
+  const handleSelectIncident = (inc) => {
+    setSelectedIncident(inc);
+    setSelectedSector(inc.name);
+    setCurrentCenter([...inc.center]);
+    setCurrentZoom(9.5);
+    if (showToast) showToast(`Centered on ${inc.name} (${inc.hazard})`);
+  };
+
+  // Select bookmark location
+  const handleSelectBookmark = (loc) => {
+    setSelectedSector(loc);
+    if (SECTOR_COORDS[loc]) {
+      setCurrentCenter([...SECTOR_COORDS[loc]]);
+      setCurrentZoom(9.5);
+      if (showToast) showToast(`Navigated to saved bookmark: ${loc}`);
+    } else {
+      if (showToast) showToast(`Selected bookmark: ${loc}`);
+    }
+  };
+
+  // Add new bookmark
+  const handleAddBookmark = (e) => {
+    e?.preventDefault();
+    const clean = newBookmarkText.trim() || selectedSector;
+    if (clean && !bookmarks.includes(clean)) {
+      setBookmarks((prev) => [clean, ...prev]);
+      setNewBookmarkText('');
+      if (showToast) showToast(`Saved location: ${clean}`);
+    }
+  };
+
+  // Remove bookmark
+  const handleRemoveBookmark = (item, e) => {
+    e.stopPropagation();
+    setBookmarks((prev) => prev.filter((b) => b !== item));
+    if (showToast) showToast(`Removed bookmark: ${item}`);
+  };
+
+  // Recenter map handler
   const handleRecenter = () => {
     setCurrentCenter([...chamoliCenter]);
     setCurrentZoom(9);
-    if (showToast) showToast('Recentered to Chamoli Convective Core');
+    if (showToast) showToast('Recentered to Chamoli Incident Core');
   };
 
+  // Toggle fullscreen
   const handleToggleFullscreen = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -147,51 +447,65 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     }
   };
 
+  // Dispatch alert action
   const handleDispatch = () => {
-    if (onDispatchAlert) {
+    if (onNavigateTab) {
+      onNavigateTab('alerts');
+    } else if (onDispatchAlert) {
       onDispatchAlert();
     } else if (showToast) {
       showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
     }
   };
 
-  // High-resolution multi-band Doppler radar convective plume contours (Chamoli - Alaknanda Valley)
-  const radarOuterHalo = [
+  // Multi-band Doppler radar convective plume base contours (Chamoli - Alaknanda Valley)
+  const baseRadarOuter = [
     [30.82, 79.15], [30.86, 79.35], [30.80, 79.58], [30.68, 79.72],
     [30.55, 79.88], [30.40, 80.05], [30.22, 80.08], [30.08, 79.92],
     [30.02, 79.70], [30.06, 79.45], [30.15, 79.22], [30.28, 79.08],
     [30.44, 78.96], [30.60, 78.98], [30.74, 79.05]
   ];
 
-  const radarGreenBand = [
+  const baseRadarGreen = [
     [30.74, 79.22], [30.76, 79.42], [30.68, 79.62], [30.52, 79.78],
     [30.36, 79.92], [30.20, 79.88], [30.12, 79.68], [30.15, 79.45],
     [30.24, 79.28], [30.38, 79.14], [30.55, 79.12], [30.66, 79.16]
   ];
 
-  const radarYellowBand = [
+  const baseRadarYellow = [
     [30.66, 79.28], [30.68, 79.45], [30.58, 79.62], [30.45, 79.72],
     [30.32, 79.78], [30.22, 79.65], [30.20, 79.48], [30.28, 79.32],
     [30.42, 79.22], [30.56, 79.22]
   ];
 
-  const radarOrangeBand = [
+  const baseRadarOrange = [
     [30.58, 79.34], [30.58, 79.48], [30.48, 79.58], [30.38, 79.64],
     [30.28, 79.58], [30.26, 79.44], [30.32, 79.32], [30.44, 79.28],
     [30.52, 79.30]
   ];
 
-  const radarCorePlume = [
+  const baseRadarCore = [
     [30.52, 79.36], [30.50, 79.45], [30.42, 79.50], [30.34, 79.48],
     [30.30, 79.40], [30.32, 79.34], [30.40, 79.30], [30.48, 79.32]
   ];
 
-  const radarExtremeCore = [
+  const baseRadarExtreme = [
     [30.46, 79.36], [30.44, 79.42], [30.38, 79.42], [30.34, 79.36],
     [30.36, 79.32], [30.42, 79.32]
   ];
 
-  // Alaknanda River and tributaries
+  // Dynamic scaling based on current forecast timestep
+  const currentStepData = TIMESTEP_DATA[selectedStep] || TIMESTEP_DATA['+2h'];
+  const stepScale = currentStepData.scale || 1.0;
+
+  const radarOuterHalo = scaleCoords(baseRadarOuter, stepScale);
+  const radarGreenBand = scaleCoords(baseRadarGreen, stepScale);
+  const radarYellowBand = scaleCoords(baseRadarYellow, stepScale);
+  const radarOrangeBand = scaleCoords(baseRadarOrange, stepScale);
+  const radarCorePlume = scaleCoords(baseRadarCore, stepScale);
+  const radarExtremeCore = scaleCoords(baseRadarExtreme, stepScale);
+
+  // Hydrological River Network (Alaknanda River)
   const alaknandaRiver = [
     [30.744, 79.493], // Badrinath
     [30.650, 79.520],
@@ -211,53 +525,57 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
   ];
 
   const tributaryPindar = [
-    [30.080, 79.550],
-    [30.180, 79.380],
+    [30.060, 79.500],
+    [30.150, 79.350],
     [30.258, 79.217]
   ];
 
-  const tacticalPoints = [
-    { name: 'Badrinath', coords: [30.744, 79.493] },
-    { name: 'Joshimath', coords: [30.556, 79.566] },
-    { name: 'Rudraprayag', coords: [30.285, 78.981] },
-    { name: 'Karnaprayag', coords: [30.258, 79.217] },
-    { name: 'Srinagar', coords: [30.220, 78.780] },
-    { name: 'Tehri', coords: [30.380, 78.480] },
-    { name: 'Rishikesh', coords: [30.086, 78.267] },
-    { name: 'Dehradun', coords: [30.316, 78.032] },
+  // Affected Catchment Boundary Polygon
+  const catchmentBoundary = [
+    [30.82, 79.10],
+    [30.88, 79.52],
+    [30.64, 79.80],
+    [30.38, 79.85],
+    [30.15, 79.60],
+    [30.18, 79.15],
+    [30.42, 78.92],
+  ];
+
+  // Wind streamline vectors across valley
+  const windVectors = [
+    [[30.55, 79.05], [30.48, 79.25], [30.42, 79.45]],
+    [[30.40, 79.00], [30.35, 79.22], [30.30, 79.48]],
+    [[30.68, 79.20], [30.62, 79.40], [30.55, 79.62]],
   ];
 
   return (
     <div className="tac-app-shell">
-      {/* ================= 1. LEFT RAIL (MAP, LAYERS, FORECAST, RIVERS, INCIDENTS, BOOKMARKS) ================= */}
+      {/* ================= 1. DEDICATED LEFT VERTICAL RAIL ================= */}
       <aside className="tac-left-rail">
-        <div className="tac-rail-top">
-          {/* Map Button (Active) */}
+        <div className="tac-rail-tools">
+          {/* 1. Map Button */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'map' ? 'active' : ''}`}
-            onClick={() => setActiveRailItem('map')}
-            title="Operational Map View"
+            className={`tac-rail-btn ${activeRailItem === 'map' && !activePanel ? 'active' : ''}`}
+            onClick={handleRailMapClick}
+            title="Reset to default operational weather map"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-                <line x1="9" y1="3" x2="9" y2="18" />
-                <line x1="15" y1="6" x2="15" y2="21" />
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                <line x1="8" y1="2" x2="8" y2="18" />
+                <line x1="16" y1="6" x2="16" y2="22" />
               </svg>
             </div>
             <span className="tac-rail-label">Map</span>
           </button>
 
-          {/* Layers Button */}
+          {/* 2. Layers Button */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'layers' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveRailItem('layers');
-              handleToggleLayer('precip');
-            }}
-            title="Toggle Radar Layers"
+            className={`tac-rail-btn ${activeRailItem === 'layers' || activePanel === 'layers' ? 'active' : ''}`}
+            onClick={handleRailLayersClick}
+            title="Toggle map layers and visible data"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -269,54 +587,46 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Layers</span>
           </button>
 
-          {/* Forecast Button */}
+          {/* 3. Forecast Button */}
           <button
             type="button"
             className={`tac-rail-btn ${activeRailItem === 'forecast' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveRailItem('forecast');
-              setIsPlaying(!isPlaying);
-            }}
-            title="Nowcast Simulation"
+            onClick={handleRailForecastClick}
+            title="Focus 6-hour Nowcast simulation timeline"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
                 <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
-                <path d="M13 13l-2 4h3l-2 4" strokeWidth="2" />
+                <line x1="11" y1="19" x2="10" y2="23" strokeWidth="2.2" />
+                <line x1="15" y1="19" x2="14" y2="23" strokeWidth="2.2" />
               </svg>
             </div>
             <span className="tac-rail-label">Forecast</span>
           </button>
 
-          {/* Rivers Button */}
+          {/* 4. Rivers Button */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'rivers' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveRailItem('rivers');
-              handleToggleLayer('rivers');
-            }}
-            title="River Drainage Network"
+            className={`tac-rail-btn ${activeRailItem === 'rivers' || activePanel === 'rivers' || layers.rivers ? 'active' : ''}`}
+            onClick={handleRailRiversClick}
+            title="Toggle hydrological river flow and downstream risk"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="M4 6c4 0 4 4 8 4s4-4 8-4" />
-                <path d="M4 12c4 0 4 4 8 4s4-4 8-4" />
-                <path d="M4 18c4 0 4 4 8 4s4-4 8-4" />
+                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
               </svg>
             </div>
             <span className="tac-rail-label">Rivers</span>
           </button>
 
-          {/* Incidents Button */}
+          {/* 5. Incidents Button */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'incidents' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveRailItem('incidents');
-              if (onNavigateTab) onNavigateTab('alerts');
-            }}
-            title="Active Incidents"
+            className={`tac-rail-btn ${activeRailItem === 'incidents' || activePanel === 'incidents' ? 'active' : ''}`}
+            onClick={handleRailIncidentsClick}
+            title="View active incidents and threat sectors"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -328,15 +638,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Incidents</span>
           </button>
 
-          {/* Bookmarks Button */}
+          {/* 6. Bookmarks Button */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'bookmarks' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveRailItem('bookmarks');
-              if (showToast) showToast('Sector Bookmarked: Chamoli, Alaknanda Basin');
-            }}
-            title="Saved Sectors"
+            className={`tac-rail-btn ${activeRailItem === 'bookmarks' || activePanel === 'bookmarks' ? 'active' : ''}`}
+            onClick={handleRailBookmarksClick}
+            title="Saved Locations & Sectors"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -375,6 +682,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
         <div className="tac-clean-top-row">
           {/* MAP CARD */}
           <div className="tac-clean-map-card" ref={mapCardRef}>
+            
             {/* FLOATING TOP BAR */}
             <div className="tac-clean-map-topbar">
               {/* Sector / Search Dropdown */}
@@ -401,6 +709,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                         onClick={() => {
                           setSelectedSector(opt);
                           setIsSectorOpen(false);
+                          if (SECTOR_COORDS[opt]) {
+                            setCurrentCenter([...SECTOR_COORDS[opt]]);
+                            setCurrentZoom(9);
+                          }
                           if (showToast) showToast(`Centered to ${opt}`);
                         }}
                       >
@@ -418,20 +730,307 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     key={step}
                     type="button"
                     className={`tac-clean-time-pill ${selectedStep === step ? 'active' : ''}`}
-                    onClick={() => setSelectedStep(step)}
+                    onClick={() => {
+                      setSelectedStep(step);
+                      if (showToast) showToast(`Nowcast timestep: ${step}`);
+                    }}
                   >
                     {step}
                   </button>
                 ))}
               </div>
 
-              {/* Date & Live Indicator */}
+              {/* Live Timestamp Badge */}
               <div className="tac-clean-live-pill">
                 <span>08 Sep 2026, 11:52 PM IST</span>
                 <span className="tac-clean-live-dot" />
                 <span style={{ color: '#f87171', fontWeight: 700 }}>Live</span>
               </div>
             </div>
+
+            {/* FLOATING DRAWERS / POPOVER PANELS */}
+            
+            {/* 1. LAYERS PANEL */}
+            {activePanel === 'layers' && (
+              <div className="tac-floating-popover tac-popover-layers">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                      <polyline points="2 17 12 22 22 17" />
+                      <polyline points="2 12 12 17 22 12" />
+                    </svg>
+                    <span>MAP LAYERS</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => setActivePanel(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="tac-popover-body">
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.precip}
+                      onChange={() => handleToggleLayer('precip')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Precipitation Intensity</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.satellite || basemap === 'satellite'}
+                      onChange={() => handleToggleLayer('satellite')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Satellite (True Color)</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.terrain || basemap === 'terrain'}
+                      onChange={() => handleToggleLayer('terrain')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Terrain Topography</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.radar}
+                      onChange={() => handleToggleLayer('radar')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Doppler Radar Grid</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.rivers}
+                      onChange={() => handleToggleLayer('rivers')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Rivers &amp; Tributaries</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.wind}
+                      onChange={() => handleToggleLayer('wind')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Wind Flow Streamlines</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.affectedArea}
+                      onChange={() => handleToggleLayer('affectedArea')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Affected Inundation Area</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* 2. RIVERS PANEL */}
+            {activePanel === 'rivers' && (
+              <div className="tac-floating-popover tac-popover-rivers">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <span style={{ fontSize: '15px' }}>🌊</span>
+                    <span>RIVER RISK · ALAKNANDA BASIN</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => setActivePanel(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="tac-popover-body">
+                  <div className="tac-river-stat-box">
+                    <span className="tac-river-stat-lbl">Primary River</span>
+                    <span className="tac-river-stat-val" style={{ color: '#38bdf8' }}>Alaknanda River (Ganga Headstream)</span>
+                  </div>
+                  <div className="tac-river-stat-box">
+                    <span className="tac-river-stat-lbl">Flow Direction</span>
+                    <span className="tac-river-stat-val">NE → SW (Badrinath Gorge → Devprayag)</span>
+                  </div>
+                  <div className="tac-river-stat-box">
+                    <span className="tac-river-stat-lbl">Surge Risk Status</span>
+                    <span className="tac-river-stat-val" style={{ color: '#ef4444', fontWeight: 800 }}>
+                      CRITICAL · PEAK SURGE ETA +1h 45m
+                    </span>
+                  </div>
+                  <div className="tac-river-stat-box">
+                    <span className="tac-river-stat-lbl">Downstream Affected Zones</span>
+                    <span className="tac-river-stat-val">Karnaprayag, Rudraprayag, Srinagar, Devprayag</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="tac-river-action-btn"
+                    onClick={() => {
+                      setCurrentCenter([30.41, 79.32]);
+                      setCurrentZoom(10);
+                      if (showToast) showToast('Focused on Alaknanda Gorge Surge Corridor');
+                    }}
+                  >
+                    📍 Focus on Alaknanda Surge Zone
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 3. INCIDENTS PANEL */}
+            {activePanel === 'incidents' && (
+              <div className="tac-floating-popover tac-popover-incidents">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <span style={{ color: '#ef4444' }}>⚠️</span>
+                    <span>ACTIVE INCIDENTS ({INCIDENTS_DATA.length})</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => setActivePanel(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="tac-popover-body tac-incidents-scroll">
+                  {INCIDENTS_DATA.map((inc) => (
+                    <div
+                      key={inc.id}
+                      className={`tac-incident-card-item ${selectedIncident.id === inc.id ? 'active' : ''}`}
+                      onClick={() => handleSelectIncident(inc)}
+                    >
+                      <div className="tac-inc-item-top">
+                        <div className="tac-inc-item-loc">
+                          <span className="tac-inc-dot" style={{ background: inc.riskColor }} />
+                          <span className="tac-inc-name">{inc.name.split(',')[0]}</span>
+                        </div>
+                        <span className="tac-inc-badge" style={{ color: inc.riskColor, borderColor: inc.riskColor }}>
+                          {inc.riskLevel}
+                        </span>
+                      </div>
+                      <div className="tac-inc-hazard">{inc.hazard}</div>
+                      <div className="tac-inc-meta">
+                        <span>ETA {inc.eta}</span>
+                        <span>•</span>
+                        <span>{inc.rainfall}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 4. BOOKMARKS PANEL */}
+            {activePanel === 'bookmarks' && (
+              <div className="tac-floating-popover tac-popover-bookmarks">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <span style={{ color: '#eab308' }}>★</span>
+                    <span>SAVED LOCATIONS</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => setActivePanel(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="tac-popover-body">
+                  <form onSubmit={handleAddBookmark} className="tac-bookmark-add-form">
+                    <input
+                      type="text"
+                      className="tac-bookmark-input"
+                      placeholder="Add sector (e.g. Kedarnath)..."
+                      value={newBookmarkText}
+                      onChange={(e) => setNewBookmarkText(e.target.value)}
+                    />
+                    <button type="submit" className="tac-bookmark-add-btn">
+                      Add ★
+                    </button>
+                  </form>
+
+                  <div className="tac-bookmarks-list">
+                    {bookmarks.map((loc) => (
+                      <div
+                        key={loc}
+                        className={`tac-bookmark-row ${selectedSector === loc ? 'active' : ''}`}
+                        onClick={() => handleSelectBookmark(loc)}
+                      >
+                        <div className="tac-bookmark-left">
+                          <span className="tac-bm-star">★</span>
+                          <span className="tac-bm-name">{loc}</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="tac-bm-del"
+                          onClick={(e) => handleRemoveBookmark(loc, e)}
+                          title="Remove bookmark"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 5. TELEMETRY SOURCE DETAIL MODAL */}
+            {activePanel === 'telemetry' && selectedTelemetrySource && (
+              <div className="tac-floating-popover tac-popover-telemetry">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <span>📡</span>
+                    <span>{selectedTelemetrySource.name}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => setActivePanel(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="tac-popover-body">
+                  <div className="tac-telem-info-row">
+                    <span className="tac-telem-lbl">Telemetry Stream</span>
+                    <span className="tac-telem-val">{selectedTelemetrySource.stream}</span>
+                  </div>
+                  <div className="tac-telem-info-row">
+                    <span className="tac-telem-lbl">Refresh Frequency</span>
+                    <span className="tac-telem-val">{selectedTelemetrySource.frequency}</span>
+                  </div>
+                  <div className="tac-telem-info-row">
+                    <span className="tac-telem-lbl">Latency</span>
+                    <span className="tac-telem-val" style={{ color: '#22c55e' }}>{selectedTelemetrySource.latency}</span>
+                  </div>
+                  <div className="tac-telem-info-row">
+                    <span className="tac-telem-lbl">Ingestion Health</span>
+                    <span className="tac-telem-val" style={{ color: '#38bdf8' }}>99.98% High Precision Calibrated</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* LEAFLET MAP */}
             <MapContainer
@@ -440,6 +1039,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               scrollWheelZoom={false}
               className="tac-clean-leaflet-container"
               zoomControl={false}
+              attributionControl={false}
             >
               <MapController center={currentCenter} zoom={currentZoom} />
               <MapToolControls
@@ -486,6 +1086,45 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   subdomains="abcd"
                   opacity={0.7}
                 />
+              )}
+
+              {/* Radar Grid Layer */}
+              {layers.radar && (
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png"
+                  subdomains="abcd"
+                  opacity={0.9}
+                />
+              )}
+
+              {/* Affected Area Inundation Boundary */}
+              {layers.affectedArea && (
+                <Polygon
+                  positions={catchmentBoundary}
+                  pathOptions={{
+                    color: '#f87171',
+                    fillColor: '#ef4444',
+                    fillOpacity: 0.18,
+                    weight: 2,
+                    dashArray: '6, 6',
+                  }}
+                />
+              )}
+
+              {/* Wind Flow Streamline Vectors */}
+              {layers.wind && (
+                windVectors.map((pts, idx) => (
+                  <Polyline
+                    key={idx}
+                    positions={pts}
+                    pathOptions={{
+                      color: '#38bdf8',
+                      weight: 2.2,
+                      opacity: 0.75,
+                      dashArray: '4, 6',
+                    }}
+                  />
+                ))
               )}
 
               {/* Precipitation Doppler Multi-Band Radar Plume */}
@@ -563,6 +1202,26 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     positions={tributaryPindar}
                     pathOptions={{ color: '#0284c7', weight: 2, opacity: 0.8 }}
                   />
+
+                  {/* River Direction Flow Markers */}
+                  <Marker
+                    position={[30.650, 79.520]}
+                    icon={createHtmlIcon(`
+                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(210deg); text-shadow: 0 0 6px #0284c7;">➤</div>
+                    `, [14, 14], [7, 7])}
+                  />
+                  <Marker
+                    position={[30.490, 79.430]}
+                    icon={createHtmlIcon(`
+                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(220deg); text-shadow: 0 0 6px #0284c7;">➤</div>
+                    `, [14, 14], [7, 7])}
+                  />
+                  <Marker
+                    position={[30.350, 79.260]}
+                    icon={createHtmlIcon(`
+                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(205deg); text-shadow: 0 0 6px #0284c7;">➤</div>
+                    `, [14, 14], [7, 7])}
+                  />
                 </>
               )}
 
@@ -574,8 +1233,8 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 10px #ffffff, 0 0 20px #ef4444; position: absolute; left: 0; top: 12px; z-index: 10;"></div>
                     <div style="margin-left: 20px; background: rgba(8, 14, 25, 0.94); border: 1px solid rgba(239, 68, 68, 0.6); border-radius: 6px; padding: 6px 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.85); min-width: 96px;">
                       <div style="font-size: 11px; font-weight: 700; color: #ffffff;">Chamoli</div>
-                      <div style="font-size: 10px; font-weight: 700; color: #ef4444;">High Risk</div>
-                      <div style="font-size: 9.5px; color: #94a3b8; font-family: monospace;">ETA 1h 45m</div>
+                      <div style="font-size: 10px; font-weight: 700; color: #ef4444;">${currentStepData.riskLevel}</div>
+                      <div style="font-size: 9.5px; color: #94a3b8; font-family: monospace;">ETA ${currentStepData.eta}</div>
                     </div>
                   </div>
                 `, [160, 48], [6, 18])}
@@ -598,40 +1257,55 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <div style="color: rgba(255, 255, 255, 0.55); font-size: 15px; font-weight: 800; letter-spacing: 3px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">
                     UTTARAKHAND
                   </div>
-                `, [200, 24], [100, 12])}
+                `, [180, 24], [90, 12])}
               />
 
               <Marker
-                position={[30.65, 80.12]}
+                position={[30.744, 79.493]}
                 icon={createHtmlIcon(`
-                  <div style="color: rgba(255, 255, 255, 0.45); font-size: 14px; font-weight: 800; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">
-                    INDIA
+                  <div style="color: #ffffff; font-size: 10px; font-weight: 700; text-shadow: 0 1px 4px #000; display: flex; align-items: center; gap: 4px;">
+                    <div style="width: 5px; height: 5px; border-radius: 50%; background: #ffffff;"></div>
+                    <span>Badrinath</span>
                   </div>
-                `, [100, 24], [50, 12])}
+                `, [90, 18], [2, 9])}
               />
 
-              {/* Tactical Town Points */}
-              {tacticalPoints.map((pt) => (
-                <Marker
-                  key={pt.name}
-                  position={pt.coords}
-                  icon={createHtmlIcon(`
-                    <div style="display: flex; align-items: center; gap: 4px; pointer-events: none;">
-                      <div style="width: 5px; height: 5px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 4px #000;"></div>
-                      <span style="font-size: 10px; font-weight: 600; color: #f1f5f9; text-shadow: 0 1px 4px #000; white-space: nowrap;">
-                        ${pt.name}
-                      </span>
-                    </div>
-                  `, [120, 18], [2, 9])}
-                />
-              ))}
+              <Marker
+                position={[30.556, 79.566]}
+                icon={createHtmlIcon(`
+                  <div style="color: #ffffff; font-size: 10px; font-weight: 700; text-shadow: 0 1px 4px #000; display: flex; align-items: center; gap: 4px;">
+                    <div style="width: 5px; height: 5px; border-radius: 50%; background: #ffffff;"></div>
+                    <span>Joshimath</span>
+                  </div>
+                `, [90, 18], [2, 9])}
+              />
+
+              <Marker
+                position={[30.285, 78.981]}
+                icon={createHtmlIcon(`
+                  <div style="color: #ffffff; font-size: 10px; font-weight: 700; text-shadow: 0 1px 4px #000; display: flex; align-items: center; gap: 4px;">
+                    <div style="width: 5px; height: 5px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8;"></div>
+                    <span>Rudraprayag</span>
+                  </div>
+                `, [100, 18], [2, 9])}
+              />
+
+              <Marker
+                position={[30.258, 79.217]}
+                icon={createHtmlIcon(`
+                  <div style="color: #ffffff; font-size: 9.5px; font-weight: 700; text-shadow: 0 1px 4px #000; display: flex; align-items: center; gap: 4px;">
+                    <div style="width: 4px; height: 4px; border-radius: 50%; background: #ffffff;"></div>
+                    <span>Karnaprayag</span>
+                  </div>
+                `, [90, 18], [2, 9])}
+              />
             </MapContainer>
 
-            {/* FLOATING BOTTOM-LEFT: PRECIPITATION INTENSITY BAR */}
-            <div className="tac-clean-legend-box">
-              <span className="tac-clean-legend-title">Precipitation Intensity (mm/hr)</span>
-              <div className="tac-clean-legend-ramp" />
-              <div className="tac-clean-legend-ticks">
+            {/* FLOATING PRECIPITATION INTENSITY LEGEND */}
+            <div className="tac-clean-precip-legend">
+              <div className="tac-clean-legend-title">Precipitation Intensity (mm/hr)</div>
+              <div className="tac-clean-legend-bar" />
+              <div className="tac-clean-legend-labels">
                 <span>0</span>
                 <span>1</span>
                 <span>5</span>
@@ -642,40 +1316,51 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               </div>
             </div>
 
-            {/* FLOATING BOTTOM-RIGHT: BASEMAP STYLE SELECTOR (Satellite | Terrain | Hybrid) */}
+            {/* FLOATING BASEMAP SELECTOR */}
             <div className="tac-clean-basemap-selector">
               <button
                 type="button"
-                className={`tac-basemap-thumb ${basemap === 'satellite' ? 'active' : ''}`}
-                onClick={() => setBasemap('satellite')}
+                className={`tac-clean-basemap-card ${basemap === 'satellite' ? 'active' : ''}`}
+                onClick={() => {
+                  setBasemap('satellite');
+                  setLayers((prev) => ({ ...prev, satellite: true, terrain: false }));
+                  if (showToast) showToast('Satellite Basemap Selected');
+                }}
               >
-                <div className="tac-thumb-preview satellite-preview" />
-                <span>Satellite</span>
+                <div className="tac-basemap-thumb-img thumb-sat" />
+                <span className="tac-basemap-name">Satellite</span>
               </button>
 
               <button
                 type="button"
-                className={`tac-basemap-thumb ${basemap === 'terrain' ? 'active' : ''}`}
-                onClick={() => setBasemap('terrain')}
+                className={`tac-clean-basemap-card ${basemap === 'terrain' ? 'active' : ''}`}
+                onClick={() => {
+                  setBasemap('terrain');
+                  setLayers((prev) => ({ ...prev, terrain: true, satellite: false }));
+                  if (showToast) showToast('Terrain Topographic Basemap Selected');
+                }}
               >
-                <div className="tac-thumb-preview terrain-preview" />
-                <span>Terrain</span>
+                <div className="tac-basemap-thumb-img thumb-terr" />
+                <span className="tac-basemap-name">Terrain</span>
               </button>
 
               <button
                 type="button"
-                className={`tac-basemap-thumb ${basemap === 'hybrid' ? 'active' : ''}`}
-                onClick={() => setBasemap('hybrid')}
+                className={`tac-clean-basemap-card ${basemap === 'hybrid' ? 'active' : ''}`}
+                onClick={() => {
+                  setBasemap('hybrid');
+                  setLayers((prev) => ({ ...prev, satellite: true, terrain: false }));
+                  if (showToast) showToast('Hybrid Basemap Selected');
+                }}
               >
-                <div className="tac-thumb-preview hybrid-preview" />
-                <span>Hybrid</span>
+                <div className="tac-basemap-thumb-img thumb-hyb" />
+                <span className="tac-basemap-name">Hybrid</span>
               </button>
             </div>
           </div>
 
-          {/* HIGHEST THREAT PANEL (Right Column) */}
+          {/* HIGHEST THREAT ACTION CARD */}
           <div className="tac-clean-threat-card">
-            {/* Header */}
             <div className="tac-clean-threat-head">
               <div className="tac-clean-flame-tag">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.2">
@@ -683,9 +1368,9 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <line x1="12" y1="9" x2="12" y2="13" />
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
-                <span>HIGHEST THREAT</span>
+                <span>{selectedIncident.badge}</span>
               </div>
-              <div className="tac-clean-forecast-pill">Forecast: +1h 45m</div>
+              <div className="tac-clean-forecast-pill">Forecast: +{currentStepData.eta}</div>
             </div>
 
             {/* Warning Title with Left Alert Icon */}
@@ -699,8 +1384,8 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   </svg>
                 </div>
                 <div className="tac-clean-warn-text-col">
-                  <div className="tac-clean-warn-main">FLASH FLOOD</div>
-                  <div className="tac-clean-warn-main">HIGH RISK</div>
+                  <div className="tac-clean-warn-main">{selectedIncident.hazard}</div>
+                  <div className="tac-clean-warn-main">{currentStepData.riskLevel}</div>
                 </div>
               </div>
               <div className="tac-clean-warn-loc">
@@ -708,13 +1393,13 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                <span>Chamoli, Uttarakhand</span>
+                <span>{selectedIncident.name}</span>
               </div>
             </div>
 
             {/* Narrative */}
             <div className="tac-clean-narrative">
-              Intense rainfall may cause sudden rises in rivers and flash flooding in downstream areas.
+              {selectedIncident.narrative}
             </div>
 
             {/* 4 Metric Chips (2x2 Grid) */}
@@ -722,15 +1407,15 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <div className="tac-clean-chip">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: '#38bdf8', fontSize: '13px' }}>🌧️</span>
-                  <span className="tac-clean-chip-val">124 mm</span>
+                  <span className="tac-clean-chip-val">{currentStepData.rainfall}</span>
                 </div>
-                <span className="tac-clean-chip-label">Est. rainfall (next 2h)</span>
+                <span className="tac-clean-chip-label">Est. rainfall ({selectedStep})</span>
               </div>
 
               <div className="tac-clean-chip">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: '#38bdf8', fontSize: '13px' }}>🕒</span>
-                  <span className="tac-clean-chip-val">1h 45m</span>
+                  <span className="tac-clean-chip-val">{currentStepData.arrival}</span>
                 </div>
                 <span className="tac-clean-chip-label">Estimated arrival</span>
               </div>
@@ -738,7 +1423,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <div className="tac-clean-chip">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: '#38bdf8', fontSize: '13px' }}>📊</span>
-                  <span className="tac-clean-chip-val">82%</span>
+                  <span className="tac-clean-chip-val">{currentStepData.confidence}</span>
                 </div>
                 <span className="tac-clean-chip-label">Model confidence</span>
               </div>
@@ -746,7 +1431,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <div className="tac-clean-chip">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: '#38bdf8', fontSize: '13px' }}>🗺️</span>
-                  <span className="tac-clean-chip-val">412 km²</span>
+                  <span className="tac-clean-chip-val">{currentStepData.area}</span>
                 </div>
                 <span className="tac-clean-chip-label">Affected area</span>
               </div>
@@ -759,7 +1444,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                 <span>Recommended Action</span>
               </div>
               <div className="tac-clean-action-desc">
-                Move away from riverbeds and low-lying areas.
+                {currentStepData.action || selectedIncident.action}
               </div>
             </div>
 
@@ -778,17 +1463,11 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <button
                 type="button"
                 className="tac-clean-dispatch-btn"
-                onClick={() => {
-                  if (onNavigateTab) {
-                    onNavigateTab('alerts');
-                  } else {
-                    handleDispatch();
-                  }
-                }}
+                onClick={handleDispatch}
                 title="Open Alert & Incident Command to broadcast CAP 1.2 payload"
               >
                 <span style={{ fontSize: '15px' }}>((•))</span>
-                <span>Prepare & Dispatch Alert (Act) →</span>
+                <span>Prepare &amp; Dispatch Alert (Act) →</span>
               </button>
             </div>
           </div>
@@ -797,9 +1476,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
         {/* ================= BOTTOM ROW: 3 CARDS ================= */}
         <div className="tac-clean-bottom-row">
           {/* Card 1: Forecast Timeline (Chamoli) */}
-          <div className="tac-clean-card">
+          <div 
+            className={`tac-clean-card tac-clean-timeline-card ${isTimelineFocused ? 'pulse-highlight' : ''}`}
+            ref={timelineCardRef}
+          >
             <div className="tac-clean-card-title-row">
-              <span className="tac-clean-card-title">Forecast Timeline (Chamoli)</span>
+              <span className="tac-clean-card-title">Forecast Timeline ({selectedSector.split(',')[0]})</span>
               <span className="tac-clean-sim-badge">6-Hour Nowcast Simulation</span>
             </div>
 
@@ -808,135 +1490,125 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                 type="button"
                 className="tac-clean-play-circle"
                 onClick={() => setIsPlaying(!isPlaying)}
-                title={isPlaying ? 'Pause simulation' : 'Play simulation'}
+                title={isPlaying ? 'Pause Simulation' : 'Play 6-Hour Nowcast Simulation'}
               >
-                {isPlaying ? '❚❚' : '▶'}
+                {isPlaying ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffffff">
+                    <rect x="6" y="4" width="4" height="16" />
+                    <rect x="14" y="4" width="4" height="16" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffffff">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                )}
               </button>
 
               <div className="tac-clean-filmstrip">
-                {TIME_STEPS.map((step) => (
-                  <div
-                    key={step}
-                    className={`tac-clean-thumb-box ${selectedStep === step ? 'active' : ''}`}
-                    onClick={() => setSelectedStep(step)}
-                  >
-                    <div className="tac-clean-thumb-graphic">
-                      <svg viewBox="0 0 60 40" width="100%" height="100%">
-                        <rect width="60" height="40" fill="#07111e" />
-                        <path d="M0 38 L14 26 L28 32 L42 20 L60 34 L60 40 L0 40 Z" fill="#0e1d32" opacity="0.9" />
-                        {/* Multi-ring radar echo */}
-                        <circle
-                          cx="30"
-                          cy="20"
-                          r={step === 'Now' ? 10 : step === '+1h' ? 12 : step === '+2h' ? 15 : step === '+3h' ? 13 : step === '+4h' ? 11 : step === '+5h' ? 10 : 9}
-                          fill="#00e5ff"
-                          opacity="0.45"
-                        />
-                        <circle
-                          cx="30"
-                          cy="20"
-                          r={step === 'Now' ? 7 : step === '+1h' ? 9 : step === '+2h' ? 12 : step === '+3h' ? 10 : step === '+4h' ? 8 : step === '+5h' ? 7 : 6}
-                          fill="#22c55e"
-                          opacity="0.6"
-                        />
-                        <circle
-                          cx="30"
-                          cy="20"
-                          r={step === 'Now' ? 5 : step === '+1h' ? 7 : step === '+2h' ? 9 : step === '+3h' ? 7 : step === '+4h' ? 5 : step === '+5h' ? 4.5 : 4}
-                          fill="#eab308"
-                          opacity="0.75"
-                        />
-                        <circle
-                          cx="30"
-                          cy="20"
-                          r={step === 'Now' ? 3.5 : step === '+1h' ? 5 : step === '+2h' ? 6.5 : step === '+3h' ? 5 : step === '+4h' ? 3.5 : step === '+5h' ? 3 : 2.5}
-                          fill="#f97316"
-                          opacity="0.85"
-                        />
-                        <circle
-                          cx="30"
-                          cy="20"
-                          r={step === 'Now' ? 2 : step === '+1h' ? 3 : step === '+2h' ? 4.5 : step === '+3h' ? 3 : step === '+4h' ? 2 : step === '+5h' ? 1.8 : 1.5}
-                          fill="#ef4444"
-                          opacity="0.95"
-                        />
-                      </svg>
+                {TIME_STEPS.map((step) => {
+                  const isSelected = selectedStep === step;
+                  return (
+                    <div
+                      key={step}
+                      className={`tac-clean-strip-item ${isSelected ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedStep(step);
+                        if (showToast) showToast(`Nowcast simulation shifted to ${step}`);
+                      }}
+                    >
+                      <div className="tac-clean-strip-thumb">
+                        <svg viewBox="0 0 60 44" width="100%" height="100%">
+                          <rect width="60" height="44" fill="#071224" />
+                          <circle cx="30" cy="22" r="16" fill="#0284c7" opacity="0.3" />
+                          <circle cx="30" cy="22" r="12" fill="#22c55e" opacity="0.4" />
+                          <circle cx="30" cy="22" r="8" fill="#eab308" opacity="0.6" />
+                          <circle cx="30" cy="22" r="4" fill="#ef4444" opacity="0.9" />
+                        </svg>
+                      </div>
+                      <span className="tac-clean-strip-label">{step}</span>
                     </div>
-                    <span className="tac-clean-thumb-label">{step}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              <button
+              <button 
                 type="button"
-                className="tac-clean-next-btn"
+                className="tac-clean-strip-arrow"
                 onClick={() => {
                   const idx = TIME_STEPS.indexOf(selectedStep);
-                  setSelectedStep(TIME_STEPS[(idx + 1) % TIME_STEPS.length]);
+                  const nextIdx = (idx + 1) % TIME_STEPS.length;
+                  setSelectedStep(TIME_STEPS[nextIdx]);
                 }}
-                title="Next timestep"
+                title="Next Timestep"
               >
                 ›
               </button>
             </div>
           </div>
 
-          {/* Card 2: Other Active Threats (Next 6 Hours) */}
+          {/* Card 2: Other Active Threats */}
           <div className="tac-clean-card">
             <div className="tac-clean-card-title-row">
               <span className="tac-clean-card-title">Other Active Threats (Next 6 Hours)</span>
-              <span
-                className="tac-clean-view-all"
-                onClick={() => showToast && showToast('Viewing all secondary tactical convective threats')}
+              <button
+                type="button"
+                className="tac-clean-viewall-btn"
+                onClick={() => setActivePanel('incidents')}
               >
                 View All →
-              </span>
+              </button>
             </div>
 
             <div className="tac-clean-threats-list">
-              <div className="tac-clean-threat-row">
-                <span className="tac-clean-threat-name">
-                  <span style={{ color: '#ef4444' }}>⚠️</span>
-                  <span>Cloudburst</span>
-                </span>
+              <div
+                className="tac-clean-threat-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleSelectIncident(INCIDENTS_DATA[0])}
+                title="Select Cloudburst Threat"
+              >
+                <div className="tac-clean-threat-left">
+                  <span style={{ color: '#eab308', fontSize: '13px' }}>⚠️</span>
+                  <span className="tac-clean-threat-name">Cloudburst</span>
+                </div>
                 <div className="tac-clean-threat-bar-wrap">
-                  <div
-                    className="tac-clean-threat-bar-fill"
-                    style={{ width: '48%', background: 'linear-gradient(90deg, #f97316, #ef4444)' }}
-                  />
+                  <div className="tac-clean-threat-bar-fill fill-cloudburst" />
                 </div>
                 <span className="tac-clean-threat-pct">48%</span>
-                <span className="tac-clean-threat-eta">ETA 2 h 30 m</span>
+                <span className="tac-clean-threat-eta">ETA 2h 30m</span>
               </div>
 
-              <div className="tac-clean-threat-row">
-                <span className="tac-clean-threat-name">
-                  <span style={{ color: '#38bdf8' }}>⛈️</span>
-                  <span>Thunderstorm</span>
-                </span>
+              <div
+                className="tac-clean-threat-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleSelectIncident(INCIDENTS_DATA[2])}
+                title="Select Thunderstorm Threat"
+              >
+                <div className="tac-clean-threat-left">
+                  <span style={{ color: '#38bdf8', fontSize: '13px' }}>🌧️</span>
+                  <span className="tac-clean-threat-name">Thunderstorm</span>
+                </div>
                 <div className="tac-clean-threat-bar-wrap">
-                  <div
-                    className="tac-clean-threat-bar-fill"
-                    style={{ width: '30%', background: 'linear-gradient(90deg, #38bdf8, #eab308)' }}
-                  />
+                  <div className="tac-clean-threat-bar-fill fill-thunderstorm" />
                 </div>
                 <span className="tac-clean-threat-pct">30%</span>
-                <span className="tac-clean-threat-eta">ETA 3 h 10 m</span>
+                <span className="tac-clean-threat-eta">ETA 3h 10m</span>
               </div>
 
-              <div className="tac-clean-threat-row">
-                <span className="tac-clean-threat-name">
-                  <span style={{ color: '#38bdf8' }}>🌧️</span>
-                  <span>Heavy Rainfall</span>
-                </span>
+              <div
+                className="tac-clean-threat-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleSelectIncident(INCIDENTS_DATA[1])}
+                title="Select Heavy Rainfall Threat"
+              >
+                <div className="tac-clean-threat-left">
+                  <span style={{ color: '#0ea5e9', fontSize: '13px' }}>🌧️</span>
+                  <span className="tac-clean-threat-name">Heavy Rainfall</span>
+                </div>
                 <div className="tac-clean-threat-bar-wrap">
-                  <div
-                    className="tac-clean-threat-bar-fill"
-                    style={{ width: '20%', background: 'linear-gradient(90deg, #0284c7, #38bdf8)' }}
-                  />
+                  <div className="tac-clean-threat-bar-fill fill-heavyrain" />
                 </div>
                 <span className="tac-clean-threat-pct">20%</span>
-                <span className="tac-clean-threat-eta">ETA 4 h 20 m</span>
+                <span className="tac-clean-threat-eta">ETA 4h 20m</span>
               </div>
             </div>
           </div>
@@ -945,50 +1617,105 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
           <div className="tac-clean-card">
             <div className="tac-clean-card-title-row">
               <span className="tac-clean-card-title">Data Freshness</span>
-              <span className="tac-clean-freshness-badge">● Live</span>
+              <span className="tac-clean-live-pill-sm">
+                <span className="tac-clean-live-dot" />
+                Live
+              </span>
             </div>
 
             <div className="tac-clean-freshness-list">
-              <div className="tac-clean-freshness-row">
-                <div className="tac-clean-feed-left">
-                  <span className="tac-clean-green-dot" />
-                  <span>INSAT-3D/3DR</span>
+              <div
+                className="tac-clean-fresh-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSelectedTelemetrySource({
+                    name: 'INSAT-3D / 3DR Geostationary Imager',
+                    stream: 'Thermal Infrared (TIR-1) + Water Vapor (WV)',
+                    frequency: '15 Minutes Scanning Interval',
+                    latency: '2 minutes ago',
+                  });
+                  setActivePanel('telemetry');
+                }}
+                title="Inspect INSAT telemetry stream"
+              >
+                <div className="tac-clean-fresh-left">
+                  <span className="tac-clean-dot-green" />
+                  <span className="tac-clean-feed-name">INSAT-3D/3DR</span>
                 </div>
                 <div className="tac-clean-feed-right">
-                  <span className="tac-clean-feed-time">2 min ago</span>
+                  <span className="tac-clean-fresh-time">2 min ago</span>
                   <span className="tac-clean-feed-chevron">›</span>
                 </div>
               </div>
 
-              <div className="tac-clean-freshness-row">
-                <div className="tac-clean-feed-left">
-                  <span className="tac-clean-green-dot" />
-                  <span>IMDAA Reanalysis</span>
+              <div
+                className="tac-clean-fresh-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSelectedTelemetrySource({
+                    name: 'IMDAA High-Resolution Reanalysis',
+                    stream: 'NCMRWF Unified Model Convective Variables',
+                    frequency: 'Hourly Reanalysis Assimilation',
+                    latency: '6 minutes ago',
+                  });
+                  setActivePanel('telemetry');
+                }}
+                title="Inspect IMDAA telemetry stream"
+              >
+                <div className="tac-clean-fresh-left">
+                  <span className="tac-clean-dot-green" />
+                  <span className="tac-clean-feed-name">IMDAA Reanalysis</span>
                 </div>
                 <div className="tac-clean-feed-right">
-                  <span className="tac-clean-feed-time">6 min ago</span>
+                  <span className="tac-clean-fresh-time">6 min ago</span>
                   <span className="tac-clean-feed-chevron">›</span>
                 </div>
               </div>
 
-              <div className="tac-clean-freshness-row">
-                <div className="tac-clean-feed-left">
-                  <span className="tac-clean-green-dot" />
-                  <span>CartoDEM</span>
+              <div
+                className="tac-clean-fresh-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSelectedTelemetrySource({
+                    name: 'CartoDEM Elevation & Slope Mesh',
+                    stream: 'ISRO National Remote Sensing Centre (NRSC)',
+                    frequency: 'Dynamic Inundation DEM Mesh',
+                    latency: '12 minutes ago',
+                  });
+                  setActivePanel('telemetry');
+                }}
+                title="Inspect CartoDEM mesh stream"
+              >
+                <div className="tac-clean-fresh-left">
+                  <span className="tac-clean-dot-green" />
+                  <span className="tac-clean-feed-name">CartoDEM</span>
                 </div>
                 <div className="tac-clean-feed-right">
-                  <span className="tac-clean-feed-time">12 min ago</span>
+                  <span className="tac-clean-fresh-time">12 min ago</span>
                   <span className="tac-clean-feed-chevron">›</span>
                 </div>
               </div>
 
-              <div className="tac-clean-freshness-row">
-                <div className="tac-clean-feed-left">
-                  <span className="tac-clean-green-dot" />
-                  <span>IMD Observations</span>
+              <div
+                className="tac-clean-fresh-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSelectedTelemetrySource({
+                    name: 'IMD Automated Weather Stations (AWS)',
+                    stream: 'Surface Pressure, Rain Gauge, Wind Vector',
+                    frequency: 'Real-time telemetry pulse',
+                    latency: '3 minutes ago',
+                  });
+                  setActivePanel('telemetry');
+                }}
+                title="Inspect IMD Observations"
+              >
+                <div className="tac-clean-fresh-left">
+                  <span className="tac-clean-dot-green" />
+                  <span className="tac-clean-feed-name">IMD Observations</span>
                 </div>
                 <div className="tac-clean-feed-right">
-                  <span className="tac-clean-feed-time">3 min ago</span>
+                  <span className="tac-clean-fresh-time">3 min ago</span>
                   <span className="tac-clean-feed-chevron">›</span>
                 </div>
               </div>
@@ -996,15 +1723,25 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
           </div>
         </div>
 
-        {/* ================= 3. INSTITUTIONAL FOOTER BAR ================= */}
+        {/* ================= 3. INSTITUTIONAL FOOTER ================= */}
         <footer className="tac-clean-footer">
           <div className="tac-footer-left">
             <div className="tac-footer-brand-logo">
-              <img src="/VAYUNET_LOGO.png" alt="VAYUNET" className="tac-footer-vayu-img" />
+              <img 
+                src="/vayunet-logo.svg" 
+                alt="VAYUNET" 
+                className="tac-footer-vayu-img" 
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
               <span className="tac-footer-brand-text">VAYUNET</span>
             </div>
             <div className="tac-footer-emblem-wrap">
-              <img src="/emblem-india.svg" alt="India Emblem" className="tac-footer-emblem-img" />
+              <img 
+                src="/emblem-india.svg" 
+                alt="Government of India" 
+                className="tac-footer-emblem-img" 
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
               <span className="tac-footer-dept">Ministry of Earth Sciences</span>
               <span className="tac-footer-pipe">|</span>
               <span className="tac-footer-dept">NCMRWF</span>
@@ -1012,21 +1749,40 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
           </div>
 
           <div className="tac-footer-center">
-            <button type="button" className="tac-footer-link" onClick={() => showToast && showToast('Operator Help Docs opened')}>Help</button>
-            <span className="tac-footer-dot">·</span>
-            <button type="button" className="tac-footer-link" onClick={() => showToast && showToast('Feedback modal opened')}>Feedback</button>
-            <span className="tac-footer-dot">·</span>
-            <button type="button" className="tac-footer-link" onClick={() => showToast && showToast('Terms of Service')}>Terms</button>
-            <span className="tac-footer-dot">·</span>
-            <span className="tac-footer-status">
+            <button 
+              type="button" 
+              className="tac-footer-link"
+              onClick={() => showToast && showToast('Help documentation: VAYUNET Operator Field Manual')}
+            >
+              Help
+            </button>
+            <span className="tac-footer-dot">•</span>
+            <button 
+              type="button" 
+              className="tac-footer-link"
+              onClick={() => showToast && showToast('Feedback: Send diagnostic logs to MoES/NCMRWF team')}
+            >
+              Feedback
+            </button>
+            <span className="tac-footer-dot">•</span>
+            <button 
+              type="button" 
+              className="tac-footer-link"
+              onClick={() => showToast && showToast('Terms of Service: Authorized NDMA/SDMA Personnel Only')}
+            >
+              Terms
+            </button>
+            <span className="tac-footer-dot">•</span>
+            <div className="tac-footer-status">
               <span className="tac-footer-status-dot" />
               <span>All Systems Operational</span>
-            </span>
+            </div>
           </div>
 
           <div className="tac-footer-right">
             <div className="tac-footer-motto-wrap">
               <span className="tac-footer-submotto">From Data to Action</span>
+              <span className="tac-footer-pipe">|</span>
               <span className="tac-footer-mainmotto">For a Safer Tomorrow</span>
             </div>
           </div>

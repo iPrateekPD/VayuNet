@@ -2246,3 +2246,361 @@
   font-weight: 600;
 }
 
+/* =========================================================
+   FLOATING INTERACTIVE POPOVERS (Layers, Rivers, Incidents, Bookmarks)
+   ========================================================= */
+.tac-floating-popover {
+  position: absolute;
+  top: 54px;
+  left: 14px;
+  z-index: 1200;
+  width: 290px;
+  background: rgba(8, 16, 30, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(16px);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: tacPopoverIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes tacPopoverIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tac-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.tac-popover-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.tac-popover-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.tac-popover-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.tac-popover-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Layer Toggle Rows */
+.tac-layer-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: #e2e8f0;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.tac-layer-toggle-row:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.tac-layer-toggle-row input[type="checkbox"] {
+  accent-color: #0284c7;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.tac-toggle-text {
+  font-weight: 500;
+}
+
+/* River Risk Panel */
+.tac-river-stat-box {
+  background: rgba(12, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tac-river-stat-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tac-river-stat-val {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.35;
+}
+
+.tac-river-action-btn {
+  background: #0284c7;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 9px 12px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s ease;
+}
+
+.tac-river-action-btn:hover {
+  background: #0369a1;
+}
+
+/* Incidents Panel */
+.tac-incidents-scroll {
+  max-height: 310px;
+  overflow-y: auto;
+  gap: 8px;
+}
+
+.tac-incident-card-item {
+  background: rgba(12, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tac-incident-card-item:hover {
+  background: rgba(18, 35, 64, 0.9);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.tac-incident-card-item.active {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.55);
+}
+
+.tac-inc-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tac-inc-item-loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tac-inc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.tac-inc-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tac-inc-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border: 1px solid;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+.tac-inc-hazard {
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.tac-inc-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+}
+
+/* Bookmarks Panel */
+.tac-bookmark-add-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.tac-bookmark-input {
+  flex: 1;
+  background: rgba(4, 9, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.tac-bookmark-input:focus {
+  border-color: #38bdf8;
+}
+
+.tac-bookmark-add-btn {
+  background: #0284c7;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.tac-bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.tac-bookmark-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  background: rgba(12, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tac-bookmark-row:hover {
+  background: rgba(18, 35, 64, 0.9);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.tac-bookmark-row.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.tac-bookmark-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-bm-star {
+  color: #eab308;
+  font-size: 13px;
+}
+
+.tac-bm-name {
+  font-size: 12px;
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.tac-bm-del {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.tac-bm-del:hover {
+  color: #ef4444;
+}
+
+/* Telemetry Detail Popover */
+.tac-telem-info-row {
+  background: rgba(12, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tac-telem-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tac-telem-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+/* Pulse Highlight for Timeline Card when Forecast is clicked */
+.tac-clean-timeline-card.pulse-highlight {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45) !important;
+  animation: timelinePulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes timelinePulse {
+  0% {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.65);
+  }
+}
+
+
