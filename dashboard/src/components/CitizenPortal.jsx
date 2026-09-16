@@ -253,6 +253,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
   const [toastMessage, setToastMessage] = useState(null);
   const [language, setLanguage] = useState('EN');
   const [liveIstTime, setLiveIstTime] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const headerRef = useRef(null);
   const footerRef = useRef(null);
@@ -567,7 +568,93 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 <span>Enter Operations Portal →</span>
               </button>
             </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              className="mobile-hamburger-btn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation Drawer */}
+          {mobileMenuOpen && (
+            <div className="mobile-nav-drawer">
+              <div className="mobile-nav-links">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
+                  <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
+                </div>
+                <div className="mobile-nav-lang-row">
+                  <span>Language:</span>
+                  <select 
+                    className="home-lang-select" 
+                    value={language} 
+                    onChange={(e) => {
+                      setLanguage(e.target.value);
+                      const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
+                      showToast(`Language switched to ${sel?.label || e.target.value}`);
+                    }}
+                  >
+                    {INDIAN_LANGUAGES.map(lang => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mobile-nav-divider" />
+                <button 
+                  className="nav-link-item" 
+                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
+                  onClick={() => { setMobileMenuOpen(false); onBackHome(); }}
+                >
+                  ← Return to Home
+                </button>
+                <button 
+                  className="nav-link-item" 
+                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
+                  onClick={() => { setMobileMenuOpen(false); setGuidanceModalOpen(true); }}
+                >
+                  Safety Guide & Protocols
+                </button>
+                <button 
+                  className="nav-link-item" 
+                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
+                  onClick={() => { setMobileMenuOpen(false); setShelterModalOpen(true); }}
+                >
+                  Safe Shelters & Resources
+                </button>
+                <div className="mobile-nav-divider" />
+                <button
+                  className="btn-primary-nav mobile-nav-btn"
+                  onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
+                  id="cp-mobile-drawer-operator-btn"
+                >
+                  <span>🛡️ Operator Access / Portal Login →</span>
+                </button>
+                <div className="mobile-gov-footer">
+                  <div>Ministry of Earth Sciences, Government of India</div>
+                  <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
+                    National Severe Weather Alert System
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
 
@@ -1172,9 +1259,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.
               </p>
               <div className="cp-footer-emblem-badge">
-                <svg className="cp-gov-emblem-svg" viewBox="0 0 24 28" fill="#94a3b8">
-                  <path d="M12 2C8 2 6 5 6 8C6 11 8 13 12 14C16 13 18 11 18 8C18 5 16 2 12 2ZM12 15C7 15 3 18 3 22H21C21 18 17 15 12 15Z"/>
-                </svg>
+                <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
                   Ministry of Earth Sciences
                   <span style={{ color: '#94a3b8' }}>Government of India</span>

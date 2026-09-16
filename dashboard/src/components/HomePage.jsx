@@ -162,7 +162,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
       // 1. Initial State: Hide all other elements before map zooms into position on Earth
       gsap.set(['.emergency-alert-ticker', '.home-nav'], { opacity: 0, y: -25 });
       gsap.set('.hero-text-readability-overlay', { opacity: 0 });
-      gsap.set('.hero-eyebrow-tag', { opacity: 0, y: 15 });
       gsap.set('.hero-headline', { opacity: 0, y: 25 });
       gsap.set('.hero-lead-text', { opacity: 0, y: 20 });
       gsap.set('.hero-cta-group', { opacity: 0, y: 18 });
@@ -215,7 +214,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           ease: 'power2.out',
         }, '-=0.35')
         // 4. Hero left content staggers in
-        .to('.hero-eyebrow-tag', { opacity: 1, y: 0, duration: 0.35 }, '-=0.3')
         .to('.hero-headline', { opacity: 1, y: 0, duration: 0.45 }, '-=0.25')
         .to('.hero-lead-text', { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
         .to('.hero-cta-group', { opacity: 1, y: 0, duration: 0.35 }, '-=0.25')
@@ -572,8 +570,9 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               <button
                 className="btn-primary-nav mobile-nav-btn"
                 onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
+                id="mobile-drawer-operator-access-btn"
               >
-                <span>{t.enterPortal}</span>
+                <span>🛡️ Operator Access / Portal Login →</span>
               </button>
               <div className="mobile-gov-footer">
                 <div>Ministry of Earth Sciences, Government of India</div>
@@ -680,12 +679,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
 
           {/* ===== LEFT COLUMN: Mission Briefing ===== */}
           <div className="hero-left-content">
-            <div className="hero-eyebrow-tag">
-              <span>REAL-TIME INSIGHTS.</span>
-              <br className="mobile-eyebrow-break" />
-              <span>EARLIER ACTIONS.</span>
-            </div>
-
             <h1 className="hero-headline">
               Detect severe weather<br />
               <span className="hero-headline-accent">before it becomes</span><br />
@@ -1223,9 +1216,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                 An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.
               </p>
               <div className="cp-footer-emblem-badge">
-                <svg className="cp-gov-emblem-svg" viewBox="0 0 24 28" fill="#94a3b8">
-                  <path d="M12 2C8 2 6 5 6 8C6 11 8 13 12 14C16 13 18 11 18 8C18 5 16 2 12 2ZM12 15C7 15 3 18 3 22H21C21 18 17 15 12 15Z"/>
-                </svg>
+                <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
                   Ministry of Earth Sciences
                   <span style={{ color: '#94a3b8' }}>Government of India</span>

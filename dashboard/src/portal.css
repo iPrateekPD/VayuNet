@@ -8361,18 +8361,21 @@ html {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
 
   .home-brand {
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+    overflow: hidden !important;
   }
 
   .home-logo {
-    width: 38px !important;
-    height: 38px !important;
+    width: 32px !important;
+    height: 32px !important;
     flex-shrink: 0 !important;
   }
 
@@ -8385,6 +8388,8 @@ html {
   .brand-titles-group {
     display: flex !important;
     flex-direction: column !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
   }
 
   .brand-row {
@@ -8394,11 +8399,12 @@ html {
   }
 
   .home-title {
-    font-size: 18px !important;
+    font-size: 16px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
     letter-spacing: 0.5px !important;
     line-height: 1.1 !important;
+    white-space: nowrap !important;
   }
 
   .gov-sovereign-pill {
@@ -8406,22 +8412,26 @@ html {
   }
 
   .home-dept {
-    font-size: 10px !important;
+    font-size: 9.5px !important;
     color: #94a3b8 !important;
-    margin-top: 2px !important;
+    margin-top: 1px !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 150px !important;
   }
 
   .home-nav-links-capsule {
     display: none !important;
   }
 
-  /* Right Header Actions: Only English capsule + Hamburger */
+  /* Right Header Actions: Compact Language capsule + Hamburger */
   .home-nav-actions {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
   }
 
   .home-nav-actions .day-night-toggle,
@@ -8433,38 +8443,40 @@ html {
   .home-lang-wrap {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 3px !important;
     background: rgba(4, 18, 28, 0.8) !important;
     border: 1px solid rgba(56, 189, 248, 0.25) !important;
-    border-radius: 8px !important;
-    padding: 5px 8px 5px 9px !important;
-    height: 34px !important;
+    border-radius: 6px !important;
+    padding: 2px 5px !important;
+    height: 28px !important;
     box-sizing: border-box !important;
+    flex-shrink: 0 !important;
   }
 
   .home-lang-icon {
-    width: 13px !important;
-    height: 13px !important;
+    width: 11px !important;
+    height: 11px !important;
     color: #38bdf8 !important;
     flex-shrink: 0 !important;
   }
 
   .home-lang-select {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 600 !important;
     color: #f1f5f9 !important;
     background: transparent !important;
     border: none !important;
     outline: none !important;
     cursor: pointer !important;
-    padding-right: 2px !important;
+    padding-right: 0 !important;
+    max-width: 54px !important;
   }
 
   .mobile-hamburger-btn {
     display: flex !important;
-    width: 34px !important;
-    height: 34px !important;
-    border-radius: 8px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 6px !important;
     background: rgba(4, 18, 28, 0.8) !important;
     border: 1px solid rgba(56, 189, 248, 0.25) !important;
     align-items: center !important;
@@ -8591,26 +8603,13 @@ html {
     display: block !important;
   }
 
-  .hero-eyebrow-tag {
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    font-family: var(--font-mono) !important;
-    letter-spacing: 2px !important;
-    color: #38bdf8 !important;
-    margin-bottom: 12px !important;
-    line-height: 1.4 !important;
-  }
-
-  .mobile-eyebrow-break {
-    display: block !important;
-  }
-
   .hero-headline {
-    font-size: clamp(30px, 8.8vw, 36px) !important;
+    font-size: clamp(28px, 8vw, 36px) !important;
     font-weight: 800 !important;
     line-height: 1.15 !important;
     letter-spacing: -0.5px !important;
     color: #ffffff !important;
+    margin-top: 4px !important;
     margin-bottom: 14px !important;
   }
 
@@ -8795,5 +8794,109 @@ html {
   }
 }
 
+/* Official Government of India Emblem */
+.cp-gov-emblem-img {
+  width: 28px;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(0.92);
+  opacity: 0.95;
+  transition: opacity 0.2s ease;
+}
 
+[data-theme="light"] .cp-gov-emblem-img {
+  filter: brightness(0) opacity(0.85);
+}
 
+/* Compact Login Form & Terminal Refinements */
+.login-terminal-card {
+  max-width: 520px;
+  padding: 30px 32px;
+}
+
+@media (max-width: 640px) {
+  .login-terminal-wrapper {
+    padding: 24px 12px 32px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .login-terminal-card {
+    padding: 22px 16px !important;
+    border-radius: 14px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .terminal-sec-banner {
+    font-size: 8.5px !important;
+    padding: 5px 8px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .terminal-header {
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .terminal-title {
+    font-size: 16px !important;
+  }
+
+  .terminal-subtitle {
+    font-size: 10.5px !important;
+  }
+
+  .terminal-field input {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .btn-terminal-submit {
+    padding: 12px 16px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .fast-track-section {
+    margin-top: 18px !important;
+    padding-top: 14px !important;
+  }
+
+  .fast-track-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .fast-track-card {
+    padding: 10px 12px !important;
+  }
+
+  .login-telemetry-bar {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-size: 9.5px !important;
+    padding: 10px 14px !important;
+    text-align: center !important;
+  }
+}
+
+/* Ensure sticky header on all views */
+.cp-navbar,
+.home-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+}
+
+@media (max-width: 380px) {
+  .home-dept {
+    display: none !important;
+  }
+}

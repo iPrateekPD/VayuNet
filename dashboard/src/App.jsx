@@ -253,6 +253,8 @@ function App() {
             showToast(`Welcome, ${userData.role} (${userData.user}). Operations portal unlocked.`);
           }}
           onBackHome={() => navigateTo('home')}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>

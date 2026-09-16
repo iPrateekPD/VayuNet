@@ -1,0 +1,2595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 69" style="enable-background:new 0 0 40 69;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st1{filter:url(#Adobe_OpacityMaskFilter);}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st3{mask:url(#mask-2_1_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st4{filter:url(#Adobe_OpacityMaskFilter_1_);}
+	.st5{mask:url(#mask-2_2_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st6{filter:url(#Adobe_OpacityMaskFilter_2_);}
+	.st7{mask:url(#mask-2_3_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st8{filter:url(#Adobe_OpacityMaskFilter_3_);}
+	.st9{mask:url(#mask-2_4_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st10{filter:url(#Adobe_OpacityMaskFilter_4_);}
+	.st11{mask:url(#mask-2_5_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st12{filter:url(#Adobe_OpacityMaskFilter_5_);}
+	.st13{mask:url(#mask-2_6_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st14{filter:url(#Adobe_OpacityMaskFilter_6_);}
+	.st15{mask:url(#mask-2_7_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st16{filter:url(#Adobe_OpacityMaskFilter_7_);}
+	.st17{mask:url(#mask-2_8_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st18{filter:url(#Adobe_OpacityMaskFilter_8_);}
+	.st19{mask:url(#mask-2_9_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st20{filter:url(#Adobe_OpacityMaskFilter_9_);}
+	.st21{mask:url(#mask-2_10_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st22{filter:url(#Adobe_OpacityMaskFilter_10_);}
+	.st23{mask:url(#mask-2_11_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st24{filter:url(#Adobe_OpacityMaskFilter_11_);}
+	.st25{mask:url(#mask-2_12_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st26{filter:url(#Adobe_OpacityMaskFilter_12_);}
+	.st27{mask:url(#mask-2_13_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st28{filter:url(#Adobe_OpacityMaskFilter_13_);}
+	.st29{mask:url(#mask-2_14_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st30{filter:url(#Adobe_OpacityMaskFilter_14_);}
+	.st31{mask:url(#mask-2_15_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st32{filter:url(#Adobe_OpacityMaskFilter_15_);}
+	.st33{mask:url(#mask-2_16_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st34{filter:url(#Adobe_OpacityMaskFilter_16_);}
+	.st35{mask:url(#mask-2_17_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st36{filter:url(#Adobe_OpacityMaskFilter_17_);}
+	.st37{mask:url(#mask-2_18_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st38{filter:url(#Adobe_OpacityMaskFilter_18_);}
+	.st39{mask:url(#mask-2_19_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st40{filter:url(#Adobe_OpacityMaskFilter_19_);}
+	.st41{mask:url(#mask-2_20_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st42{filter:url(#Adobe_OpacityMaskFilter_20_);}
+	.st43{mask:url(#mask-2_21_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st44{filter:url(#Adobe_OpacityMaskFilter_21_);}
+	.st45{mask:url(#mask-2_22_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st46{filter:url(#Adobe_OpacityMaskFilter_22_);}
+	.st47{mask:url(#mask-2_23_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st48{filter:url(#Adobe_OpacityMaskFilter_23_);}
+	.st49{mask:url(#mask-2_24_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st50{filter:url(#Adobe_OpacityMaskFilter_24_);}
+	.st51{mask:url(#mask-2_25_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st52{filter:url(#Adobe_OpacityMaskFilter_25_);}
+	.st53{mask:url(#mask-2_26_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st54{filter:url(#Adobe_OpacityMaskFilter_26_);}
+	.st55{mask:url(#mask-2_27_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st56{filter:url(#Adobe_OpacityMaskFilter_27_);}
+	.st57{mask:url(#mask-2_28_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st58{filter:url(#Adobe_OpacityMaskFilter_28_);}
+	.st59{mask:url(#mask-2_29_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st60{filter:url(#Adobe_OpacityMaskFilter_29_);}
+	.st61{mask:url(#mask-2_30_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st62{filter:url(#Adobe_OpacityMaskFilter_30_);}
+	.st63{mask:url(#mask-2_31_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st64{filter:url(#Adobe_OpacityMaskFilter_31_);}
+	.st65{mask:url(#mask-2_32_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st66{filter:url(#Adobe_OpacityMaskFilter_32_);}
+	.st67{mask:url(#mask-2_33_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st68{filter:url(#Adobe_OpacityMaskFilter_33_);}
+	.st69{mask:url(#mask-2_34_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st70{filter:url(#Adobe_OpacityMaskFilter_34_);}
+	.st71{mask:url(#mask-2_35_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st72{filter:url(#Adobe_OpacityMaskFilter_35_);}
+	.st73{mask:url(#mask-2_36_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st74{filter:url(#Adobe_OpacityMaskFilter_36_);}
+	.st75{mask:url(#mask-2_37_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st76{filter:url(#Adobe_OpacityMaskFilter_37_);}
+	.st77{mask:url(#mask-2_38_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st78{filter:url(#Adobe_OpacityMaskFilter_38_);}
+	.st79{mask:url(#mask-2_39_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st80{filter:url(#Adobe_OpacityMaskFilter_39_);}
+	.st81{mask:url(#mask-2_40_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st82{filter:url(#Adobe_OpacityMaskFilter_40_);}
+	.st83{mask:url(#mask-2_41_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st84{filter:url(#Adobe_OpacityMaskFilter_41_);}
+	.st85{mask:url(#mask-2_42_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st86{filter:url(#Adobe_OpacityMaskFilter_42_);}
+	.st87{mask:url(#mask-2_43_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st88{filter:url(#Adobe_OpacityMaskFilter_43_);}
+	.st89{mask:url(#mask-2_44_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st90{filter:url(#Adobe_OpacityMaskFilter_44_);}
+	.st91{mask:url(#mask-2_45_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st92{filter:url(#Adobe_OpacityMaskFilter_45_);}
+	.st93{mask:url(#mask-2_46_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st94{filter:url(#Adobe_OpacityMaskFilter_46_);}
+	.st95{mask:url(#mask-2_47_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st96{filter:url(#Adobe_OpacityMaskFilter_47_);}
+	.st97{mask:url(#mask-2_48_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st98{filter:url(#Adobe_OpacityMaskFilter_48_);}
+	.st99{mask:url(#mask-2_49_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st100{filter:url(#Adobe_OpacityMaskFilter_49_);}
+	.st101{mask:url(#mask-2_50_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st102{filter:url(#Adobe_OpacityMaskFilter_50_);}
+	.st103{mask:url(#mask-2_51_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st104{filter:url(#Adobe_OpacityMaskFilter_51_);}
+	.st105{mask:url(#mask-2_52_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st106{filter:url(#Adobe_OpacityMaskFilter_52_);}
+	.st107{mask:url(#mask-2_53_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st108{filter:url(#Adobe_OpacityMaskFilter_53_);}
+	.st109{mask:url(#mask-2_54_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st110{filter:url(#Adobe_OpacityMaskFilter_54_);}
+	.st111{mask:url(#mask-2_55_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st112{filter:url(#Adobe_OpacityMaskFilter_55_);}
+	.st113{mask:url(#mask-2_56_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st114{filter:url(#Adobe_OpacityMaskFilter_56_);}
+	.st115{mask:url(#mask-2_57_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st116{filter:url(#Adobe_OpacityMaskFilter_57_);}
+	.st117{mask:url(#mask-2_58_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st118{filter:url(#Adobe_OpacityMaskFilter_58_);}
+	.st119{mask:url(#mask-2_59_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st120{filter:url(#Adobe_OpacityMaskFilter_59_);}
+	.st121{mask:url(#mask-2_60_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st122{filter:url(#Adobe_OpacityMaskFilter_60_);}
+	.st123{mask:url(#mask-2_61_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st124{filter:url(#Adobe_OpacityMaskFilter_61_);}
+	.st125{mask:url(#mask-2_62_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st126{filter:url(#Adobe_OpacityMaskFilter_62_);}
+	.st127{mask:url(#mask-2_63_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st128{filter:url(#Adobe_OpacityMaskFilter_63_);}
+	.st129{mask:url(#mask-2_64_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st130{filter:url(#Adobe_OpacityMaskFilter_64_);}
+	.st131{mask:url(#mask-2_65_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st132{filter:url(#Adobe_OpacityMaskFilter_65_);}
+	.st133{mask:url(#mask-2_66_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st134{filter:url(#Adobe_OpacityMaskFilter_66_);}
+	.st135{mask:url(#mask-2_67_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st136{filter:url(#Adobe_OpacityMaskFilter_67_);}
+	.st137{mask:url(#mask-2_68_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st138{filter:url(#Adobe_OpacityMaskFilter_68_);}
+	.st139{mask:url(#mask-2_69_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st140{filter:url(#Adobe_OpacityMaskFilter_69_);}
+	.st141{mask:url(#mask-2_70_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st142{filter:url(#Adobe_OpacityMaskFilter_70_);}
+	.st143{mask:url(#mask-2_71_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st144{filter:url(#Adobe_OpacityMaskFilter_71_);}
+	.st145{mask:url(#mask-2_72_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st146{filter:url(#Adobe_OpacityMaskFilter_72_);}
+	.st147{mask:url(#mask-2_73_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st148{filter:url(#Adobe_OpacityMaskFilter_73_);}
+	.st149{mask:url(#mask-2_74_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st150{filter:url(#Adobe_OpacityMaskFilter_74_);}
+	.st151{mask:url(#mask-2_75_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st152{filter:url(#Adobe_OpacityMaskFilter_75_);}
+	.st153{mask:url(#mask-2_76_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st154{filter:url(#Adobe_OpacityMaskFilter_76_);}
+	.st155{mask:url(#mask-2_77_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st156{filter:url(#Adobe_OpacityMaskFilter_77_);}
+	.st157{mask:url(#mask-2_78_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st158{filter:url(#Adobe_OpacityMaskFilter_78_);}
+	.st159{mask:url(#mask-2_79_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st160{filter:url(#Adobe_OpacityMaskFilter_79_);}
+	.st161{mask:url(#mask-2_80_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st162{filter:url(#Adobe_OpacityMaskFilter_80_);}
+	.st163{mask:url(#mask-2_81_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st164{filter:url(#Adobe_OpacityMaskFilter_81_);}
+	.st165{mask:url(#mask-2_82_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st166{filter:url(#Adobe_OpacityMaskFilter_82_);}
+	.st167{mask:url(#mask-2_83_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st168{filter:url(#Adobe_OpacityMaskFilter_83_);}
+	.st169{mask:url(#mask-2_84_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st170{filter:url(#Adobe_OpacityMaskFilter_84_);}
+	.st171{mask:url(#mask-2_85_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st172{filter:url(#Adobe_OpacityMaskFilter_85_);}
+	.st173{mask:url(#mask-2_86_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st174{filter:url(#Adobe_OpacityMaskFilter_86_);}
+	.st175{mask:url(#mask-2_87_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st176{filter:url(#Adobe_OpacityMaskFilter_87_);}
+	.st177{mask:url(#mask-2_88_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st178{filter:url(#Adobe_OpacityMaskFilter_88_);}
+	.st179{mask:url(#mask-2_89_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st180{filter:url(#Adobe_OpacityMaskFilter_89_);}
+	.st181{mask:url(#mask-2_90_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st182{filter:url(#Adobe_OpacityMaskFilter_90_);}
+	.st183{mask:url(#mask-2_91_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st184{filter:url(#Adobe_OpacityMaskFilter_91_);}
+	.st185{mask:url(#mask-2_92_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st186{filter:url(#Adobe_OpacityMaskFilter_92_);}
+	.st187{mask:url(#mask-2_93_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st188{filter:url(#Adobe_OpacityMaskFilter_93_);}
+	.st189{mask:url(#mask-2_94_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st190{filter:url(#Adobe_OpacityMaskFilter_94_);}
+	.st191{mask:url(#mask-2_95_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st192{filter:url(#Adobe_OpacityMaskFilter_95_);}
+	.st193{mask:url(#mask-2_96_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st194{filter:url(#Adobe_OpacityMaskFilter_96_);}
+	.st195{mask:url(#mask-2_97_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st196{filter:url(#Adobe_OpacityMaskFilter_97_);}
+	.st197{mask:url(#mask-2_98_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st198{filter:url(#Adobe_OpacityMaskFilter_98_);}
+	.st199{mask:url(#mask-2_99_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st200{filter:url(#Adobe_OpacityMaskFilter_99_);}
+	.st201{mask:url(#mask-2_100_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st202{filter:url(#Adobe_OpacityMaskFilter_100_);}
+	.st203{mask:url(#mask-2_101_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st204{filter:url(#Adobe_OpacityMaskFilter_101_);}
+	.st205{mask:url(#mask-2_102_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st206{filter:url(#Adobe_OpacityMaskFilter_102_);}
+	.st207{mask:url(#mask-2_103_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st208{filter:url(#Adobe_OpacityMaskFilter_103_);}
+	.st209{mask:url(#mask-2_104_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st210{filter:url(#Adobe_OpacityMaskFilter_104_);}
+	.st211{mask:url(#mask-2_105_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st212{filter:url(#Adobe_OpacityMaskFilter_105_);}
+	.st213{mask:url(#mask-2_106_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st214{filter:url(#Adobe_OpacityMaskFilter_106_);}
+	.st215{mask:url(#mask-2_107_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st216{filter:url(#Adobe_OpacityMaskFilter_107_);}
+	.st217{mask:url(#mask-2_108_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st218{filter:url(#Adobe_OpacityMaskFilter_108_);}
+	.st219{mask:url(#mask-2_109_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st220{filter:url(#Adobe_OpacityMaskFilter_109_);}
+	.st221{mask:url(#mask-2_110_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st222{filter:url(#Adobe_OpacityMaskFilter_110_);}
+	.st223{mask:url(#mask-2_111_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st224{filter:url(#Adobe_OpacityMaskFilter_111_);}
+	.st225{mask:url(#mask-2_112_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st226{filter:url(#Adobe_OpacityMaskFilter_112_);}
+	.st227{mask:url(#mask-2_113_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st228{filter:url(#Adobe_OpacityMaskFilter_113_);}
+	.st229{mask:url(#mask-2_114_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st230{filter:url(#Adobe_OpacityMaskFilter_114_);}
+	.st231{mask:url(#mask-2_115_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st232{filter:url(#Adobe_OpacityMaskFilter_115_);}
+	.st233{mask:url(#mask-2_116_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st234{filter:url(#Adobe_OpacityMaskFilter_116_);}
+	.st235{mask:url(#mask-2_117_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st236{filter:url(#Adobe_OpacityMaskFilter_117_);}
+	.st237{mask:url(#mask-2_118_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st238{filter:url(#Adobe_OpacityMaskFilter_118_);}
+	.st239{mask:url(#mask-2_119_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st240{filter:url(#Adobe_OpacityMaskFilter_119_);}
+	.st241{mask:url(#mask-2_120_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st242{filter:url(#Adobe_OpacityMaskFilter_120_);}
+	.st243{mask:url(#mask-2_121_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st244{filter:url(#Adobe_OpacityMaskFilter_121_);}
+	.st245{mask:url(#mask-2_122_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st246{filter:url(#Adobe_OpacityMaskFilter_122_);}
+	.st247{mask:url(#mask-2_123_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st248{filter:url(#Adobe_OpacityMaskFilter_123_);}
+	.st249{mask:url(#mask-2_124_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st250{filter:url(#Adobe_OpacityMaskFilter_124_);}
+	.st251{mask:url(#mask-2_125_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st252{filter:url(#Adobe_OpacityMaskFilter_125_);}
+	.st253{mask:url(#mask-2_126_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st254{filter:url(#Adobe_OpacityMaskFilter_126_);}
+	.st255{mask:url(#mask-2_127_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st256{filter:url(#Adobe_OpacityMaskFilter_127_);}
+	.st257{mask:url(#mask-2_128_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st258{filter:url(#Adobe_OpacityMaskFilter_128_);}
+	.st259{mask:url(#mask-2_129_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st260{filter:url(#Adobe_OpacityMaskFilter_129_);}
+	.st261{mask:url(#mask-2_130_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st262{filter:url(#Adobe_OpacityMaskFilter_130_);}
+	.st263{mask:url(#mask-2_131_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st264{filter:url(#Adobe_OpacityMaskFilter_131_);}
+	.st265{mask:url(#mask-2_132_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+	.st266{filter:url(#Adobe_OpacityMaskFilter_132_);}
+	.st267{mask:url(#mask-2_133_);fill-rule:evenodd;clip-rule:evenodd;fill:#FEFEFE;}
+</style>
+<title>Group 145</title>
+<desc>Created with Sketch.</desc>
+<g id="Page-1">
+	<g id="Artboard-Copy-12" transform="translate(-57.000000, -15.000000)">
+		<g id="Group-145" transform="translate(57.000000, 15.000000)">
+			<path id="Fill-1" class="st0" d="M23.7,5.1c-0.2-0.1-0.4-0.6-1-0.6c-0.6,0-0.9,0.7-1,0.8c-0.1,0.1,0.1,0.3,0.2,0.2
+				c0.3-0.2,0.3-0.6,0.8-0.7c0.4,0,0.6,0.4,0.9,0.4C24,5.4,23.9,5.3,23.7,5.1"/>
+			<path id="Fill-3" class="st0" d="M16.5,5.4c0.2-0.1,0.5-0.5,0.8-0.6c0.3-0.1,0.6,0.1,0.8,0.3c0.1,0.1,0.2,0.3,0.3,0.3
+				c0.2,0,0.2-0.2,0.1-0.2c-0.2,0-0.2-0.5-0.5-0.7c-0.2-0.1-0.5-0.2-0.8-0.1C17,4.6,16.7,4.8,16.5,5c-0.2,0.2-0.4,0.3-0.4,0.3
+				S16.3,5.5,16.5,5.4"/>
+			<path id="Fill-5" class="st0" d="M20,10.8c-0.2,0,0,0.4-0.3,0.4c-0.2,0-0.2-0.4-0.3-0.3c-0.2,0.1,0,0.4,0.1,0.5
+				c0.1,0.1,0.3,0.3,0.5,0.1C20.1,11.3,20.1,10.8,20,10.8"/>
+			<path id="Fill-7" class="st0" d="M18.3,11.8c-0.1,0-0.2,0.5,0,0.7c0.2,0.2,0.3,0.3,0.4,0.2c0-0.1-0.2-0.3-0.3-0.4
+				C18.2,12.3,18.3,11.8,18.3,11.8"/>
+			<path id="Fill-9" class="st0" d="M21.9,12.8c0.2,0,0.4-0.4,0.5-0.6c0-0.3,0-0.7-0.1-0.7c-0.1,0,0,0.5-0.2,0.7
+				C21.9,12.5,21.6,12.9,21.9,12.8"/>
+			<g id="Clip-12">
+			</g>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="30.5" y="53.4" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30.5" y="53.4" width="0.3" height="0.3" id="mask-2_1_">
+				<g class="st1">
+					<polygon id="path-1_1_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-11" class="st3" points="30.5,53.7 30.8,53.7 30.8,53.4 30.5,53.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_1_" filterUnits="userSpaceOnUse" x="30.3" y="54.1" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30.3" y="54.1" width="0.3" height="0.3" id="mask-2_2_">
+				<g class="st4">
+					<polygon id="path-1_2_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-13" class="st5" points="30.3,54.3 30.6,54.3 30.6,54.1 30.3,54.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_2_" filterUnits="userSpaceOnUse" x="30.3" y="54.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30.3" y="54.7" width="0.3" height="0.2" id="mask-2_3_">
+				<g class="st6">
+					<polygon id="path-1_3_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-14" class="st7" points="30.3,54.9 30.6,54.9 30.6,54.7 30.3,54.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_3_" filterUnits="userSpaceOnUse" x="30" y="46.8" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30" y="46.8" width="0.3" height="0.3" id="mask-2_4_">
+				<g class="st8">
+					<polygon id="path-1_4_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-15" class="st9" points="30,47.1 30.3,47.1 30.3,46.8 30,46.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_4_" filterUnits="userSpaceOnUse" x="30.5" y="46.8" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30.5" y="46.8" width="0.3" height="0.3" id="mask-2_5_">
+				<g class="st10">
+					<polygon id="path-1_5_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-16" class="st11" points="30.5,47.1 30.8,47.1 30.8,46.8 30.5,46.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_5_" filterUnits="userSpaceOnUse" x="30.5" y="47.5" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="30.5" y="47.5" width="0.3" height="0.3" id="mask-2_6_">
+				<g class="st12">
+					<polygon id="path-1_6_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-17" class="st13" points="30.5,47.8 30.8,47.8 30.8,47.5 30.5,47.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_6_" filterUnits="userSpaceOnUse" x="29.6" y="46.2" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="29.6" y="46.2" width="0.3" height="0.3" id="mask-2_7_">
+				<g class="st14">
+					<polygon id="path-1_7_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-18" class="st15" points="29.6,46.4 29.9,46.4 29.9,46.2 29.6,46.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_7_" filterUnits="userSpaceOnUse" x="31" y="47.5" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31" y="47.5" width="0.3" height="0.3" id="mask-2_8_">
+				<g class="st16">
+					<polygon id="path-1_8_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-19" class="st17" points="31,47.8 31.3,47.8 31.3,47.5 31,47.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_8_" filterUnits="userSpaceOnUse" x="31.8" y="49.3" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31.8" y="49.3" width="0.3" height="0.3" id="mask-2_9_">
+				<g class="st18">
+					<polygon id="path-1_9_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-20" class="st19" points="31.8,49.5 32.1,49.5 32.1,49.3 31.8,49.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_9_" filterUnits="userSpaceOnUse" x="32.3" y="48.2" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="32.3" y="48.2" width="0.3" height="0.3" id="mask-2_10_">
+				<g class="st20">
+					<polygon id="path-1_10_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-21" class="st21" points="32.3,48.4 32.6,48.4 32.6,48.2 32.3,48.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_10_" filterUnits="userSpaceOnUse" x="31.8" y="48.8" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31.8" y="48.8" width="0.3" height="0.3" id="mask-2_11_">
+				<g class="st22">
+					<polygon id="path-1_11_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-22" class="st23" points="31.8,49 32.1,49 32.1,48.8 31.8,48.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_11_" filterUnits="userSpaceOnUse" x="32.3" y="47.6" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="32.3" y="47.6" width="0.3" height="0.3" id="mask-2_12_">
+				<g class="st24">
+					<polygon id="path-1_12_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-23" class="st25" points="32.3,47.9 32.6,47.9 32.6,47.6 32.3,47.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_12_" filterUnits="userSpaceOnUse" x="31.7" y="47.6" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31.7" y="47.6" width="0.3" height="0.3" id="mask-2_13_">
+				<g class="st26">
+					<polygon id="path-1_13_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-24" class="st27" points="31.7,47.9 32,47.9 32,47.6 31.7,47.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_13_" filterUnits="userSpaceOnUse" x="31" y="46.9" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31" y="46.9" width="0.3" height="0.3" id="mask-2_14_">
+				<g class="st28">
+					<polygon id="path-1_14_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-25" class="st29" points="31,47.1 31.3,47.1 31.3,46.9 31,46.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_14_" filterUnits="userSpaceOnUse" x="31.8" y="48.2" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="31.8" y="48.2" width="0.3" height="0.3" id="mask-2_15_">
+				<g class="st30">
+					<polygon id="path-1_15_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-26" class="st31" points="31.8,48.5 32.1,48.5 32.1,48.2 31.8,48.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_15_" filterUnits="userSpaceOnUse" x="27" y="53.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="27" y="53.2" width="0.3" height="0.2" id="mask-2_16_">
+				<g class="st32">
+					<polygon id="path-1_16_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-27" class="st33" points="27,53.4 27.3,53.4 27.3,53.2 27,53.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_16_" filterUnits="userSpaceOnUse" x="16.3" y="8" width="0" height="0">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="16.3" y="8" width="0" height="0" id="mask-2_17_">
+				<g class="st34">
+					<polygon id="path-1_17_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-28" class="st35" d="M16.3,8C16.3,8,16.3,8,16.3,8C16.3,8,16.3,8,16.3,8C16.3,8,16.3,8,16.3,8"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_17_" filterUnits="userSpaceOnUse" x="29.9" y="49.1" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="29.9" y="49.1" width="0.3" height="0.3" id="mask-2_18_">
+				<g class="st36">
+					<polygon id="path-1_18_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-29" class="st37" d="M30.1,49.1c-0.1,0-0.2,0.1-0.2,0.2c0,0.1,0.2,0.1,0.3,0C30.2,49.3,30.1,49.1,30.1,49.1"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_18_" filterUnits="userSpaceOnUse" x="27.5" y="47.3" width="1.2" height="1.1">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="27.5" y="47.3" width="1.2" height="1.1" id="mask-2_19_">
+				<g class="st38">
+					<polygon id="path-1_19_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-30" class="st39" d="M28.3,48.3c0.3-0.1,0.3-0.3,0.3-0.4c0-0.2-0.2,0-0.3-0.2c-0.1-0.1,0.1-0.2,0.2-0.4
+				c0.1-0.1-0.3-0.2-0.7,0c-0.3,0.2-0.5,0.7-0.4,0.6c0,0,0.2-0.2,0.3-0.1c0,0-0.1,0.1-0.1,0.1c0,0.1,0.1,0.2,0.2,0.2
+				c0.1,0,0.1-0.1,0.1-0.2c0-0.1,0.1-0.2,0.2-0.1c0.2,0.1,0.1,0.2-0.1,0.3C27.9,48.3,28,48.5,28.3,48.3"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_19_" filterUnits="userSpaceOnUse" x="9.4" y="12.5" width="0" height="0">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.4" y="12.5" width="0" height="0" id="mask-2_20_">
+				<g class="st40">
+					<polygon id="path-1_20_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-31" class="st41" d="M9.4,12.5C9.4,12.5,9.4,12.5,9.4,12.5C9.4,12.5,9.4,12.5,9.4,12.5"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_20_" filterUnits="userSpaceOnUse" x="9.3" y="12.5" width="0.1" height="0">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.3" y="12.5" width="0.1" height="0" id="mask-2_21_">
+				<g class="st42">
+					<polygon id="path-1_21_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-32" class="st43" d="M9.3,12.5C9.3,12.5,9.3,12.5,9.3,12.5C9.3,12.5,9.3,12.5,9.3,12.5C9.3,12.5,9.3,12.5,9.3,12.5
+				"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_21_" filterUnits="userSpaceOnUse" x="9.3" y="12.5" width="0" height="0">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.3" y="12.5" width="0" height="0" id="mask-2_22_">
+				<g class="st44">
+					<polygon id="path-1_22_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-33" class="st45" d="M9.3,12.5C9.3,12.5,9.3,12.5,9.3,12.5C9.3,12.5,9.3,12.5,9.3,12.5"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_22_" filterUnits="userSpaceOnUse" x="19.7" y="49.7" width="1" height="1">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="19.7" y="49.7" width="1" height="1" id="mask-2_23_">
+				<g class="st46">
+					<polygon id="path-1_23_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-34" class="st47" d="M20.2,49.7c0.3,0,0.5,0.2,0.5,0.5c0,0.3-0.2,0.5-0.5,0.5c-0.3,0-0.5-0.2-0.5-0.5
+				C19.7,50,19.9,49.7,20.2,49.7"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_23_" filterUnits="userSpaceOnUse" x="15" y="45.1" width="10.3" height="10.4">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="15" y="45.1" width="10.3" height="10.4" id="mask-2_24_">
+				<g class="st48">
+					<polygon id="path-1_24_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-35" class="st49" d="M23.1,50.5c-0.8-0.1-1.5-0.1-1.8-0.1c0,0,0-0.1,0-0.1c0,0,0-0.1,0-0.1c0.3,0,1-0.1,1.8-0.2
+				c0.9-0.1,1.7-0.3,1.9-0.4c0,0.1,0,0.1,0,0.2c-0.1,0-0.3,0.2-0.3,0.4c0,0.2,0.1,0.4,0.3,0.4c0,0.1,0,0.1,0,0.1
+				C24.7,50.7,24,50.6,23.1,50.5 M25,51c-0.1,0-0.3,0.1-0.4,0.3c-0.1,0.2,0,0.4,0.2,0.5c0,0,0,0.1-0.1,0.1c-0.2-0.1-0.9-0.4-1.8-0.8
+				c-0.8-0.3-1.4-0.5-1.7-0.6c0-0.1,0-0.1,0-0.2c0.3,0.1,1,0.2,1.8,0.3c0.9,0.1,1.7,0.2,1.9,0.1C25,50.9,25,51,25,51 M24.6,52.2
+				c-0.1-0.1-0.3,0-0.4,0.2c-0.1,0.2-0.1,0.4,0,0.5c0,0.1-0.1,0.1-0.1,0.2c-0.2-0.2-0.8-0.7-1.5-1.2c-0.7-0.5-1.2-0.9-1.5-1.1
+				c0-0.1,0.1-0.1,0.1-0.2c0.3,0.2,0.9,0.4,1.7,0.7c0.9,0.3,1.6,0.6,1.8,0.6C24.6,52.1,24.6,52.2,24.6,52.2 M23.9,53.3
+				c-0.1-0.1-0.3,0-0.5,0.1c-0.2,0.2-0.2,0.4-0.1,0.5c-0.1,0-0.1,0.1-0.2,0.1c-0.1-0.2-0.6-0.9-1.1-1.6c-0.5-0.7-1-1.2-1.2-1.4
+				c0,0,0.1-0.1,0.1-0.1c0.2,0.2,0.8,0.7,1.4,1.2c0.7,0.5,1.4,1,1.6,1.1C24,53.2,24,53.3,23.9,53.3 M23,54.2c-0.1-0.1-0.3-0.1-0.5,0
+				c-0.2,0.1-0.3,0.3-0.2,0.4c-0.1,0-0.1,0.1-0.2,0.1c-0.1-0.2-0.3-1-0.7-1.8c-0.3-0.8-0.6-1.4-0.8-1.7c0.1,0,0.1-0.1,0.2-0.1
+				c0.2,0.3,0.6,0.8,1.1,1.5c0.6,0.7,1.1,1.3,1.2,1.5C23.1,54.1,23.1,54.1,23,54.2 M21.9,54.8c-0.1-0.1-0.3-0.2-0.5-0.1
+				c-0.2,0.1-0.4,0.2-0.3,0.4c-0.1,0-0.1,0-0.2,0c0-0.3-0.1-1-0.2-1.9c-0.1-0.8-0.2-1.5-0.3-1.8c0.1,0,0.1,0,0.2-0.1
+				c0.1,0.3,0.3,1,0.7,1.7c0.4,0.8,0.7,1.5,0.8,1.7C22,54.7,22,54.7,21.9,54.8 M20.7,55.1c0-0.1-0.2-0.3-0.4-0.3
+				c-0.2,0-0.4,0.1-0.4,0.3c-0.1,0-0.1,0-0.2,0c0.1-0.2,0.2-1,0.3-1.9c0.1-0.8,0.2-1.5,0.2-1.8c0,0,0.1,0,0.1,0c0,0,0.1,0,0.1,0
+				c0,0.3,0.1,1,0.2,1.8c0.1,0.9,0.3,1.7,0.3,1.9C20.8,55,20.7,55,20.7,55.1 M19.4,55c0-0.1-0.1-0.3-0.3-0.4c-0.2-0.1-0.4,0-0.5,0.2
+				c-0.1,0-0.1,0-0.2-0.1c0.1-0.2,0.5-0.9,0.8-1.8c0.3-0.8,0.6-1.4,0.6-1.7c0.1,0,0.1,0,0.2,0c-0.1,0.3-0.2,1-0.3,1.8
+				c-0.1,0.9-0.2,1.7-0.2,1.9C19.5,55,19.5,55,19.4,55 M18.2,54.6c0.1-0.1,0-0.3-0.2-0.4c-0.2-0.1-0.4-0.1-0.5,0
+				c-0.1,0-0.1-0.1-0.1-0.1c0.2-0.2,0.7-0.8,1.2-1.5c0.5-0.7,0.9-1.2,1.1-1.5c0.1,0,0.1,0.1,0.2,0.1c-0.2,0.3-0.4,0.9-0.8,1.7
+				c-0.3,0.8-0.6,1.6-0.7,1.8C18.3,54.7,18.3,54.7,18.2,54.6 M17.1,54c0.1-0.1,0-0.3-0.1-0.5c-0.2-0.2-0.4-0.2-0.5-0.1
+				c0,0-0.1-0.1-0.1-0.1c0.2-0.1,0.8-0.6,1.6-1.1c0.7-0.5,1.2-1,1.4-1.2c0,0,0.1,0.1,0.1,0.1c-0.2,0.2-0.7,0.8-1.2,1.4
+				c-0.5,0.7-1,1.4-1.1,1.6C17.2,54.1,17.2,54,17.1,54 M16.4,53.2c0,0-0.1-0.1-0.1-0.1c0.1-0.1,0.1-0.3,0-0.5
+				c-0.1-0.2-0.3-0.3-0.4-0.2c0-0.1-0.1-0.1-0.1-0.2c0.2-0.1,1-0.3,1.8-0.7c0.8-0.3,1.4-0.6,1.7-0.8c0,0.1,0.1,0.1,0.1,0.2
+				c-0.3,0.2-0.8,0.6-1.5,1.1C17.1,52.5,16.5,53,16.4,53.2 M15.7,52c0.1-0.1,0.2-0.3,0.1-0.5c-0.1-0.2-0.2-0.4-0.4-0.3
+				c0-0.1,0-0.1,0-0.2c0.3,0,1-0.1,1.9-0.2c0.8-0.1,1.5-0.2,1.8-0.3c0,0.1,0,0.1,0.1,0.2c-0.3,0.1-1,0.3-1.7,0.7
+				c-0.8,0.4-1.5,0.7-1.7,0.8C15.7,52.1,15.7,52,15.7,52 M15.4,50.7c0.1,0,0.3-0.2,0.3-0.4s-0.1-0.4-0.3-0.4c0-0.1,0-0.1,0-0.2
+				c0.2,0.1,1,0.2,1.9,0.3c0.8,0.1,1.5,0.2,1.8,0.2c0,0,0,0.1,0,0.1c0,0,0,0.1,0,0.1c-0.3,0-1,0.1-1.8,0.2c-0.9,0.1-1.7,0.3-1.9,0.3
+				C15.4,50.8,15.4,50.8,15.4,50.7 M15.4,49.5c0.1,0,0.3-0.1,0.4-0.3c0.1-0.2,0-0.4-0.2-0.5c0-0.1,0-0.1,0.1-0.2
+				c0.2,0.1,0.9,0.5,1.8,0.8c0.8,0.3,1.4,0.5,1.7,0.6c0,0.1,0,0.1,0,0.2c-0.3-0.1-1-0.2-1.8-0.3c-0.9-0.1-1.7-0.2-1.9-0.2
+				C15.4,49.6,15.4,49.5,15.4,49.5 M15.8,48.3c0.1,0.1,0.3,0,0.4-0.2c0.1-0.2,0.1-0.4,0-0.5c0,0,0.1-0.1,0.1-0.1
+				c0.2,0.2,0.8,0.7,1.5,1.2c0.7,0.5,1.2,0.9,1.5,1.1c0,0.1-0.1,0.1-0.1,0.2c-0.3-0.2-0.9-0.4-1.7-0.7c-0.8-0.3-1.6-0.6-1.8-0.6
+				C15.7,48.4,15.8,48.3,15.8,48.3 M16.5,47.2c0.1,0.1,0.3,0,0.5-0.1c0.2-0.2,0.2-0.4,0.1-0.5c0,0,0.1-0.1,0.1-0.1
+				c0.1,0.2,0.6,0.8,1.1,1.6c0.5,0.6,1,1.2,1.2,1.4c0,0-0.1,0.1-0.1,0.1c-0.2-0.2-0.8-0.7-1.4-1.2c-0.7-0.5-1.4-1-1.6-1.1
+				C16.4,47.3,16.4,47.2,16.5,47.2 M17.4,46.3c0.1,0.1,0.3,0.1,0.5,0c0.2-0.1,0.3-0.3,0.2-0.4c0,0,0.1,0,0.1-0.1
+				c0.1,0.2,0.3,1,0.7,1.8c0.3,0.8,0.6,1.4,0.8,1.7c-0.1,0-0.1,0.1-0.2,0.1c-0.2-0.3-0.6-0.8-1.1-1.5c-0.6-0.7-1.1-1.3-1.3-1.5
+				C17.3,46.4,17.3,46.4,17.4,46.3 M18.5,45.7c0.1,0.1,0.3,0.2,0.5,0.1c0.2-0.1,0.4-0.2,0.3-0.4c0.1,0,0.1,0,0.2,0
+				c0,0.3,0.1,1,0.2,1.9c0.1,0.8,0.3,1.5,0.3,1.8c-0.1,0-0.1,0-0.2,0.1c-0.1-0.3-0.3-1-0.7-1.7c-0.4-0.8-0.7-1.5-0.8-1.7
+				C18.4,45.8,18.4,45.7,18.5,45.7 M19.7,45.4c0,0.1,0.2,0.3,0.4,0.3c0.2,0,0.4-0.1,0.4-0.3c0.1,0,0.1,0,0.2,0
+				c-0.1,0.2-0.2,1-0.3,1.9c-0.1,0.8-0.2,1.5-0.2,1.8c0,0-0.1,0-0.1,0c0,0-0.1,0-0.1,0c0-0.3-0.1-1-0.2-1.8
+				c-0.1-0.9-0.3-1.7-0.4-1.9C19.6,45.5,19.6,45.4,19.7,45.4 M21,45.5c0,0.2,0.1,0.3,0.3,0.4c0.2,0.1,0.4,0,0.5-0.2
+				c0.1,0,0.1,0,0.2,0.1c-0.1,0.2-0.4,0.9-0.8,1.8c-0.3,0.8-0.5,1.4-0.6,1.7c-0.1,0-0.1,0-0.2,0c0.1-0.3,0.2-1,0.3-1.8
+				c0.1-0.9,0.2-1.7,0.1-1.9C20.8,45.5,20.9,45.5,21,45.5 M22.2,45.8c-0.1,0.1,0,0.3,0.2,0.4c0.2,0.1,0.4,0.1,0.5,0
+				c0,0,0.1,0.1,0.1,0.1c-0.2,0.2-0.7,0.8-1.2,1.5c-0.5,0.7-0.9,1.2-1,1.5c-0.1,0-0.1-0.1-0.2-0.1c0.1-0.3,0.4-0.9,0.7-1.7
+				c0.3-0.8,0.6-1.6,0.6-1.8C22.1,45.8,22.1,45.8,22.2,45.8 M21,50.2c0,0.4-0.3,0.8-0.8,0.8c-0.4,0-0.8-0.3-0.8-0.8
+				c0-0.4,0.3-0.8,0.8-0.8C20.6,49.5,21,49.8,21,50.2 M23.2,46.5c-0.1,0.1,0,0.3,0.1,0.5c0.2,0.2,0.4,0.2,0.5,0.1
+				c0,0,0.1,0.1,0.1,0.1c-0.2,0.1-0.8,0.6-1.6,1.1c-0.6,0.5-1.2,1-1.4,1.2c0,0-0.1-0.1-0.1-0.1c0.2-0.2,0.7-0.8,1.2-1.4
+				c0.5-0.7,1-1.4,1.1-1.6C23.1,46.4,23.2,46.5,23.2,46.5 M24.1,47.4c-0.1,0.1-0.1,0.3,0,0.5c0.1,0.2,0.3,0.3,0.4,0.2
+				c0,0,0,0.1,0.1,0.1c-0.2,0.1-1,0.3-1.8,0.7c-0.8,0.3-1.4,0.6-1.7,0.8c0-0.1-0.1-0.1-0.1-0.2c0.3-0.2,0.8-0.6,1.5-1.1
+				c0.7-0.6,1.3-1.1,1.5-1.3C24,47.3,24.1,47.4,24.1,47.4 M24.7,48.5c-0.1,0.1-0.2,0.3-0.1,0.5c0.1,0.2,0.2,0.4,0.4,0.3
+				c0,0.1,0,0.1,0,0.1c-0.3,0-1,0.1-1.9,0.2c-0.8,0.1-1.5,0.3-1.8,0.3c0-0.1,0-0.1-0.1-0.2c0.3-0.1,1-0.3,1.7-0.7
+				c0.8-0.4,1.5-0.7,1.7-0.8C24.7,48.4,24.7,48.5,24.7,48.5 M20.1,45.1c-2.9,0-5.1,2.4-5.1,5.2c0,2.9,2.4,5.1,5.2,5.1
+				c2.9,0,5.1-2.4,5.1-5.2C25.3,47.3,23,45,20.1,45.1"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_24_" filterUnits="userSpaceOnUse" x="24.8" y="54.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="24.8" y="54.6" width="0.3" height="0.2" id="mask-2_25_">
+				<g class="st50">
+					<polygon id="path-1_25_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-36" class="st51" points="24.8,54.8 25.1,54.8 25.1,54.6 24.8,54.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_25_" filterUnits="userSpaceOnUse" x="24.8" y="55.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="24.8" y="55.2" width="0.3" height="0.2" id="mask-2_26_">
+				<g class="st52">
+					<polygon id="path-1_26_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-37" class="st53" points="24.8,55.4 25.1,55.4 25.1,55.2 24.8,55.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_26_" filterUnits="userSpaceOnUse" x="25.4" y="54.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.4" y="54.6" width="0.3" height="0.2" id="mask-2_27_">
+				<g class="st54">
+					<polygon id="path-1_27_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-38" class="st55" points="25.4,54.8 25.7,54.8 25.7,54.6 25.4,54.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_27_" filterUnits="userSpaceOnUse" x="24.2" y="55.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="24.2" y="55.2" width="0.3" height="0.2" id="mask-2_28_">
+				<g class="st56">
+					<polygon id="path-1_28_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-39" class="st57" points="24.2,55.4 24.5,55.4 24.5,55.2 24.2,55.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_28_" filterUnits="userSpaceOnUse" x="25.3" y="55.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.3" y="55.2" width="0.3" height="0.2" id="mask-2_29_">
+				<g class="st58">
+					<polygon id="path-1_29_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-40" class="st59" points="25.3,55.4 25.6,55.4 25.6,55.2 25.3,55.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_29_" filterUnits="userSpaceOnUse" x="25.9" y="55.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.9" y="55.2" width="0.3" height="0.2" id="mask-2_30_">
+				<g class="st60">
+					<polygon id="path-1_30_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-41" class="st61" points="25.9,55.4 26.2,55.4 26.2,55.2 25.9,55.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_30_" filterUnits="userSpaceOnUse" x="26.3" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.3" y="54.5" width="0.3" height="0.2" id="mask-2_31_">
+				<g class="st62">
+					<polygon id="path-1_31_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-42" class="st63" points="26.3,54.7 26.6,54.7 26.6,54.5 26.3,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_31_" filterUnits="userSpaceOnUse" x="25.9" y="53.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.9" y="53.2" width="0.3" height="0.2" id="mask-2_32_">
+				<g class="st64">
+					<polygon id="path-1_32_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-43" class="st65" points="25.9,53.4 26.2,53.4 26.2,53.2 25.9,53.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_32_" filterUnits="userSpaceOnUse" x="25.4" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.4" y="53.8" width="0.3" height="0.2" id="mask-2_33_">
+				<g class="st66">
+					<polygon id="path-1_33_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-44" class="st67" points="25.4,54 25.7,54 25.7,53.8 25.4,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_33_" filterUnits="userSpaceOnUse" x="25.9" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.9" y="53.8" width="0.3" height="0.2" id="mask-2_34_">
+				<g class="st68">
+					<polygon id="path-1_34_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-45" class="st69" points="25.9,54 26.2,54 26.2,53.8 25.9,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_34_" filterUnits="userSpaceOnUse" x="25.9" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.9" y="54.5" width="0.3" height="0.2" id="mask-2_35_">
+				<g class="st70">
+					<polygon id="path-1_35_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-46" class="st71" points="25.9,54.7 26.2,54.7 26.2,54.5 25.9,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_35_" filterUnits="userSpaceOnUse" x="26.6" y="51.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.6" y="51.8" width="0.3" height="0.2" id="mask-2_36_">
+				<g class="st72">
+					<polygon id="path-1_36_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-47" class="st73" points="26.6,52 26.9,52 26.9,51.8 26.6,51.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_36_" filterUnits="userSpaceOnUse" x="26.4" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.4" y="53.8" width="0.3" height="0.2" id="mask-2_37_">
+				<g class="st74">
+					<polygon id="path-1_37_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-48" class="st75" points="26.4,54 26.7,54 26.7,53.8 26.4,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_37_" filterUnits="userSpaceOnUse" x="26.5" y="53.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.5" y="53.2" width="0.3" height="0.2" id="mask-2_38_">
+				<g class="st76">
+					<polygon id="path-1_38_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-49" class="st77" points="26.5,53.4 26.8,53.4 26.8,53.2 26.5,53.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_38_" filterUnits="userSpaceOnUse" x="26.5" y="52.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.5" y="52.6" width="0.3" height="0.2" id="mask-2_39_">
+				<g class="st78">
+					<polygon id="path-1_39_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-50" class="st79" points="26.5,52.7 26.8,52.7 26.8,52.6 26.5,52.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_39_" filterUnits="userSpaceOnUse" x="26.1" y="46.7" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.1" y="46.7" width="0.3" height="0.3" id="mask-2_40_">
+				<g class="st80">
+					<polygon id="path-1_40_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-51" class="st81" points="26.1,46.9 26.4,46.9 26.4,46.7 26.1,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_40_" filterUnits="userSpaceOnUse" x="26.2" y="47.9" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.2" y="47.9" width="0.3" height="0.3" id="mask-2_41_">
+				<g class="st82">
+					<polygon id="path-1_41_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-52" class="st83" points="26.2,48.2 26.5,48.2 26.5,47.9 26.2,47.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_41_" filterUnits="userSpaceOnUse" x="26.1" y="46" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.1" y="46" width="0.3" height="0.3" id="mask-2_42_">
+				<g class="st84">
+					<polygon id="path-1_42_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-53" class="st85" points="26.1,46.3 26.4,46.3 26.4,46 26.1,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_42_" filterUnits="userSpaceOnUse" x="25.5" y="46" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="25.5" y="46" width="0.3" height="0.3" id="mask-2_43_">
+				<g class="st86">
+					<polygon id="path-1_43_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-54" class="st87" points="25.5,46.3 25.8,46.3 25.8,46 25.5,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_43_" filterUnits="userSpaceOnUse" x="26.1" y="47.2" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="26.1" y="47.2" width="0.3" height="0.3" id="mask-2_44_">
+				<g class="st88">
+					<polygon id="path-1_44_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-55" class="st89" points="26.1,47.5 26.4,47.5 26.4,47.2 26.1,47.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_44_" filterUnits="userSpaceOnUse" x="11.9" y="49.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="49.4" width="0.3" height="0.2" id="mask-2_45_">
+				<g class="st90">
+					<polygon id="path-1_45_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-56" class="st91" points="11.9,49.6 12.2,49.6 12.2,49.4 11.9,49.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_45_" filterUnits="userSpaceOnUse" x="11.9" y="48.9" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="48.9" width="0.3" height="0.2" id="mask-2_46_">
+				<g class="st92">
+					<polygon id="path-1_46_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-57" class="st93" points="11.9,49.1 12.2,49.1 12.2,48.9 11.9,48.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_46_" filterUnits="userSpaceOnUse" x="12.4" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.4" y="47.4" width="0.3" height="0.2" id="mask-2_47_">
+				<g class="st94">
+					<polygon id="path-1_47_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-58" class="st95" points="12.4,47.6 12.7,47.6 12.7,47.4 12.4,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_47_" filterUnits="userSpaceOnUse" x="12.3" y="46.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.3" y="46.6" width="0.3" height="0.2" id="mask-2_48_">
+				<g class="st96">
+					<polygon id="path-1_48_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-59" class="st97" points="12.3,46.8 12.6,46.8 12.6,46.6 12.3,46.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_48_" filterUnits="userSpaceOnUse" x="11.4" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="47.4" width="0.3" height="0.2" id="mask-2_49_">
+				<g class="st98">
+					<polygon id="path-1_49_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-60" class="st99" points="11.4,47.6 11.7,47.6 11.7,47.4 11.4,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_49_" filterUnits="userSpaceOnUse" x="12.3" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.3" y="46" width="0.3" height="0.2" id="mask-2_50_">
+				<g class="st100">
+					<polygon id="path-1_50_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-61" class="st101" points="12.3,46.2 12.6,46.2 12.6,46 12.3,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_50_" filterUnits="userSpaceOnUse" x="13.2" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.2" y="46" width="0.3" height="0.2" id="mask-2_51_">
+				<g class="st102">
+					<polygon id="path-1_51_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-62" class="st103" points="13.2,46.2 13.5,46.2 13.5,46 13.2,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_51_" filterUnits="userSpaceOnUse" x="11.4" y="48.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="48.3" width="0.3" height="0.2" id="mask-2_52_">
+				<g class="st104">
+					<polygon id="path-1_52_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-63" class="st105" points="11.4,48.5 11.7,48.5 11.7,48.3 11.4,48.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_52_" filterUnits="userSpaceOnUse" x="12.5" y="49.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.5" y="49.4" width="0.3" height="0.2" id="mask-2_53_">
+				<g class="st106">
+					<polygon id="path-1_53_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-64" class="st107" points="12.5,49.6 12.8,49.6 12.8,49.4 12.5,49.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_53_" filterUnits="userSpaceOnUse" x="11.9" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="46" width="0.3" height="0.2" id="mask-2_54_">
+				<g class="st108">
+					<polygon id="path-1_54_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-65" class="st109" points="11.9,46.2 12.2,46.2 12.2,46 11.9,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_54_" filterUnits="userSpaceOnUse" x="13.8" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.8" y="46" width="0.3" height="0.2" id="mask-2_55_">
+				<g class="st110">
+					<polygon id="path-1_55_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-66" class="st111" points="13.8,46.2 14.1,46.2 14.1,46 13.8,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_55_" filterUnits="userSpaceOnUse" x="12.7" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.7" y="46" width="0.3" height="0.2" id="mask-2_56_">
+				<g class="st112">
+					<polygon id="path-1_56_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-67" class="st113" points="12.7,46.2 13,46.2 13,46 12.7,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_56_" filterUnits="userSpaceOnUse" x="12.7" y="46.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.7" y="46.6" width="0.3" height="0.2" id="mask-2_57_">
+				<g class="st114">
+					<polygon id="path-1_57_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-68" class="st115" points="12.7,46.8 13,46.8 13,46.6 12.7,46.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_57_" filterUnits="userSpaceOnUse" x="11.4" y="48.9" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="48.9" width="0.3" height="0.2" id="mask-2_58_">
+				<g class="st116">
+					<polygon id="path-1_58_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-69" class="st117" points="11.4,49.1 11.7,49.1 11.7,48.9 11.4,48.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_58_" filterUnits="userSpaceOnUse" x="9.8" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.8" y="47.4" width="0.3" height="0.2" id="mask-2_59_">
+				<g class="st118">
+					<polygon id="path-1_59_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-70" class="st119" points="9.8,47.6 10.1,47.6 10.1,47.4 9.8,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_59_" filterUnits="userSpaceOnUse" x="9.9" y="48.9" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.9" y="48.9" width="0.3" height="0.2" id="mask-2_60_">
+				<g class="st120">
+					<polygon id="path-1_60_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-71" class="st121" points="9.9,49.1 10.2,49.1 10.2,48.9 9.9,48.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_60_" filterUnits="userSpaceOnUse" x="11.9" y="46.6" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="46.6" width="0.3" height="0.2" id="mask-2_61_">
+				<g class="st122">
+					<polygon id="path-1_61_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-72" class="st123" points="11.9,46.8 12.2,46.8 12.2,46.6 11.9,46.6 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_61_" filterUnits="userSpaceOnUse" x="10.3" y="46.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="46.7" width="0.3" height="0.2" id="mask-2_62_">
+				<g class="st124">
+					<polygon id="path-1_62_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-73" class="st125" points="10.3,46.9 10.6,46.9 10.6,46.7 10.3,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_62_" filterUnits="userSpaceOnUse" x="10.3" y="48.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="48.3" width="0.3" height="0.2" id="mask-2_63_">
+				<g class="st126">
+					<polygon id="path-1_63_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-74" class="st127" points="10.3,48.5 10.6,48.5 10.6,48.3 10.3,48.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_63_" filterUnits="userSpaceOnUse" x="10.3" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="47.4" width="0.3" height="0.2" id="mask-2_64_">
+				<g class="st128">
+					<polygon id="path-1_64_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-75" class="st129" points="10.3,47.6 10.6,47.6 10.6,47.4 10.3,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_64_" filterUnits="userSpaceOnUse" x="9.8" y="46.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.8" y="46.2" width="0.3" height="0.2" id="mask-2_65_">
+				<g class="st130">
+					<polygon id="path-1_65_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-76" class="st131" points="9.8,46.4 10,46.4 10,46.2 9.8,46.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_65_" filterUnits="userSpaceOnUse" x="9.2" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.2" y="47.4" width="0.3" height="0.2" id="mask-2_66_">
+				<g class="st132">
+					<polygon id="path-1_66_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-77" class="st133" points="9.2,47.6 9.5,47.6 9.5,47.4 9.2,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_66_" filterUnits="userSpaceOnUse" x="9.2" y="46.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.2" y="46.7" width="0.3" height="0.2" id="mask-2_67_">
+				<g class="st134">
+					<polygon id="path-1_67_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-78" class="st135" points="9.2,46.9 9.5,46.9 9.5,46.7 9.2,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_67_" filterUnits="userSpaceOnUse" x="9.2" y="46.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.2" y="46.2" width="0.3" height="0.2" id="mask-2_68_">
+				<g class="st136">
+					<polygon id="path-1_68_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-79" class="st137" points="9.2,46.4 9.5,46.4 9.5,46.2 9.2,46.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_68_" filterUnits="userSpaceOnUse" x="9.7" y="48.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.7" y="48.3" width="0.3" height="0.2" id="mask-2_69_">
+				<g class="st138">
+					<polygon id="path-1_69_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-80" class="st139" points="9.7,48.5 10,48.5 10,48.3 9.7,48.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_69_" filterUnits="userSpaceOnUse" x="9.8" y="46.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.8" y="46.7" width="0.3" height="0.2" id="mask-2_70_">
+				<g class="st140">
+					<polygon id="path-1_70_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-81" class="st141" points="9.8,46.9 10.1,46.9 10.1,46.7 9.8,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_70_" filterUnits="userSpaceOnUse" x="11.4" y="46" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="46" width="0.3" height="0.2" id="mask-2_71_">
+				<g class="st142">
+					<polygon id="path-1_71_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-82" class="st143" points="11.4,46.2 11.7,46.2 11.7,46 11.4,46 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_71_" filterUnits="userSpaceOnUse" x="11.4" y="46.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="46.7" width="0.3" height="0.2" id="mask-2_72_">
+				<g class="st144">
+					<polygon id="path-1_72_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-83" class="st145" points="11.4,46.9 11.7,46.9 11.7,46.7 11.4,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_72_" filterUnits="userSpaceOnUse" x="11.4" y="49.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.4" y="49.4" width="0.3" height="0.2" id="mask-2_73_">
+				<g class="st146">
+					<polygon id="path-1_73_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-84" class="st147" points="11.4,49.6 11.7,49.6 11.7,49.4 11.4,49.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_73_" filterUnits="userSpaceOnUse" x="11.9" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="47.4" width="0.3" height="0.2" id="mask-2_74_">
+				<g class="st148">
+					<polygon id="path-1_74_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-85" class="st149" points="11.9,47.6 12.2,47.6 12.2,47.4 11.9,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_74_" filterUnits="userSpaceOnUse" x="11.9" y="48.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="48.3" width="0.3" height="0.2" id="mask-2_75_">
+				<g class="st150">
+					<polygon id="path-1_75_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-86" class="st151" points="11.9,48.5 12.2,48.5 12.2,48.3 11.9,48.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_75_" filterUnits="userSpaceOnUse" x="10.8" y="48.9" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="48.9" width="0.3" height="0.2" id="mask-2_76_">
+				<g class="st152">
+					<polygon id="path-1_76_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-87" class="st153" points="10.8,49.1 11.1,49.1 11.1,48.9 10.8,48.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_76_" filterUnits="userSpaceOnUse" x="10.4" y="48.9" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.4" y="48.9" width="0.3" height="0.2" id="mask-2_77_">
+				<g class="st154">
+					<polygon id="path-1_77_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-88" class="st155" points="10.4,49.1 10.7,49.1 10.7,48.9 10.4,48.9 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_77_" filterUnits="userSpaceOnUse" x="10.8" y="46.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="46.1" width="0.3" height="0.2" id="mask-2_78_">
+				<g class="st156">
+					<polygon id="path-1_78_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-89" class="st157" points="10.8,46.3 11,46.3 11,46.1 10.8,46.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_78_" filterUnits="userSpaceOnUse" x="10.8" y="48.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="48.3" width="0.3" height="0.2" id="mask-2_79_">
+				<g class="st158">
+					<polygon id="path-1_79_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-90" class="st159" points="10.8,48.5 11.1,48.5 11.1,48.3 10.8,48.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_79_" filterUnits="userSpaceOnUse" x="10.3" y="46.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="46.2" width="0.3" height="0.2" id="mask-2_80_">
+				<g class="st160">
+					<polygon id="path-1_80_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-91" class="st161" points="10.3,46.4 10.6,46.4 10.6,46.2 10.3,46.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_80_" filterUnits="userSpaceOnUse" x="10.8" y="47.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="47.4" width="0.3" height="0.2" id="mask-2_81_">
+				<g class="st162">
+					<polygon id="path-1_81_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-92" class="st163" points="10.8,47.6 11.1,47.6 11.1,47.4 10.8,47.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_81_" filterUnits="userSpaceOnUse" x="10.8" y="46.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="46.7" width="0.3" height="0.2" id="mask-2_82_">
+				<g class="st164">
+					<polygon id="path-1_82_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-93" class="st165" points="10.8,46.9 11.1,46.9 11.1,46.7 10.8,46.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_82_" filterUnits="userSpaceOnUse" x="8.3" y="53.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.3" y="53.1" width="0.3" height="0.2" id="mask-2_83_">
+				<g class="st166">
+					<polygon id="path-1_83_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-94" class="st167" points="8.3,53.4 8.6,53.4 8.6,53.1 8.3,53.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_83_" filterUnits="userSpaceOnUse" x="8.8" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.8" y="53.7" width="0.3" height="0.2" id="mask-2_84_">
+				<g class="st168">
+					<polygon id="path-1_84_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-95" class="st169" points="8.8,54 9.1,54 9.1,53.7 8.8,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_84_" filterUnits="userSpaceOnUse" x="7.2" y="54.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.2" y="54.3" width="0.3" height="0.2" id="mask-2_85_">
+				<g class="st170">
+					<polygon id="path-1_85_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-96" class="st171" points="7.2,54.5 7.5,54.5 7.5,54.3 7.2,54.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_85_" filterUnits="userSpaceOnUse" x="7.2" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.2" y="53.7" width="0.3" height="0.2" id="mask-2_86_">
+				<g class="st172">
+					<polygon id="path-1_86_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-97" class="st173" points="7.2,53.9 7.5,53.9 7.5,53.7 7.2,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_86_" filterUnits="userSpaceOnUse" x="6.7" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="6.7" y="53.7" width="0.3" height="0.2" id="mask-2_87_">
+				<g class="st174">
+					<polygon id="path-1_87_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-98" class="st175" points="6.7,53.9 7,53.9 7,53.7 6.7,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_87_" filterUnits="userSpaceOnUse" x="7.2" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.2" y="55" width="0.3" height="0.2" id="mask-2_88_">
+				<g class="st176">
+					<polygon id="path-1_88_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-99" class="st177" points="7.2,55.2 7.5,55.2 7.5,55 7.2,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_88_" filterUnits="userSpaceOnUse" x="11.3" y="55.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.3" y="55.1" width="0.3" height="0.2" id="mask-2_89_">
+				<g class="st178">
+					<polygon id="path-1_89_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-100" class="st179" points="11.3,55.3 11.6,55.3 11.6,55.1 11.3,55.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_89_" filterUnits="userSpaceOnUse" x="10.3" y="55.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="55.1" width="0.3" height="0.2" id="mask-2_90_">
+				<g class="st180">
+					<polygon id="path-1_90_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-101" class="st181" points="10.3,55.3 10.6,55.3 10.6,55.1 10.3,55.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_90_" filterUnits="userSpaceOnUse" x="10.8" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="55" width="0.3" height="0.2" id="mask-2_91_">
+				<g class="st182">
+					<polygon id="path-1_91_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-102" class="st183" points="10.8,55.3 11.1,55.3 11.1,55 10.8,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_91_" filterUnits="userSpaceOnUse" x="10.8" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="53.8" width="0.3" height="0.2" id="mask-2_92_">
+				<g class="st184">
+					<polygon id="path-1_92_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-103" class="st185" points="10.8,54 11.1,54 11.1,53.8 10.8,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_92_" filterUnits="userSpaceOnUse" x="10.3" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="54.5" width="0.3" height="0.2" id="mask-2_93_">
+				<g class="st186">
+					<polygon id="path-1_93_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-104" class="st187" points="10.3,54.7 10.6,54.7 10.6,54.5 10.3,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_93_" filterUnits="userSpaceOnUse" x="10.3" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.3" y="53.8" width="0.3" height="0.2" id="mask-2_94_">
+				<g class="st188">
+					<polygon id="path-1_94_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-105" class="st189" points="10.3,54.1 10.6,54.1 10.6,53.8 10.3,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_94_" filterUnits="userSpaceOnUse" x="9.8" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.8" y="54.5" width="0.3" height="0.2" id="mask-2_95_">
+				<g class="st190">
+					<polygon id="path-1_95_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-106" class="st191" points="9.8,54.7 10.1,54.7 10.1,54.5 9.8,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_95_" filterUnits="userSpaceOnUse" x="10.8" y="54.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="10.8" y="54.4" width="0.3" height="0.2" id="mask-2_96_">
+				<g class="st192">
+					<polygon id="path-1_96_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-107" class="st193" points="10.8,54.7 11.1,54.7 11.1,54.4 10.8,54.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_96_" filterUnits="userSpaceOnUse" x="7.7" y="53.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.7" y="53.1" width="0.3" height="0.2" id="mask-2_97_">
+				<g class="st194">
+					<polygon id="path-1_97_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-108" class="st195" points="7.7,53.4 8,53.4 8,53.1 7.7,53.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_97_" filterUnits="userSpaceOnUse" x="11.9" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="55" width="0.3" height="0.2" id="mask-2_98_">
+				<g class="st196">
+					<polygon id="path-1_98_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-109" class="st197" points="11.9,55.3 12.2,55.3 12.2,55 11.9,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_98_" filterUnits="userSpaceOnUse" x="9.8" y="55.1" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.8" y="55.1" width="0.3" height="0.2" id="mask-2_99_">
+				<g class="st198">
+					<polygon id="path-1_99_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-110" class="st199" points="9.8,55.3 10.1,55.3 10.1,55.1 9.8,55.1 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_99_" filterUnits="userSpaceOnUse" x="11.3" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.3" y="54.5" width="0.3" height="0.2" id="mask-2_100_">
+				<g class="st200">
+					<polygon id="path-1_100_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-111" class="st201" points="11.3,54.7 11.6,54.7 11.6,54.5 11.3,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_100_" filterUnits="userSpaceOnUse" x="11.9" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="11.9" y="54.5" width="0.3" height="0.2" id="mask-2_101_">
+				<g class="st202">
+					<polygon id="path-1_101_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-112" class="st203" points="11.9,54.7 12.2,54.7 12.2,54.5 11.9,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_101_" filterUnits="userSpaceOnUse" x="8.3" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.3" y="53.7" width="0.3" height="0.2" id="mask-2_102_">
+				<g class="st204">
+					<polygon id="path-1_102_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-113" class="st205" points="8.3,53.9 8.6,53.9 8.6,53.7 8.3,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_102_" filterUnits="userSpaceOnUse" x="8.3" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.3" y="55" width="0.3" height="0.2" id="mask-2_103_">
+				<g class="st206">
+					<polygon id="path-1_103_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-114" class="st207" points="8.3,55.3 8.6,55.3 8.6,55 8.3,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_103_" filterUnits="userSpaceOnUse" x="7.9" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.9" y="55" width="0.3" height="0.2" id="mask-2_104_">
+				<g class="st208">
+					<polygon id="path-1_104_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-115" class="st209" points="7.9,55.3 8.2,55.3 8.2,55 7.9,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_104_" filterUnits="userSpaceOnUse" x="8.3" y="54.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.3" y="54.4" width="0.3" height="0.2" id="mask-2_105_">
+				<g class="st210">
+					<polygon id="path-1_105_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-116" class="st211" points="8.3,54.7 8.6,54.7 8.6,54.4 8.3,54.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_105_" filterUnits="userSpaceOnUse" x="7.7" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.7" y="53.7" width="0.3" height="0.2" id="mask-2_106_">
+				<g class="st212">
+					<polygon id="path-1_106_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-117" class="st213" points="7.7,53.9 8,53.9 8,53.7 7.7,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_106_" filterUnits="userSpaceOnUse" x="7.8" y="54.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.8" y="54.3" width="0.3" height="0.2" id="mask-2_107_">
+				<g class="st214">
+					<polygon id="path-1_107_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-118" class="st215" points="7.8,54.6 8.1,54.6 8.1,54.3 7.8,54.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_107_" filterUnits="userSpaceOnUse" x="8.8" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.8" y="55" width="0.3" height="0.2" id="mask-2_108_">
+				<g class="st216">
+					<polygon id="path-1_108_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-119" class="st217" points="8.8,55.3 9.1,55.3 9.1,55 8.8,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_108_" filterUnits="userSpaceOnUse" x="9.3" y="54.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.3" y="54.4" width="0.3" height="0.2" id="mask-2_109_">
+				<g class="st218">
+					<polygon id="path-1_109_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-120" class="st219" points="9.3,54.7 9.6,54.7 9.6,54.4 9.3,54.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_109_" filterUnits="userSpaceOnUse" x="8.8" y="54.5" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.8" y="54.5" width="0.3" height="0.2" id="mask-2_110_">
+				<g class="st220">
+					<polygon id="path-1_110_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-121" class="st221" points="8.8,54.7 9.1,54.7 9.1,54.5 8.8,54.5 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_110_" filterUnits="userSpaceOnUse" x="9.3" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.3" y="53.7" width="0.3" height="0.2" id="mask-2_111_">
+				<g class="st222">
+					<polygon id="path-1_111_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-122" class="st223" points="9.3,54 9.6,54 9.6,53.7 9.3,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_111_" filterUnits="userSpaceOnUse" x="9.7" y="53.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.7" y="53.8" width="0.3" height="0.2" id="mask-2_112_">
+				<g class="st224">
+					<polygon id="path-1_112_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-123" class="st225" points="9.7,54.1 10,54.1 10,53.8 9.7,53.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_112_" filterUnits="userSpaceOnUse" x="9.3" y="55" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9.3" y="55" width="0.3" height="0.2" id="mask-2_113_">
+				<g class="st226">
+					<polygon id="path-1_113_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-124" class="st227" points="9.3,55.3 9.6,55.3 9.6,55 9.3,55 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_113_" filterUnits="userSpaceOnUse" x="14.6" y="53.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="14.6" y="53.7" width="0.3" height="0.2" id="mask-2_114_">
+				<g class="st228">
+					<polygon id="path-1_114_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-125" class="st229" points="14.6,54 14.9,54 14.9,53.7 14.6,53.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_114_" filterUnits="userSpaceOnUse" x="13.3" y="51.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.3" y="51.7" width="0.3" height="0.2" id="mask-2_115_">
+				<g class="st230">
+					<polygon id="path-1_115_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-126" class="st231" points="13.3,51.9 13.6,51.9 13.6,51.7 13.3,51.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_115_" filterUnits="userSpaceOnUse" x="12.8" y="51.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.8" y="51.2" width="0.3" height="0.2" id="mask-2_116_">
+				<g class="st232">
+					<polygon id="path-1_116_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-127" class="st233" points="12.8,51.4 13.1,51.4 13.1,51.2 12.8,51.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_116_" filterUnits="userSpaceOnUse" x="12.8" y="51.8" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="12.8" y="51.8" width="0.3" height="0.2" id="mask-2_117_">
+				<g class="st234">
+					<polygon id="path-1_117_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-128" class="st235" points="12.8,52 13.1,52 13.1,51.8 12.8,51.8 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_117_" filterUnits="userSpaceOnUse" x="13.4" y="52.4" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.4" y="52.4" width="0.3" height="0.2" id="mask-2_118_">
+				<g class="st236">
+					<polygon id="path-1_118_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-129" class="st237" points="13.4,52.6 13.7,52.6 13.7,52.4 13.4,52.4 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_118_" filterUnits="userSpaceOnUse" x="13.8" y="51.7" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.8" y="51.7" width="0.3" height="0.2" id="mask-2_119_">
+				<g class="st238">
+					<polygon id="path-1_119_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-130" class="st239" points="13.8,51.9 14.2,51.9 14.2,51.7 13.8,51.7 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_119_" filterUnits="userSpaceOnUse" x="13.3" y="51.2" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="13.3" y="51.2" width="0.3" height="0.2" id="mask-2_120_">
+				<g class="st240">
+					<polygon id="path-1_120_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-131" class="st241" points="13.3,51.4 13.6,51.4 13.6,51.2 13.3,51.2 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_120_" filterUnits="userSpaceOnUse" x="14" y="52.3" width="0.3" height="0.2">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="14" y="52.3" width="0.3" height="0.2" id="mask-2_121_">
+				<g class="st242">
+					<polygon id="path-1_121_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<polygon id="Fill-132" class="st243" points="14,52.5 14.3,52.5 14.3,52.3 14,52.3 			"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_121_" filterUnits="userSpaceOnUse" x="7.7" y="48.2" width="0.4" height="0.8">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.7" y="48.2" width="0.4" height="0.8" id="mask-2_122_">
+				<g class="st244">
+					<polygon id="path-1_122_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-133" class="st245" d="M7.7,48.9c0-0.1,0.1-0.1,0.3-0.3c0.2-0.2,0.1-0.4,0-0.4c-0.1,0.2-0.2,0.2-0.3,0.4
+				C7.6,48.7,7.7,49.1,7.7,48.9"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_122_" filterUnits="userSpaceOnUse" x="8.4" y="49.6" width="0.3" height="0.8">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8.4" y="49.6" width="0.3" height="0.8" id="mask-2_123_">
+				<g class="st246">
+					<polygon id="path-1_123_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-134" class="st247" d="M8.7,50.3c0-0.1,0-0.7-0.1-0.7c-0.2,0-0.2,0.5-0.2,0.7C8.5,50.6,8.7,50.5,8.7,50.3"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_123_" filterUnits="userSpaceOnUse" x="7.1" y="47.2" width="0.3" height="0.8">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.1" y="47.2" width="0.3" height="0.8" id="mask-2_124_">
+				<g class="st248">
+					<polygon id="path-1_124_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-135" class="st249" d="M7.1,47.8c0,0.2,0.1,0.3,0.2,0.2c0,0-0.1-0.2,0.1-0.4c0.1-0.2,0-0.5-0.1-0.4
+				C7.3,47.5,7.1,47.5,7.1,47.8"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_124_" filterUnits="userSpaceOnUse" x="6.9" y="46.8" width="0.4" height="0.5">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="6.9" y="46.8" width="0.4" height="0.5" id="mask-2_125_">
+				<g class="st250">
+					<polygon id="path-1_125_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-136" class="st251" d="M6.9,47.2c0.1,0,0.2,0,0.1-0.2c0-0.1,0.1-0.2,0.2-0.2c0.1-0.1-0.1-0.1-0.2,0
+				C6.8,47,6.9,47.2,6.9,47.2"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_125_" filterUnits="userSpaceOnUse" x="7.4" y="47.7" width="0.4" height="0.7">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.4" y="47.7" width="0.4" height="0.7" id="mask-2_126_">
+				<g class="st252">
+					<polygon id="path-1_126_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-137" class="st253" d="M7.5,48.4c0-0.2,0.2-0.3,0.2-0.4c0-0.1,0-0.4-0.1-0.2c0,0.1-0.3,0.2-0.3,0.4
+				C7.4,48.4,7.5,48.5,7.5,48.4"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_126_" filterUnits="userSpaceOnUse" x="6.6" y="46.5" width="0.2" height="0.5">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="6.6" y="46.5" width="0.2" height="0.5" id="mask-2_127_">
+				<g class="st254">
+					<polygon id="path-1_127_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-138" class="st255" d="M6.8,46.5c-0.1-0.1-0.3,0.2-0.2,0.3c0.1,0.2,0.2,0.2,0.1-0.1C6.7,46.7,6.8,46.6,6.8,46.5"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_127_" filterUnits="userSpaceOnUse" x="7.8" y="48.7" width="0.5" height="0.9">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="7.8" y="48.7" width="0.5" height="0.9" id="mask-2_128_">
+				<g class="st256">
+					<polygon id="path-1_128_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-139" class="st257" d="M8,49c-0.2,0.2-0.2,0.4-0.2,0.5c0.1,0.2,0.1,0.2,0.2,0c0-0.1,0.1-0.2,0.2-0.3
+				c0.2-0.2,0.1-0.5,0.1-0.5C8.2,48.7,8.1,48.8,8,49"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_128_" filterUnits="userSpaceOnUse" x="8" y="49.3" width="0.3" height="0.8">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="8" y="49.3" width="0.3" height="0.8" id="mask-2_129_">
+				<g class="st258">
+					<polygon id="path-1_129_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-140" class="st259" d="M8.1,49.6c-0.1,0.3,0.1,0.5,0.1,0.5c0.1,0,0.1-0.3,0.1-0.4c0-0.1,0.1-0.4,0-0.4
+				C8.3,49.3,8.1,49.5,8.1,49.6"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_129_" filterUnits="userSpaceOnUse" x="6.3" y="46.3" width="0.2" height="0.4">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="6.3" y="46.3" width="0.2" height="0.4" id="mask-2_130_">
+				<g class="st260">
+					<polygon id="path-1_130_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-141" class="st261" d="M6.5,46.3c-0.1,0-0.2,0.3-0.2,0.4c0.1,0.2,0.1,0,0.1-0.1C6.4,46.5,6.6,46.3,6.5,46.3"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_130_" filterUnits="userSpaceOnUse" x="9" y="50.1" width="0.3" height="0.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="9" y="50.1" width="0.3" height="0.3" id="mask-2_131_">
+				<g class="st262">
+					<polygon id="path-1_131_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-142" class="st263" d="M9.2,50.4c0.1,0.1,0.1,0,0.1-0.1C9.2,50.2,9,50.1,9,50.2C9,50.3,9.1,50.4,9.2,50.4"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_131_" filterUnits="userSpaceOnUse" x="0" y="0" width="39.7" height="59.5">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="0" y="0" width="39.7" height="59.5" id="mask-2_132_">
+				<g class="st264">
+					<polygon id="path-1_132_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-143" class="st265" d="M36.4,10.6c-0.3,0.1-0.5-0.2-0.5-0.2s0.6-0.5,0.8-0.9c0.2-0.3,0.6,0,0.5,0.2
+				C37.2,10.1,36.8,10.5,36.4,10.6L36.4,10.6z M39.1,12.1c0,0.2-0.3,0.6-0.5,0.5c-0.4-0.2-0.1-0.6-0.7-0.8c-0.5-0.2-0.7-0.1-0.8-0.1
+				c-0.1-0.1-0.1-0.2-0.1-0.4c0-0.2-0.1-0.2-0.2-0.3c-0.2,0-0.2-0.3-0.1-0.3c0.2-0.1,0.5,0.6,0.7,0.3c0.1-0.1-0.2-0.2-0.1-0.5
+				c0-0.2,0.2-0.4,0.3-0.5c0,0,0,0,0-0.1c-0.1-0.1,0-0.7-0.1-0.9c0-0.1-0.1-0.2-0.2-0.3c-0.2-0.2-0.3-0.2-0.5-0.1
+				c-0.2,0.1-0.7,1-1,1.4c-0.3,0.4-0.4,0.3,0.4,0.7c0.5,0.3,0.3,0.7,0.3,0.8c0,0.2-0.1,0.3,0.3,0.3c0.2,0,0.5,0,0.7,0.1
+				c0.3,0.1,0.6,0.3,0.9,0.7c0.2,0.3,0.1,0.6,0,0.5c-0.2-0.1-0.6-0.6-0.7-0.7c-0.2-0.1-0.3-0.3-0.5-0.2c-0.1,0.1,0.1,0.2,0.2,0.4
+				c0.2,0.2,0.8,0.7,0.5,0.9c-0.2,0.1-0.5-0.3-0.6-0.5c-0.1-0.1-0.2-0.4-0.4-0.5c0,0,0.2,0.3,0.2,0.4c0.1,0.2,0.2,0.5,0.2,0.7
+				c0,0.3,0.1,0.5-0.1,0.5c-0.4,0-0.2-0.2-0.4-0.4c-0.1-0.1-0.8-1.1-0.8-1.2c0-0.1,0.1-0.2,0.1-0.1c0,0,0.6,0.9,0.7,1
+				c0.4,0.3,0.1-0.2,0.1-0.4c0-0.1-0.2-0.6-0.2-0.7c0,0,0,0,0,0c-0.2-0.1-0.3-0.3-0.6-0.6c-0.4-0.4-0.9-0.1-1-0.2
+				c0,0.1-0.1,0.3-0.2,0.4c-0.1,0.2-0.4,0.7-0.4,1.1c-0.1,0.7-0.3,0.4-0.6,0.5c-0.2,0.1-0.3,0.6,0.1,1c0.4,0.3,1,0.2,1.3,0.2
+				c0.3,0,0.2,0.2,0.2,0.5c0,0.3,0.2,0.6,0.4,0.8c0.1,0.2-0.1,0.3-0.4,0.4c-0.4,0.1-0.6-0.1-0.7-0.2c-0.1-0.1,0-0.5-0.3-0.7
+				c-0.2-0.2-0.8-0.4-1-0.6c-0.2-0.2-0.1-1.4-0.1-1.6c0.1-0.2-0.2-0.6,0-0.8c0.2-0.2,0.7,0.2,0.9-0.1c0.1-0.1,0.4-0.3,0.4-0.4
+				c0.4-0.4,0.5-0.4,0.5-0.4c-0.1-0.2-0.4,0-0.7,0.1c-0.2,0-0.9,0.2-1,0c-0.1-0.2,0.1-0.3,0.1-0.7c0-0.4-0.2-0.4-0.2-0.7
+				c0-0.3,0.1-0.5,0.6-0.5c0.6,0,0.9,0.1,1.2,0.2c0.2,0.1,0.4,0.1,0.4-0.1c0-0.1-0.5-0.6-0.9-0.7c-0.3-0.1-0.4,0-0.6,0.1
+				c-0.1,0.1-0.5,0-0.5-0.2c0-0.2-0.1-0.2-0.2-0.5c0-0.2-0.1-0.6,0.4-0.6c0.3,0,0.5-0.7,0.8-0.8c0.1-0.1,0.4-0.1,0.8,0.1
+				c1.5,0.8,1.9,0.4,2.2,0.9c0.1,0.1,0.2,0.3,0.3,0.6c0.1,0.3,0.1,0.7,0.1,0.9c0.2,0.1,0.1,0.5,0.4,0.7c0.4,0.3,0.4,0.3,0.6,0.5
+				C39.1,11.4,39.2,11.9,39.1,12.1L39.1,12.1z M35.9,13.2c0.2,0.1,0.3,0.4,0.2,0.5c-0.1,0-0.3-0.2-0.3-0.3c-0.1-0.1-0.3-0.1-0.3-0.1
+				c-0.1-0.1,0-0.2,0.1-0.2C35.6,13.1,35.8,13.2,35.9,13.2L35.9,13.2z M37.1,14.8c-0.1,0.1-0.6,0.6-0.8,0.6c-0.1,0,0.2,0.3-0.1,0.3
+				c-0.2,0-0.4-0.2-0.5-0.4c-0.1-0.2-0.3-0.6-0.5-0.6c-0.5,0-0.6,0-0.8-0.2c-0.1-0.1-0.2-0.1-0.3-0.3c0-0.1,0-0.2,0.3-0.4
+				c0,0,0.2-0.2,0.3-0.4c0-0.1,0.3-0.6,0.4-0.8c0.1-0.1,0.3-0.4,0.4-0.4c0.1-0.1,0.2,0,0.1,0.1c-0.1,0.1-0.5,1-0.6,1.1
+				c-0.1,0.2-0.4,0.6-0.4,0.7c0,0.2,0.2,0.2,0.4,0.1c0.1,0,0.2-0.5,0.3-0.4c0.2,0,0.2,0.2,0.2,0.4c-0.1,0.4,0.3-0.1,0.4,0
+				c0.1,0.1-0.2,0.7,0.2,0.3c0.2-0.1,0.2-0.6,0.5-0.5c0.1,0.1,0.2,0.2,0.2,0.3c-0.1,0.2-0.5,0.4-0.6,0.5c-0.1,0.1,0,0.3,0.1,0.3
+				c0.2,0.1,0.4-0.4,0.7-0.5C37,14.5,37.2,14.7,37.1,14.8L37.1,14.8z M33.2,17.9c0,0.3,0.1,0.5,0.4,0.7c0.2,0.1-0.1,0.1-0.2,0.1
+				c-0.1,0-0.5-0.5-0.8-0.7c-0.2-0.1,0.4-0.3,0.4-0.4c0-0.1,0-0.3-0.2-0.2c-0.2,0.1-0.6,0-0.9-0.2c-0.3-0.3-0.3-1-0.2-1.3
+				c0.1-0.3,0.2-0.4,0.5-0.6c0.1,0,0.4-0.1,0.4,0.2c0,0.4-0.3,0.6-0.4,0.9c-0.1,0.3,0,0.9,0.3,0.9c0.3,0,0.2-0.2,0.4-0.3
+				C33.3,16.9,33.2,17.5,33.2,17.9L33.2,17.9z M33.7,20.7c-0.1,0.3-0.6,0.8-0.7,0.9c-0.1,0.2,0.1,0.5,0.2,0.4
+				c0.1-0.1,0.5-0.8,0.8-0.9c0.2-0.1,0.3,0.2,0.3,0.5c-0.1,0.5-0.6,0.5-0.8,0.9c-0.1,0.2,0,0.4,0,0.5c0,0.1-0.2,0-0.3-0.1
+				c-0.1-0.1,0-0.4-0.1-0.5c-0.7-0.4-0.8-0.8-0.8-1c0-0.2,0.5-0.9,0.7-1.1s0.4-0.6,0.5-0.6C33.9,19.7,33.8,20.5,33.7,20.7L33.7,20.7
+				z M32.7,25.2c-0.1,0.2,0.3,0.4,0.4,0.6c0.2,0.2-0.1,0.2-0.3,0.2c-0.1,0-0.4-0.2-0.4-0.6c0-0.3,0.1-0.9,0.5-1.2
+				c0.3-0.2,0.3-0.4,0.2-0.6c-0.1-0.3,0.4,0,0.4,0.4C33.5,24.8,32.8,25,32.7,25.2L32.7,25.2z M32,24.3c0,0.3-0.1,0.9-0.1,0.9
+				s-0.5-0.7-0.4-1.2c0.1-0.5,0.3-0.6,0.4-0.8c0.2-0.2,0.2-0.5,0.3-0.4c0.2,0.1,0.2,0.3,0.2,0.6C32.5,23.6,32,24,32,24.3L32,24.3z
+				 M31.9,26.5c-0.1,0.2-0.2,0.5-0.5,0.7c-0.1,0.1-0.5,0.4,0,0.8c0.2,0.1-0.1,0.4-0.4,0.1c-0.1-0.1-0.3-0.6-0.1-1
+				c0.1-0.3,0.3-0.4,0.6-0.6c0.3-0.2,0.2-0.5,0.4-0.5C32,26,32,26.2,31.9,26.5L31.9,26.5z M30.8,28.9c-0.2,0.2-0.4,0.4-0.4,0.6
+				c-0.1,0.2,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.3,0.1,0.4c-0.2,0.1-0.7-0.2-0.7-0.5c0-0.3,0.4-0.5,0.2-0.6c-0.1-0.1-0.6,0.1-0.9,0
+				c-0.2-0.1-0.4-0.2-0.4-0.6c0-0.3,0.2-0.7,0.5-1c0.1-0.1,0.4,0,0.3,0.3c-0.1,0.2-0.5,0.3-0.6,0.6c0,0.3,0.2,0.5,0.5,0.4
+				c0.3,0,0.4-0.2,0.8-0.2C30.7,28.6,31,28.7,30.8,28.9L30.8,28.9z M30.3,34.5c0,0.5-0.6,2.9-0.5,3.4c0,0.4,0.6,1.7,0.6,2.1
+				c0,0.4,0.5,1.2,0.6,1.4c0,0.3-0.2,0-0.4-0.3c-0.2-0.3-0.4-0.6-0.5-0.7c-0.1-0.1,0.1,0.7,0.2,0.9c0.1,0.2,0.6,0.7,0.5,0.7
+				c-0.1,0-0.8-0.5-1-1c-0.1-0.2-0.3-1.1-0.4-1.6c0-0.1-0.1-0.8-0.1-1.7c0.1-1.8,0.4-3.4,0.4-3.9c0-0.4,0.2-2.2,0-2.4
+				c-0.1-0.1-0.2-0.7,0-0.9c0.1-0.1,0.4,0.1,0.5,0.2C30.5,31.5,30.3,34,30.3,34.5L30.3,34.5z M29,29.7c0.1,0,0.3-0.1,0.3,0
+				c0,0.1,0,0.3-0.1,0.3C29,30,28.8,29.8,29,29.7L29,29.7z M30.9,42.6c0.1,0.3,0,0.6,0.2,0.8c0.2,0.2,0.5,0.4,0.8,0.5
+				c0.2,0.1,0.1,0.3,0.1,0.5c-0.1,0.3-0.4,0.5-0.3-0.1c0-0.2-0.4-0.3-0.5-0.2c-0.2,0.2-0.1,0.4-0.2,0.4c-0.2,0-0.2-0.5-0.1-0.6
+				c0.1-0.1-0.1-1-0.5-1.2c-0.2-0.1,0.1,0.6,0,0.9c-0.1,0.3,0,0.8-0.4,0.8c-0.7-0.1-1.1-1.4-1.4-1.5c-0.1-0.1,0-0.6-0.7-1.3
+				c-0.1-0.1,0.1-1.1-0.2-1.2c-0.3-0.1,0-1-0.2-1.1c-0.3-0.1-0.1-0.7-0.5-1c-0.1,0-0.2-0.3-0.3-0.6c-0.1-0.3-0.1-0.6-0.2-0.8
+				C26,36,26,35.1,26.2,34.9c0.1-0.2,0.2-0.4,0.1-0.8c-0.1-0.5,0-1.1,0.2-1.3c0.1-0.2-0.1-2,0.2-2.6c0.1-0.1,0-0.3,0-0.3
+				c0.2-0.1,0.1-0.3,0-0.4c-0.2-0.2-0.1-0.4-0.2-0.6c0-0.2-0.2-0.6,0-0.7c0.3-0.2,0.2,0.3,0.4,0.5c0.3,0.1,0.7,0.5,0.9,0.7
+				c0.1,0.2,0.2,0.3,0.5,0.6c0.4,0.3,0.5,0.4,0.6,0.8c0.3,0.9,0.2,1.9,0.3,2.6c0.1,0.7,0.2,1-0.1,1.2c-0.2,0.2,0.1,1.1,0,1.3
+				c-0.1,0.2-0.2,3.1-0.1,3.5c0.2,0.4,0.2,1.6,0.3,1.8c0.1,0.3,0.2,0.8,0.6,1c0.2,0.1,0.4,0.3,0.6,0.2C30.7,42,30.9,42.4,30.9,42.6
+				L30.9,42.6z M31.4,42.1c0.2-0.1,0.5,0.1,0.7,0.1c0.3,0.1,0.5,0.2,0.5,0.4c0,0.1-0.1,0.8,0,1c0.1,0.2,0.1,0.4,0.2,0.6
+				c0,0.2,0,0.3,0,0.5c0,0.1-0.2,0.1-0.3,0c-0.1,0,0.1-0.5,0-0.9c0-0.1-0.2-0.3-0.4-0.4c-0.3-0.2-0.6-0.8-0.6-0.9
+				C31.4,42.3,31.2,42.1,31.4,42.1L31.4,42.1z M32.8,41.8c0.1,0,0.3,0.1,0.3,0.2c0.1,0.1,0,0.8,0.1,0.9c0,0.1,0.3,0.3,1.2,0.8
+				c0,0,0.2,0.3,0.2,0.5c0,0.1,0,0.5-0.2,0.5c-0.1,0-0.1-0.1-0.1-0.4c0.1-0.2-0.1-0.4-0.1-0.5c-0.1-0.1-0.3,0-0.3,0
+				c-0.1,0.1-0.1,0.3-0.1,0.5c0,0.2,0.2,0.2,0.1,0.5c0,0-0.3,0.1-0.4-0.1c0-0.1,0.1-0.2,0.1-0.3c0.1-0.3,0-0.6,0-0.6
+				c-0.1,0-0.6-0.5-0.6-0.7c0-0.1,0-0.5-0.2-0.5c0,0-0.1-0.5-0.4-0.7C32.3,41.8,32.7,41.8,32.8,41.8L32.8,41.8z M34.6,45.8
+				c-0.1,0.2-0.4,0.2-0.4-0.1c0-0.3-0.2-0.5-0.1-0.5c0.1,0,0.2,0,0.3,0.1C34.6,45.5,34.7,45.7,34.6,45.8L34.6,45.8z M34.8,52.8
+				c0,0.8-0.2,2-0.2,2.2c0,0.1-0.2-4.4-0.2-4.8c0-0.2,0-3.6,0.1-3.6c0.3,0.2,0.3,1.8,0.3,2.5C34.7,49.6,34.8,52,34.8,52.8L34.8,52.8
+				z M34.1,44c0.1,0,0.2,0.1,0.2,0.3c0,0.2,0,0.4,0,0.4c0,0-0.1-0.2-0.1-0.3C34.1,44.3,34,44,34.1,44L34.1,44z M33.9,55.1
+				c-0.1,0.3-0.3-4.8-0.3-5.2c0-0.3-0.2-3.2,0.1-3.3c0.1-0.1,0.3,0.8,0.4,2.3C34.2,50.1,34.2,54.3,33.9,55.1L33.9,55.1z M33.5,56
+				c-0.1,0.1-0.2,0.1-0.2,0.1c-0.1-0.1,0-0.2-0.1-0.3c-0.1-0.1-0.2-0.2-0.1-0.3c0.1,0,0.3,0.1,0.4,0.2C33.5,55.9,33.6,55.9,33.5,56
+				L33.5,56z M33,56.2c0,0-0.2,0.1-0.2,0c0,0-0.1-0.1-0.1-0.2c0,0-0.3-0.3-0.3-0.3c0,0,0.1-0.1,0.1-0.1c0.1,0,0.4,0.3,0.4,0.3
+				C33,56.1,33.1,56.2,33,56.2L33,56.2z M32.3,56.4c0,0-0.1,0.1-0.1-0.1c0-0.1-0.4-0.5-0.2-0.5c0,0,0.2,0,0.3,0
+				c0.1,0.1,0.3,0.3,0.3,0.4C32.5,56.3,32.4,56.3,32.3,56.4L32.3,56.4z M32.3,54.9c0,0.1,0,0.4,0,0.5c0,0-0.1,0-0.1-0.2
+				c0-0.1-0.1-0.5,0-0.7c0.1-0.2,0.1-0.2,0.3-0.3c0.1,0,0.2,0.1,0.1,0.3C32.5,54.7,32.3,54.8,32.3,54.9L32.3,54.9z M27,49
+				c0.2,0,0.1,0.1,0.1,0.2c-0.1,0-0.2,0-0.2,0C26.8,49.1,27,49,27,49L27,49z M31.5,55.3c-0.1,0.1-0.3,0.1-0.7,0.1
+				c-0.1,0-0.1-0.5,0.1-0.6c0.4-0.3,0.1-0.4,0.4-0.6c0.1-0.1,0.4-0.6,0.9-1c0.1-0.1,0-0.1,0-0.1s0-0.6,0-0.6c0.1,0,0.3-0.4,0.3-0.5
+				c0,0-0.1,0.2-0.4,0.5c-0.4,0.4-1.5,0.5-1.9,0.1c-0.1-0.1,0.1-0.1,0.3-0.5c0.2-0.3,0.2-0.7,0.2-0.9c0-0.3-0.2-0.7-0.2-0.7
+				c0,0,0.1,0.6-0.2,1.2c-0.2,0.3-0.3,0.5-0.5,0.8c-0.1,0.1,0,0.3,0.1,0.3c0.2,0,0,0.8-0.1,0.9c-0.1,0.1-0.2,0.3-0.2,0.5
+				c0,0.2-0.1,0.4-0.1,0.6c0,0.2,0.1,0.4,0.1,0.4c-0.1,0-0.1,0.3-0.1,0.4c0,0.1-0.7,0.2-0.8,0c-0.1-0.1,0.1-0.2,0.2-0.3
+				c0.1-0.1,0.1-0.6,0-0.7c-0.1,0-0.2-0.2-0.1-0.3c0.2-0.1,0.2,0.2,0.2,0.2c0,0,0.2,0,0.2-0.1c0.1-0.1,0.1-0.3,0-0.5
+				c-0.1-0.4-0.5-0.6-0.5-0.8c0-0.1,0.1-0.3,0.1-0.4c0,0-0.2,0.3-0.3,0.4c-0.1,0,0.1,0.4,0,0.4c-0.1,0.1-0.2,0.2-0.2,0.4
+				c0,0.1-0.2,0.6-0.3,0.7c-0.1,0.1-0.4,0.9-0.7,0.9c-0.3,0-0.7,0.1-0.7-0.1c0-0.1,0.5-0.5,0.6-0.6c0.1-0.1,0.4-1,0.4-1.1
+				c0-0.1-0.1-0.3,0.1-0.6c0.1-0.2,0.4,0,0.6-0.3c0,0,0.5-0.6,0.6-1c0.1-0.2,0.2-0.8,0.3-1c0.1-0.4-0.2,0.2-0.3,0.4
+				c-0.1,0.2-0.1,0.4-0.2,0.6c-0.1,0.2-0.3,0.5-0.4,0.7c-0.2,0.2-0.5,0.2-0.5,0c0,0,0.1-0.1,0.1-0.2c0-0.1,0.3-0.6,0.5-1
+				c0.2-0.3,0.6-1,0.7-1.1c0-0.1-0.5,0.6-0.7,1c-0.2,0.4-0.5,0.8-0.6,0.9c-0.1,0.1-0.2,0.1-0.3,0.1c-0.1-0.1-0.3-0.3-0.2-0.4
+				c0,0,0.2-0.3,0.3-0.3c0.1-0.1,0.4-0.4,0.7-0.7c0.1-0.1,0.6-1,0.6-1c0,0-0.6,0.8-0.8,1c-0.2,0.2-0.5,0.5-0.7,0.6
+				c-0.2,0.1-0.3,0-0.3-0.1c-0.1-0.1,0.2-0.1,0.3-0.2c0.1-0.1,0.5-0.4,0.5-0.5c0.1-0.1,0.3-0.3,0.4-0.4c0.2-0.3,0.5-0.7,0.4-0.6
+				c0,0-0.2,0.3-0.3,0.4c-0.1,0.2-0.4,0.4-0.6,0.6c-0.1,0.1-0.3,0.3-0.4,0.3c-0.1,0.1-0.2,0.1-0.3,0c-0.1-0.1,0-0.1,0-0.2
+				c0.1-0.1,0.5-0.3,0.6-0.4c0-0.1-0.4,0.1-0.5,0.1c-0.2,0-0.2-0.1,0-0.2c0.1-0.1,0.4-0.2,0.5-0.3c0.1-0.2,0.1-0.3-0.1-0.2
+				c-0.1,0-0.1,0.1-0.3,0.1c-0.1,0-0.3-0.1-0.1-0.2c0.2-0.1,0.4-0.2,0.5-0.2c0.1,0,0.5,0,0.5-0.1c0-0.1-0.3-0.2-0.5-0.2
+				c-0.1,0-0.1,0-0.3,0.2c-0.2,0.3-0.8,0.1-0.8-0.1c0-0.1,0.6,0.2,0.7-0.1c0.1-0.2-0.1-0.4-0.2-0.4c-0.1,0-0.3-0.1-0.4,0
+				c-0.2,0.1,0-0.1,0.2-0.2c0.1,0,0.3-0.1,0.2-0.2c0,0-0.2,0-0.2-0.1c0-0.1-0.2-0.8,0.2-1c0.2-0.1,0.2-0.2,0.2-0.3
+				c0-0.2-0.2-0.3-0.2-0.3c-0.1-0.1-0.1-0.2,0-0.3c0.1-0.1,0.2,0,0.1-0.1c-0.1-0.1,0-0.3,0-0.3c0.1-0.1,0.3-0.2,0.4-0.3
+				c0,0-0.1,0.4-0.1,0.5c0,0.1,0,0.3,0.1,0.4c0.1,0.1,0.2,0.2,0.3,0.2c0.1,0,0.3,0,0.4,0c0.1,0,0.2-0.2,0.2-0.2c0.2-0.3,0-0.5,0-0.7
+				c0,0,0.2,0,0.3,0.1c0.1,0.1,0.2,0.2,0.1,0.5c0,0.3,0.1,0.2,0.1,0.2c0.1,0.1,0.1,0.1,0.2,0.2c0,0.1-0.1,0.1-0.1,0.1
+				c0,0.1,0.1,0.3,0,0.3c-0.2,0.1-0.1,0.3,0.1,0.2c0.1,0,0.1,0.1,0,0.2c-0.1,0.1,0,0.5-0.1,0.7c-0.1,0.1-0.2,0.3-0.4,0.4
+				c-0.2,0.1-0.5,0-0.6,0c-0.1,0.1-0.2,0.1,0,0.1c0.1,0,0.2,0.1,0.2,0.2c0,0.1,0,0.2-0.1,0.3c-0.1,0.1-0.1,0.2,0,0.2
+				c0.2-0.1,0.2-0.2,0.4-0.4c0,0,0.2-0.1,0.3-0.2c0.1-0.1,0.2-0.1,0.4-0.2c0.2-0.1,0.2-0.4,0.5-0.6c0.3-0.1,0.5,0,0.6,0
+				c0.2,0.1,0.5,0.3,0.3,0.6c-0.2,0.3-0.3,0.4-0.4,0.5c-0.1,0.1-0.1,0.4,0,0.5c0.1,0.1,0.1,0.3,0.3,0.3c0.2,0.1,0.2,0.1,0.5,0
+				c0.2-0.1,0.3-0.2,0.5-0.2c0.3,0,0.6,0.1,0.9,0.2c0.1,0.1,0.3,0.2,0.5,0.4c0.1,0.1,0,0.2,0.1,0.4c0,0.2,0.1,0.3,0.1,0.5
+				c0,0.4-0.2,0.4-0.1,0.6c0,0.2-0.1,0.6-0.2,0.6c-0.1,0-0.3,0.1-0.3,0.3c0,0.1,0,0.3-0.1,0.4c-0.1,0.1-0.3,0.2-0.5,0.5
+				c-0.1,0.1-0.1,0.3-0.2,0.4c-0.1,0.1-0.2,0.4-0.2,0.5C31.9,55.1,31.6,55.2,31.5,55.3L31.5,55.3z M31.6,56.6
+				c-0.1-0.1-0.2-0.5-0.2-0.6c0-0.1,0.1-0.1,0.1-0.1c0.2,0,0.4,0.4,0.4,0.5C31.8,56.5,31.6,56.6,31.6,56.6L31.6,56.6z M31.2,57.5
+				c-0.1,0-0.1-0.1-0.1-0.1c0,0,0.1,0,0.2,0c0.1,0,0,0,0.1,0.1C31.4,57.5,31.3,57.5,31.2,57.5L31.2,57.5z M30.9,56.7
+				c-0.1-0.1-0.3-0.7-0.2-0.8c0.1-0.1,0.2,0,0.2,0.1c0,0.1,0.2,0.4,0.2,0.5C31.1,56.6,31,56.7,30.9,56.7L30.9,56.7z M30.8,57.5
+				c-0.1,0-0.2-0.1-0.1-0.1c0,0,0.1,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1C31,57.5,30.9,57.5,30.8,57.5L30.8,57.5z M30.6,58.4
+				c-0.3,0.4-0.5,0.3-0.6,0.2c0-0.1,0.3-0.3,0.3-0.4c0-0.2,0-0.4,0.1-0.4C30.6,57.8,30.7,58.1,30.6,58.4L30.6,58.4z M30.2,57.5
+				c-0.1,0-0.2-0.1-0.2-0.1c0,0,0.2,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1C30.5,57.5,30.4,57.5,30.2,57.5L30.2,57.5z M30,56
+				c0.1-0.1,0.4,0,0.4,0c0,0.1,0.2,0.5,0.1,0.6c-0.1,0.1-0.3,0.1-0.3,0.1C30.1,56.6,29.9,56.1,30,56L30,56z M29.7,57.5
+				c-0.1,0-0.2-0.1-0.2-0.1c0,0,0.2,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1C30,57.5,29.8,57.5,29.7,57.5L29.7,57.5z M30.1,54.4v-0.3h-0.3
+				c0.1-0.3,0.2-0.6,0.3-0.9c0,0,0.9,0.3,1.8-0.1c0.2-0.1,0.2,0.1,0.2,0.1c-0.1,0.1-0.4,0.1-0.6,0.4v-0.1h-0.3v0.2h0.2
+				c-0.1,0.1-0.2,0.4-0.3,0.7c-0.1,0.3-0.3,0.7-0.5,0.9v0h-0.3v0.3h0.1c-0.1,0.1-0.2,0.2-0.2,0.2s-0.2,0-0.3-0.2H30v-0.3h-0.2
+				c0,0,0-0.1,0-0.2c0,0,0,0,0-0.1H30v-0.3h-0.2c0-0.2,0-0.3,0.1-0.5v0.3L30.1,54.4L30.1,54.4z M29.4,56.6c-0.1-0.1-0.4-0.5-0.2-0.6
+				c0.1,0,0.3,0,0.4,0c0.1,0.1,0.2,0.3,0.2,0.5c0,0.2,0,0.3-0.2,0.3C29.3,56.9,29.5,56.7,29.4,56.6L29.4,56.6z M29,57.3
+				c0-0.1,0.2,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1c0,0.1-0.1,0.1-0.2,0.1C29,57.5,29,57.4,29,57.3L29,57.3z M29.2,58.6
+				c-0.1,0.1-0.3,0.1-0.4,0.1c-0.2-0.1,0.1-0.5,0.1-0.7c0-0.2,0.3-0.1,0.4,0C29.5,58.1,29.4,58.5,29.2,58.6L29.2,58.6z M28.5,57.5
+				c-0.2,0-0.2-0.1-0.2-0.2c0-0.1,0.2,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1C28.8,57.5,28.6,57.5,28.5,57.5L28.5,57.5z M28.6,56.1
+				c0.2,0.1,0.3,0.5,0.2,0.7c0,0.1-0.2,0.1-0.3,0.1c-0.1,0,0.1-0.2,0-0.4c-0.1-0.3-0.3-0.4-0.4-0.5c-0.1-0.1,0-0.1,0.1-0.1
+				C28.3,55.9,28.5,56,28.6,56.1L28.6,56.1z M28.4,54.7c0,0.1-0.1,0.1-0.2,0.1c-0.1-0.1-0.1-0.3,0.1-0.4c0.1-0.1,0.1-0.2,0.1-0.2
+				c0.1,0,0.1,0.3,0,0.3C28.4,54.5,28.4,54.6,28.4,54.7L28.4,54.7z M28.2,56.5c-0.1,0.1-0.2,0.3-0.3,0.4c-0.2,0-0.4,0-0.4-0.1
+				c0-0.1,0.1-0.3,0-0.4c-0.1-0.1-0.5-0.4-0.3-0.4c0.1,0,0.2,0,0.5,0C27.9,56.1,28.2,56.4,28.2,56.5L28.2,56.5z M27.8,57.5
+				c-0.2,0-0.2-0.1-0.2-0.2c0-0.1,0.2,0,0.3,0c0.1,0,0.1,0.1,0.1,0.1C28.1,57.6,28,57.5,27.8,57.5L27.8,57.5z M27.3,58.8
+				c-0.2,0-0.1-0.2-0.1-0.4c0-0.2-0.1-0.4,0-0.4c0.1-0.1,0.4-0.1,0.5,0c0.1,0,0.2,0.5,0.2,0.7C27.8,58.8,27.7,58.7,27.3,58.8
+				L27.3,58.8z M26.9,57.3c0-0.1,0.2-0.1,0.4-0.1c0.2,0,0.1,0.1,0.1,0.2c0,0.1-0.2,0.1-0.3,0.1C26.9,57.5,26.9,57.4,26.9,57.3
+				L26.9,57.3z M26.6,58.7c-0.2,0.1-0.5,0.1-0.5,0c0-0.1-0.2-0.7-0.1-0.8c0.1-0.1,0.6,0,0.7,0C26.9,58,26.8,58.7,26.6,58.7
+				L26.6,58.7z M25.6,57.3c0-0.1,0.2-0.1,0.4-0.1c0.1,0,0.1,0.1,0.1,0.2c0,0.2-0.1,0.2-0.3,0.2C25.6,57.6,25.6,57.4,25.6,57.3
+				L25.6,57.3z M25.5,58.8c-0.2,0.1-0.6,0.1-0.6-0.1c0-0.2-0.3-0.7-0.2-0.7c0.2,0,0.8-0.1,0.9,0.1C25.7,58.2,25.7,58.7,25.5,58.8
+				L25.5,58.8z M24.4,57.6c-0.2,0-0.1-0.2-0.1-0.3c0-0.1,0.2,0,0.4,0c0.1,0,0.1,0.1,0.1,0.2C24.8,57.6,24.6,57.6,24.4,57.6
+				L24.4,57.6z M24.1,58.8c-0.1,0-0.2-0.8-0.1-0.9c0.1-0.1,0.4,0,0.5,0c0.2,0,0,0.3,0.2,0.7C24.9,58.9,24.3,58.9,24.1,58.8
+				L24.1,58.8z M23.8,58.7c0,0.1-0.3,0.2-0.5,0.1c-0.1,0-0.4-0.8-0.2-0.9c0.3-0.1,0.5,0,0.6,0C23.8,57.9,23.8,58.6,23.8,58.7
+				L23.8,58.7z M22.5,57.3c0-0.1,0.3,0,0.5,0c0.2,0,0.2,0.1,0.2,0.2c0,0.2-0.2,0.2-0.4,0.2C22.5,57.6,22.5,57.5,22.5,57.3L22.5,57.3
+				z M22.8,58.8c-0.1,0.1-0.5,0.1-0.6,0c-0.1,0-0.3-0.8-0.2-0.8c0.1,0,0.4,0,0.6,0C22.7,58,22.8,58.7,22.8,58.8L22.8,58.8z
+				 M21.6,57.3c0-0.1,0.3-0.1,0.5-0.1c0.2,0,0.2,0.1,0.2,0.2c0,0.2-0.2,0.2-0.4,0.2C21.6,57.6,21.6,57.4,21.6,57.3L21.6,57.3z
+				 M21.7,58.7c-0.1,0.1-0.4,0.1-0.6,0c-0.2-0.1-0.3-0.7-0.2-0.7c0.2,0,0.7,0,0.8,0C21.8,58.1,21.7,58.7,21.7,58.7L21.7,58.7z
+				 M20.9,57.2c-0.1,0,0.7,0,0.7,0c0,0.1-0.2,0.4-0.2,0.5c0,0-0.6,0-0.6,0C20.7,57.6,20.9,57.2,20.9,57.2L20.9,57.2z M20.6,58.7
+				c0,0.1-0.3,0.1-0.5,0c-0.3-0.1-0.2-0.6-0.2-0.7c0-0.1,0.6-0.1,0.7,0C20.6,58.2,20.6,58.5,20.6,58.7L20.6,58.7z M19.6,58.7
+				c-0.2,0-0.4,0.1-0.5,0c-0.1-0.2,0-0.5,0-0.7c0-0.1,0.7-0.1,0.7,0C19.8,58.1,19.8,58.7,19.6,58.7L19.6,58.7z M18.7,58.7
+				c-0.2,0.1-0.5,0.1-0.6,0c-0.1-0.1-0.1-0.7,0-0.7c0.1,0,0.4,0,0.6,0C18.8,58,18.9,58.7,18.7,58.7L18.7,58.7z M17.6,58.8
+				c-0.1,0-0.6,0-0.6,0c-0.1-0.1,0-0.8,0.2-0.8c0.2,0,0.5,0,0.6,0C17.9,58.1,17.7,58.8,17.6,58.8L17.6,58.8z M16.9,57.4
+				c0.1-0.1,0.1-0.2,0.3-0.2c0.2,0,0.5-0.1,0.5,0.1c0,0.1-0.1,0.3-0.4,0.3C17.1,57.6,16.7,57.7,16.9,57.4L16.9,57.4z M16.3,57.6
+				c-0.2,0-0.5,0.1-0.4-0.2c0.1-0.1,0.1-0.2,0.3-0.2c0.2,0,0.5-0.1,0.5,0.1C16.8,57.4,16.6,57.6,16.3,57.6L16.3,57.6z M16.5,58.8
+				c-0.2,0.1-0.6,0-0.6-0.1c0-0.1-0.3-0.8-0.1-0.8c0.2,0,0.4,0,0.6,0.1C16.5,58,16.6,58.7,16.5,58.8L16.5,58.8z M15.3,57.4
+				c0-0.1,0-0.2,0.2-0.2c0.2,0,0.4,0,0.4,0.1c0,0.1-0.1,0.3-0.3,0.3C15.4,57.5,15.1,57.6,15.3,57.4L15.3,57.4z M15.3,58.7
+				c-0.2,0-0.7,0.1-0.7-0.3c0-0.4-0.1-0.5,0.1-0.6c0.1,0,0.4,0,0.5,0.1C15.2,58,15.5,58.7,15.3,58.7L15.3,58.7z M14.5,57.4
+				c0-0.1,0-0.2,0.2-0.2c0.2,0,0.4,0,0.4,0.1c0,0.1-0.1,0.3-0.3,0.3C14.7,57.5,14.4,57.6,14.5,57.4L14.5,57.4z M14.1,57.5
+				c-0.2,0-0.4,0.1-0.3-0.1c0-0.1,0-0.2,0.2-0.2c0.2,0,0.4,0,0.4,0.1C14.4,57.3,14.3,57.5,14.1,57.5L14.1,57.5z M13.7,58.7
+				c-0.2,0-0.3-0.6-0.2-0.8c0.1-0.1,0.2-0.1,0.4-0.1c0.1,0,0.2,0.6,0.4,0.7C14.4,58.7,13.9,58.7,13.7,58.7L13.7,58.7z M13.1,57.4
+				c0-0.1,0-0.2,0.2-0.2c0.2,0,0.4,0,0.4,0c0,0.1-0.1,0.3-0.3,0.3C13.2,57.5,13,57.6,13.1,57.4L13.1,57.4z M12.6,58.7
+				c-0.2-0.1-0.3-0.9-0.1-0.9c0.1,0,0.3-0.1,0.4,0c0.1,0.1,0.1,0.8,0.2,0.8C13.1,58.7,12.8,58.8,12.6,58.7L12.6,58.7z M12.4,57.4
+				c0-0.1,0-0.2,0.2-0.2c0.2,0,0.4,0,0.4,0c0,0.1-0.1,0.2-0.3,0.2C12.5,57.5,12.2,57.6,12.4,57.4L12.4,57.4z M12.9,55.6
+				c0.1,0,0.3,0.1,0.3,0.1c-0.1,0-0.4,0.1-0.4,0.3c0,0.2,0.1,0.4,0.2,0.5c0.1,0.1-0.2,0.1-0.3,0c-0.1-0.1-0.3-0.4-0.3-0.5
+				C12.3,56,12.6,55.7,12.9,55.6L12.9,55.6z M12.3,55.7c-0.1,0.1-0.4,0.2-0.3,0.3c0.1,0.2,0.4,0.5,0.2,0.5c-0.1,0-0.3,0.1-0.5,0
+				c-0.1,0-0.3-0.4-0.3-0.5c0-0.1,0.2-0.5,0.5-0.6C12.1,55.5,12.4,55.6,12.3,55.7L12.3,55.7z M11.9,57.5c-0.1,0-0.4,0.1-0.3-0.1
+				c0-0.1,0-0.2,0.2-0.2c0.1,0,0.3,0,0.3,0C12.2,57.3,12.1,57.5,11.9,57.5L11.9,57.5z M11.8,58.7c-0.4,0.2-0.5-0.2-0.5-0.5
+				c0-0.3-0.1-0.4,0-0.4c0.1,0,0.3,0,0.3,0.1C11.7,58,12,58.5,11.8,58.7L11.8,58.7z M10.9,57.4c0-0.1,0-0.2,0.2-0.2
+				c0.1,0,0.3,0,0.3,0c0,0.1-0.1,0.2-0.3,0.2C11.1,57.5,10.9,57.5,10.9,57.4L10.9,57.4z M10.7,56c0-0.1,0.3-0.4,0.5-0.4
+				c0,0,0.3,0,0.2,0c-0.1,0-0.3,0.2-0.3,0.3c0,0.1,0.2,0.5,0.2,0.5c-0.1,0-0.3,0.1-0.4,0C10.9,56.4,10.7,56.2,10.7,56L10.7,56z
+				 M10.3,56c0,0.1,0.2,0.4,0.2,0.4c0,0.1-0.3,0.1-0.4,0.1C10,56.4,9.8,56.1,9.8,56c0.1-0.1,0.5-0.4,0.7-0.5c0.2,0,0.3,0.1,0.2,0.1
+				C10.7,55.7,10.3,55.9,10.3,56L10.3,56z M10.5,57.5c-0.1,0-0.3,0-0.2-0.1c0-0.1,0-0.1,0.2-0.1c0.1,0,0.3,0,0.3,0
+				C10.7,57.3,10.6,57.5,10.5,57.5L10.5,57.5z M10.6,58.6c0,0.1-0.1,0.1-0.2,0c-0.2-0.2-0.3-0.7-0.1-0.8c0.1,0,0.3,0,0.4,0.1
+				C10.7,58.1,10.6,58.4,10.6,58.6L10.6,58.6z M9.9,57.4c-0.1,0-0.3,0-0.2-0.1c0-0.1,0-0.1,0.2-0.1c0.1,0,0.3,0,0.3,0
+				C10.1,57.3,10.1,57.4,9.9,57.4L9.9,57.4z M9.3,56.4c-0.2,0-0.6-0.4-0.5-0.5c0.1-0.1,0.7-0.3,0.8-0.3c0.2,0,0.4,0,0.3,0.1
+				c-0.1,0.1-0.4,0.2-0.5,0.3c-0.1,0.1,0.3,0.3,0.2,0.4C9.6,56.4,9.4,56.4,9.3,56.4L9.3,56.4z M9.3,57.5c-0.1,0-0.3,0-0.2-0.1
+				c0,0,0-0.1,0.2-0.1c0.1,0,0.3,0,0.3,0C9.6,57.3,9.5,57.5,9.3,57.5L9.3,57.5z M9.5,58.1c0,0.2-0.1,0.5-0.1,0.5
+				c0,0.1-0.2,0.1-0.3-0.1c-0.1-0.2-0.1-0.6,0.1-0.6C9.3,57.9,9.5,57.9,9.5,58.1L9.5,58.1z M8.8,57.4c-0.1,0-0.3,0-0.2-0.1
+				c0,0,0-0.1,0.1-0.1c0.1,0,0.3,0,0.3,0C9,57.3,8.9,57.4,8.8,57.4L8.8,57.4z M8.5,56c0,0-0.1,0.1-0.2,0.1c-0.1,0-0.3-0.2-0.4-0.4
+				c-0.1-0.1,0.3-0.2,0.5-0.2c0.1,0,0.4,0.1,0.3,0.1c-0.1,0.1-0.3,0.1-0.3,0.2C8.3,55.9,8.5,56,8.5,56L8.5,56z M8.3,57.4
+				c-0.1,0-0.2,0-0.1-0.1c0,0,0-0.1,0.1-0.1c0.1,0,0.2,0,0.2,0C8.4,57.3,8.4,57.4,8.3,57.4L8.3,57.4z M7.8,55.7
+				c-0.1,0-0.3,0.1-0.2,0.2c0,0.1,0.2,0.2,0.1,0.2c-0.1,0-0.1,0.1-0.2,0c-0.1-0.1-0.2-0.3-0.2-0.4c0-0.1,0.2-0.2,0.3-0.2
+				C7.7,55.6,7.9,55.7,7.8,55.7L7.8,55.7z M7.1,55.7c-0.1,0-0.2,0.2,0,0.3c0.1,0.1,0,0.2-0.2,0.1c-0.2,0-0.3-0.3-0.2-0.4
+				s0.2-0.3,0.4-0.3C7.1,55.5,7.2,55.7,7.1,55.7L7.1,55.7z M6.2,55.2c-0.3,0-0.6-0.4-0.7-0.7c-0.1-0.2-0.1-0.4,0-0.6l0-0.1
+				c0,0,0.1-0.1,0-0.2c-0.1,0-0.1-0.4,0-0.5c0.1-0.1,0.4-0.3,0.5-0.3c0.2,0,0.3-0.1,0.4-0.2c0.1-0.1,0.1-0.2,0.1-0.3
+				c0-0.1-0.2-0.2-0.3-0.4c-0.1-0.2-0.1-0.9,0.1-1.1c0.1-0.1,0.3-0.3,0.3-0.4c0.1-0.1,0,0,0.1-0.1c0.1-0.1,0.1-0.3-0.1-0.3
+				c-0.2,0-0.3,0-0.3-0.4c0-0.1,0-0.4,0.1-0.5c0.1-0.1,0-0.4,0.1-0.6c0.1-0.2,0.2-0.5,0-0.6c-0.1-0.1-0.1-0.6-0.1-0.8
+				c0-0.2-0.2-0.4-0.3-0.3c-0.1,0,0,0.2,0,0.2S6.1,47.3,6,47.2c0.2,0.1,0.4,0.3,0.4,0.7c0,0.5-0.1,0.3-0.2,0.6
+				c-0.1,0.2,0,0.4-0.1,0.5c-0.2,0.1-0.4-0.3-0.5-0.4c0-0.1,0-0.4,0.1-0.5c0.1-0.1,0.1-0.2,0.1-0.4c0-0.3,0-0.5,0.2-0.5c0,0,0,0,0,0
+				c0,0-0.1-0.4,0-0.5c0.1-0.1,0.2-0.2,0.2-0.3c0-0.1,0-0.2,0.1-0.3c0,0,0.3-0.1,0.3-0.2c0-0.1,0.2-0.2,0.3-0.2c0.2,0,0.2,0,0.4,0
+				c0.1,0,0.3,0,0.4,0.1c0.1,0.1,0.1,0.2,0,0.3c-0.1,0.1-0.1,0.5,0,0.5c0.1,0,0-0.2,0.2-0.4c0.1,0,0.2-0.2,0.2-0.2
+				c0.1,0,0.1,0.4,0.1,0.6c0,0.1,0.1-0.2,0.2-0.2c0.2,0,0.2,0.4,0.1,0.4c-0.1,0-0.2,0.2-0.2,0.3c0,0.2,0,0.3,0.2,0
+				c0-0.1,0.2,0,0.2,0c0,0.1,0,0.2-0.1,0.3c0,0-0.1,0.1-0.2,0.2c-0.1,0.1,0,0.3,0.1,0.3c0.1,0,0.1-0.2,0.2-0.3
+				c0.1-0.1,0.2,0.1,0.2,0.1c0,0.1,0,0.1-0.1,0.2c-0.1,0.1-0.3,0.3-0.1,0.3c0.1,0,0.4-0.1,0.4-0.1c0.1,0.1,0.1,0.2-0.1,0.3
+				c-0.1,0.1-0.2,0.1-0.3,0.2c-0.1,0.1,0,0.1,0,0.1c0.3,0,0.4-0.2,0.5-0.1c0.1,0.1,0,0.3,0,0.4c-0.1,0.1-0.4,0.3-0.3,0.3
+				c0.1,0,0.4-0.1,0.5-0.2c0.1-0.1,0.1,0.2,0,0.3C9.3,49.7,9,49.7,9,49.8c0,0.1,0.2,0.2,0.4,0.1c0.1,0,0.2,0,0.3,0
+				c0.1,0,0.3,0.1,0.4,0.2c0.1,0,0.3,0,0.4-0.1c0.2-0.1,0.4-0.1,0.6-0.1c0.1,0,0.6,0,0.9,0.3c0.1,0.1,0.5,0.2,0.6,0.2
+				c0.1,0,0.5-0.1,0.7-0.4c0.1-0.3,0.1-0.6,0-0.9c-0.2-0.3-0.3-0.7,0-1c0.3-0.2,0.2-0.4,0.2-0.6c0-0.2,0.5-0.5,0.6-0.6
+				c0.1-0.1,0.2-0.2,0.2-0.3c0-0.1,0.2-0.2,0.3-0.2c0.1,0,0.2,0.2,0.1,0.3c-0.1,0.1-0.3,0.3-0.3,0.4c-0.1,0-0.3,0.1-0.3,0.3
+				c0,0.1,0.2,0.1,0.3,0.3c0.1,0.2,0,0.3,0,0.4c-0.1,0-0.2,0.1-0.3,0.1c-0.1,0-0.1,0.1-0.1,0.1c0.1,0.1,0.2,0.1,0.2,0.2
+				c0,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.1,0.1,0,0.2c0.2,0.1,0.1,0.4,0,0.4c-0.1,0-0.1,0.1-0.2,0.2c0,0,0,0.1,0.1,0.2
+				c0.1,0,0.1,0.2,0,0.3c-0.1,0.1-0.1,0.1-0.1,0.2c0,0.2,0.1,0.3-0.1,0.4c-0.2,0.2-0.2,0.2-0.5,0.3c-0.2,0-0.3,0.1-0.5,0.1
+				c-0.3,0-0.6,0.2-0.8,0.1c-0.2,0-0.1,0.1,0,0.2c0.4,0.4,0.1,0.8,0.3,1.1c0.4,0.5,0.7,1,0.9,1.1c0.2,0.1,0.6,0.2,0.7,0.3
+				c0.1,0.1,0,0.3,0,0.4c-0.1,0.1-0.1,0.2,0,0.3c0.2,0.1,0.3-0.1,0.4,0.1c0.1,0.1,0.2,0.4,0.3,0.6c0.1,0.1,0,0.7,0,0.7
+				c-0.1,0-0.4,0.2-0.6,0.1c-0.2-0.1,0.2-0.3,0.1-0.5c0-0.1-0.2-0.4-0.3-0.6c-0.1-0.2-0.5-0.7-0.7-0.7c-0.3-0.1-1-0.7-1.2-0.6
+				c-0.5,0-1.4-0.3-2-0.9c-0.2-0.2-0.1,0-0.1,0.3c0,0.2-0.2,0.4-0.4,0.4c-0.4-0.1-0.5-0.4-0.6-0.5c-0.1-0.2-0.3-0.2-0.4-0.2
+				C8,52,7.8,51.4,7.7,51.3c-0.1,0,0.1,0.8,0,1c-0.1,0.1-0.5,0.7-0.8,0.8c-0.2,0.1-0.6,0.1-0.8,0.2c-0.2,0-0.4,0.4-0.2,0.5
+				c0.1,0.1,0,0.8,0,0.9c0.1,0.1,0.3,0.1,0.4,0.1c0.1,0,0.1,0.2,0.2,0.3c0,0.1,0.2,0.2,0.1,0.2C6.6,55.2,6.6,55.3,6.2,55.2L6.2,55.2
+				z M6.4,55.5c0,0-0.2,0.3-0.3,0.3c-0.1,0,0.3,0.3,0.2,0.3c-0.1,0-0.2,0-0.3,0c-0.1,0-0.3-0.3-0.3-0.4c0-0.1,0.4-0.3,0.5-0.3
+				C6.2,55.4,6.4,55.5,6.4,55.5L6.4,55.5z M5.3,53c-0.1,0.2-0.1,1.1-0.2,1.7c0,0.6-0.6,0.7-0.5,0.5c0.2-0.2,0.2-0.5,0.3-1
+				c0-0.5-0.1-1.6,0.1-1.9c0.1-0.1,0.4,0,0.5,0c0.3,0,0.4-0.1,0.4,0.2C5.9,52.8,5.4,52.8,5.3,53L5.3,53z M4.2,55.4
+				c0-0.1,0.1-0.4,0.2-0.6c0.1-0.4,0.1-1.3,0.1-1.8c0-0.5,0-2.1,0-2.8c0-0.3-0.1-2.1-0.2-2.6c0-0.2-0.1-0.9-0.1-1.1
+				c0-0.2,0.3,0.7,0.4,1.4c0.1,0.4,0.1,2,0.1,2.4c0,0.7,0.2,3.7-0.2,4.6C4.5,55.2,4.2,55.5,4.2,55.4L4.2,55.4z M3.7,54.3
+				C3.6,54.6,3.6,54.5,3.7,54.3c-0.1-0.2,0.3-1.1,0.2-2c0-0.8,0-3.1-0.1-3.4c0-0.3-0.1-1.2-0.3-1.7c-0.1-0.1-0.3-0.5-0.3-0.6
+				c0-0.3,0.2-0.2,0.4,0C4,47,4.1,48.4,4.2,49c0,0.5,0.1,2.5,0.1,3.4C4.2,53.3,3.8,54.2,3.7,54.3L3.7,54.3z M3.2,53c0,0,0-2,0-2.6
+				c0-0.5-0.1-2.8,0-2.9c0.1-0.1,0.2,1.8,0.2,2.3C3.5,50.3,3.5,53,3.2,53L3.2,53z M2.7,51.2c0.1-0.3,0.1-0.7-0.1-1.1
+				c0-0.1,0.4,0.1,0.4,0.5C3.1,51.2,2.6,51.4,2.7,51.2L2.7,51.2z M4.8,46.9c0.1-0.2,0.8,4.1,0.6,4.3C5.2,51.4,5,51.8,5,51.8
+				S4.7,47.2,4.8,46.9L4.8,46.9z M5.7,51.1c-0.2,0.1-0.4-2.2-0.2-2.2c0.2,0,0.7,0.6,0.7,0.8C6.1,49.8,5.9,50.9,5.7,51.1L5.7,51.1z
+				 M5.6,52.1c-0.3,0-0.4,0.1-0.5-0.1c0-0.1,0.2-0.6,0.3-0.7c0.2-0.2,0.7-0.1,0.7-0.1l0,0.2c0,0-0.1,0-0.2,0c-0.1,0-0.2,0.1-0.1,0.3
+				C5.8,51.9,5.9,52.1,5.6,52.1L5.6,52.1z M5.1,45.5c0.1-0.4,0-0.4,0.4-0.5c0.2,0,0,0.2-0.1,0.3c0,0.2,0.2,0.3,0,0.3
+				C5.1,45.7,5,45.7,5.1,45.5L5.1,45.5z M5.1,43.7c0.1-0.1,0.3,0,0.3,0.1c0,0.1-0.1,0.1-0.1,0.3c0,0.1,0,0.3-0.1,0.1
+				C5.1,44.1,5,43.8,5.1,43.7L5.1,43.7z M5.1,43.2c0.2-0.2,0.4,0,0.6-0.1C5.9,43,6.1,42.7,6.2,42c0.1-0.7,0.4-0.7,0.4-0.5
+				c0,0.1-0.1,0.4-0.1,0.7c0,0.2,0,0.3-0.1,0.4c0,0.1-0.2,0.3-0.3,0.5c-0.1,0.1-0.1,0.5-0.4,0.6C5.5,43.8,4.9,43.4,5.1,43.2
+				L5.1,43.2z M5.7,43.9c0.2,0,0.3,0.2,0.3,0.4c0,0.2-0.2,0.1-0.1,0.2c0,0.1,0.1,0.3,0,0.4c-0.1,0.1-0.5,0.1-0.6,0
+				c-0.1-0.2,0-0.2,0.2-0.3c0.1,0,0.2-0.3,0.2-0.3S5.5,43.9,5.7,43.9L5.7,43.9z M6.4,45.4c0.1,0.2,0,0.2-0.2,0.2
+				c-0.2,0-0.4-0.2-0.2-0.5C6,45,6.1,44.8,6.6,44.8c0.1,0,0.2,0.2,0.1,0.3C6.4,45.1,6.3,45.2,6.4,45.4L6.4,45.4z M7.1,44.2
+				c-0.1,0.4-0.4,0.5-0.6,0.5c-0.2,0,0.1-0.3,0.2-0.5c0.1-0.3-0.3-0.7-0.4-0.3c0,0.5-0.3,0.1-0.2-0.2c0.1-0.2,0.3-0.3,0.5-0.2
+				C6.9,43.6,7.3,43.8,7.1,44.2L7.1,44.2z M7,42.2c0.2-0.3,0.4-0.4,0.5-0.5c0.3,0,0.3,0.1,0.5,0.3c0,0-0.1,0.1-0.3,0.2
+				c-0.2,0.2,0.1,0.7,0,0.8c-0.1,0.1-0.6,0.7-0.7,0.3c0-0.2-0.1-0.5-0.2-0.8C6.8,42.4,6.8,42.4,7,42.2L7,42.2z M7.4,45.3
+				c0,0.2-0.6,0.2-0.6,0.1c0-0.3,0.3-0.7,0.4-0.7c0.1,0,0.3-0.1,0.3,0C7.6,44.8,7.4,45.1,7.4,45.3L7.4,45.3z M8.8,42.2
+				c0.6,0.1,0.8-0.1,1-0.2c0.2-0.2,0.4-0.4,0.5-0.9c0.1-0.5,0.1-1,0.1-1.1c0-0.2-0.2-0.1-0.2,0.4c0,0.4-0.1,0.6-0.3,0.8
+				c-0.1,0.1-0.2,0.3-0.3,0.1c-0.2-0.3,0.1-0.7,0.2-1.2c0.1-0.3-0.1-1-0.3-0.4c-0.1,0.4,0,1.4-0.4,1.6c-0.2,0.1-0.5,0-0.3-0.4
+				c0.2-0.4,0.2-0.7,0.3-0.8c0.1-0.3,0.2-0.7,0.2-0.8c0-0.1,0-0.3-0.1-0.3c-0.1,0-0.1,0.3-0.2,0.5c-0.1,0.5-0.1,1.1-0.3,1
+				c-0.1-0.1,0-0.7,0.1-1.3c0-0.3,0.1-0.6,0.2-0.9c0.1-0.3,0-0.7,0.1-1c0.1-0.2,0.3-0.5,0.3-0.8c0.1-0.3,0.2-0.6,0.3-0.9
+				c0.2-0.9,0.3-1.6,0.1-2.7c-0.1-0.7-0.4-3.1-0.2-3.4c0.1-0.1,0.6-0.2,0.8-0.3c0.2-0.1,0.2-0.5,0.3-0.6c0.2-0.2,0.5-0.3,0.9-0.7
+				c0.1-0.1,0-0.8,0.4-0.9c0.3,0,0.5,0.6,0.3,0.8c-0.1,0.1,0.6,0.6,0.6,1c0.1,0.4-0.1,0.2-0.1,0.9c0,0.6,0.1,2.2,0.4,3.4
+				c0.1,0.4,0.2,0.8,0.3,1.3c0.1,0.5-0.2,0.7-0.1,1.4c0,0.3,0,0.5-0.2,0.7c-0.3,0.4-0.6,0.6-0.6,1.2c-0.1,0.9-0.6,1.7-0.5,1
+				c0-0.2,0-0.9-0.1-0.7c-0.1,0.2-0.1,1-0.4,1.5c-0.3,0.5-0.1,0.7-0.1,1.2c0,0.3-0.6,0.5-0.5,1c0.1,0.3-0.6,1.1-1,1.5
+				c-0.2,0.2,0,0.2,0.3,0.1c0.2-0.1,0.5-0.4,0.6-0.4c0.1,0.1-0.2,0.7-0.7,0.8c-0.2,0-0.5,0-0.6,0.1c-0.2,0.1-0.3,0.2-0.5,0.3
+				c-0.1,0.1-0.2,0.2-0.5,0.2c-0.1,0-0.3,0.4-0.4,0.1c0-0.1,0.1-0.6,0.1-0.6c0-0.2-0.2-0.3-0.2-0.2c0,0.1,0,0.5-0.2,0.5
+				c-0.2,0-0.3-0.5-0.1-0.7c0.2-0.2,0.3-0.2,0.5-0.2c0.2,0,0.3-0.1,0.1-0.3C8,42.8,8,42.3,8.1,42.2C8.3,42,8.3,42.1,8.8,42.2
+				L8.8,42.2z M8.8,33c0-0.2-0.1-0.3-0.2-1c-0.1-0.7-0.1-2.6,0.1-2.7c0.2-0.1,0.6,1.2,0.7,1.5c0,0.6-0.1,0.8-0.1,0.9
+				c0,0.1,0.1,1.8,0,2.1c-0.1,0.3-0.1,0.5-0.3,0.5C9,34.3,8.9,33.4,8.8,33L8.8,33z M8.5,24.5c0.1-0.2,0.3-0.7,0-0.9
+				c-0.2-0.1-0.4-0.3-0.7-0.3c-0.2,0-0.4-0.3-0.5-0.5C7.2,22.4,7.5,22,7.6,22c0.4,0.1,0.3,0.6,0.6,0.7c0.4,0,0.4-0.6,0.3-0.8
+				c-0.2-0.4-0.9-0.5-0.8-1.2c0-0.3,0.2-0.3,0.3-0.3c0.3,0,0.4,0.3,0.7,0.3c0.3,0,0.4-0.3,0.3-0.6c0-0.2-1-0.8-1.1-1
+				c-0.1-0.2,0.3-0.6,0.5-0.7c0.2-0.1,0.3,0.4,0.6,0.5c0.3,0.1,0.3,0,0.4-0.1c0.2-0.4-0.7-0.6-1-1.3c-0.1-0.3,0.3-0.6,0.6-0.8
+				c0.2-0.1,0.5,0.4,0.7,0.4c0.1,0,0.2-0.3,0.1-0.4c-0.3-0.3-0.7-0.3-0.8-0.5c-0.2-0.4-0.4-1.3,0-1.4c0.2,0,0.5,0.7,1,0.6
+				c0.2,0,0.3,0.1,0.3,0.3c0,0.2,0.2,0.4,0.4,0.6s0,0.8-0.3,1c-0.3,0.2-0.8,0-1-0.1c-0.1,0-0.1,0.2,0.3,0.4c0.5,0.2,0.8,1,0.4,1.4
+				c-0.5,0.3-1,0.2-1,0.3c-0.1,0.1,0.1,0.1,0.2,0.2c0.1,0.1,0.1,0.2,0.2,0.3c0.2,0.2,0.5,0.2,0.3,0.7c-0.2,0.6-1.1,0.6-1,0.7
+				c0.4,0.4,0.5,0.5,0.5,0.7c0,0.2-0.2,0.8-0.7,0.8c-0.3,0-0.5,0.1-0.1,0.3c0.2,0.1,0.8,0.3,0.5,0.9C8.9,24.7,8.5,24.7,8.5,24.5
+				L8.5,24.5z M8.1,29.2c-0.4,0.1-0.5-0.2-0.4-0.3c0.2-0.2,0.3-0.1,0.3-0.3c0-0.3-0.2-0.3-0.2-0.6c0-0.2,0.3-0.2,0.3-0.2
+				c0.3,0.1,0.3,0.6,0.3,1C8.4,29,8.2,29.2,8.1,29.2L8.1,29.2z M7.5,26.1c-0.1,0.1,0.1,0.5,0,0.8c-0.1,0.1-0.3,0.4-0.6,0.3
+				c-0.2-0.1,0.3-0.3,0.4-0.5c0-0.2-0.1-0.5-0.3-0.6c-0.4-0.2-0.6-0.6-0.6-0.7c0-0.2,0.2-0.3,0.4,0c0.2,0.2,0.5,0.4,0.7,0.4
+				c0.3,0,0.5-0.1,0.5-0.2c0.1-0.4-0.3-0.5-0.5-0.7c-0.2-0.1-0.3-0.4-0.4-0.6c0-0.2-0.1-0.5,0-0.6c0.2-0.2,0.5,0.1,0.5,0.2
+				c0,0.1-0.1,0.3,0,0.4c0.4,0.2,0.6,0.5,0.8,0.8c0.3,0.4,0,0.8-0.2,0.9C7.9,26.1,7.6,26,7.5,26.1L7.5,26.1z M5.7,24.6
+				c0.2-0.1,0.2-0.2,0.1-0.4c0-0.2-0.5-0.6-0.6-0.9c0-0.2-0.2-0.5,0-0.5c0.3,0.1,0.4,0.5,0.7,0.8c0.3,0.2,0.6,0.7,0.4,1
+				C6,25,5.3,24.8,5.7,24.6L5.7,24.6z M5.4,21c0.1-0.1,0.4,0.2,0.4,0.4c0,0.2,0.1,0.6,0.3,0.5c0.2,0,0.6-0.5,0.2-0.8
+				c-0.3-0.3,0.1-0.3-0.6-0.9c-0.2-0.2-0.4-1-0.1-1.1C6,19,6.3,19.6,6.4,19.7c0.1,0.1,0.1,0.3,0.5,0.3c0.1,0,0.2-0.4-0.1-0.7
+				c-0.3-0.2-0.6-0.7-0.7-1.1c-0.1-0.4,0.1-0.5,0.3-0.4c0.2,0.1,0.5,0.6,0.8,0.6c0.3,0,0.2-0.2,0.3-0.4c0.1-0.2-0.6-0.5-0.8-0.8
+				c-0.2-0.2-0.3-0.4-0.3-0.7c0-0.4,0.3-0.8,0.4-0.9c0.2-0.1,0.4,0.1,0.5,0.2c0,0.1,0.3,0.3,0.3,0.3s0,0.2-0.1,0.2
+				c-0.3-0.1-0.3,0-0.3,0.1c0,0.1,0.2,0.4,0.3,0.5c0.1,0.1,0.5,0.3,0.7,0.5c0.1,0.1,0.1,0.8,0,0.8c-0.2,0.1-0.1,0.3-0.3,0.4
+				c-0.1,0-0.5,0.2-0.8,0.1c-0.1,0,0.3,0.4,0.5,0.4c0.3,0.1,0.5,0.6,0.4,0.9c-0.1,0.3-0.1,0-0.2,0.3c-0.1,0.2-0.8,0.2-1.1-0.1
+				c-0.1-0.1-0.3,0,0,0.3c0.3,0.3,0.7,0.5,0.8,0.8c0,0.3-0.2,0.6-0.4,0.7c-0.2,0.1-0.5,0.1-0.5,0.3c-0.1,0.2,0.3,0.3,0.3,0.5
+				c0,0.1-0.4,0.6-0.6,0.6c-0.2,0-0.1-0.2,0.1-0.4c0.3-0.3,0-0.4-0.2-0.6c-0.2-0.2-0.6-0.3-0.7-0.6C5.1,21.5,5.2,21.1,5.4,21L5.4,21
+				z M2.8,9.1C2.8,8.9,3.3,9,3.4,9c0.1,0.1,0.1,0.2,0,0.3C3,9.3,3.1,9.2,3,9.2C2.9,9.2,2.7,9.1,2.8,9.1L2.8,9.1z M5.3,15.7
+				C5,16.5,5.1,15.6,5,15.6c-0.2,0.1-0.3,0.5-0.4,0.6c-0.1,0.1-0.6,0.2-0.8,0.1c-0.2,0,0-0.6,0-0.7c0.2-0.5,0.3-0.6,0.5-0.6
+				c0.3,0,0.6,0,0.8-0.1c0.1,0,0.1-0.2,0.3-0.4c0.2-0.2-0.1-0.3-0.1-0.4c0.2-0.1,0.2-0.3,0.3-0.6c0.1-0.3-0.1-0.6-0.3-0.7
+				c-0.2-0.1-0.7-0.6-0.7-0.8c0-0.2-0.7-0.8-0.4-0.7c0.3,0.2,0.8,0.5,1.3,0.1c0.3-0.2,0.4-0.4,0.5-0.6c0.1-0.2-0.1-0.3-0.2-0.2
+				c-0.1,0.2-0.3,0.5-1,0.4c-0.3,0-0.3-0.1-0.1-0.2C5,11,5.1,10.9,5,10.8c-0.1-0.1-1.2-0.1-1.6,0.1c-0.2,0.1-0.6,0.5-0.9,0.5
+				c-0.2,0-0.5,0.1-0.2-0.2c0.3-0.3,0.5-0.4,0.6-0.5c0.2-0.1,0-0.7,0.1-0.9c0.1-0.1,0.2-0.5,1.2-0.5c0.2,0-0.2-0.5-0.4-0.5
+				c-0.1,0-0.2-0.5-0.8-0.5c-0.2,0-0.5,0.2-0.7,0.4c-0.2,0.3-0.2,0.8,0,0.8c0.3,0,0.4,0.2,0.4,0.5c0,0.4-0.2,0.6-0.5,0.7
+				c-0.3,0.1-0.5,0.4-0.6,0.7c0,0.3-0.1,0.4-0.3,0.5c-0.4,0.3-0.9,0.1-0.9-0.3c0-0.3,0.4-1,0.8-1.3c0.2-0.1,0.3,0.1,0.3-0.3
+				C1.6,10,1.8,9.6,2,9.6c0.1,0,0-0.8,0.1-1c0.2-0.4,0.9-0.8,1.1-0.8c0.2-0.1,0.7-0.1,0.9-0.3c0.2-0.2,0.3-0.6,0.4-0.6
+				c0.3,0,0.5,0.5,0.8,0.6C5.6,7.6,6.2,7.8,6.4,8C6.7,8.6,6,8.6,5.9,8.7C5.4,9.3,4.6,8.9,4.6,9.1c-0.1,0.2,0,0.2,0,0.2
+				c0.3,0,0.9-0.1,1.2,0.1c0.3,0.2,0.6,0.3,0.7,0.9c0,0.2,0.5-0.2,0.1,0.6c-0.1,0.2-0.1,0.5-0.1,0.6c0,0.4-0.1,0.8,0.2,1.3
+				c0.3,0.5,0.1,0.6-0.1,0.9c-0.4,0.5,0.1,1.4-0.2,1.4C5.5,15,5.4,15.4,5.3,15.7L5.3,15.7z M3.3,15.6c-0.2-0.1,1-1.1,1.1-1.1
+				c0.2-0.1,0.5-0.1,0.6-0.1c0.1,0,0.3,0,0.3,0.1c0,0.1-0.1,0.2-0.4,0.2c-0.2,0-0.5,0.2-0.6,0.2C4.1,15,3.5,15.7,3.3,15.6L3.3,15.6z
+				 M4.2,13.1c0.1,0,0.3,0.2,0.3,0.2c0,0.1,0.1,0.3,0,0.3c-0.1,0-0.4-0.3-0.4-0.4C4.1,13.2,4.1,13.1,4.2,13.1L4.2,13.1z M2.7,15
+				c-0.1-0.1,0.4-0.2,0-0.3c-0.3-0.1-0.6-0.6-0.4-0.7c0.1-0.1,0.3,0.7,0.6,0.4C3,14.2,2.6,14,2.6,13.7c0-0.2,0-0.4,0.2-0.3
+				c0.2,0.1,0.4,0.5,0.4,0.8c-0.1,0.5,0.2,0.1,0.1,0.2c0,0-0.1-0.6,0-0.5c0.1,0,0.2,0.5,0.2,0.6c0,0.1,0.3-0.2,0.4-0.3
+				C4.2,14,4.6,14,4.7,13.8c0.2-0.2,0.2-0.5,0-0.6c-0.1-0.1-0.5-0.3-0.6-0.5c-0.1-0.2,0.1-0.3-0.1-0.4c-0.2-0.1-0.2-0.3,0-0.3
+				c0.2,0,0.7,0.7,0.8,0.9c0.1,0.2,0.6,0.8,0.5,1c-0.1,0.2-0.8,0.2-1,0.3c-0.2,0.1-0.1,0.2-0.3,0.3c-0.2,0.1-0.3,0.2-0.4,0.2
+				c-0.1,0,0,0.2-0.3,0.2c0,0-0.1,0-0.1,0C3.3,15,2.9,15.2,2.7,15L2.7,15z M2.1,13.6c0-0.1,0.1-0.6,0.2-0.7c0.1,0,0.3,0,0.3,0
+				c0.1,0.1-0.1,0.2-0.1,0.3C2.4,13.3,2.1,13.8,2.1,13.6L2.1,13.6z M3,13c-0.1,0.2-0.3,0-0.2-0.1c0.1-0.1,0.5-0.5,0.6-0.5
+				c0,0,0.2,0.1,0.1,0.1C3.5,12.6,3.2,12.7,3,13L3,13z M4,13.7c0,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.3-0.1-0.2-0.2c0-0.1,0.1-0.2,0.2-0.2
+				C3.8,13.5,4,13.6,4,13.7L4,13.7z M3.9,12.9c-0.1,0.1-0.5,0.4-0.7,0.5C3.1,13.5,3,13.3,3,13.2c0.1-0.2,0.6-0.4,0.7-0.4
+				C3.9,12.8,3.9,12.9,3.9,12.9L3.9,12.9z M1.7,13.5c-0.1,0-0.1-0.3,0.1-0.7C2,12.6,2.2,12.3,2,12.4c-0.2,0.1-0.5,0.2-0.5,0.4
+				c-0.2,0.4-0.3,0.2-0.2,0c0.1-0.3,0.4-0.6,0.6-0.8c0.2-0.1,0.5-0.1,0.8-0.2c0.3-0.1,0.7-0.5,0.9-0.6c0.2,0,0.2,0.1,0.2,0.2
+				c0,0.1-0.1,0.2-0.3,0.4c-0.2,0.2-0.6,0.7-0.6,0.9c-0.1,0.1-0.3,0.2-0.5,0.2c-0.2,0-0.2,0.1-0.4,0.3C1.8,13.3,1.7,13.5,1.7,13.5
+				L1.7,13.5z M5.8,5.5c0.4,0.1,0.5,0.6,0.6,0.1c0-0.2-0.3-0.4-0.4-0.5c-0.1-0.1,0-0.2,0.1-0.2c0.3,0,0.5,0.4,0.7,0.3
+				C7.4,5,7.6,4.5,8.4,4.5c0.8,0.1,0.7,0.6,0.7,0.9c0,0.2,0.4,0,0.4,0.8c0,0.7,0.2,0.2,0.1,0.8C9.6,7,9.4,7,9.5,7.1
+				c0.2,0.5-0.2,0.6-0.3,0.6C9,7.7,8.9,7.9,9,8c0.3,0.2,0.5,0.5,0.3,0.6C9.1,8.7,8.4,8.5,8.8,8.7C9.2,9,9.5,10,9.1,10.3
+				c-0.3,0.2-0.6-0.4-1-0.4C8,9.9,8,10,8.2,10.2c0.2,0.2,0.8,0.5,0.8,1c0,0.4-0.3,1-0.5,1.1c-0.4,0.1-0.3-0.2-0.2-0.4
+				c0.1-0.1,0.2-0.2,0.1-0.3c-0.1-0.1,0-0.2-0.2-0.3c-0.3-0.2-0.6,0.1-1-0.3c-0.2-0.2-0.2-0.6,0-0.6c0.1,0,0.3,0.2,0.5,0.2
+				c0.2,0,0.3-0.6,0.1-0.7C7.3,9.6,7.1,9.7,6.9,9.7c-0.2,0-0.3-0.3-0.2-0.3c0.3,0,1.2-0.2,1.4-0.8c0.1-0.3,0-1.1-0.3-1.5
+				C7.7,6.8,7.5,6.6,7.3,6.5c-0.2-0.1-0.5,0-0.4,0C8,6.7,8.2,8.2,7.6,8.7C6.8,9.3,6.3,9,6.6,8.8c0.5-0.3,0.7-0.7,0.7-1
+				c0-0.2-0.5-0.6-1.1-0.7c-0.5-0.1-1-0.2-1.1-0.8C5,5.8,5.4,5.4,5.8,5.5L5.8,5.5z M9.7,7.8C10,8,9.9,8.6,10.4,8.6
+				c0.1,0,0.4-0.1,0.5,0.1c0.1,0.1,0.7,0.1,0.9,0c0.1-0.1-0.1-0.5-0.4-0.6C11,8.1,10.4,8.2,10,7.9C9.7,7.7,9.7,7.2,9.8,7.1
+				C9.9,6.9,9.6,6.7,10,6.4c0.5-0.3,1.2-0.1,1.6,0.1c0.4,0.2,1,0.7,1.2,0.8C13,7.6,12.9,8,12.8,8.2c-0.1,0.2-0.4,0-0.5-0.4
+				c-0.1-0.3-0.4-0.8-0.6-0.9c-0.1-0.1-0.4-0.1-0.4,0c0,0.1,0.4,0.4,0.5,0.6C12.2,8,12.5,8.8,12,9c-0.2,0.1-0.8-0.1-0.7,0.1
+				c0.2,0.2,0.1,0.4,0.2,0.5c0.3,0.3,0.5,0.5,0.4,0.9c-0.1,0.3-0.3,0.5-0.7,0.5c-0.2,0,0.2-0.9-0.2-0.9c-0.3,0-0.9-0.1-1.1-0.5
+				C10,9.3,9.8,9.4,9.7,9.3C9.6,9.3,9.5,9.1,9.6,9c0.1-0.2,0.2-0.7,0-0.9C9.4,7.9,9.5,7.6,9.7,7.8L9.7,7.8z M9.9,5.4
+				c0.3-0.2,1.6,0.5,1.4,0.6c-0.2,0.1-1.1,0.2-1.3,0C9.9,5.9,9.7,5.5,9.9,5.4L9.9,5.4z M11.6,5.7c0.3,0,0.6,0.1,0.8,0.3
+				c0.4,0.5,0.4,1,0.3,0.8c-0.2-0.3-0.5-0.3-0.8-0.5c-0.2-0.1-0.1-0.3-0.2-0.4C11.7,5.8,11.5,5.7,11.6,5.7L11.6,5.7z M12.9,10.7
+				c-0.1,0.2-0.3,0.3-0.3,0.1c0-0.1,0.1-0.3-0.2-0.5c-0.2-0.1-0.2-0.4-0.3-0.5c-0.3-0.2-0.4-0.3-0.3-0.4c0.1-0.1,0.5,0,0.7-0.2
+				c0.3-0.2,0.1-0.5,0.2-0.7c0.1-0.1,0.1-0.1,0.2,0c0.1,0.2,0.1,0.5,0,0.8c-0.1,0.2-0.3,0.3-0.1,0.6C12.9,10.1,13,10.4,12.9,10.7
+				L12.9,10.7z M13,12.6c0,0.1-0.3,0.1-0.4-0.3c-0.1-0.5-0.4-0.2-0.5-0.6c-0.1-0.3,0.2-0.5,0.3-0.7c0.1-0.2,0.4,0.4,0.6,0.8
+				C13,12.2,13,12.5,13,12.6L13,12.6z M13.1,13.1c0.2-0.1,0.3,1.8-0.1,2c-0.1,0.1-0.1,0.4-0.1,0.7c0,0.3-0.2,0.2-0.4,0.6
+				c-0.1,0.3-0.1,0.7-0.3,0.6c-0.2-0.1-0.1-0.4-0.1-0.7c0-0.3-0.1-0.5-0.3-1c-0.2-0.4,0-0.4,0.3-0.4c0.3,0,0.4,0.9,0.5,0.6
+				c0.1-0.1,0.1-0.4,0-0.7c0-0.1-0.1-0.2-0.4-0.4c-0.1-0.1-0.1-0.5-0.1-0.8c0-0.3-0.2-0.1-0.3-0.6c0-0.2,0.2-0.3,0.3-0.3
+				c0.1,0.1,0,0.3,0.2,0.4c0.2,0.1,0.3,0.2,0.3,0.4c0,0.3,0.1,0.4,0.1,0.4C13,13.8,12.9,13.2,13.1,13.1L13.1,13.1z M13.1,7.2
+				c0-0.2,0.2-0.4,0.4-0.3c0.2,0.1,0.3,0.5,0.3,0.7c0,0.3,0.1,0.6,0.3,0.6c0.2,0.1,0.3-0.1,0.3-0.4c0-0.2-0.1-0.5-0.4-0.9
+				c-0.2-0.3-0.6-0.3-0.7-0.7c-0.2-0.8,0.1-0.9,0.1-1.2c0-0.3,0.1-0.7,0.4-0.7c0.2,0,0.4,0.2,0.4,0.6c-0.1,0.9,0.1,0.3,0.1,0.1
+				c0.1-0.2,0.2-0.3,0.2-0.5c0-0.2,0-0.5-0.3-0.7c-0.2-0.2-0.2-0.4-0.2-0.6c0-0.2,0.1-0.2,0.3-0.3c0.2-0.1,0.2-0.3,0-0.3
+				c-0.1,0-0.2,0.1-0.3,0.1c-0.2,0.1-0.2-0.4-0.2-0.7c0-0.3,0.2-0.5,0.4-0.6c0.3-0.2,0.4-0.1,0.6,0c0.2,0,0.4,0,0.5-0.1
+				c0.1-0.1,0.2-0.3,0.4-0.3c0.2,0,0.3,0,0.6,0.3c0.4,0.3,0.5,0.6,0.6,0.9c0.1,0.3,0.1,0.4,0.1,0.5c0,0.1-0.2,0.1-0.3,0
+				c-0.1-0.1-0.2-0.3-0.3-0.5c-0.1-0.2-0.2-0.4-0.4-0.4C16,1.7,16,1.7,16.2,1.9c0.1,0.1,0.4,0.4,0.5,0.7c0.1,0.2-0.1,0.2-0.1,0.2
+				c-0.1,0-0.3-0.2-0.4-0.4c-0.1-0.2-0.3-0.3-0.5-0.3c-0.2,0-0.3,0.3-0.5,0.3c-0.2,0-0.3-0.1-0.4,0c-0.1,0.1,0.3,0.2,0.4,0.3
+				s0,0.1-0.2,0.3c-0.2,0.2,0.2,0.2,0.4,0.2c0.2,0,0.3-0.3,0.3-0.4c0-0.1-0.1-0.4,0-0.5c0.1-0.1,0.3,0.2,0.4,0.4
+				c0.1,0.1,0.1,0.5,0,0.6c-0.1,0.1-0.9,0.8-1,1.2c-0.2,0.4,0,0.8,0,1c0,0.2-0.3,0.6-0.4,0.8c-0.1,0.2-0.1,0.8,0,1.1
+				c0.1,0.3,0.4,0.7,0.5,0.9c0.1,0.2,0,0.5-0.1,0.6c-0.3,0.3-0.2-0.3-0.4,0.1c-0.1,0.3-0.6,0.6-0.9,0.7c-0.4,0-0.5-0.1-0.6-0.2
+				c-0.1-0.1,0.1-0.3,0.3-0.4c0.2-0.1,0.1-0.3,0.2-0.5c0-0.2-0.2-0.3-0.4-0.5C13.1,7.9,13.1,7.4,13.1,7.2L13.1,7.2z M17.3,1.1
+				c0.1-0.3,0.6-0.3,0.8,0.1c0.2,0.4,0.1,0.6,0.1,0.9c-0.1,0.3-0.2,0.4-0.3,0.5c0,0-0.1,0-0.1-0.1c0-0.1-0.3-0.4-0.4-0.6
+				C17.2,1.6,17.1,1.3,17.3,1.1L17.3,1.1z M18.8,2.6c0,0,0.1-0.2,0.1-0.3c0-0.1-0.1-0.3-0.3-0.6c-0.2-0.2-0.2-0.5-0.2-0.6
+				c0-0.1,0.1-0.3,0.3-0.4c0.3,0,0.4,0,0.5,0.1c0.2,0.2,0.2,0.5,0.2,0.8c0,0.3-0.1,0.5-0.2,0.6c-0.1,0.2-0.1,0.3-0.1,0.3s0,0,0,0
+				c0.3,0,0.5-0.1,0.8-0.1c0,0-0.1-0.1-0.1-0.3c0-0.1,0-0.2-0.1-0.4c-0.2-0.3-0.1-0.7,0-0.9c0.1-0.1,0.3-0.2,0.4-0.1
+				c0.2,0.1,0.2,0.5,0.2,0.5c0,0.3,0.1,0.6,0,0.8c-0.2,0.3-0.3,0.3-0.2,0.4h0c0.1,0,0.1,0,0.2,0c0.2,0,0.3,0,0.4,0h0
+				c0,0,0.1-0.1,0.1-0.3c-0.1-0.2-0.2-0.3-0.2-0.6c0-0.2,0-0.5,0.1-0.7c0.1-0.2,0.2-0.3,0.4-0.3c0.2,0,0.4,0.1,0.4,0.6
+				c0,0.5-0.2,0.5-0.2,0.8c0,0.2-0.1,0.4,0.1,0.5c0.1,0,0.1,0.1,0,0.1c0.2,0,0.3,0.1,0.5,0.1c2.1,0.5,2.4,1.2,2.6,1.5
+				c0.3,0.6,0.2,1.3,0.4,1.4c0.3,0.2,0.4,0.6,0.4,0.8c0.1,0.5-0.7,0.7-0.9,1.1c-0.1,0.3-0.2,0.3-0.3,0.3c-0.5-0.1-0.6-1.2-1-1.3
+				c-0.2-0.1,0.9-0.4,1.3-0.8c0.3-0.4,0.1-0.2-0.6,0.1c-0.5,0.2-1.5,0.6-2.1,0.2C21,5.6,21.6,4.6,22,4.3c0.4-0.3,0.9-0.4,1.5,0.2
+				c0.6,0.6,0.6,0.6,0.7,0.6c0.1,0-0.6-1.1-1.1-1.3c-0.7-0.3-1.4-0.2-2.2,1c-0.5,0.7,0.2,0.9,0.3,1.4c0.2,0.7-0.2,0.5-0.3,0.6
+				c0,0.1-0.1,0.1-0.5,0.1c-0.4,0-0.3,0-0.5-0.1c-0.1-0.1-0.7,0.1-0.6-0.6c0.1-0.5,0.5-0.6,0.2-1.4c-0.4-1.1-1.3-1.4-2.2-1
+				C16.9,4,16,4.9,16,5c0.1,0,0.5-0.2,1-0.6c0.5-0.4,1-0.3,1.5,0c0.4,0.2,0.5,1.1,0,1.5c-0.6,0.4-1,0.2-1.5,0
+				c-0.5-0.1-0.9-0.3-1.2-0.3c-0.3,0.1-0.1,0.1,0,0.1c0.1,0,0.3,0,0.5,0.1c0.1,0.1,0.3,0.3,0.6,0.4c0.4,0.2,0.9,0.1,0.8,0.1
+				c-0.2,0.2-0.6,0-0.9,1c-0.1,0.2-0.2,0.2-0.4,0.3c0,0,0,0-0.1,0.2c-0.1,0.3-0.1,0.1-0.1,0.3c0,0.2,0.3,0.1,0.3,0.6
+				c0,0.3,0.1,0.5-0.2,0.4c-0.2-0.1-0.2-0.5-0.5-0.4c-0.1,0,0,0.2,0.2,0.3c0.2,0.1,0.2,0.3,0.2,0.3c0.1,0.4-0.1,0.6-0.1,1
+				s0.1,0.4,0.4,0.5c0.3,0.1,0.6,0.1,0.9,0.4c0.2,0.3,0,0.6-0.1,0.7c-0.1,0.2-0.2,0.1-0.4-0.1c-0.2-0.2,0-0.4-0.6-0.6
+				c-0.4-0.1-0.5-0.1-0.6-0.2c-0.2-0.1-0.1-0.4-0.1-0.7c0-0.4,0.2-0.2,0.2-0.6c0-0.4-0.2-0.2-0.3-0.6c-0.1-0.4,0-0.4,0.3-0.6
+				c0.2-0.2,0.2-0.3,0.2-0.3l0-0.7c-0.5-0.5-1.1-0.7-1.2-1.4c0-0.3,0.2-0.6,0.6-0.8c0.2-0.1-0.1-0.8,0.1-1.4
+				C15.8,3.5,17.1,2.9,18.8,2.6C18.7,2.6,18.8,2.6,18.8,2.6C18.8,2.6,18.8,2.6,18.8,2.6L18.8,2.6z M21.6,1.8c0-0.1,0.1-0.5,0.2-0.7
+				c0.2-0.3,0.6-0.5,0.7-0.5c0.3,0,0.2,0.4,0.2,0.5c0,0.1-0.2,0.3-0.4,1c-0.1,0.3-0.4,0.5-0.5,0.4C21.6,2.4,21.6,2.3,21.6,1.8
+				L21.6,1.8z M23.1,1.2C23.5,1,23.9,0.9,24.3,1c0.5,0.1,0.7,0.3,0.6,0.6C24.8,2,24.5,2.3,24,2.5c-0.3,0.1-0.3,0.3-0.2,0.4
+				c0.2,0.1,0.4,0,0.5,0.1c0.4,0.2,0.6,0.6,0.7,0.6c0.2,0,0.2-0.2,0.1-0.4c-0.2-0.3-0.5-0.5-0.5-0.7c0-0.2,0.2-0.4,0.5-0.2
+				c0.3,0.1,0.1,0.5,0.3,0.7c0.1,0.2,0.4,0.5,0.4,0.8s-0.1,0.6-0.4,0.9c-0.3,0.2-0.1,0.3-0.1,0.3c0,0,0.2-0.2,0.4-0.1
+				C25.7,4.9,25.8,5,26,5.3c0.2,0.3,0.4,0.3,0.5,0.8c0,0.3-0.1,0.6-0.2,0.8c-0.4,0.7,0,0.5,0.2,0.7c0.1,0.1,0.1,0.2,0.1,0.4
+				c-0.1,0.4-0.3,0.6,0,1c0.1,0.1,0.1,0.4,0,0.4c-0.2,0.1,0,0.7-0.1,0.8c-0.1,0.1-0.4-0.3-0.4,0c0,0.3,0.3,0.3,0.2,0.5
+				c-0.1,0.2-0.3,0.3-0.3,0.2c-0.1-0.1-0.2-0.4-0.3-0.5c-0.1-0.1-0.3-0.2-0.1,0.1c0,0.1,0.1,0.2,0.2,0.3c0.1,0.1,0,0.2,0.1,0.5
+				c0,0.3,0,0.4-0.1,0.5c-0.2,0.1-0.6-0.4-0.6-0.6c0-0.2,0-0.3-0.1-0.5c-0.2-0.2-0.4-0.7-0.2-1c0.2-0.3,0.3-0.1,0.4,0
+				c0.2,0.3,0.3,0.1,0.1-0.2C25.2,9.3,25,9.3,25,9.1c0-0.2,0-0.8,0.4-1.2c0.3-0.4,0.4-1.1,0.3-1.3c-0.1-0.2-0.5-0.9-0.7-1
+				c-0.1-0.1-0.3-0.3-0.2-0.7c0.1-0.5,0.2-1,0.1-1c-0.1,0-0.5-0.6-0.7-0.5c-0.2,0.1-1-0.2-1.1-0.5C23,2.6,22.9,2.2,23.4,2
+				c0.5-0.2,0.6,0.2,0.7-0.1c0-0.2-0.1-0.4-0.4-0.4c-0.3,0.1-0.4,0.1-0.6,0.3c-0.1,0.2-0.2,0.5-0.4,0.5c-0.2,0-0.2-0.2-0.2-0.4
+				C22.6,1.7,22.9,1.4,23.1,1.2L23.1,1.2z M27.2,9.9c0.1,0,0.2-0.1,0.1,0.3c-0.1,0.3-0.1,1-0.1,1.4c0,0.1-0.1,0.1-0.1,0.1
+				c0,0-0.1,0.1-0.1,0.1c-0.4,0.3-0.4,0.7-0.4,0.7c0,0,0.3-0.5,0.5-0.6c0.1-0.1,0.2,0.1,0.2,0.2c0,0.2,0,0.5-0.1,0.8
+				c-0.1,0.4-0.4,0.5-0.5,0.9c0,0.2-0.1,0.7,0,0.9c0.2,0.4,0.2,0.3,0.2-0.1c0-0.1-0.1-0.3,0-0.6c0-0.1,0.2-0.4,0.3-0.5
+				c0.2-0.2,0.2-0.4,0.4-0.4c0.3,0,0.2,0.7,0.2,0.9c0,0.2-0.1,0.4-0.1,0.6c-0.1,0.5-0.4,0.3-0.6,0.9c-0.1,0.4,0,0.8,0.1,0.7
+				c0.1,0,0.1-0.6,0.8-1c0.1,0,0.3,0,0.2,0.4c0,0.1-0.3,0.1-0.1,0.3c0.1,0.2-0.2,0.3-0.3,0.6c-0.1,0.4-0.4,0.4-0.4,0.5
+				c0.3,0.2,0.2,1.1,0.3,0.8c0.2-0.4,0.5-1.1,0.8-1.1c0.1,0,0.2,0.4-0.2,1c-0.4,0.7-0.5,0.9-0.6,0.9c-0.3,0-0.3-0.3-0.3-0.8
+				c0-0.4-0.4-0.5-0.6-0.9c-0.1-0.2,0-0.8-0.2-1.5c-0.2-0.7-0.4-0.7-0.5-1.2c-0.1-0.5,0.4-1.1,0.3-1.4c-0.1-0.2-0.1-0.3,0.1-0.6
+				c0.2-0.3,0.4-0.5,0.4-0.8C26.7,10.9,27,9.9,27.2,9.9L27.2,9.9z M31.5,14.7C31.2,14.8,31,15,31,15.2c0,0.3,0.2,0.3,0.3,0.4
+				c0.1,0.1,0.1,0.2-0.3,0.2c-0.2,0-0.3-0.3-0.4-0.5c-0.1-0.3-0.1-0.4,0.2-0.7c0.3-0.3,1.1-1,1.1-1.1c0-0.1-0.2-0.2,0-0.3
+				c0.2-0.1,0.7-0.7,0.9-0.6c0.1,0.1,0.1,0.5,0.1,0.6c0,0.3-0.2,0.7-0.4,1C32.3,14.4,31.9,14.5,31.5,14.7L31.5,14.7z M28.1,19.6
+				c0.2,0.1,0.2,0.3,0.1,0.6c-0.1,0.3-0.2,0.7-0.1,0.8s-0.3,0.1-0.4-0.4C27.7,20.1,27.9,19.5,28.1,19.6L28.1,19.6z M29.2,21.3
+				c0.5,0.3,0.6-0.5,0.7-0.9c0.1-0.4,0.3-0.3,0.5,0c0.2,0.5-0.1,0.7-0.2,1c-0.2,1-0.5,0.4-0.5,0.8c0.1,0.5,0.2,0.8,0,0.8
+				c-0.2,0-0.6-0.5-0.5-0.8c0-0.3,0.2-0.5,0.1-0.6c-0.2-0.3-0.6-0.4-0.8-0.9c-0.1-0.6,0.3-1.5,0.7-1.5c0.1,0,0.3,0.2,0.3,0.4
+				c0,0.2-0.5,0.8-0.6,1C28.9,20.9,29,21.2,29.2,21.3L29.2,21.3z M28.9,18c0.1,0,0.2,0.3,0.2,0.5c0,0.2-0.5,0.7-0.7,1
+				c-0.1,0.1-0.3-0.4-0.2-0.6C28.2,18.8,28.6,18,28.9,18L28.9,18z M28.5,15.3c0.1-0.2,0.6-0.4,0.6-0.5c0.1-0.1-0.1-0.3,0-0.4
+				c0.1-0.2,0.3-0.2,0.5-0.3c0.1,0,0.3-0.1,0.5,0c0.3,0.2,0.2,0.5-0.2,0.8c-0.3,0.3-0.9,0.5-0.9,0.6c0.1,0.1,0.1,0.3-0.1,0.6
+				c-0.2,0.2-0.3,0.2-0.4,0C28.5,15.9,28.4,15.6,28.5,15.3L28.5,15.3z M28.5,12.9c0.5-0.5,0.9-0.5,1-0.5c0.2,0,0.2,0.7,0.3,0.8
+				c0.1,0.1-0.2,0.3-0.4,0.5c-0.3,0.1-0.6,0.2-0.6,0.2c-0.2,0.3,0.2,0.5,0,0.6c-0.3,0.1-0.5,0.1-0.6-0.1
+				C28.1,14.2,28,13.4,28.5,12.9L28.5,12.9z M27.4,10.3c0.1-0.4,0.5-0.5,0.6-0.6c0.1-0.1,0-0.5,0.1-0.4c0.1,0,0.6,0,1-0.1
+				c0.4-0.1,0.7-0.6,0.7-0.4c0.1,0.4-0.2,1.1-0.4,1.5c-0.2,0.2-0.6,0-0.8,0.1c-0.3,0-0.5,0.1-0.5,0.3c0,0.2,0,0.4-0.2,0.3
+				C27.5,11,27.3,10.7,27.4,10.3L27.4,10.3z M27.8,12.3c-0.1,0-0.5-0.3-0.2-0.5c0.1-0.1,0.3-0.3,0.5-0.4c0.4-0.2,0.1-0.4,0.5-0.5
+				c0.5-0.1,0.7-0.3,0.9-0.3c0.5,0.1,0.7,0.4,0.8,0.5c0.2,0.1-0.3,0.5-0.7,0.7c-0.6,0.2-1,0-1.2,0.2c-0.1,0.1-0.5,0.3-0.1,0.6
+				c0.1,0.1,0,0.1-0.2,0.1C27.7,12.7,27.9,12.4,27.8,12.3L27.8,12.3z M28.4,24.4c-0.1,0.2-0.1,0.5,0,0.7c0.2,0.3-0.1,0.1-0.1,0.1
+				s-0.3-0.1-0.4-0.7c-0.1-0.5,0.2-1.1,0.4-1.3c0.3-0.3,0.4-0.9,0.2-0.9c-0.1,0,0,0.7-0.3,0.7c-0.3,0.1-0.5-0.3-0.5-0.7
+				c0-0.4,0-0.6-0.1-0.7c-0.1-0.1-0.3-0.1-0.3-0.2c0-0.1,0.1-0.3,0.4,0c0.1,0.1,0.1,0.1,0.4-0.1c0.2-0.2,0.5-0.1,0.6,0
+				c0.1,0.2-0.5,0.8-0.5,1c0.1,0.3,0.4-0.7,0.7-0.6c0.4,0.1,0.1,0.6,0.2,0.7c0.2,0.1,0.3,0.6,0.1,1.1C28.9,24.1,28.6,24.1,28.4,24.4
+				L28.4,24.4z M28.2,29.1c-0.1,0.1-0.6-0.4-0.3-0.7c0.2-0.2,0.5,0,0.5,0.2C28.5,28.7,28.3,29,28.2,29.1L28.2,29.1z M26,27.6
+				c0.1,0.1-0.4,0.1-0.4-0.3c0-0.4,0.2-0.7,0.4-0.7c0.2,0,0.3,0.4,0.2,0.5C26.2,27.4,26,27.5,26,27.6L26,27.6z M25.7,34.8
+				c0.1,0.3-0.7,2.1-0.9,2.1c-0.1,0-0.2-0.5,0.1-2.4c0-0.1,0.1-0.5,0.1-0.6c-0.1-0.6,0.1-0.5,0.2-0.9c0.1-0.3-0.2-0.3,0-0.6
+				c0.2-0.3,0-3,0.5-3.1c0.2,0,0.4,1.1,0.2,3C26,32.8,25.7,34.5,25.7,34.8L25.7,34.8z M26.4,41.2c-0.1,0.2-0.7,0-0.9-0.2
+				c-0.2-0.2-0.2-2.5-0.1-2.8c0-0.2,0.1-0.9,0.4-0.9c0.2,0,0.3,0.5,0.4,0.7C26.3,38.3,26.4,41.1,26.4,41.2L26.4,41.2z M26.7,42
+				c0,0.2,0.1,0.7,0.3,1c0,0,0,0.2,0,0.2c0,0.1,0.1,0,0.1-0.1c0.1-0.1,0.3-0.1,0.4,0.1c0,0-0.2,0-0.4,0.1c-0.1,0.1-0.2,0.3,0,0.4
+				c0.1,0.1,0.3,0.4,0.2,0.4c-0.1,0-0.3,0.1-0.4-0.2c-0.1-0.2,0-0.4-0.1-0.7c0-0.2-0.2-0.3-0.3-0.7c-0.1-0.3-0.3-0.5-0.1-0.7
+				C26.4,41.7,26.7,41.7,26.7,42L26.7,42z M27.3,42.3c0,0.1-0.1,0.2-0.1,0.2c-0.1-0.1,0-0.5-0.1-0.7c-0.1-0.1,0-0.2,0.1-0.2
+				C27.3,41.6,27.3,42.2,27.3,42.3L27.3,42.3z M27.7,42.6c-0.1,0.1-0.1,0-0.2-0.1c0-0.1,0.1-0.3,0.1-0.5c-0.1-0.2-0.2-0.5-0.1-0.5
+				c0.1,0,0.3,0.5,0.3,0.7C27.8,42.3,27.8,42.5,27.7,42.6L27.7,42.6z M27.3,43.6c0-0.1,0.1-0.2,0.1-0.2c0.1,0,0.1,0.2,0.1,0.2
+				c0,0.1,0.1,0.4,0.1,0.5c-0.1,0.1-0.1,0.2-0.3-0.2C27.4,43.8,27.3,43.7,27.3,43.6L27.3,43.6z M26.6,49.2c0,0-0.1-0.1,0.1-0.1
+				c0,0,0.2,0.1,0.1,0.1C26.7,49.2,26.6,49.2,26.6,49.2L26.6,49.2z M23.8,56.9c0.1-0.1,0.1-0.2,0.1-0.3c-0.1-0.2-0.5-0.6-0.3-0.6
+				c0.1,0,0.2,0,0.3,0c0.1,0.1,0.4,0.3,0.4,0.5c0,0.1,0.1,0.4-0.1,0.4C24,57,23.7,57,23.8,56.9L23.8,56.9z M23.4,57.3
+				c0-0.1,0.3,0,0.5,0c0.2,0,0.2,0.1,0.2,0.2c0.1,0.2-0.2,0.2-0.4,0.2C23.4,57.6,23.4,57.5,23.4,57.3L23.4,57.3z M21.2,56.9
+				c0.1-0.1,0.2-0.2,0.1-0.3c0-0.1-0.2-0.3-0.1-0.3c0.1,0,0.3-0.1,0.3-0.1c0.1,0,0.4,0.6,0.2,0.7C21.7,56.9,21.1,56.9,21.2,56.9
+				L21.2,56.9z M14.2,45.3c-0.1,0,0-0.3,0.2-0.6c0.1-0.2,0.2-0.4,0.4-0.4c0.2,0,0.5,0,0.5,0c0.3,0-0.1,0.2-0.3,0.4
+				c-0.2,0.2-0.1,0.6-0.2,0.6C14.6,45.4,14.5,45.3,14.2,45.3L14.2,45.3z M11.8,44.6c-0.6,0.3-0.4,0.8-0.5,0.8c-0.2,0-0.4,0-0.6,0
+				c-0.1,0,0-0.3,0.1-0.4c0.1-0.1,0.3-0.5,0.7-0.5C11.6,44.4,11.8,44.5,11.8,44.6L11.8,44.6z M12.2,42.2c0.2-0.1,0.4-0.9,0.6-0.8
+				c0.2,0.1-0.1,1.1-0.3,1.2c-0.6,0.2-0.7,0.9-0.8,0.7c-0.1-0.2-0.2-1.2,0-1.3C11.9,42,11.8,42.3,12.2,42.2L12.2,42.2z M12.3,41.2
+				c0,0.2-0.1,0.3-0.1,0.4c0,0.2-0.2,0.1-0.2-0.3c0-0.1,0.1-0.4,0.2-0.5C12.3,40.9,12.3,41.1,12.3,41.2L12.3,41.2z M12.6,38.9
+				c-0.1,0.3-0.2,1.5-0.3,1.5c-0.1-0.1-0.1-1.3,0-1.5c0.1-0.3,0.4-0.6,0.5-0.7C12.9,38.1,12.7,38.6,12.6,38.9L12.6,38.9z M13.4,29.4
+				c0.1-0.2,0.1-0.8,0.4-0.8c0.3,0,0.2,2.1,0.1,2.3c-0.1,0.2,0.1,2.1-0.1,2c-0.3-0.2-0.5-2-0.5-2.2c0-0.2-0.1-0.6-0.1-0.8
+				C13.1,29.8,13.3,29.6,13.4,29.4L13.4,29.4z M13.1,26.9c0.2,0,0.2,0.3,0.2,0.4c0,0.2,0.2,0.4,0,0.4c-0.2,0-0.3-0.1-0.4-0.3
+				C12.8,27.3,12.9,26.9,13.1,26.9L13.1,26.9z M12.5,25.3c0.1-0.1,0.4,0.2,0.4,0.3c0,0.1,0.2,0.4,0.1,0.5c-0.1,0.1-0.3,0.2-0.5-0.1
+				C12.4,25.8,12.2,25.5,12.5,25.3L12.5,25.3z M11.9,23.9c0-0.3,0.2-0.3,0.3-0.3c0.1,0,0.2,0,0.2,0.3c0,0.4-0.2,0.7-0.3,0.7
+				C12.1,24.5,11.9,24.1,11.9,23.9L11.9,23.9z M12.2,21.9c0.1-0.1,0.4,0.4,0.3,0.6c-0.1,0.3-0.6-0.2-0.6-0.3
+				C11.9,22.1,12.1,22,12.2,21.9L12.2,21.9z M12.4,21.4c-0.2,0.4-0.2-0.1-0.3-0.2c0-0.2-0.1-0.6,0.1-0.7
+				C12.5,20.4,12.7,20.8,12.4,21.4L12.4,21.4z M12.2,19.9c-0.1-0.1,0-0.5,0.2-0.6c0.1-0.1,0.3,0.1,0.3,0.2
+				C12.6,19.7,12.4,20.1,12.2,19.9L12.2,19.9z M12.8,18.2c0,0.2,0,0.5-0.3,0.7c-0.2,0.1-0.2-0.1-0.2-0.4c0-0.2,0-0.6,0.2-0.6
+				C12.6,17.9,12.9,17.9,12.8,18.2L12.8,18.2z M13.4,21.4c0.3-0.2,0.4,0.4,0.3,0.7c-0.1,0.2-0.5,0.6-0.7,0.9
+				c-0.1,0.3-0.3-0.4-0.2-0.7C13,22,13.2,21.6,13.4,21.4L13.4,21.4z M13.4,16.8c-0.1,0.2-0.2,0.6-0.4,0.5c-0.1,0-0.3-0.6,0.1-0.9
+				C13.2,16.3,13.4,16.7,13.4,16.8L13.4,16.8z M13.5,20.5c-0.2,0.2-0.3,0.7-0.5,0.5c0,0-0.2-0.3,0-0.8c0.1-0.5,0.4-0.7,0.6-0.7
+				C13.7,19.6,13.6,20.3,13.5,20.5L13.5,20.5z M13.7,17.7c0.2,0,0.5,0.3,0.3,0.5c-0.2,0.3-0.8,0.5-0.8,0.7c0.1,0.2-0.5-0.2-0.2-0.6
+				C13.5,17.8,13.6,17.7,13.7,17.7L13.7,17.7z M17.8,14.4c0.1,0,0,0.5,0,0.6c0.1,0.1,0.2-0.3,0.2-0.3s0.2-0.4,0.3-0.4
+				c0.1,0,0.1,0.1,0,0.3c-0.1,0.1-0.4,0.5-0.4,0.7c0,0.2,0.2,0.6,0,0.7c-0.3,0.2-0.4,0.1-0.8-0.1c-0.4-0.2-0.3-0.7-0.4-0.9
+				c-0.1-0.2-0.1-0.2-0.4-0.2c-0.2,0-0.2-0.5-0.1-0.7c0-0.2,0.2-0.2,0.2-0.2c0.2,0,0.3,0.2,0.3,0.4c0,0.3,0.2,0,0.3-0.2
+				c0.2-0.2,0.1,0.7,0.2,0.7C17.4,14.8,17.6,14.4,17.8,14.4L17.8,14.4z M25.8,16.6c-0.3,0-0.3-0.2-0.4-0.5c-0.1-0.3,0-0.6,0.1-0.6
+				c0.2,0,0.2,0.4,0.3,0.5C26,16.2,26.1,16.6,25.8,16.6L25.8,16.6z M26.3,18.2c-0.4,0-0.3-0.2-0.4-0.4c-0.1-0.2-0.4-0.2-0.4-0.5
+				c0-0.2,0-0.3,0.1-0.3c0.2-0.1,0.3,0,0.5,0.1c0.2,0.1,0.6,0.4,0.6,0.6C26.7,17.8,26.7,18.2,26.3,18.2L26.3,18.2z M25.7,22.4
+				c0.1-0.1,0.2-0.1,0.1-0.3c-0.1-0.2-0.7-0.3-0.8-0.7C25,21.2,25.1,21,25.4,21c0.2,0,0.3,0.1,0.6,0.3c0.1,0.1,0.4,0.4,0.1,0.8
+				C25.9,22.5,25.6,22.5,25.7,22.4L25.7,22.4z M25.6,24.2c-0.1-0.3-0.3-0.5-0.5-0.7c-0.2-0.2-0.3-0.1-0.3-0.2
+				c-0.1-0.1,0.2-0.7,0.4-0.7c0,0,0.1,0,0.2,0.2c0.1,0.1,0,0.4,0,0.5c0,0.1,0.2,0.1,0.4,0.3C26,23.6,26,23.9,26,24
+				C25.9,24.2,25.7,24.5,25.6,24.2L25.6,24.2z M25.3,25.3c0-0.2-0.3,0.1-0.5-0.2c-0.1-0.1-0.1-0.4,0.2-0.5c0.3-0.1,0.8,0.3,0.9,0.4
+				c0.1,0.1-0.1,0.5-0.2,0.5C25.5,25.7,25.3,25.7,25.3,25.3L25.3,25.3z M24.9,27.6c-0.3,0.1-0.1,0-0.1,0s0.2-0.2,0.2-0.5
+				c0-0.3-0.1-0.4-0.2-0.6c-0.1-0.2-0.1-0.4,0.1-0.5c0.4-0.1,0.5,0.4,0.5,0.6C25.3,26.9,25.3,27.5,24.9,27.6L24.9,27.6z M17.6,36.5
+				c-0.2,0.2-0.2-0.9-0.2-1.1c0-0.8-0.2-2.7-0.2-3c0-0.4-0.3-1.6,0-2c0.1-0.2,0-1,0.7-1c0.2,0,0.5,0.5,0.7,0.6
+				c0.2,0.1-0.2,0.8-0.2,1c0,0.1-0.1,0.2-0.1,0.4c0,0.2,0.1,0.4,0.1,0.6C18.5,32.4,18.5,35.7,17.6,36.5L17.6,36.5z M18.1,40.4
+				c0,0.3,0.2,1.7,0.1,2c-0.1,0.3-0.5-1.8-0.5-2.5c0-0.5,0-1.5,0.2-1.6v0.9C18,39.6,18.1,40.3,18.1,40.4L18.1,40.4z M13.8,26.9
+				c0-0.1,0-0.6,0.3-0.5c0.1,0,0.1,0.2,0.2,0.3c0.1,0.2,0,0.3-0.1,0.5c-0.1,0.1,0,0.5-0.1,0.6c-0.2,0.1-0.4-0.3-0.4-0.6
+				C13.6,26.9,13.8,27,13.8,26.9L13.8,26.9z M14.1,16.6c0,0.2-0.6-0.4-0.4-0.7c0.3-0.3,0.4-0.6,0.6-0.8c0.1-0.1,0.4,0.1,0.4,0.5
+				C14.8,16,14.2,16.3,14.1,16.6L14.1,16.6z M16,16.7c-0.2,0.7-0.6,0.5-1.3,0.9c-0.3,0.1-0.2-0.3-0.2-0.5c0.1-0.3,0.5-0.5,0.8-0.6
+				c0.3-0.1,0.3-0.4,0.5-0.4C15.9,16.1,16.1,16.5,16,16.7L16,16.7z M16.5,19.2c0.3-0.1,0.7,0.1,0.6,0.4c-0.1,0.3-0.6,0.5-0.6,0.8
+				c-0.1,0.2-0.1,0.5,0.1,0.7c0.2,0.1-0.3,0.1-0.5-0.2c-0.2-0.2-0.3-0.6-0.2-0.9C15.9,19.7,16.3,19.3,16.5,19.2L16.5,19.2z M17,18.2
+				c-0.3,0.3-0.2,0.4-0.3,0.6c-0.1,0.2-0.5,0.2-0.6-0.2c-0.1-0.3,0.4-1.5,1.1-1.8c0.2-0.1,0.7-0.1,0.8,0.1
+				C18.2,17.4,17.3,17.9,17,18.2L17,18.2z M18.4,17.3c0.3-0.3,0.4-0.3,0.6-0.4c0.1,0,0.4,0,0.6,0c0.2,0.1,0.2,0.9-0.3,1.3
+				c-0.4,0.4-0.9,0.3-1.1,0.7c-0.2,0.3-0.1,0.6,0,0.7c0.1,0.1-0.7,0-0.7-0.5c-0.1-0.3,0.1-0.6,0.3-0.8c0.1-0.1,0-0.2,0.1-0.4
+				C18.1,17.8,18.3,17.4,18.4,17.3L18.4,17.3z M18.7,14.6c0.1,0,0.1,0.4,0.1,0.5c0,0.1,0.2-0.4,0.3-0.4c0.2,0,0.1,0.3,0.1,0.5
+				c0,0.1,0.5-0.6,0.7-0.6c0.1,0-0.3,0.6-0.3,0.7c-0.1,0.2,0,0.4,0.1,0.4c0.3,0.2,0.4,0.1,0.4,0.2c0,0.2-0.1,0.1-0.3,0.2
+				c-0.1,0.1-0.2,0.2-0.4,0.2c-0.2,0-0.4-0.1-0.6-0.2c-0.2-0.1-0.4-0.2-0.4-0.7C18.4,15,18.4,14.6,18.7,14.6L18.7,14.6z M24.6,18.5
+				c0,0.2-0.3,0.6-0.6,0.5c-0.2-0.1,0-0.2-0.1-0.5c-0.1-0.3-0.5-0.3-0.7-0.4c-0.2-0.1-0.7-0.3-0.8-0.8c-0.2-0.5,0.3-0.4,0.3-0.4
+				c0.4,0,0.4,0.2,0.5,0.3c0,0.1,0.2,0.3,0.7,0.5C24.3,17.9,24.6,18.2,24.6,18.5L24.6,18.5z M25.1,18.8c-0.4,0.1-0.2-0.2-0.1-0.3
+				c0.1-0.1,0.3-0.4,0-0.6c-0.3-0.2-0.5-0.4-0.3-0.5c0.2-0.1,0.5-0.1,0.9,0.3C26.1,18.3,25.5,18.7,25.1,18.8L25.1,18.8z M23.9,21
+				c-0.1,0,0.2-0.3,0.2-0.5c0-0.2-0.5-0.5-0.9-0.7c-0.2-0.1-0.1-0.3-0.1-0.4c0.1-0.1-0.1-0.7,0.1-0.6c0.2,0,0.5,0.4,0.6,0.5
+				c0.1,0.1,0.4,0.3,0.7,0.6c0.3,0.3,0.4,0.5,0.3,0.8C24.7,21,24.2,21,23.9,21L23.9,21z M23.1,19.9c0.4,0.2,0.3,0.5,0.7,1
+				c0.3,0.6,0.7,0.4,0.8,0.7c0.1,0.2,0.1,0.3,0,0.6c-0.1,0.3-0.4,0.5-0.6,0.5c-0.1,0-0.1-0.4-0.2-0.7c0-0.3-0.6-0.3-0.7-0.5
+				C23,21.4,22.9,19.8,23.1,19.9L23.1,19.9z M23.8,24.6c-0.1,0-0.2-0.1-0.1-0.2c0.1-0.1,0.2-0.4,0-0.6c-0.1-0.2-0.6-0.7-0.8-0.7
+				c-0.2-0.1-0.2-0.3,0-0.5c0.1-0.1,0.2,0,0.1-0.1c-0.1-0.1-0.3-0.4-0.4-0.6c-0.1-0.2,0-0.3,0-0.3c0.1-0.1,0.4,0.2,0.4,0.3
+				c0.1,0,0.4,0.4,0.5,0.5c0.1,0.1-0.1,0.4,0.1,0.4c0.2,0,0.2,0.3,0.6,0.3c0.4,0.1,0.4,0.6,0.3,0.8C24.5,24.2,24.2,24.6,23.8,24.6
+				L23.8,24.6z M24.2,27.3c0-0.1,0-0.2,0.1-0.2c0.2,0,0.3,0.4,0.3,0.4c0,0.1-0.1,0.2-0.3,0.1C24.2,27.6,24.2,27.5,24.2,27.3
+				L24.2,27.3z M21.7,23.1c-0.3-0.2,0.1-0.4,0.1-0.6c0-0.2-0.1-0.6-0.4-0.6c-0.3,0-0.6,0-0.8-0.2c-0.3-0.2-0.4-0.4-0.5-0.7
+				c0-0.4,0.2-0.5,0.4-0.6c0.1,0,0,0.3,0.4,0.4c0.4,0.1,0.4,0.2,0.6,0.4c0.3,0.3,0.3,0.6,0.6,0.7c0.5,0.1,0.8,0.6,0.5,0.9
+				C22.3,23,21.9,23.3,21.7,23.1L21.7,23.1z M20.2,18.7c0.1-0.1,0-0.5,0.2-0.5c0.2,0,0.9,0.6,1.1,0.8c0.2,0.2,0.3,0.9,0.7,1
+				c0.6,0.2,0.6,0.5,0.6,0.6c0,0.2-0.3,0.7-0.6,0.7c-0.3,0.1-0.4,0-0.4-0.2c-0.1-0.2,0.1-0.3,0-0.6c-0.1-0.3-1.2-0.8-1.5-0.9
+				c-0.3-0.1-0.5-0.7-0.4-0.8C19.9,18.8,20,18.8,20.2,18.7L20.2,18.7z M20.2,15.6c-0.1,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2
+				c0.1,0,0.1,0.1,0.1,0.2C20.3,15.5,20.2,15.6,20.2,15.6L20.2,15.6z M22.2,19c-0.1-0.4-0.6-0.4-0.8-0.6c-0.3-0.2-0.6-0.6-0.7-1
+				c0-0.3-0.7-0.5,0.3-0.5c0.6,0,0.6,0.3,0.7,0.4c0.1,0.1,0.4,0.7,0.7,0.9c0.3,0.2,0.6,0.6,0.4,1.2c-0.1,0.3-0.4,0.4-0.6,0.2
+				C21.8,19.5,22.3,19.6,22.2,19L22.2,19z M20.4,14.6c0.2,0,0.6,0.1,0.7,0.2c0.1,0.2,0.3,0.4,0.3,0.4s0.1-0.7,0.2-0.7
+				c0.2,0,0.4,0.7,0.4,1c0,0.3,0,0.5-0.3,0.6c-0.3,0.1-0.8,0.3-1.3,0c-0.2-0.1,0.2-0.3,0.4-0.7C21,15,20,14.6,20.4,14.6L20.4,14.6z
+				 M17.7,21.5c-0.2-0.4-0.2-0.8,0-1c0.2-0.3,0.4-0.1,0.7-0.4c0.3-0.2,0.2-0.5,0.3-0.7c0.1-0.2,0.2-0.3,0.4-0.3
+				c0.4-0.1,0.7,0,0.7,0.5c0,0.4-0.2,0.5-0.3,0.6c-0.1,0.1-0.2,0.1-0.5,0.2c-0.2,0.1-0.7,0.6-0.8,0.8c-0.1,0.2,0.3,0.5,0.2,0.6
+				C18.3,21.9,17.9,21.9,17.7,21.5L17.7,21.5z M16.1,26.7c0.1-0.3,0.5-0.4,0.7-0.7c0.2-0.3-0.2-0.6,0.2-0.6c0.2,0,0.2-0.1,0.3-0.1
+				c0.1,0,0.3,0.2,0.1,0.4c-0.1,0.1,0,0.4,0,0.5c-0.1,0.2-0.7,0.3-0.7,0.5c0,0.2-0.2,0.3-0.1,0.5c0.1,0.2,0.1,0.5,0,0.4
+				C16.3,27.5,16,27.1,16.1,26.7L16.1,26.7z M16.2,24.7c0.7-0.7,0.8-1.3,1-1.2c0.3,0.2,0.3,0.7,0.3,1c0,0.3-1.1,0.7-1.2,0.8
+				C16.2,25.6,15.9,25,16.2,24.7L16.2,24.7z M15.9,22.6c0.2-0.2-0.1-0.5,0.4-0.7c0.3-0.1,0.5-0.4,0.6-0.6c0.1-0.1,0.5,0.7,0.4,1
+				c-0.1,0.4-0.6,0.5-0.9,0.8c-0.2,0.2,0,0.4,0,0.6c0.1,0.2-0.2,0.3-0.5,0C15.8,23.3,15.6,22.9,15.9,22.6L15.9,22.6z M14.8,19.6
+				c-0.1,0.1-0.3,0.1-0.2,0.6c0,0.2-0.7-0.1-0.3-1c0.4-0.9,1-1,1-1c0.2,0,0.4,0.4,0.5,0.6C15.9,19.1,15.1,19.4,14.8,19.6L14.8,19.6z
+				 M14.8,22.5c0.1,0.2-0.6,0.3-0.6-0.6c0-0.2,0.2-0.7,0.4-0.7c0.4-0.1,0.5-0.6,0.6-0.5c0.2,0,0.4,0.4,0.3,0.6
+				c-0.3,0.7-0.7,0.6-0.7,0.8C14.7,22.2,14.7,22.4,14.8,22.5L14.8,22.5z M15,24.9c-0.3-0.1-0.5,0-0.5-0.2c0-0.3-0.1-0.7,0.1-1.2
+				c0.2-0.5,0.4-0.4,0.4-0.4s0.4,0,0.2,0.7c-0.1,0.3-0.5,0.5-0.4,0.7c0.1,0.2,0.5,0,0.6,0.2c0.1,0.3,0,0.8-0.1,1
+				c-0.2,0.4-0.6,0.6-0.6,0.3c0-0.3-0.2-0.5,0-0.6C14.9,25.3,15.3,25,15,24.9L15,24.9z M15.1,28c-0.2,0-0.5-0.5-0.3-0.9
+				c0.1-0.3,0.3-0.2,0.4-0.3c0.1-0.1,0-0.2,0.1-0.3c0.2-0.2,0.3,0,0.3,0.1c-0.1,0.4-0.4,0.4-0.5,1C15.1,27.8,15.4,28,15.1,28
+				L15.1,28z M17,28.6c0,0.2,0.4,0.4,0,0.4c-0.4,0-0.6-0.3-0.6-0.7c0-0.2,0.4-0.6,0.5-0.8c0.1-0.1,0-0.2,0.1-0.3
+				c0.1-0.1,0.5-0.5,0.6-0.5c0.2,0,0.2,0.8,0,0.9C17.2,27.8,17,28.4,17,28.6L17,28.6z M22.3,24.6c-0.1,0.1-0.1,0.2-0.4,0.2
+				c-0.3,0.1,0-0.3,0-0.4c0-0.2-0.4-0.6-0.8-0.8c-0.2-0.1-0.4,0.1-0.8-0.4c-0.2-0.2-0.1-0.6-0.4-0.7c-0.2-0.1,0.1-0.3-0.4-0.6
+				c0,0,0,0,0,0c0,0.1,0,0.2,0,0.2c0.1,0.5-0.2,0.6-0.4,0.7c-0.2,0.2-0.5,0.4-0.5,0.9c0,0.3-0.3,0.5-0.6,0.1c-0.3-0.3,0.1-1,0.1-1.3
+				c0-0.3,0.1-0.3,0.4-0.4c0.2-0.1,0.3-0.4,0.2-0.6c0-0.1-0.1-0.2-0.1-0.3c0.1-0.1,0.7-0.3,0.9-0.1c0.1-0.1,0.4-0.3,0.4-0.2
+				c0,0.1,0,0.4,0.1,0.6c0,0.2,0.3,0.5,0.5,0.7c0.2,0.2,0.5,0.1,0.8,0.4c0.2,0.1,0.1,0.4,0.2,0.5c0.3,0.3,0.5,0.3,0.8,0.4
+				C22.6,23.8,22.5,24.4,22.3,24.6L22.3,24.6z M21.1,30.5c0-0.4,0.9-0.6,1-0.5c0.2,0.1,0.1,0.8,0.1,1c0,0.8,0.3,0.8,0.3,1
+				c0,0.3-0.3,3.5-0.5,3.7c-0.3,0.3-0.2-0.2-0.4-0.9c-0.2-0.7-0.4-2-0.4-2.6C21.2,31.4,21.1,30.9,21.1,30.5L21.1,30.5z M19.6,29.5
+				c0.2-0.1,0-0.4,0.2-0.5c0.1-0.1,0.2-0.1,0.3-0.1c0.2,0.1,0.2,0.2,0.2,0.4c-0.1,0.4-0.2,0.7-0.5,0.8
+				C19.5,30.2,19.4,29.5,19.6,29.5L19.6,29.5z M19.4,27.8c0.2-0.1,0.4-0.8,0.5-0.7c0.2,0.5-0.1,0.6-0.2,0.9
+				c-0.1,0.3-0.8,0.6-0.8,0.9c0,0.3,0,0.4-0.1,0.5c-0.1,0.1-0.5,0.1-0.5-0.6C18.3,27.9,19.2,27.9,19.4,27.8L19.4,27.8z M19.7,24.4
+				c-0.1,0.4-0.8,0.9-1,1c-0.1,0.1-0.1,0.4-0.2,0.5c-0.1,0.1-0.4,0-0.4-0.4c-0.1-0.4,0.2-0.8,0.6-0.9c0.3-0.1,0.3-0.2,0.3-0.4
+				c0-0.2,0.2-0.4,0.4-0.4C19.6,23.7,19.8,24,19.7,24.4L19.7,24.4z M21.7,29c0.1,0,0.2,0.3,0.1,0.4c-0.1,0.4-0.5,0.3-0.5,0.3
+				c0-0.1,0.1,0,0.1-0.3C21.4,29,21.6,28.9,21.7,29L21.7,29z M22.3,25.8c0.2,0.2,0.1,0.6,0,0.7c-0.2,0.1-0.3-0.2-0.3-0.3
+				c0-0.1-0.2-0.3-0.2-0.4C21.8,25.5,22.2,25.6,22.3,25.8L22.3,25.8z M22.1,27.3c0.2,0.1,0.3,0.5,0.3,0.7c0,0.3,0,0.3-0.5,0.6
+				c-0.1,0-0.3,0.1-0.2-0.2c0.1-0.2,0-0.7,0-1C21.5,27,22,27.2,22.1,27.3L22.1,27.3z M20.1,25.3c0.1,0,0.1,0,0.1,0.1v0
+				c0,0,1.1,0.7,1.3,0.9c0.2,0.1,0.1,0.8-0.1,0.9c-0.1,0.1-0.7-0.3-0.7-0.5c0-0.2,0.1-0.2,0.1-0.3c0-0.1-0.6-0.4-0.6-0.6
+				c0.1-0.2-0.1-0.1-0.1-0.1v0c0,0.1,0,0.3-0.1,0.3c0,0.1-0.1,0.1-0.4,0.1c-0.4,0.1-0.6,0.7-0.6,1c0,0.3,0.1,0.6-0.1,0.5
+				c-0.2-0.1-0.6-0.5-0.6-0.8c0-0.2,0.4-0.2,0.6-0.5c0.1-0.3,0-0.7,0.3-0.7C19.7,25.6,19.9,25.3,20.1,25.3L20.1,25.3z M20.1,24.1
+				c-0.3-0.2-0.3-0.5-0.2-0.5c0.4,0.3,1.3,0.8,1.5,1c0.2,0.2,0.1,0.6,0,0.7c-0.4,0.3-1.1-0.5-1.2-0.7C20.1,24.4,20.3,24.2,20.1,24.1
+				L20.1,24.1z M20.9,30.4c-0.1,0.1-0.3,0.1-0.3,0.1c0,0,0.1-0.7,0.3-0.6C20.9,29.9,21.3,30,20.9,30.4L20.9,30.4z M20.4,28.3
+				c0-0.5-0.2-0.9-0.1-0.9c0.1-0.1,0.4,0.1,0.5,0.2c0.2,0.1,0.4,0.2,0.5,0.5c0.1,0.4-0.3,0.3-0.3,0.4c0,0,0.2,0.1,0.4,0.2
+				c0.1,0.1,0.1,0.3-0.2,0.4C20.7,29.1,20.4,28.5,20.4,28.3L20.4,28.3z M22.9,27c-0.1-0.2-0.1-1,0-1.1c0.1-0.2-0.2-0.3-0.3-0.5
+				c-0.1-0.2,0.2-0.2,0.5,0c0.1,0.1,0.3,0.3,0.3,0.5c0,0.3,0,0.5,0,0.5c0.1,0.1,0.5,0.8,0.5,1s-0.2,0.5-0.4,0.2
+				C23.2,27.5,23.1,27.3,22.9,27L22.9,27z M22.7,27.6c0.1-0.2,0.3,0,0.3,0.1c0,0.1,0.1,0.4,0.1,0.4C23,28.1,22.6,27.9,22.7,27.6
+				L22.7,27.6z M22.9,28.6c0-0.1,0.3,0,0.3,0c0.1,0.1,0.2,0.3-0.1,0.4C23,29.1,22.8,28.8,22.9,28.6L22.9,28.6z M22.9,24.7
+				c-0.1-0.1-0.1-1.1,0-1.2c0.2-0.2,0.6,1,1,1.3c0.4,0.3,0.5,0.5,0.4,0.7c-0.2,0.4-0.5,0.5-0.3,0C24,25.2,23,24.8,22.9,24.7
+				L22.9,24.7z M24.9,19.6c-0.1-0.2,0-0.6,0.5-0.5c0.3,0,0.5,0.2,0.5,0.3c0.1,0.4,0,0.7-0.1,0.8c0,0.2-0.3,0.7-0.3,0.1
+				C25.6,19.8,25.2,20.2,24.9,19.6L24.9,19.6z M24,16.6c-0.1-0.2-0.1-0.5,0.2-0.5c0.4,0,0.5,0.4,0.4,0.6c-0.1,0.2-0.2,0.5-0.6,0.4
+				C23.6,17.1,24.2,17,24,16.6L24,16.6z M23.1,14.7c0.2-0.2,0-1,0.1-1c0.1,0,0.3,0.2,0.4,0.5c0.2,0.7-0.3,0-0.2,0.3
+				c0.3,0.6,0.1,0.9,0,1c-0.3,0.3-0.7,0.5-1.1,0.5c-0.3,0-0.2-0.1-0.1-0.2c0.1-0.1,0.2-0.4,0.1-0.6c0-0.2-0.3-0.5-0.2-0.7
+				c0-0.2,0.5,0.4,0.6,0.4c0.1,0-0.2-0.7,0-0.7C22.8,14.2,23,14.9,23.1,14.7L23.1,14.7z M23.7,10.2c0-0.2,0.2-0.2,0.3-0.3
+				c0.1-0.2,0-0.4,0.2-0.5c0.1-0.1,0.2-0.1,0.3,0.1c0.1,0.2-0.1,0.5,0.1,0.7c0.1,0.2,0.1,0.4,0,0.6c-0.1,0.3-0.3,0.3-0.7,0.4
+				c-0.2,0-0.4,0.2-0.6,0.6c-0.2,0.4-0.4,0.1-0.4-0.1c0-0.2-0.1-0.5,0-0.6c0.1-0.1,0.3-0.1,0.7-0.5C23.8,10.4,23.6,10.4,23.7,10.2
+				L23.7,10.2z M19,11.6c0.1,0.1,0.2,0.4,0.9,0.6c0.2,0.1,0.9,0.1,1.2-0.2c0.4-0.3,0.9-1.4,1.2-1.5c0.3-0.1,0.3,1.6,0.3,1.8
+				c0,0.2-0.6,0.8-1,0.8c-0.2,0-0.7,0-0.6-0.1c0.1-0.1,0.4-0.2,0.4-0.3c0-0.1-0.2,0-0.4,0c-0.2,0-0.5-0.1-0.4,0
+				c0,0.1,0.2,0.3,0.1,0.4c-0.1,0.1-0.9,0.2-1,0c-0.1-0.1,0.2-0.4,0.1-0.5c-0.1-0.1-0.2,0.2-0.4,0.2c-0.4,0.1-0.7,0-0.6,0.1
+				c0.1,0.1,0.3,0.1,0.4,0.1c0.2,0,0.3,0.1-0.1,0.2c-0.3,0-0.8,0.1-1.1-0.2c-0.2-0.2-0.4-0.6-0.4-1c0.1-0.4,0.1-1.4,0.3-1.4
+				C18.4,10.6,18.7,11.4,19,11.6L19,11.6z M20.3,11.5c0.1,0.1,0.2,0.1,0.4,0c0.2-0.1,0.2-0.2,0.5-0.5c0.2-0.3,0.5-0.2,0.4,0
+				c-0.1,0.2-0.4,0.8-0.8,0.8c-0.1,0-0.4,0-0.5,0.1c0,0.1-0.4,0.2-0.7-0.1c-0.3-0.3-0.7-0.7-0.6-1.1c0.1-0.2,0.5-0.5,0.8-0.5
+				c0.2,0,0.2-0.3,0.3-0.2c0.3,0.3,0.6,0.4,0.9,0.4c0.4,0,0.1,0.7-0.4,0.7C20.1,11.3,20.2,11.4,20.3,11.5L20.3,11.5z M13.2,24.6
+				c-0.2,0.1-0.3-0.4-0.2-0.7c0.1-0.3,0.4-0.6,0.6-0.7c0.1,0,0.5,0,0.4,0.3C13.9,23.7,13.5,24.4,13.2,24.6L13.2,24.6z M14,24.8
+				c0.1-0.1,0.4,0.4,0.2,0.6c-0.1,0.2,0.1,0.1-0.2,0.5c-0.3,0.4-0.6,0.2-0.7-0.1C13.3,25.6,13.8,24.9,14,24.8L14,24.8z M12.7,44.4
+				c0.3,0,0.4,0.1,0.4,0.2c0,0.1-0.3,0.3-0.4,0.4c-0.1,0.1,0,0.4-0.1,0.5c-0.1,0.1-0.3,0-0.6,0.1c-0.3,0-0.1-0.3,0-0.6
+				C12,44.4,12.4,44.4,12.7,44.4L12.7,44.4z M12.7,43.6c0,0.1-0.1,0.3-0.2,0.2c-0.1-0.1,0-0.5,0.1-0.5
+				C12.8,43.3,12.7,43.5,12.7,43.6L12.7,43.6z M13.7,42c-0.1,0.3-0.6,0.8-0.6,1c0,0.1,0,0.2,0,0.4c0,0.5-0.2,0.8-0.2,0.8
+				c-0.1-0.1,0.1-0.4,0-0.7c-0.1-0.3-0.5-0.3-0.6-0.2c-0.2,0.2,0,1-0.1,0.9c-0.1,0-0.3-0.5-0.2-0.8c0.1-0.3,0.4-0.5,0.8-0.6
+				c0.3,0,0.4-0.2,0.4-0.5c0-0.2,0.1-0.8,0.5-0.9C13.9,41.4,13.8,41.7,13.7,42L13.7,42z M14,43.8c-0.1,0-0.2-0.1-0.2-0.2
+				c0-0.1,0-0.2,0.1-0.2c0.1,0,0.1,0,0.2,0.1C14.1,43.6,14,43.7,14,43.8L14,43.8z M13.7,43.1c-0.1,0.1-0.2,0.5,0,0.7
+				c0.1,0.1,0.2,0.3,0.1,0.4c-0.1,0.1-0.4,0.1-0.5-0.1c-0.1-0.1-0.1-0.8,0.1-1.1c0.2-0.2,0.4-0.2,0.5-0.2c0.1,0,0.2,0.1,0.4,0.2
+				c0.3,0.3,0.1,0.6,0.1,0.6c-0.1,0,0.1-0.3-0.3-0.6C14,43,13.8,42.9,13.7,43.1L13.7,43.1z M13.8,45.2c0.1,0.3-0.1,0.3-0.4,0.3
+				c-0.3,0-0.4,0-0.4-0.3c0-0.1,0.2-0.4,0.3-0.6c0.1-0.2,0.2-0.3,0.5-0.3c0.2,0,0.5-0.1,0.5,0c0,0.1-0.1,0.2-0.3,0.3
+				C13.9,44.8,13.8,45.1,13.8,45.2L13.8,45.2z M15,42.3c0,0.1,0,0.3-0.1,0.5c0,0.2,0,0.4-0.1,0.6c-0.1,0.2-0.2,0.4-0.1,0.5
+				c0.1,0.4-0.5,0.3-0.6,0.1c0-0.2,0.1-0.4,0.3-0.4c0,0,0.2-0.1,0.1-0.5c0-0.1,0.1-0.3,0.2-0.5c0-0.2,0-0.3-0.1-0.3
+				c-0.2,0-0.6,0.1-0.5-0.1c0.1-0.2,0.1-0.5,0.1-0.6c0-0.1,0.2-0.2,0.3,0c0.1,0.1,0.4,0,0.5-0.2c0.2-0.3,0.5-2.2,0.3-2
+				c-0.1,0.1-0.1,0.8-0.2,1.1c0,0.1-0.1,0.3-0.2,0.4c-0.3,0.4-0.5,0.4-0.6,0.3c-0.2-0.1,0.1-0.8,0.2-0.8c0.3,0,0.2,0.4,0.3,0.4
+				c0.2,0,0.2-0.6,0.1-0.8c0,0,0-0.3,0-0.4c0-0.6,0.1-2,0.1-2.1c-0.1-0.1,0.1-2.8-0.1-2.9c-0.1-0.2-0.5-2.6-0.5-3
+				c0-0.3-0.1-0.6-0.2-0.9c-0.1-0.7-0.1-1.4,0.3-1.6c0.1-0.1,1.1-0.2,1.5,0.2c0.3,0.2,0.9,0.8,0.9,1c0.1,0.3,0.2,1.1,0,1.7
+				c0,0.1-0.2,0.3-0.2,0.6c0,0.6-0.1,1.5,0,2.3c0,0.2,0,0.4,0.1,0.5c0,0.3,0.3,1.3,0.5,1.5c0.3,0.4,0.3,1,0.2,1.1
+				c-0.1,0.1-0.2-0.5-0.3-0.6c-0.1-0.1-0.2-0.1-0.2,0c0,0.2,0.3,0.5,0.3,1.1c0,0.3,0.1,0.5,0.2,0.8c0.1,0.4,0,1.1-0.3,1.1
+				c-0.1,0-0.2-0.6-0.3-0.8c0-0.2-0.1-0.2-0.1-0.4c0-0.1-0.1-0.3-0.2-0.3c-0.1,0,0.3,1.2,0,1.4c-0.1,0.1-0.3,0.4-0.4,0.3
+				c-0.1-0.2-0.2-1.4-0.3-1.6c-0.2-0.3,0.1,1.5-0.2,1.8C15.7,41.1,15,42,15,42.3L15,42.3z M17.1,42.9c-0.1,0,0,0.1,0,0.2
+				c0,0.2,0,0.9-0.1,0.9c-0.2,0.1-0.1-0.3,0-0.5c0.1-0.3-0.1-0.5-0.2-0.6c-0.1-0.1,0-0.5-0.1-0.7c-0.1-0.2-0.2-0.4-0.2-0.4
+				c0,0-0.2,0.4-0.3,0.5c-0.2,0.1-0.3,0.2-0.3,0.3c0,0.1,0,0.2,0.1,0.2c0.1,0,0.4,0,0.4,0.1c0.2,0.2,0.2,0.4,0.2,0.5
+				c0,0.3-0.2,0.5-0.3,0.5c-0.2,0.1,0-0.6,0-0.6c0-0.1-0.1-0.2-0.2-0.3c-0.1-0.1-0.2,0-0.4,0.1c-0.1,0-0.2,0.2-0.1,0.3
+				c0.1,0.2,0.1,0.5,0.1,0.5c-0.1,0.2-0.4,0.3-0.4-0.3c0-0.3,0.1-0.5,0.2-0.6c0.1,0,0-0.7,0.1-1.1c0.1-0.2,0.1-0.6,0.5-0.6
+				c0.1,0,0.3,0.2,0.4,0.2c0.1,0-0.1-0.5,0.1-0.6c0.1,0,0.2-0.4,0.3-0.5c0.1,0,0.2,0.2,0.2,0.3c0.1,0.1,0.1,0.9,0,0.9
+				c0,0.1,0,0.2,0.1,0.2c0.1,0,0.4-0.2,0.2,0.2c-0.1,0.1-0.1,0.2-0.2,0.3c0,0.1,0.1,0.2,0.1,0.2c0.1-0.1,0.2-0.3,0.3-0.3
+				c0.2-0.1,0.3,0,0.3,0.1c0,0.2,0,0.3-0.2,0.3c-0.2,0-0.4,0-0.4,0.1C17.3,42.8,17.2,43,17.1,42.9L17.1,42.9z M16.9,44.2
+				c0.1,0,0.4,0.1,0.2,0.3c-0.3,0.2-0.4,0.4-0.5,0.6c0,0.1-0.3,0.1-0.3-0.2C16.3,44.6,16.8,44.2,16.9,44.2L16.9,44.2z M15.7,43.3
+				c0.2,0,0.2,0.2,0.2,0.3c0,0.1,0,0.2-0.1,0.3c-0.1,0-0.1-0.1-0.1-0.3C15.7,43.5,15.7,43.3,15.7,43.3L15.7,43.3z M15.9,44.3
+				c0.2,0,0.7-0.1,0.6,0c-0.1,0.1-0.4,0.2-0.5,0.4c-0.1,0.1,0,0.4-0.1,0.4c-0.1,0.1-0.3,0.1-0.5,0C15.1,45.1,15.7,44.3,15.9,44.3
+				L15.9,44.3z M17.8,43.7c0,0.1-0.2,0.1-0.2,0c0-0.1-0.1-0.3,0.1-0.3C17.8,43.4,17.9,43.6,17.8,43.7L17.8,43.7z M18,43.3
+				c-0.1-0.1-0.4-0.3-0.6,0c-0.1,0.2,0,0.4,0,0.5c0,0.1,0.3,0.2,0.3,0.4c0,0.1-0.4,0-0.4-0.1c-0.1-0.1,0-0.3-0.1-0.3
+				c-0.1-0.3,0-0.6,0-0.7c0.1-0.2,0.3-0.2,0.4-0.2c0.2,0,0.4,0.2,0.4,0.2c0.1,0.2,0.1,0.4,0.1,0.5c0,0.1,0.1,0.3,0.1,0.4
+				c0,0.1-0.2,0.1-0.2,0.1c0,0-0.2,0-0.1-0.2c0-0.1,0.1-0.2,0.1-0.3C18.1,43.5,18.1,43.4,18,43.3L18,43.3z M21.3,42.8
+				c0.3,0.3,0.2,1.1-0.1,1.2c-0.3,0.1-1.8,0.1-2.3,0c-0.3,0,0-0.4-0.1-0.7c-0.1-0.1-0.4-0.5-0.3-0.6c0.1-0.1,0.3-0.6,0-0.9
+				c-0.1-0.1,0-1.1,0-1.2c0-0.2,0.1-0.8-0.1-1.1c-0.1-0.3-0.1-2.2,0.4-3.2c0.3-0.5-0.4-4.3,0-4.8c0.1-0.1,0-0.4,0.2-0.5
+				c0.2,0,0.3,0.3,0.5,0.1c0.3-0.2,0.5-0.2,0.6-0.1c0.2,0,0.3,0.3,0.4,0.3c0.1,0,0.3-0.2,0.4-0.1c0.1,0.1,0.1,3.6,0.1,3.7
+				c0,0.2,0.4,2.5,0.6,3c0.2,0.4,0,1,0,1s0,0.2,0,0.5c0,0.2,0,0.7-0.1,1c-0.1,0.2-0.3,0.7-0.5,1.1C20.9,41.9,21,42.5,21.3,42.8
+				L21.3,42.8z M26,43.7c0-0.1,0-0.2,0.1-0.2c0.1,0,0.1,0.2,0.1,0.3C26.1,43.8,26,43.8,26,43.7L26,43.7z M25.7,44.5
+				c0.2,0,0.4,0,0.5,0.1c0.2,0.1,0.6,0.7,0.6,0.7c0,0.2-0.4,0.2-0.5,0.2c-0.3,0,0-0.5-0.5-0.8C25.8,44.7,25.6,44.5,25.7,44.5
+				L25.7,44.5z M22.9,44.5c0.2,0,0.4,0,0.5,0.2c0.4,0.3,0.3,0.6,0.2,0.4c-0.2-0.2-0.5-0.4-0.8-0.4C22.7,44.7,22.8,44.5,22.9,44.5
+				L22.9,44.5z M22.7,43.3c0,0,0.1,0.2,0.1,0.4c0,0.2,0,0.2-0.1,0C22.7,43.5,22.6,43.3,22.7,43.3L22.7,43.3z M24.4,43.8
+				c0,0-0.1-0.1-0.2-0.2c0-0.1,0-0.3,0.1-0.3c0.1,0,0.1,0.1,0.1,0.2C24.5,43.6,24.5,43.8,24.4,43.8L24.4,43.8z M22.6,43.8
+				c0.1,0.3-0.1,0.4-0.3,0.3c-0.1-0.1-0.2-1,0.1-1.2c0.2-0.2,0.1-0.4-0.1-0.4c-0.1,0-0.1-0.6,0.1-0.6c0.2,0,0.4,0.8,0.4,0.5
+				c0-0.2-0.1-0.6-0.2-0.9c-0.1-0.3-0.1-0.8,0-0.7c0.1,0,0.1-0.6,0-0.6c-0.2-0.1-0.1-1.1,0-1.2c0.1-0.1,0.1-0.8,0.2-0.8
+				c0.1,0,0.2,0.9,0.2,1.1c0,0.1,0.1,0.2,0.1,0.4c0,0.1-0.1,0.5,0,0.7c0.2,0.3,0,0.6,0,1c0,0.4-0.3,0.3-0.1,0.9
+				c0.1,0.1,0.1,0.4,0.1,0.5c0.1,0.1,0.2-0.1,0.2-0.2c0-0.1,0.1-0.4,0.3-0.6c0.1-0.1,0.3,0,0.3,0.1c0.1,0.1,0.2,0.3,0.1,0.5
+				c-0.1,0.1-0.2,0.2-0.3,0.4c-0.1,0.2,0.3,0,0.6,0.1c0.2,0,0.3,0.1,0.4,0.3c0,0.1,0.1,0.3,0,0.4c0,0.2-0.1,0.5-0.2,0.6
+				c-0.1,0.1-0.3,0-0.3-0.1c0-0.2,0.2-0.4,0.2-0.6c0-0.1,0-0.2-0.1-0.3c-0.2-0.1-0.4,0-0.5,0.1c-0.1,0.1-0.1,0.3,0,0.4
+				c0.1,0.1,0.2,0.2,0.2,0.3c0.1,0.3-0.1,0.3-0.4,0.2c-0.1,0-0.2-0.4-0.2-0.8c0-0.4-0.2-0.2-0.4-0.5c-0.1-0.2-0.3,0-0.1,0.1
+				c0.1,0.1,0.2,0.4,0.2,0.6c0,0.2-0.1,0.4-0.3,0.4c-0.1,0,0-0.3-0.1-0.5c0-0.3-0.3-0.4-0.4-0.3C22.4,43.4,22.6,43.7,22.6,43.8
+				L22.6,43.8z M24,44.9c-0.2-0.2-0.5-0.4-0.4-0.5c0.2,0,0.3,0,0.5,0.1c0.1,0.1,0.4,0.3,0.5,0.5c0.1,0.1,0.3,0.6,0.1,0.6
+				c-0.3,0-0.6,0-0.6-0.1C24,45.2,24.1,45,24,44.9L24,44.9z M25,45c-0.1-0.1-0.6-0.5-0.5-0.5c0.3,0,0.5-0.1,0.8,0.2
+				c0.1,0.1,0.3,0.4,0.4,0.6c0,0.1-0.1,0.1-0.3,0.1c-0.2,0-0.4,0.1-0.4-0.1C25.1,45.3,25.1,45.1,25,45L25,45z M25.2,41
+				c0.1-0.1,0.2,0.2,0.2,0.3c0.1,0.1,0.3,0.3,0.3,0.4c-0.1,0-0.3,0-0.4-0.1C25.2,41.4,25.1,41.1,25.2,41L25.2,41z M24.1,36.2
+				c0.1,0.6,0.3,1.4,0.7,2.6c0.1,0.3,0.1,1,0.2,1.3c0.1,0.4-0.2,0.3-0.2,0.5c0,0.3-0.1,0.8,0.1,1c0.2,0.1,0.7,0.2,0.8,0.6
+				c0.1,0.2,0,0.4-0.1,0.5c-0.1,0.1,0,0.4,0,0.5c0.1,0.2,0.1-0.1,0.2-0.2c0.1-0.2,0.4,0,0.5,0.2c0.1,0.1,0.1,0.6,0.1,0.7
+				c0,0.2-0.1,0.2-0.2,0.1c-0.1-0.1,0.1-0.6-0.1-0.7c-0.1-0.1-0.2-0.1-0.4-0.1c-0.2,0.1,0.3,0.7,0,0.7c-0.1,0-0.2,0.1-0.3,0
+				c-0.1-0.1,0-0.4-0.1-0.5c-0.1,0-0.2-0.1-0.3,0.2c0,0.3-0.1,0.1-0.1-0.2c0-0.4,0.2-0.6,0-0.8c-0.1-0.1-0.2-0.2-0.3-0.5
+				c-0.1-0.2,0.1-0.4-0.3-0.5c-0.1,0-0.6-0.1-0.6-0.4c0-0.2,0.1-0.3-0.1-0.6c-0.1-0.1,0.2-0.6,0-0.9c-0.2-0.3-0.6-1.1-0.6-1.9
+				c0-1.1-0.1-2.5-0.1-2.5c-0.1,0-0.2,0.9-0.3,1.8c-0.2,1.3-0.6,2.6-0.5,2.9c0,0.1,0.1,0.3,0.1,0.5c0,0.2-0.2,0.6-0.3,0.7
+				c-0.1,0.3-0.2,0.8-0.1,1c0.1,0.1-0.3,0.2-0.3-0.2c0-0.3,0.1-0.7,0.2-0.9c0.1-0.1,0.3-0.3,0.3-0.5c0-0.2-0.2-0.6-0.2-0.7
+				c-0.1-0.2,0-0.6,0-0.9c0.2-0.9,0.7-4,0.8-4.3c0.1-0.3,0.1-3.8,0.1-4.2c0-0.4-0.4-1.3-0.1-1.3c0.7-0.1,0.7-0.2,0.9-0.3
+				c0.2-0.2,0.7-0.8,0.9-0.8c0.4,0,0.7,0.1,0.6,0.3c-0.1,0.7,0.5,1.2,0.2,2.6c-0.3,1.1-0.2,1.4-0.6,2.6C24.2,35.1,24,35.6,24.1,36.2
+				L24.1,36.2z M26.5,19.8c-0.5-0.1-0.1,0,0-0.3c0.1-0.3-0.1-0.2-0.3-0.4c-0.2-0.2-0.2-0.7,0.2-0.7c0.3,0,0.5,0.2,0.7,0.6
+				C27.2,19.3,27,19.8,26.5,19.8L26.5,19.8z M26.9,21.4c-0.2,0-0.2-0.2-0.2-0.3c-0.1-0.1-0.3-0.2-0.3-0.3c0-0.1,0-0.3,0.1-0.4
+				c0.1-0.1,0.3-0.2,0.5-0.1c0.3,0.1,0.3,0.4,0.3,0.6C27.3,21.1,27.1,21.4,26.9,21.4L26.9,21.4z M26.2,23.4c0,0,0.3-0.1,0.5,0.2
+				c0.2,0.4,0.2,0.8,0,0.9c-0.2,0.1-0.3-0.1-0.3-0.4C26.5,23.6,26.2,23.4,26.2,23.4L26.2,23.4z M27.2,23c-0.1-0.5-0.3,0-0.4-0.6
+				c-0.1-0.6-0.5-0.2-0.1-0.6c0.1-0.1,0.5,0,0.6,0.3c0.2,0.3,0.4,1.2,0,1.8C26.9,24.5,27.3,23.5,27.2,23L27.2,23z M24.7,13.8
+				c0.4-0.3,0.2-1.3,0-1.5c-0.2-0.3,0.3,0,0.5,0c0.1,0,0-0.2-0.3-0.4c-0.1-0.1-0.2-0.2,0-0.3c0.1-0.1,0.4,0.1,0.8,0.5
+				c0.3,0.2,0.1,0.9-0.1,1.2c-0.2,0.3-0.2,0.6-0.5,0.6c-0.3,0-0.4,0.4-0.5,0.6c-0.2,0.3-0.4,0.4-0.6,0.3c-0.2,0-0.2-0.2-0.1-0.2
+				c0,0,0.2,0,0.2,0c0.1-0.1,0.1-0.3,0-0.5c-0.1-0.2-0.3-0.5-0.4-0.6c-0.2-0.3-0.1-0.5-0.1-0.5c0.2-0.1,0.4,0.5,0.6,0.5
+				c0.1,0-0.3-0.7-0.1-0.9c0,0,0.2,0.6,0.2,0.5c0.2-0.1,0-0.9,0.1-0.8c0.1,0.1,0.3,0.5,0.3,0.8C24.7,13.5,24.6,13.9,24.7,13.8
+				L24.7,13.8z M21.9,6.6c0.1-0.1,0.5-0.1,0.5,0.3c0,0.4,0,0.8-0.5,1c-0.6,0.3-0.7-0.2-0.7-0.2s0.4-0.1,0.6-0.3
+				C22,7.2,21.7,6.8,21.9,6.6L21.9,6.6z M17.7,7.3c0.3,0.2,0,0.3,0.4,0.7c0.4,0.4,0.9,0.4,0.9,0.4s-0.3,0.2-0.8,0.1
+				c-0.4-0.1-0.8-0.5-0.9-0.7C17,7.5,17.4,7.1,17.7,7.3L17.7,7.3z M17.8,9.7c-0.3,0-0.5-0.1-1-0.3c-0.1-0.1-0.1-0.2,0.2-0.2
+				c0.3,0.1,0.4,0.1,0.9,0.1c0.6,0,1.1-0.2,1.4-0.4c0.3-0.1,0.5-0.2,0.5-0.4c0-0.2-0.1-0.2-0.4,0.1C19.2,9,18.1,9.1,17.7,9
+				c-0.5-0.1-0.6-0.3-0.9-0.6C16.7,8.2,16.7,8,16.9,8c0.2,0,0.3,0.6,0.6,0.7c0.4,0.2,0.9,0.2,1.4,0.1c0.3-0.1,0.6-0.2,0.6-0.4
+				c0-0.1,0-0.2-0.1-0.3c-0.5-0.3-0.6-0.1-0.9-0.3c-0.3-0.2-0.2-0.4-0.4-1c-0.2-0.4,0.2-0.5,0.2-0.5c0.1,0,0.2,0,0.3,0.3
+				c0,0.4-0.1,0.6,0.1,0.9c0.2,0.3,0.4,0,0.9,0.3c0.2,0.1,0.7,0.3,0.8,0.3c0.3,0,0.3-0.3,0.6-0.3c0.3,0,0.2,0.2,0.5,0.3
+				c0.3,0.1,0.6,0,0.9-0.2c0.2-0.2,0.3-0.1,0.4-0.4c0.1-0.2,0-0.3,0-0.6c0-0.3,0.7,0.1,0.4,0.9c-0.1,0.3-0.4,0.6-0.7,0.7
+				c-0.4,0.2-1.1,0-1.5-0.3c-0.4-0.3-0.1,0.2,0.4,0.4c0.9,0.3,1.1,0.2,1.4,0.1c0.5-0.2,0.5-0.6,0.8-0.7c0.3-0.1,0.3,0.3,0.1,0.6
+				c-0.2,0.3-0.5,0.6-1,0.6c-0.5,0-0.8,0-1.1-0.1c-0.5-0.2-0.6-0.3-1-0.6c-0.2-0.2-0.1,0.1,0,0.3c0.2,0.3,0.7,0.6,1.3,0.7
+				c0.4,0,0.9,0.2,1.5-0.1c0.6-0.2,0.5-0.7,0.9-0.9c0.2-0.1,0.3,0.1,0.4,0.3c0.1,0.2,0.1,0.5,0,0.6c-0.1,0.1-0.2,0-0.2-0.1
+				C24.4,8.8,24.1,8.8,24,9c-0.2,0.6-1,1.2-2.1,1.1c-0.9-0.1-1.2-0.4-1.5-0.7c-0.2-0.2-0.2-0.5-0.4-0.5c-0.1,0,0,0.1-0.2,0.4
+				c-0.2,0.3-0.5,0.4-0.8,0.7c-0.3,0.2-0.5,0.1-1.1,0.4c-0.3,0.2-0.8,0.1-0.7-0.2c0-0.3,0.5-0.2,0.7-0.3C18.2,9.8,18,9.8,17.8,9.7
+				L17.8,9.7z M16.8,13c0.1,0.1,0,0.5-0.1,0.6c-0.2,0.2-0.7,0.2-0.8,0.5c-0.1,0.3,0,0.3-0.1,0.5c0,0-0.2,0.2-0.3,0.2
+				c-0.2,0-0.3-0.1-0.4-0.4c-0.1-0.3-0.1-0.8-0.4-1c-0.3-0.2-0.8-0.9-0.9-1.1c-0.1-0.2,0.1-0.2,0.1-0.2c0.3,0.2,0.6,0.4,0.8,0.7
+				c0.2,0.2,0.2-0.8,0.7-0.7c0.3,0.1,0.2,0.6,0.3,1c0.2,0.8,0.1-0.3,0.4-0.3c0.3-0.1,0.2,0.4,0.2,0.6C16.2,13.6,16.7,12.9,16.8,13
+				L16.8,13z M15.2,10.5c0-0.3-0.1-0.6,0.2-0.6c0.2,0,0.3,0.2,0.1,0.6c-0.1,0.3-0.1,0.5-0.1,0.6c0,0.5-0.3,0.9-0.8,0.9
+				c-0.5,0-0.2-0.2-0.5-0.5c-0.2-0.2-0.5-0.3-0.6-0.5c-0.1-0.2-0.1-0.5,0-0.8c0.1-0.3,0.4,0,0.8-0.2c0.4-0.2,0.3-0.4,0.4-0.4
+				c0.2,0,0.3,0.5,0.3,0.7c0,0.2,0,0.5,0,0.5S15.2,10.7,15.2,10.5L15.2,10.5z M9.9,10.1c0.1-0.1,0.1,0.4,0.4,0.5
+				c0.2,0,0.5,0.1,0.6,0.3c0.1,0.2,0.1,0.3,0.3,0.5c0.2,0.1,0.6,0.3,0.7,0.6c0.1,0.3-0.3,0.6-0.4,0.8s-0.1-0.3-0.5-0.6
+				c-0.4-0.2-1-0.3-1.2-0.6C9.5,11.1,9.5,10.5,9.9,10.1L9.9,10.1z M7.5,15c-0.6-0.5-0.7-0.8-0.7-1.2c0-0.2,0.2-0.5,0.4-0.4
+				c0.2,0.1,0.5,0.5,0.7,0.6c0.2,0.1-0.1,0.4,0.1,0.5c0.1,0,0.1-0.1,0.1-0.1c0.1,0,0.1-0.2,0.1-0.3c0,0,0.1,0,0.1,0
+				c0-0.1,0-0.2,0-0.3c-0.1-0.2-0.2,0-0.6-0.7c-0.1-0.2-0.4-0.4-0.6-0.5C7,12.5,7,12.3,7,12.2c-0.1-0.2-0.4-0.6-0.3-0.7
+				c0.3-0.2,0.4,0.3,0.6,0.4c0.3,0.1,0.3,0,0.5,0.1c0.2,0.1,0,0.5,0.4,0.8c0.3,0.3,0.5,0.3,0.6,0.5c0,0-0.1,0.2,0,0.2
+				c0.2,0.3,0.2,0.8,0,1c-0.3,0.4-0.8,0.4-0.7,0.5c0.1,0.1,0.5,0,0.7,0.5c0.2,0.5,0,1.1-0.4,1.3c-0.4,0.2-1,0-0.8-0.1
+				C7.8,16.5,8,16.2,8,15.9C8.1,15.6,8,15.4,7.5,15L7.5,15z M10.7,15.2c-0.2-0.3-1.1-0.2-1.5-0.9c-0.2-0.3,0-0.5-0.1-0.8
+				c0-0.4-0.3-0.5-0.3-0.7c0-0.2,0.4-0.5,0.4-0.5s0,0,0,0.1c-0.1-0.1-0.1-0.7,0.1-0.7c0.4-0.1,0.4,0.2,0.7,0.6
+				c0.3,0.3,0.4,0,0.5,0.2c0,0.1,0,0.2,0.3,0.4c0.3,0.1,0.4,0,0.6,0.1c0.2,0,0.4,0.4,0.4,0.9c0,0.2-0.1,0.3-0.4,0.5
+				c-0.3,0.2-0.5-0.2-0.4-0.4c0-0.2-0.2-0.5-0.4-0.5c-0.2-0.1-0.6,0-0.9-0.1c-0.3-0.1-0.1-0.7-0.4-0.8c0,0,0,0.3,0,0.5
+				c0,0.3,0.3,0.9,0.5,1c0.4,0.2,0.8,0.3,1.2,0.4c0.4,0.2,0.7,0.6,0.4,1.1c-0.2,0.4-0.8,0.4-0.9,0.3S10.9,15.5,10.7,15.2L10.7,15.2z
+				 M11.2,25.8c0-0.2,0.1-0.6,0-0.6c-0.1-0.1-0.3-0.4-0.1-0.5c0.1,0,0.2,0,0.4,0.2c0.2,0.2,0.3,0.9,0.1,1
+				C11.4,26.1,11.2,26,11.2,25.8L11.2,25.8z M11.2,21.9c0.1,0,0.2,0.1,0.2,0.2c0,0.1,0,0.3-0.1,0.4c-0.2,0.1-0.2-0.1-0.2-0.1
+				C10.9,22.3,10.9,21.9,11.2,21.9L11.2,21.9z M9.7,24.2c-0.1,0-0.2-0.2,0-0.3c0,0,0.1-0.1,0.4-0.1c0.2,0,0.3,0.2,0.5,0.1
+				c0.2,0,0.3-0.4,0.5-0.5c0.2-0.1,0.4,0.2,0.5,0.5c0,0.2-0.1,0.3-0.4,0.4c-0.1,0-0.1-0.2-0.2-0.1c-0.2,0,0.1,0.4-0.2,0.7
+				c-0.2,0.3-0.3,0.5-0.4,0.3c0-0.2,0.1-0.5-0.1-0.7C10.2,24.3,9.9,24.3,9.7,24.2L9.7,24.2z M10.3,22.5c-0.1-0.1-0.3-0.3-0.4-0.5
+				c0-0.1,0-0.4,0.2-0.5c0.2-0.1,0.3,0.2,0.3,0.5c0.1,0.3,0.4,0.4,0.4,0.6c0,0.4-0.2,0.6-0.5,0.7c-0.3,0.1-0.8,0.1-1-0.1
+				c-0.2-0.2-0.1-0.3,0-0.4c0.2,0,0.3,0.3,0.6,0.3c0.2,0.1,0.2-0.1,0.3-0.2C10.5,22.9,10.4,22.6,10.3,22.5L10.3,22.5z M10.1,28.6
+				c-0.2,0.2-0.4,0.1-0.6,0.1c-0.2,0,0.2-0.1,0.4-0.7C9.9,27.6,10.4,28.2,10.1,28.6L10.1,28.6z M10.2,26.7c-0.2,0.5-0.5,0.5-0.7,0.8
+				c-0.1,0.2,0.3,0.3-0.3,0.7c-0.2,0.1-0.4,0-0.3-0.1c0.2-0.1,0.2-0.6-0.2-0.8c-0.2-0.1-0.3-0.6,0-0.6c0.2,0,0.4,0.5,0.7,0.5
+				c0.3,0,0.4-0.4,0.4-0.6c0-0.2-0.2-0.3-0.4-0.5c-0.1-0.1-0.1-0.3-0.3-0.4c-0.4-0.3-0.2-0.5,0-0.4c0.4,0,0.6,0.5,0.8,0.6
+				C10.2,25.9,10.4,26.3,10.2,26.7L10.2,26.7z M11.2,27.5c-0.1,0.2-0.4,0.3-0.6,0.3c-0.4,0-0.1-0.2,0.1-0.5c0.2-0.3-0.2-0.9,0.1-1
+				c0.4-0.1,0.5,0.2,0.7,0.4c0.1,0.1-0.1,0.4-0.2,0.5C11.2,27.3,11.3,27.4,11.2,27.5L11.2,27.5z M11.8,19.2
+				c-0.2,0.2-0.3,0.6-0.3,0.9c0,0.3,0,0.9-0.2,1c-0.1,0,0,0.6-0.2,0.7c-0.2,0.1-0.6-0.1-0.5-0.3c0-0.1,0.3-0.3,0.4-0.5
+				c0-0.3-0.2-0.5-0.5-0.8c-0.3-0.3,0.2-0.5,0.5-0.5c0.3,0,0.5,0.1,0.4-0.2c-0.1-0.3-0.7-0.7-0.7-1.2c-0.1-0.5,0.4-0.4,0.5-0.4
+				s0,0.5,0.2,0.6c0.2,0,0.1,0.1,0.3-0.2c0.2-0.3-0.3-0.1-0.3-0.7c0.1-0.5-0.1-0.9,0-1.1c0.1-0.2,0.3-0.5,0.4-0.5
+				c0.1,0,0,0.6,0.1,0.8c0.2,0.3,0.4,0.4,0.4,0.6c0.1,0.2,0.1,0.4-0.1,0.6c-0.2,0.1-0.1,0.3-0.3,0.5C11.7,18.4,12,19,11.8,19.2
+				L11.8,19.2z M13.3,39.3c0-0.4,0.1-0.8,0.2-1.1c0.1-0.2,0.1-0.4,0.2-0.7c0.1-0.2-0.2-2.2,0.2-2c0.3,0.1,0.1,1.1,0.1,1.2
+				c0,0.2-0.1,0.5,0,0.9c0.1,0.3-0.1,1.1,0.4,1.8c0.1,0.1,0,0.5-0.1,0.8c0,0.1-0.2,0.2-0.3,0.4c-0.1,0.2-0.1,0.4-0.2,0.5
+				c-0.2,0.2-0.6-0.1-0.7,0.1c-0.1,0.1-0.3,0.2-0.4,0.1c0-0.1,0.1-0.3,0.3-0.5c0.1-0.2,0.1-0.4,0.2-0.5C13.2,40,13.4,39.8,13.3,39.3
+				L13.3,39.3z M9.8,44.7c0.2-0.2,0.3-0.2,0.6-0.3c0.2,0,0.2,0.2,0,0.3c-0.2,0.1-0.4,0.4-0.3,0.7c0,0.1-0.6,0.1-0.6-0.1
+				C9.5,45.2,9.5,44.9,9.8,44.7L9.8,44.7z M8.4,44.6c-0.1,0.1-0.3,0.5-0.3,0.7c0,0.2-0.3,0.2-0.4,0.2c-0.2,0-0.1-0.3,0-0.6
+				c0.1-0.2,0.2-0.4,0.3-0.4C8.3,44.5,8.5,44.5,8.4,44.6L8.4,44.6z M8.6,44.8c0.3-0.3,0.7-0.3,0.9-0.3c0.2,0,0.1,0.2-0.1,0.2
+				C9.1,44.8,9,45,9,45.2c0,0.2,0.1,0.4-0.1,0.4c-0.1,0-0.2,0-0.3,0C8.4,45.5,8.4,45.1,8.6,44.8L8.6,44.8z M13.4,46.6v0.2h0.2
+				c-0.3,0.2-0.6,0.4-0.6,0.5h-0.2v0.2H13c0,0.2-0.1,0.4-0.3,0.7c0,0,0,0,0,0h-0.3v0.2h0.2c0,0.2,0,0.3,0.1,0.4h-0.2v0.2h0.3
+				c0,0,0,0.1,0.1,0.1c0.1,0.3,0.1,0.7-0.3,0.7c-0.2,0-0.9-0.2-1.5-0.4v-0.2h-0.3v0.1c0,0-0.1,0-0.1,0v-0.1h-0.3v0.1
+				c-0.1,0-0.1,0-0.2,0c0,0-0.1,0-0.1,0v-0.2H9.8v0.1c-0.3-0.3-0.2-1-0.5-1.4c-0.3-0.3-0.5-1.2-0.6-1.7H9v-0.2H8.7c0,0,0-0.1,0-0.1
+				c0-0.3,5.1-0.5,5.4-0.3c0.3,0.2,0.2,0.5,0,0.7c-0.1,0.1-0.2,0.2-0.4,0.3v-0.2L13.4,46.6L13.4,46.6z M20.3,55.8
+				c-3.1,0-5.6-2.4-5.7-5.5c0-3.1,2.4-5.6,5.5-5.7c3.1,0,5.6,2.4,5.7,5.5C25.8,53.3,23.3,55.8,20.3,55.8L20.3,55.8z M20.3,56.8
+				c-0.1-0.1-0.1-0.5,0-0.5c0.2,0,0.5-0.1,0.6-0.1c0.1,0,0.2,0.5,0.1,0.6C20.8,57,20.4,57,20.3,56.8L20.3,56.8z M20,57.1
+				c0,0,0.8,0,0.8,0c0,0-0.1,0.4-0.2,0.5c-0.1,0-0.8,0-0.8,0C19.8,57.5,19.9,57.2,20,57.1L20,57.1z M20,56.9c0,0.1-0.7,0.1-0.8,0
+				c-0.1-0.1-0.3-0.6-0.2-0.6c0.4,0.1,0.7,0.1,0.9,0.1C20,56.4,20,56.7,20,56.9L20,56.9z M19,57.2c0.2-0.1,0.8,0,0.8,0
+				c0,0-0.1,0.4-0.3,0.5c-0.2,0-0.7,0-0.7,0C18.8,57.5,18.8,57.2,19,57.2L19,57.2z M18.3,56.9c-0.1,0-0.3-0.4-0.3-0.5
+				c0-0.1,0.1-0.2,0.2-0.3c0,0,0.4,0.1,0.6,0.1c0.2,0-0.1,0.2-0.1,0.2c0,0.1,0.1,0.3,0.1,0.4C18.9,57,18.5,57,18.3,56.9L18.3,56.9z
+				 M17.8,57.4c0.1-0.1,0.1-0.3,0.3-0.3c0.2,0,0.5-0.1,0.5,0.1c0,0.1-0.1,0.4-0.4,0.4C18,57.6,17.7,57.7,17.8,57.4L17.8,57.4z
+				 M17.3,56.4c0-0.1,0.5-0.5,0.5-0.5c0.1,0.1,0.3,0.1,0.3,0.1s-0.4,0.2-0.2,0.5c0.2,0.3-0.2,0.3-0.4,0.3
+				C17.4,56.9,17.3,56.5,17.3,56.4L17.3,56.4z M14,53.1L14,53.1c-0.1-0.1-0.3-0.2-0.5-0.2c-0.2,0-0.3-0.1-0.4-0.4h0.1v-0.2h-0.2
+				c-0.3-0.6-0.4-1.3-0.2-1.3c0,0,1.1-0.2,1.3-0.1c0.1,0,0.1,0.1,0.1,0.2h-0.3v0.2h0.3v-0.1c0,0.4,0.1,0.9,0.5,1.5
+				c0,0.1,0.1,0.1,0.1,0.2h-0.2v0.2h0.3v-0.1c0.5,0.8,1.2,2,1.4,2.1c0.2,0.1,0,0.2,0,0.2s-0.9,0.1-1,0c-0.1-0.1,0-0.2-0.1-0.5h0.3
+				v-0.2H15v0.1c0,0,0-0.1-0.1-0.1c-0.2-0.5-0.6-0.9-0.6-1c0-0.1,0-0.2-0.1-0.3h0.1v-0.2H14z M12.7,55.4c0.1-0.1,0.3-0.4,0.4-0.5
+				c0.1-0.1,0-0.5-0.1-0.6c-0.1-0.1-0.3-0.6-0.5-0.6c-0.2,0-0.4-0.2-0.5-0.2c-0.3-0.1,0-0.1,0-0.1c0.1,0,0.2,0.1,0.3,0.1
+				c0.1,0,0.6,0.3,0.7,0.4c0.1,0.2,0.5,0.5,0.5,0.7c0.1,0.3-0.1,0.4-0.2,0.7c0,0.2-0.1,0.3-0.2,0.3C13,55.5,12.7,55.6,12.7,55.4
+				L12.7,55.4z M6.7,54.7c0-0.1-0.1-0.1-0.1-0.1h0.2v-0.2H6.5v0.1c0,0-0.1,0-0.1-0.1c-0.2,0,0-0.6,0-0.7c0,0,0,0,0,0c0,0,0,0,0,0
+				c0.1,0,1.1-0.2,1.4-0.8c0.1-0.2,0.7,0,1.2,0.3H8.8v0.2h0.3v-0.1c0,0,0,0,0,0c0.4,0.3,1.8-0.1,2.1,0.3c0,0,0,0.1,0.1,0.1h-0.1v0.2
+				h0.3v-0.1c0.4,0.2,1.1,0.2,1.2,0.8c0.1,0.7-0.3,0.7-0.4,0.8c-0.1,0-4.6,0.1-4.7,0c-0.1-0.1-0.5,0-0.7-0.3c0,0,0-0.1-0.1-0.1h0.1
+				v-0.2L6.7,54.7L6.7,54.7z M13.9,56.7c-0.1,0.1-0.4,0.1-0.5,0c-0.2-0.2-0.3-0.6-0.2-0.7c0.1-0.1,0.5-0.3,0.8-0.3
+				c0.2,0,0.4,0.1,0.4,0.1c0,0-0.5,0.2-0.6,0.3C13.6,56.3,14,56.6,13.9,56.7L13.9,56.7z M14.9,56.5c0.1,0.1,0.1,0.2-0.2,0.2
+				c-0.4,0-0.7-0.6-0.5-0.7c0.2-0.1,1-0.4,1.2-0.5c0,0,0.3,0.2,0.2,0.2c0,0-0.7,0.4-0.8,0.4C14.8,56.3,14.8,56.5,14.9,56.5
+				L14.9,56.5z M16,56.8c0,0-0.4,0.1-0.6,0c-0.3-0.1-0.4-0.5-0.3-0.6c0.2-0.1,1.4-0.7,1.5-0.6c0.1,0.1,0.2,0.1,0.3,0.1
+				c0.1,0.1-0.8,0.4-0.9,0.6C15.8,56.6,16.1,56.8,16,56.8L16,56.8z M17.1,56.7c0,0.1-0.4,0.2-0.6,0.1c-0.1,0-0.3-0.5-0.2-0.5
+				c0.1-0.1,0.6-0.5,0.8-0.5c0.1,0,0.2,0.1,0.4,0.1c0.1,0-0.5,0.2-0.5,0.3C16.9,56.4,17,56.7,17.1,56.7L17.1,56.7z M22,56.5
+				c-0.1-0.1-0.4-0.4-0.3-0.4c0.2,0,0.3-0.1,0.4-0.1c0.1,0,0.4,0.4,0.5,0.5c0.1,0.1,0.1,0.3,0,0.4c-0.1,0-0.7,0.1-0.6,0
+				S22.1,56.6,22,56.5L22,56.5z M22.9,56.3c-0.1-0.1-0.4-0.3-0.3-0.4c0.1,0,0.2-0.1,0.3-0.1c0.1,0.1,0.7,0.5,0.7,0.7
+				c0,0.2,0,0.3-0.3,0.3c-0.2,0-0.4-0.1-0.4-0.2C22.9,56.6,23,56.4,22.9,56.3L22.9,56.3z M26.6,56.7c0-0.1,0.1-0.2,0-0.3
+				c-0.1-0.2-0.3-0.4-0.2-0.4c0.1,0,0.2,0,0.3,0.1c0.1,0.1,0.4,0.5,0.3,0.6c0,0.1-0.1,0.1-0.3,0.1C26.7,56.9,26.5,56.9,26.6,56.7
+				L26.6,56.7z M26.3,57.3c0-0.1,0.2,0,0.4,0c0.2,0,0.1,0.1,0.1,0.1c0,0.1-0.2,0.2-0.3,0.2C26.2,57.6,26.2,57.4,26.3,57.3L26.3,57.3
+				z M24.9,57.3c0-0.1,0.2-0.1,0.4-0.1c0.2,0,0.1,0.1,0.1,0.2c0,0.2-0.2,0.2-0.3,0.2C24.9,57.6,24.9,57.4,24.9,57.3L24.9,57.3z
+				 M24.6,56.4c-0.1-0.1-0.3-0.3-0.2-0.3c0.1,0,0.4,0,0.5,0c0.1,0,0.4,0.3,0.4,0.4c0,0.1-0.1,0.4-0.3,0.5c-0.3,0-0.6,0-0.5-0.1
+				C24.7,56.6,24.7,56.5,24.6,56.4L24.6,56.4z M25.6,56.4c-0.1-0.2-0.4-0.3-0.3-0.4c0.2-0.1,0.2-0.1,0.4,0.1
+				c0.2,0.1,0.5,0.3,0.5,0.5c-0.1,0.2,0,0.3-0.2,0.3c-0.2,0-0.5,0-0.4-0.1C25.7,56.6,25.8,56.5,25.6,56.4L25.6,56.4z M26.8,50.5
+				c0,0.1,0,0.2,0,0.3c0,0,0,0,0,0h-0.2V51h0.2c0,0.1,0,0.2,0,0.3h-0.2v0.2h0.3c0.1,0.4,0.2,0.8,0.4,1h-0.1v0.2h0.2
+				c0.2,0.3,0.2,0.5,0.2,0.5s-0.2,0.3-0.3,0.7v-0.1H27v0.2h0.2c-0.1,0.1-0.1,0.3-0.2,0.4h-0.2v0.2h0.2c0,0.1,0,0.1,0,0.2
+				c0,0.2-0.6,0.1-0.6,0.3c0,0.2,0.1,0.5-0.1,0.5c-0.2,0-3.4,0.1-3.4,0.1s0.4-0.1,0.8-0.4v0.1H24v-0.2h-0.2c0.1,0,0.1-0.1,0.2-0.1
+				c0.3-0.3,1.1-1.1,1.6-1.7h0.1v-0.2h0c0,0,0.1-0.1,0.1-0.1c0-0.1,0.1-0.2,0.2-0.4v0.1h0.3v-0.2H26c0-0.1,0.1-0.3,0.1-0.5h0.2v-0.2
+				h-0.1c0.2-0.7,0.3-1.5,0.3-2.3c0-0.1,0.2,0.1,0.3,0.6h-0.2v0.2H26.8z M26.9,46.9c0,0.1,0,0.2-0.1,0.4h-0.2v0.3h0.1
+				c0,0.4,0,0.9-0.1,0.9c0,0-0.3,0.3-0.5,0.3c-0.1,0-0.2-0.7-0.4-1.1c0,0,0,0,0-0.1h0.1v-0.3h-0.2c0-0.1-0.1-0.2-0.2-0.3h0.1v-0.3
+				h-0.3c-0.1-0.1-0.1-0.2-0.2-0.4h0V46H25c-0.1-0.1-0.1-0.1-0.2-0.2l1.9,0c0,0,0,0.1,0.1,0.2h-0.1v0.3h0.2c0,0.1,0,0.2,0,0.3h-0.2
+				v0.3H26.9z M28,45.3c0,0.2-0.2,0.2-0.3,0.2c-0.2,0-0.4,0-0.4-0.2c0-0.3-0.4-0.5-0.4-0.7c0-0.1,0.2-0.1,0.4,0
+				c0.2,0,0.2,0.1,0.3,0.2C27.7,45,28,45.2,28,45.3L28,45.3z M28.4,44.1c0,0.1-0.4,0.2-0.5,0.1c-0.1-0.1,0.1-0.3,0-0.6
+				c-0.1-0.3-0.3-0.6-0.2-0.6C28,42.9,28.5,43.7,28.4,44.1L28.4,44.1z M28.4,46.3c0,0.1-0.1,0.2-0.3,0.2c-0.2,0-0.3-0.2-0.3-0.3
+				c0-0.2,0.1-0.3,0.3-0.3C28.3,45.9,28.4,46.1,28.4,46.3L28.4,46.3z M29.2,45.3c0,0.1,0.1,0.4,0,0.4c-0.1,0-0.3,0-0.4,0
+				c-0.1,0-0.1-0.4-0.4-0.6c-0.3-0.2-0.5-0.5-0.4-0.5c0,0,0.3,0,0.5,0C28.6,44.6,29.1,44.9,29.2,45.3L29.2,45.3z M30.1,45.7
+				c-0.2,0-0.5,0.1-0.5-0.3c0-0.3-0.4-0.5-0.4-0.7c0-0.1,0.3-0.1,0.5-0.1C29.9,44.7,30.3,45.7,30.1,45.7L30.1,45.7z M31.2,45.8
+				c-0.2,0-0.5,0.1-0.6-0.1c-0.1-0.1-0.3-0.5-0.4-0.7c-0.3-0.4-0.1-0.3,0-0.3c0.4,0,0.4,0.2,0.5,0.3C30.9,45.1,31.4,45.8,31.2,45.8
+				L31.2,45.8z M32.7,47.4l-0.1,1.4h-0.3V49h0.3l0,0.3h-0.3v0.3h0.3l0,0.3c0,0-1.3,0.1-1.3-0.1c0,0,0-0.1,0-0.1h0.2v-0.3h-0.2
+				c0-0.1,0-0.2,0-0.3h0.2v-0.3h-0.2c0-0.1,0-0.2,0-0.3h0.2v-0.3h-0.3v0.1c-0.2-0.3-0.4-0.3-0.7-0.4c-0.1-0.1-0.2-0.1-0.3-0.1h0.1
+				v-0.3H30v0.2c-0.2-0.1-0.3-0.1-0.3-0.1s-0.1-0.2-0.1-0.5h0.2v-0.3h-0.2c0,0,0,0,0-0.1c0-0.3-0.2-0.7-0.2-0.7c0.3-0.1,0.6-0.1,1,0
+				H30v0.3h0.3v-0.3c0.1,0,0.2,0.1,0.3,0.1h-0.1v0.3h0.3v-0.2c0.4,0.2,0.8,0.4,1.1,0.6h-0.2v0.3H32v-0.2
+				C32.4,47.2,32.7,47.4,32.7,47.4L32.7,47.4z M32.8,45.1c0.2,0.1,0.4,0.6,0.3,0.7c-0.1,0.1-0.4,0.2-0.4-0.2c0-0.2-0.2-0.3-0.3-0.4
+				c-0.1,0-0.2-0.2-0.1-0.3C32.5,44.9,32.7,45,32.8,45.1L32.8,45.1z M33.2,44.3c0,0.1-0.1,0.4-0.2,0.4c-0.1,0-0.1-0.4-0.1-0.5
+				c0-0.1,0-0.3,0.1-0.2C33.1,44,33.2,44.2,33.2,44.3L33.2,44.3z M33.4,44.5c-0.1,0.3-0.1-0.1-0.1-0.3c0-0.1-0.1-0.4-0.4-0.6
+				c-0.1-0.1-0.1,0.1-0.1,0.2c0,0.1-0.1-0.2-0.1-0.3s0-0.1,0.2-0.1c0.1,0,0.3,0.2,0.4,0.3C33.3,43.8,33.6,44.2,33.4,44.5L33.4,44.5z
+				 M33.5,45.4c-0.1,0-0.2-0.2,0-0.2c0.1,0,0.2,0,0.2,0c0.2,0.1,0.5,0.7,0.1,0.7C33.6,45.9,33.7,45.5,33.5,45.4L33.5,45.4z
+				 M33.1,55.4c-0.1,0-0.5,0.1-0.5,0.1c0,0,0,0,0,0c0,0,0,0,0,0c0.1,0-0.1-0.4,0.1-0.4c0.3-0.1,0.3-0.6,0.3-0.6
+				c0-0.1-0.2-0.2-0.2-0.3c0-0.1,0.2-0.6,0.2-0.6s0.4,0.4,0.5,0.5c0.1,0.1,0.2,0.4,0.1,0.4c-0.1,0-0.2,0.6-0.3,0.6
+				C33.1,55.1,33.2,55.3,33.1,55.4L33.1,55.4z M31.3,44.3c0.1,0,0.2,0.1,0.2,0.2c0,0.1-0.1,0.2-0.2,0.1
+				C31.2,44.5,31.2,44.4,31.3,44.3L31.3,44.3z M31.8,44.9c0.2,0.1,0.5,0.5,0.4,0.7c-0.1,0.2-0.2,0.4-0.4,0.2c-0.2-0.2,0-0.5-0.3-0.6
+				c-0.1,0-0.4-0.1-0.4-0.4C31.1,44.8,31.5,44.8,31.8,44.9L31.8,44.9z M26.9,41c0.1-0.1,0.7-0.1,0.7,0c-0.1,0.2-0.6,0.5-0.9,0.3
+				C26.6,41.3,26.8,41.1,26.9,41L26.9,41z M26.8,38.7c0.1,0,0.4,1,0.5,1.3c0,0.1,0.2,0.8,0.2,0.9c0,0.2-0.5-0.3-0.5-0.5
+				C27.1,39.5,26.6,38.7,26.8,38.7L26.8,38.7z M26.4,25.5c-0.1-0.1-0.3-0.2-0.2-0.4c0.1-0.2,0.4,0,0.5,0.1c0.2,0.2,0.3,0.7,0,0.8
+				c-0.2,0.1-0.3,0.1-0.3-0.1C26.5,25.7,26.4,25.6,26.4,25.5L26.4,25.5z M27.6,28.2c-0.2,0-0.4-0.2-0.4-0.4c0-0.1,0.1-0.3,0.2-0.3
+				c0.2-0.1,0.2,0.3,0.3,0.4C27.9,27.9,27.8,28.2,27.6,28.2L27.6,28.2z M27.7,26.4c0,0.4-0.1,0.9-0.3,0.8c-0.2-0.1-0.4,0.5-0.6,0.5
+				c-0.2,0-0.2-0.4-0.2-0.6c0.1-0.2,0.6-0.7,0.7-0.8c0.1-0.1-0.1-0.5-0.1-0.6c0-0.2,0.5-0.7,0.6-0.7c0.1,0,0.4,0.7,0.2,0.9
+				C27.9,25.9,27.7,26.1,27.7,26.4L27.7,26.4z M28.3,27.5c-0.1,0.3,0.2,0.3,0.2,0.4c0,0.1,0,0.2-0.5-0.2c-0.2-0.1-0.2-0.4-0.1-0.8
+				c0.1-0.4,0.2-0.5,0.4-0.8c0.2-0.3,0.2-0.3,0.2-0.3s0.3,0.7-0.1,0.9C28.3,26.9,28.4,27.2,28.3,27.5L28.3,27.5z M29.6,26.2
+				c0.1,0.1-0.4,0.2-0.6-0.3c-0.2-0.3,0-0.4-0.1-0.9c-0.1-0.4,0.7-1.1,0.9-1.2c0.1-0.1,0.3,0.5,0.3,0.7c0,0.2-0.7,0.8-0.7,1.1
+				C29.3,26,29.5,26.1,29.6,26.2L29.6,26.2z M30.3,27.6c-0.3-0.2-0.6-0.6-0.5-1.3c0-0.3,0.4-0.7,0.7-0.8c0.2-0.1,0.1-0.4,0.2-0.4
+				c0.2,0,0.2,0.3,0.2,0.6c-0.1,0.3-0.3,0.4-0.5,0.8C30.1,26.9,30.6,27.9,30.3,27.6L30.3,27.6z M30.7,23.3c0,0.1-0.1,0.2,0.1,0.9
+				c0.1,0.3,0.1,0.6,0,0.4c-0.1-0.3-0.2-0.4-0.3-0.8c0-0.2-0.4-0.3-0.3-0.6c0.1-0.3,0.3-0.6,0.4-0.9c0.1-0.3,0.3-0.6,0.4-0.9
+				c0.1-0.1,0.4-0.1,0.5,0.3c0.1,0.4-0.1,0.7-0.2,1C31.1,23.1,30.7,23.1,30.7,23.3L30.7,23.3z M31.5,20.1c0.4,0,0.3-0.2,0.4-0.4
+				c0-0.4,0.6-0.8,0.9-0.8c0.3,0,0.5,0.3,0.4,0.6c-0.2,0.4-0.4,0.3-0.8,0.8C32,20.6,32.1,20.8,32,21c0,0.1-0.3,0.2-0.3-0.3
+				c0-0.2-0.5,0-0.6-0.1c-0.3-0.1-0.4-0.8-0.7-1.2c-0.3-0.4-0.6-0.2-0.8-0.8c-0.1-0.4,0.1-0.4-0.2-0.8c-0.3-0.4-0.4-0.5-0.4-0.8
+				c0-0.2-0.2-0.6,0.4-1c0.6-0.4,0.9-0.3,0.9-0.2c0.1,0.1,0.2,0.3,0.2,0.5c0,0.3-0.6,0.2-0.8,0.6c-0.2,0.2-0.3,0.4-0.1,0.5
+				c0.2,0.1,0.5-0.3,0.6-0.3c0.2,0.1,0.5,0,0.9-0.2c0.3-0.2,0.4-0.1,0.3,0.2c0,0.4-0.3,0.6-0.7,0.8c-0.5,0.3-0.7,0.9-0.6,1.1
+				c0.1,0.3,0.3,0.3,0.4,0.1c0.1-0.3,0.1-0.6,0.6-0.7c0.5-0.1,0.4-0.4,0.6-0.4c0.3,0,0.3,0.4,0.2,0.6c-0.1,0.2-0.9,0.6-0.9,1.2
+				C31.1,20.1,31.3,20.1,31.5,20.1L31.5,20.1z M32,11.1c0.3,0.1-0.1-0.2,0.2-0.5c0.1-0.1,0.4-0.4,0.6-0.3c0.1,0,0.2,0.2,0,0.6
+				c-0.1,0.2,0,0.6-0.2,0.9c-0.1,0.3-0.7,0.6-1.1,0.7c-0.5,0.1-0.8,0.2-0.8,0.4c-0.1,0.2,0.4,0.3,0.5,0.4s0,0.3-0.3,0.4
+				c-0.3,0-0.7-0.2-0.8-0.6c-0.1-0.4,0.2-1.2,0.4-1.4c0.2-0.2,0.4,0.2,0.6,0.3c0.2,0.1,0.7,0.1,1-0.1c0.1-0.1,0.2-0.3,0-0.3
+				c-0.3-0.1-0.5,0-0.8-0.1c-0.2-0.1-0.4-0.8-0.5-0.9c-0.1-0.2-0.1-0.5,0.1-0.5c0.2-0.1,0.8-0.3,1-0.4c0.2-0.1,0.4-0.5,0.6-0.6
+				c0.1,0,0.3,0.1,0.3,0.3c0,0.2-0.1,0.6-0.3,0.5c-0.1,0-0.1,0-0.4,0.2c-0.3,0.3-0.5,0.5-0.6,0.8C31.7,10.9,31.8,11,32,11.1L32,11.1
+				z M27.1,7.7c0.1-0.3,0.3-0.5,1-1c0.3-0.2,0.7-0.5,1-0.3c0.3,0.2,0.6,0,0.8,0.1c0.3,0.2,0.2,0.2,0.3-0.1c0.1-0.3,0-0.5,0.4-1
+				c0.3-0.3,0.9-0.6,1.4-0.6c0.6,0,1.4,0.2,1.5,0.8c0.1,0.3-0.5,0.7-0.4,0.7c0.1,0,0.2-0.1,0.3-0.1c0.1,0,0.2-0.1,0.2-0.2
+				c0.1-0.1,0-0.3,0.2-0.3C34.1,5.7,34,6,34,6c0,0.1-0.1,0.2-0.1,0.2c-0.1,0.1-0.2,0.1,0.1,0.1c0.3,0,0.2-0.3,0.4-0.2
+				c0.2,0,0.1,0.6,0.1,0.8c0,0.2-0.2,0.7-0.7,0.6c-0.3-0.1-0.8-0.2-0.9,0.1c0,0.3,0,0.5-0.1,0.7c-0.1,0.3-0.2,0.3-0.3-0.1
+				c0-0.2-0.1-0.2-0.1,0c0,0.2,0,0.4-0.2,0.5c-0.3,0.1-1.1,0.2-1.4,0.7c-0.1,0.3,0,0.7-0.2,0.8c-0.3,0.2-0.7,0.1-0.7-0.2
+				c0-0.3,0.1-0.8,0.4-1.1c0.3-0.3,0.2-0.5,0.5-0.8c0.1-0.1,0-0.4-0.1-0.4c-0.3,0,0,0.6-0.3,0.5C30.1,8,29.8,7.6,30,7.5
+				c0.3-0.2,0-0.7-0.2-0.7c-0.2,0-0.1,0.5,0,0.8c0,0.3-0.2,0.9-0.5,1.1c-0.5,0.3-0.8,0.1-1.1,0.2C28,8.9,27.9,9,27.9,9.1
+				c0,0.2,0,0.4-0.1,0.4c-0.2,0.1-1-0.5-0.7-0.8c0.1-0.1,0.3,0,0.4-0.1c0.2-0.2,0.2-0.5,0.5-0.6C28.5,8,29,7.9,29.2,7.7
+				c0.3-0.3,0.3-0.8,0.2-0.8c-0.2-0.1,0,0.3-0.2,0.5c-0.3,0.1-0.4,0-0.7,0.2c-0.3,0.1-1,0.9-1.2,0.8C27,8.3,26.9,8,27.1,7.7
+				L27.1,7.7z M35,46.7c0.1,0,0.5,1.1,0.6,2c0.1,1,0.2,2.8,0.1,3.6c-0.1,0.8-0.4,2.1-0.5,2.2c-0.1,0.1-0.1-2.4-0.1-2.8
+				c0-0.4,0-2.4-0.1-3.1C34.9,48,34.9,46.7,35,46.7L35,46.7z M36.1,49.7c0-0.8,0-2.2,0.1-2.3c0.1-0.1,0.4,2.7,0.2,3.8
+				c-0.1,0.4-0.2,1.4-0.4,1.9C36,53.3,36.1,50.5,36.1,49.7L36.1,49.7z M36.8,49.6c0,0,0.3,0.2,0.3,0.6c0,0.4-0.2,0.6-0.3,0.6
+				C36.7,50.8,36.7,49.7,36.8,49.6L36.8,49.6z M2.4,50.9c0,0-0.1-0.1-0.1-0.2c0-0.1,0-0.2,0.1-0.2c0,0,0.1,0.1,0.1,0.2
+				C2.5,50.8,2.5,50.9,2.4,50.9L2.4,50.9z M39.1,10.8c-0.3-0.4-0.5-0.5-0.7-0.8c-0.2-0.3-0.1-0.4-0.1-0.9c0-1.4-1.3-1.7-2.1-1.8
+				c-0.6-0.1-0.9-0.1-0.9-0.3C35.2,6.6,35,6,34.8,5.7c-0.4-0.6-1-1-1.3-1.2C33,4.2,32.3,4,31.7,4.1c-0.5,0.1-1,0.4-1.4,0.7
+				c-0.7,0.6-0.6,1-0.9,1c-0.4,0-1,0.2-1.5,0.3c-0.5,0.2-0.6,0-0.7-0.2c-0.1-0.2,0-0.5-0.3-0.9c-0.3-0.4-0.7-0.4-0.6-1
+				c0.1-0.5,0.1-1.1-0.1-1.6c-0.2-0.4-0.3-0.2-0.3-0.6c0-0.4-0.2-0.8-0.4-1.1c-0.3-0.4-1.1-0.4-1.6-0.3c-0.5,0.1-0.5,0.1-0.6-0.1
+				c-0.2-0.3-0.6-0.4-0.9-0.3c-0.2,0.1-0.3,0.3-0.6,0.3c-0.3,0-0.2-0.3-0.7-0.3c-0.3,0.1-0.4,0.4-0.5,0.2C20.3,0.2,20.2,0,20,0
+				c-0.2,0.1-0.2,0.3-0.4,0.3c-0.2,0-0.5-0.4-0.9-0.3c-0.2,0-0.3,0.1-0.4,0.1c-0.3,0.1-0.1-0.3-0.8-0.1c-0.2,0.1-0.3,0.6-0.5,0.6
+				c-0.1,0-0.4-0.4-0.9-0.2c-0.3,0.1-0.3,0.3-0.7,0.3c-0.3,0-0.7-0.2-1.4,0.1c-0.7,0.3-0.7,0.9-0.6,1c0.1,0.4,0.1,1.2,0.2,1.4
+				c0.1,0.2,0.1,0.5-0.3,0.9c-0.3,0.3-0.5,1-0.7,1.3c-0.2,0.3-0.5,0.1-0.8,0C11.7,5.3,11.3,5,10.7,5c-0.5,0-0.8-0.1-1.2-0.6
+				C9.1,3.9,8.6,3.8,8.3,3.8c-0.2,0-0.9,0-1.2,0.3C7,4.1,6.7,4.5,6.5,4.4c-0.2-0.1-0.5,0-0.8,0.2C5.4,4.8,5,5.1,4.8,5.4
+				C4.5,5.8,4.4,6.1,4.3,6.2C4.2,6.3,4,6.7,3.8,6.8C3.6,6.9,3,7.5,2.6,7.5C2.4,7.5,2.1,7.7,1.9,8C1.6,8.3,1.6,8.9,1.5,9.3
+				c-0.1,0.4-0.6,0.9-0.8,1.1C0.5,10.6-0.1,11.5,0,12c0.1,0.4,0.1,0.7,0.3,0.8c0.2,0.1,0.3,0,0.5,0.1c0.1,0.1,0.1,0.3,0,0.4
+				c-0.1,0.1,0.5,0.6,0.7,0.7C1.7,14.1,1.9,14,2,14.2c0.1,0.2,0.3,0.7,0.4,0.8c0.2,0.2,0.1,0.3,0.4,0.6C3,16,3.3,16.2,3.5,16.4
+				c0.2,0.3,0.3,0.5,0.4,0.6c0.1,0.2,0.6,0.1,1,0c0.4-0.1,0.7-0.6,0.8-0.9c0.1-0.3,0.2-0.4,0.2-0.2c0,0.2,0.1,0.7,0.1,1
+				c0,0.3-0.2,0.3-0.4,0.5c-0.1,0.3-0.1,0.4-0.1,0.7c-0.1,0.3-0.8,0.7-0.8,1.6c0,0.2,0.3,0.4,0,0.6c-0.3,0.3-0.2,0.5-0.2,1.3
+				c0,0.6,0.2,0.4,0.1,0.6c-0.3,0.5-0.1,1.2,0.2,1.5C5.1,24.1,5.1,24,5,24.3c-0.2,0.4,0.3,1.2,0.5,1.6c0.3,0.3,0.9,0.6,0.9,1.1
+				c0,0.7,0.9,1.1,1,1.1c0.1,0.1,0,0.8,0.2,1.2c0.2,0.3,0.9,0.4,0.7,0.8c-0.2,0.6-0.1,1.1,0,1.9c0,0.8,0.6,3,0.7,3.7
+				c0.1,0.7-0.5,1.5-0.5,2.9c0.1,1.4-0.3,2.5-0.7,2.6c-0.4,0.1-1-0.2-1.5,0c-0.5,0.2-0.6,1-0.6,1.2c0,0.1-0.8,0.4-1,0.9
+				c-0.2,0.5,0.1,1.2,0.2,1.3c0.1,0.2-0.3,0.3-0.5,0.4c-0.2,0.1-0.3,0.3-0.5,0.6c-0.1,0.2-0.3,0.1-0.4,0.1c-0.1,0-0.5,0.3-0.5,0.5
+				c0,0.2,0,0.5,0,0.6c0,0.2-0.2,0.3-0.2,0.4c0,0.1,0.1,0.8-0.1,1c-0.1,0.1-0.1,1.3-0.1,1.3s-0.3,0.2-0.4,0.5c-0.2,0.3-0.1,1,0,1.2
+				c0.1,0.2,0.7,0.2,0.6,0.4c0,0.2,0,2,0.2,2.3c0.2,0.3,0.6,1.2,0.7,1.5c0.1,0.3,0.4,0.3,0.6,0.5c0.2,0.2,0.5,0.3,0.7,0.3
+				c0.5,0,1.6,0.3,2,0.3c0.2,0,0.5-0.1,0.4,0c-0.7,0.6-0.4,1.4-0.1,1.8s1,0.6,1.4,0.7c0.3,0.1,11.5,0.3,11.5,0.3s9.3-0.1,9.9-0.1
+				c0.6,0,1-0.1,1.4-0.4c0.4-0.3,0.9-0.9,0.9-1.5c-0.1-0.6-0.1-0.9,0-0.9c0.1,0,0.9-0.2,1.6-0.5c0.7-0.2,1.5-0.9,1.6-1.2
+				c0-0.1,0.1-0.7,0.4-0.8c0.3-0.1,0.1-0.5,0.2-0.6c0.1-0.1,0.4-0.2,0.4-0.6c0-0.4,0.1-1.4,0.2-1.6c0.1-0.2,0.3-0.3,0.5-0.5
+				c0.2-0.1,0.1-1.2,0.1-1.3c-0.1-0.2-0.6-0.2-0.6-0.7c0-0.2,0.1-0.6,0-0.8c0-0.3-0.3-0.3-0.3-0.6c0-0.2-0.1-0.5-0.2-0.7
+				c-0.2-0.1-0.4-0.1-0.4-0.2c0-0.1-0.1-0.5-0.4-0.7c-0.2-0.1-0.1-0.2-0.2-0.5c-0.1-0.2-1-0.5-0.6-1c0.4-0.6,0-1.3-0.6-1.5
+				c-0.2-0.1-0.1-0.5-0.3-0.7c-0.2-0.3-0.7-0.8-1.4-0.7c-0.3,0-1.1,0-1.1-0.1c-0.2-0.2-0.5-0.7-0.5-1.3c0-0.5-0.4-1.5-0.7-2.1
+				c-0.2-0.3-0.3-0.7,0.1-1.4c0.4-0.7,0.5-2.2,0.5-2.8c0-0.5-0.2-2.9,0-2.9c0.8-0.1,0.2-0.7,0.6-0.9c0.4-0.2-0.1-0.5,0.3-0.7
+				c0.4-0.2,0.6-0.5,0.6-0.8c0-0.3,0.4-0.7,0.5-1c0.1-0.2,0-0.6,0.1-0.6c0.3-0.2,0.9-0.7,0.9-1.1c0-0.3-0.3-0.5,0-0.7
+				c0.3-0.3,0.6-0.9,0.7-1.2c0.1-0.6-0.5-0.3,0-0.8c0.4-0.5,0.5-1.1,0.4-1.5c-0.1-0.4-0.3-0.3-0.2-0.7c0.1-0.2,0.1-0.5,0.1-0.6
+				c0-0.3-0.1-0.6-0.4-0.9c-0.3-0.4,0.2-0.1,0.1-0.5c0-0.4-0.4-0.8-0.5-1c0-0.1-0.1-0.4-0.2-0.6c0-0.1-0.3-0.5-0.5-0.7
+				c-0.1-0.1-0.3-0.6,0.1-0.6c0.5,0,0.4,0.6,0.5,0.9c0.1,0.3,0.5,0.5,0.6,0.5c0.2,0.1,0.5,0.1,0.8-0.1c0.2-0.1,0.6-0.7,0.8-0.9
+				c0.2-0.2,0.6-0.4,0.7-0.7c0.1-0.3,0.3-0.6,0.5-0.8c0.2-0.2,0.7-0.5,0.9-0.6c0.3-0.3,0.4-0.4,0.8-0.8c0.4-0.4,0.6-0.8,0.7-1.2
+				C39.8,11.7,39.5,11.3,39.1,10.8L39.1,10.8z"/>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter_132_" filterUnits="userSpaceOnUse" x="1.8" y="60.8" width="36.1" height="7.3">
+					<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="1.8" y="60.8" width="36.1" height="7.3" id="mask-2_133_">
+				<g class="st266">
+					<polygon id="path-1_133_" class="st2" points="0,68.1 39.7,68.1 39.7,0 0,0 					"/>
+				</g>
+			</mask>
+			<path id="Fill-144" class="st267" d="M20,65c0,0,0.1,0,0.1,0c0.3,0,0.5,0,0.8,0.1v0.6c-0.2,0.2-0.4,0.3-0.5,0.3
+				c-0.1,0.1-0.3,0.1-0.6,0.2c-0.1,0-0.2,0-0.3,0c-0.3,0-0.5-0.1-0.5-0.4C19,65.3,19.4,65,20,65L20,65z M31,63.6h1.5V65
+				c0,0.3-0.2,0.5-0.5,0.7c-0.3,0.2-0.6,0.3-0.9,0.3c-0.2,0-0.3,0-0.5-0.1c-0.2-0.1-0.3-0.2-0.3-0.4c0-0.1,0-0.1,0.1-0.1l0.3-0.1
+				c0.3-0.1,0.5-0.3,0.5-0.5l-0.1-0.3L31.1,64C31,63.8,31,63.7,31,63.6L31,63.6z M15.2,65.3h1.7v-1.8h-1.7V65.3z M10.9,63.6h1.5V65
+				c0,0.3-0.2,0.5-0.5,0.7C11.6,65.9,11.3,66,11,66c-0.2,0-0.3,0-0.5-0.1c-0.2-0.1-0.3-0.2-0.3-0.4c0-0.1,0-0.1,0.1-0.1l0.3-0.1
+				c0.3-0.1,0.5-0.3,0.5-0.5L11,64.4L10.9,64C10.9,63.8,10.9,63.7,10.9,63.6L10.9,63.6z M3.7,63.6h1.9v1.5c-0.2,0.2-0.6,0.2-1,0.2
+				l-0.5,0c-0.2,0-0.3,0-0.3-0.1V63.6z M24.1,63v0.6h4.1v1.2l-2.2,0l-0.1,0c-0.1,0-0.1,0.1-0.1,0.1v0l0,0c0.5,0.5,0.7,0.8,0.8,1
+				c0,0.4-0.2,0.6-0.6,0.6c-0.2,0-0.3-0.1-0.4-0.1c-0.1-0.1-0.2-0.2-0.4-0.3c-0.1-0.1-0.2-0.3-0.4-0.6L24.6,65
+				c-0.1-0.1-0.1-0.2-0.2-0.2c-0.1,0-0.1,0.1-0.1,0.2l0,0.1l0.2,0.5c0.1,0.3,0.3,0.5,0.4,0.7c0.3,0.4,0.6,0.7,0.9,0.9
+				c0.2,0.1,0.5,0.2,0.7,0.2c0.4-0.1,0.6-0.3,0.6-0.7c0-0.2,0-0.4-0.1-0.6l-0.2-0.4l0-0.1c0,0,0.1-0.1,0.2-0.1c0.1,0,0.2,0,0.3,0
+				l1,0v2c0,0.1,0.1,0.2,0.2,0.3c0.3,0.3,0.5,0.4,0.5,0.4c0,0,0.1-0.1,0.1-0.2v-4.3h0.4h1.3c0.1,0.1,0.1,0.3,0.1,0.4
+				c0,0.3-0.1,0.4-0.3,0.5c-0.1,0.1-0.3,0.1-0.6,0.1l-0.3,0c-0.1,0-0.1,0.1-0.1,0.1c0,0.1,0.1,0.2,0.2,0.4l0.2,0.4
+				c0.5,0.7,1,1,1.5,1c0.3,0,0.6-0.1,0.8-0.2c0,0,0.1,0,0.1,0c0,0,0.1,0,0.1,0.1l0,0.3l0,0.3l0,0.2c0,0.1,0.1,0.1,0.1,0.2l0.4,0.4
+				c0.1,0.1,0.1,0.1,0.2,0.1c0,0,0,0,0-0.1l0-4.4h0.5h3v1.1l-1.2,0l-0.4,0c-0.3,0-0.5,0.1-0.7,0.3c-0.3,0.2-0.4,0.5-0.4,0.8
+				c0,0.4,0.1,0.7,0.4,1l0.5,0.7c0.1,0.2,0.3,0.4,0.6,0.5c0.1,0.1,0.2,0.1,0.3,0.1c0.1,0,0.1,0,0.1-0.1c0-0.1,0-0.1-0.1-0.2
+				c0-0.1-0.2-0.2-0.4-0.4L35,67.1c-0.3-0.2-0.4-0.5-0.4-0.9c0-0.6,0.3-0.9,1-1h1.1l0,2c0,0.1,0,0.2,0.1,0.3l0.2,0.2
+				c0.2,0.2,0.3,0.3,0.3,0.3c0,0,0-0.1,0-0.3v-4.2h0.5V63h-4.2h-4.4L24.1,63L24.1,63z M1.8,63v0.6h1.3v1c0,0.1,0,0.1-0.1,0.2
+				c-0.1,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.1,0-0.2-0.1c-0.1-0.1-0.2-0.1-0.3-0.1c-0.2,0-0.3,0.1-0.3,0.4c0,0.4,0.2,0.8,0.6,1.3l0.6,0.7
+				c0.2,0.2,0.4,0.4,0.7,0.7C4,68,4.2,68.1,4.3,68.1c0.1,0,0.1,0,0.1-0.1c0-0.2-0.2-0.4-0.4-0.6L3.5,67c-0.3-0.2-0.4-0.4-0.4-0.6
+				l0-0.1l0.1-0.2l0.3-0.4c0.1-0.1,0.1-0.2,0.1-0.3l0.2,0c0.1,0,0.1,0.1,0.2,0.1c0.1,0.1,0.2,0.2,0.3,0.2c0.1,0,0.3,0.1,0.5,0.1
+				l0.3,0c0.1,0,0.3,0,0.5-0.1l0,1.2c0,0.3,0.1,0.5,0.2,0.6c0,0,0.1,0.1,0.2,0.2C6.1,68,6.1,68,6.2,68c0,0,0,0,0-0.1
+				c0,0,0-0.1,0-0.1l0-4.3h0.4v0h3.8c0.1,0.1,0.1,0.3,0.1,0.4c0,0.3-0.1,0.4-0.3,0.5c-0.1,0.1-0.3,0.1-0.6,0.1l-1.7,0
+				c-0.3,0-0.5,0.1-0.7,0.3c-0.3,0.2-0.4,0.5-0.4,0.8c0,0.4,0.1,0.7,0.4,1l0.5,0.6c0.1,0.2,0.3,0.4,0.6,0.5C8.5,68,8.5,68,8.6,68
+				c0.1,0,0.1,0,0.1-0.1c0-0.1,0-0.1-0.1-0.2c0-0.1-0.2-0.2-0.4-0.4l-0.3-0.3c-0.3-0.2-0.4-0.5-0.4-0.8c0-0.6,0.3-0.9,0.9-0.9h1.2
+				l0.2,0.3c0.5,0.7,1,1,1.5,1c0.3,0,0.6-0.1,0.8-0.2c0,0,0.1,0,0.1,0c0,0,0.1,0,0.1,0.1l0,0.3l0,0.3l0,0.2c0,0.1,0.1,0.1,0.1,0.2
+				l0.4,0.4C12.9,68,13,68,13,68c0,0,0,0,0-0.1v-4.4h0.5h0.9v1.7l-0.1,0l-0.1,0h-0.1c-0.2,0-0.3,0.1-0.3,0.3c0,0.2,0.1,0.4,0.3,0.6
+				l0.3,0.4c0.1,0.2,0.3,0.2,0.4,0.2c0.1,0,0.1,0,0.2-0.1c0.1,0,0.1-0.1,0.1-0.2c0,0,0-0.1,0-0.1v-0.1l0-0.2c0-0.1,0-0.1,0.1-0.2
+				h1.5v1.3c0,0.1,0.1,0.2,0.3,0.4c0.2,0.2,0.3,0.3,0.4,0.3c0.1,0,0.1-0.1,0.1-0.2v-4.3h0.5h2.7v1.3l-0.6-0.4
+				c-0.2-0.1-0.3-0.1-0.5-0.1c-0.2,0-0.4,0-0.6,0.1c-0.5,0.1-0.7,0.4-0.7,0.9c0,0.3,0.2,0.7,0.5,1c0.3,0.3,0.6,0.5,1,0.5
+				c0.2,0,0.5-0.1,0.7-0.2l0.1-0.1c0,0,0,0,0.1,0l0.1,0l0,0.4c0,0.4,0.1,0.7,0.3,0.8c0.2,0.2,0.3,0.3,0.3,0.3c0.1,0,0.1-0.1,0.1-0.2
+				l0-4.3h0.6V63h-4h-4.6H6.7H1.8z M34.2,60.8c-0.2,0-0.3,0-0.3,0.1c0,0,0,0.1,0.1,0.2l0.1,0.2c0.2,0.3,0.3,0.4,0.5,0.4l0.1,0l0.1,0
+				l0.2,0l0.2,0c0.1,0,0.2,0,0.2,0.1c0.1,0.1,0.3,0.2,0.3,0.3l0.5,0.7c0.1,0.1,0.2,0.2,0.3,0.2c0,0,0.1,0,0.1-0.1
+				c0-0.1-0.1-0.2-0.2-0.3l-0.6-0.8C35.3,61,34.8,60.8,34.2,60.8L34.2,60.8z M14.4,60.8c-0.2,0-0.3,0-0.3,0.1c0,0,0,0.1,0.1,0.2
+				l0.1,0.2c0.2,0.3,0.3,0.4,0.5,0.4l0.1,0l0.1,0l0.2,0l0.2,0c0.1,0,0.1,0,0.2,0.1c0.1,0.1,0.3,0.2,0.3,0.3l0.5,0.7
+				c0.1,0.1,0.2,0.2,0.3,0.2c0,0,0.1,0,0.1-0.1c0-0.1-0.1-0.2-0.2-0.3L16,61.6C15.5,61,15,60.8,14.4,60.8L14.4,60.8z"/>
+		</g>
+	</g>
+</g>
+</svg>

@@ -401,7 +401,7 @@ export default function FusionAccordion({ onEnterPortal }) {
       {/* Top Header Row */}
       <div className="fusion-header-wrap">
         <div className="fusion-header-left">
-          <div className="section-eyebrow">OUR FEATURES</div>
+          <div className="section-eyebrow">CORE CAPABILITIES</div>
           <h2 className="fusion-title">
             Multi-source.<br />
             <span className="fusion-title-blue">One intelligence layer.</span>
