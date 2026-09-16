@@ -1487,9 +1487,9 @@
 /* Floating Right Map Tool Controls (+, -, recenter, fullscreen) */
 .tac-clean-map-tools {
   position: absolute;
-  top: 64px;
+  top: 76px;
   right: 14px;
-  z-index: 1000;
+  z-index: 200;
   background: rgba(7, 14, 27, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
@@ -1823,10 +1823,10 @@
   transform: translateY(-1px);
 }
 
-/* ================= BOTTOM ROW: 3 CARDS ================= */
+/* ================= BOTTOM ROW: 2 OPERATIONAL CARDS ================= */
 .tac-clean-bottom-row {
   display: grid;
-  grid-template-columns: 1.15fr 1fr 0.7fr;
+  grid-template-columns: 1.25fr 1fr;
   gap: 14px;
 }
 
@@ -2337,36 +2337,79 @@
 .tac-popover-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* Layer Toggle Rows */
+/* Layer Toggle Rows — matching reference UI mockup */
+.tac-popover-layers {
+  width: 270px;
+  background: rgba(8, 16, 30, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
 .tac-layer-toggle-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12.5px;
-  color: #e2e8f0;
+  gap: 12px;
+  font-size: 13.5px;
+  color: #f1f5f9;
   cursor: pointer;
-  padding: 5px 8px;
-  border-radius: 6px;
-  transition: background 0.15s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
   user-select: none;
 }
 
 .tac-layer-toggle-row:hover {
-  background: rgba(56, 189, 248, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tac-layer-toggle-row.checked {
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
 .tac-layer-toggle-row input[type="checkbox"] {
-  accent-color: #0284c7;
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
+  display: none;
+}
+
+.tac-toggle-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(9, 18, 34, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.tac-layer-toggle-row.checked .tac-toggle-check {
+  background: #0284c7;
+  border-color: #38bdf8;
+}
+
+.tac-layer-toggle-row.checked .tac-toggle-check::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
 }
 
 .tac-toggle-text {
   font-weight: 500;
+  font-size: 13.5px;
+  color: #f8fafc;
 }
 
 /* River Risk Panel */
@@ -2728,6 +2771,82 @@
   }
   100% {
     box-shadow: 0 0 30px rgba(56, 189, 248, 0.65);
+  }
+}
+
+/* =========================================================
+   PHONE VIEW: MOVE SIDEBAR BELOW HEADER (MAP CONTROLS ONLY)
+   ========================================================= */
+@media (max-width: 768px) {
+  .tac-app-shell {
+    flex-direction: column;
+  }
+
+  .tac-left-rail {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px 12px;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+    background: #030814;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+
+  .tac-rail-tools,
+  .tac-rail-top {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+    gap: 8px;
+    padding: 0;
+  }
+
+  .tac-rail-btn {
+    width: auto;
+    min-width: 68px;
+    height: 42px;
+    flex-direction: row;
+    gap: 6px;
+    padding: 6px 12px;
+  }
+
+  .tac-rail-btn .tac-rail-label {
+    font-size: 11px;
+  }
+
+  .tac-rail-bottom {
+    display: none; /* Hide non-map motto/artwork in phone view bar */
+  }
+
+  .tac-main-dashboard {
+    padding: 10px 10px 30px 10px;
+  }
+
+  .tac-clean-top-row {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .tac-clean-map-card {
+    min-height: 400px;
+  }
+
+  .tac-clean-map-topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tac-clean-timesteps-group {
+    overflow-x: auto;
+    max-width: 100%;
   }
 }
 

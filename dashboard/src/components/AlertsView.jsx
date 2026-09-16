@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 
 // Reuse the exact same CSS
 import './TacticalNowcast.css';
+import InstitutionalFooter from './InstitutionalFooter';
 
 // Fix Leaflet marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -507,6 +508,9 @@ export default function AlertsView({ showToast, onNavigateTab }) {
         </div>
 
       </div>
+
+      {/* Institutional Footer */}
+      <InstitutionalFooter />
     </div>
   );
 }

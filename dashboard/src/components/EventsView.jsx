@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EventsView.css';
+import InstitutionalFooter from './InstitutionalFooter';
 import { 
   Search, 
   Calendar, 
@@ -450,6 +451,9 @@ export default function EventsView({ onNavigateTab }) {
             </div>
           </div>
         </div>
+
+        {/* Institutional Footer */}
+        <InstitutionalFooter />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'reac
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './TacticalNowcast.css';
+import InstitutionalFooter from './InstitutionalFooter';
 
 // Fix Leaflet marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -368,18 +369,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     }
   };
 
-  // 3. Sidebar FORECAST Button (WHEN): Open compact forecast control
+  // 3. Sidebar FORECAST Button (WHEN): Direct Play/Pause simulation toggle
   const handleRailForecastClick = () => {
-    if (activeRailItem === 'forecast' && activePanel === 'forecast') {
-      setActivePanel(null);
-      setActiveRailItem('map');
-    } else {
-      setActiveRailItem('forecast');
-      setActivePanel('forecast');
-      setIsTimelineFocused(true);
-      setTimeout(() => setIsTimelineFocused(false), 2200);
-      if (showToast) showToast(`Forecast control active (${selectedStep})`);
-    }
+    setActivePanel(null);
+    handleTogglePlay();
   };
 
   // 4. Sidebar RIVERS Button (WHERE WATER GOES): Toggle rivers and open river risk panel
@@ -592,21 +585,26 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Layers</span>
           </button>
 
-          {/* 3. FORECAST (WHEN) */}
+          {/* 3. FORECAST (WHEN - Direct Play/Pause Simulation) */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'forecast' ? 'active' : ''}`}
+            className={`tac-rail-btn ${isPlaying ? 'active' : ''}`}
             onClick={handleRailForecastClick}
-            title="Forecast (WHEN) - Control forecast time shown on map"
+            title={isPlaying ? 'Pause Forecast Simulation' : 'Play 6-Hour Forecast Simulation'}
           >
             <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
-                <line x1="11" y1="19" x2="10" y2="23" strokeWidth="2.2" />
-                <line x1="15" y1="19" x2="14" y2="23" strokeWidth="2.2" />
-              </svg>
+              {isPlaying ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="6 4 20 12 6 20 6 4" />
+                </svg>
+              )}
             </div>
-            <span className="tac-rail-label">Forecast</span>
+            <span className="tac-rail-label">{isPlaying ? 'Pause' : 'Forecast'}</span>
           </button>
 
           {/* 4. RIVERS (WHERE WATER GOES) */}
@@ -744,7 +742,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   </button>
                 </div>
                 <div className="tac-popover-body">
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.precip ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.precip}
@@ -754,7 +752,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Precipitation</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.satellite || basemap === 'satellite' ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.satellite || basemap === 'satellite'}
@@ -764,7 +762,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Satellite</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.radar ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.radar}
@@ -774,7 +772,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Radar</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.terrain || basemap === 'terrain' ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.terrain || basemap === 'terrain'}
@@ -784,7 +782,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Terrain</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.rivers ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.rivers}
@@ -794,7 +792,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Rivers</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.wind ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.wind}
@@ -804,7 +802,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-toggle-text">Wind</span>
                   </label>
 
-                  <label className="tac-layer-toggle-row">
+                  <label className={`tac-layer-toggle-row ${layers.affectedArea ? 'checked' : ''}`}>
                     <input
                       type="checkbox"
                       checked={layers.affectedArea}
@@ -852,75 +850,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                     <span className="tac-river-stat-val" style={{ color: '#fca5a5' }}>
                       Karnaprayag Ghats, Alaknanda Riverbed Settlements
                     </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 3. FORECAST COMPACT PANEL */}
-            {activePanel === 'forecast' && (
-              <div className="tac-floating-popover tac-popover-forecast">
-                <div className="tac-popover-header">
-                  <div className="tac-popover-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2">
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                    <span>FORECAST SIMULATION</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close" 
-                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); }}
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="tac-popover-body">
-                  <div className="tac-forecast-popover-row">
-                    <button
-                      type="button"
-                      className={`tac-forecast-popover-play ${isPlaying ? 'playing' : ''}`}
-                      onClick={handleTogglePlay}
-                      title={isPlaying ? 'Pause forecast simulation' : 'Play 6-hour forecast progression'}
-                    >
-                      {isPlaying ? '⏸' : '▶'}
-                    </button>
-                    <div className="tac-forecast-pills-row">
-                      {TIME_STEPS.map((step) => (
-                        <button
-                          key={step}
-                          type="button"
-                          className={`tac-forecast-pill-btn ${selectedStep === step ? 'active' : ''}`}
-                          onClick={() => {
-                            setSelectedStep(step);
-                            if (showToast) showToast(`Nowcast timestep: ${step}`);
-                          }}
-                        >
-                          {step === 'Now' ? 'NOW' : step}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="tac-forecast-popover-status">
-                    <div className="tac-river-stat-box" style={{ marginTop: '8px' }}>
-                      <span className="tac-river-stat-lbl">Active Forecast:</span>
-                      <span className="tac-river-stat-val" style={{ color: '#38bdf8', fontWeight: 700 }}>
-                        {selectedStep === 'Now' ? 'NOW (Real-Time)' : `${selectedStep} Projection`}
-                      </span>
-                    </div>
-                    <div className="tac-river-stat-box">
-                      <span className="tac-river-stat-lbl">Estimated Rainfall:</span>
-                      <span className="tac-river-stat-val" style={{ color: '#f8fafc', fontWeight: 700 }}>
-                        {currentStepData.rainfall}
-                      </span>
-                    </div>
-                    <div className="tac-river-stat-box">
-                      <span className="tac-river-stat-lbl">Severity &amp; ETA:</span>
-                      <span className="tac-river-stat-val" style={{ color: currentStepData.riskColor, fontWeight: 800 }}>
-                        {currentStepData.riskLevel} · ETA {currentStepData.eta}
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1534,80 +1463,9 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
           </div>
         </div>
 
-        {/* ================= BOTTOM ROW: 3 CARDS ================= */}
+        {/* ================= BOTTOM ROW: 2 OPERATIONAL CARDS ================= */}
         <div className="tac-clean-bottom-row">
-          {/* Card 1: Forecast Timeline (Chamoli) */}
-          <div 
-            className={`tac-clean-card tac-clean-timeline-card ${isTimelineFocused ? 'pulse-highlight' : ''}`}
-            ref={timelineCardRef}
-          >
-            <div className="tac-clean-card-title-row">
-              <span className="tac-clean-card-title">Forecast Timeline ({selectedSector.split(',')[0]})</span>
-              <span className="tac-clean-sim-badge">6-Hour Nowcast Simulation</span>
-            </div>
-
-            <div className="tac-clean-timeline-body">
-              <button
-                type="button"
-                className="tac-clean-play-circle"
-                onClick={handleTogglePlay}
-                title={isPlaying ? 'Pause Simulation' : 'Play 6-Hour Nowcast Simulation'}
-              >
-                {isPlaying ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffffff">
-                    <rect x="6" y="4" width="4" height="16" />
-                    <rect x="14" y="4" width="4" height="16" />
-                  </svg>
-                ) : (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffffff">
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                )}
-              </button>
-
-              <div className="tac-clean-filmstrip">
-                {TIME_STEPS.map((step) => {
-                  const isSelected = selectedStep === step;
-                  return (
-                    <div
-                      key={step}
-                      className={`tac-clean-strip-item ${isSelected ? 'active' : ''}`}
-                      onClick={() => {
-                        setSelectedStep(step);
-                        if (showToast) showToast(`Nowcast simulation shifted to ${step}`);
-                      }}
-                    >
-                      <div className="tac-clean-strip-thumb">
-                        <svg viewBox="0 0 60 44" width="100%" height="100%">
-                          <rect width="60" height="44" fill="#071224" />
-                          <circle cx="30" cy="22" r="16" fill="#0284c7" opacity="0.3" />
-                          <circle cx="30" cy="22" r="12" fill="#22c55e" opacity="0.4" />
-                          <circle cx="30" cy="22" r="8" fill="#eab308" opacity="0.6" />
-                          <circle cx="30" cy="22" r="4" fill="#ef4444" opacity="0.9" />
-                        </svg>
-                      </div>
-                      <span className="tac-clean-strip-label">{step}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <button 
-                type="button"
-                className="tac-clean-strip-arrow"
-                onClick={() => {
-                  const idx = TIME_STEPS.indexOf(selectedStep);
-                  const nextIdx = (idx + 1) % TIME_STEPS.length;
-                  setSelectedStep(TIME_STEPS[nextIdx]);
-                }}
-                title="Next Timestep"
-              >
-                ›
-              </button>
-            </div>
-          </div>
-
-          {/* Card 2: Other Active Threats */}
+          {/* Card 1: Other Active Threats */}
           <div className="tac-clean-card">
             <div className="tac-clean-card-title-row">
               <span className="tac-clean-card-title">Other Active Threats (Next 6 Hours)</span>
@@ -1785,69 +1643,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
         </div>
 
         {/* ================= 3. INSTITUTIONAL FOOTER ================= */}
-        <footer className="tac-clean-footer">
-          <div className="tac-footer-left">
-            <div className="tac-footer-brand-logo">
-              <img 
-                src="/vayunet-logo.svg" 
-                alt="VAYUNET" 
-                className="tac-footer-vayu-img" 
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-              />
-              <span className="tac-footer-brand-text">VAYUNET</span>
-            </div>
-            <div className="tac-footer-emblem-wrap">
-              <img 
-                src="/emblem-india.svg" 
-                alt="Government of India" 
-                className="tac-footer-emblem-img" 
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-              />
-              <span className="tac-footer-dept">Ministry of Earth Sciences</span>
-              <span className="tac-footer-pipe">|</span>
-              <span className="tac-footer-dept">NCMRWF</span>
-            </div>
-          </div>
-
-          <div className="tac-footer-center">
-            <button 
-              type="button" 
-              className="tac-footer-link"
-              onClick={() => showToast && showToast('Help documentation: VAYUNET Operator Field Manual')}
-            >
-              Help
-            </button>
-            <span className="tac-footer-dot">•</span>
-            <button 
-              type="button" 
-              className="tac-footer-link"
-              onClick={() => showToast && showToast('Feedback: Send diagnostic logs to MoES/NCMRWF team')}
-            >
-              Feedback
-            </button>
-            <span className="tac-footer-dot">•</span>
-            <button 
-              type="button" 
-              className="tac-footer-link"
-              onClick={() => showToast && showToast('Terms of Service: Authorized NDMA/SDMA Personnel Only')}
-            >
-              Terms
-            </button>
-            <span className="tac-footer-dot">•</span>
-            <div className="tac-footer-status">
-              <span className="tac-footer-status-dot" />
-              <span>All Systems Operational</span>
-            </div>
-          </div>
-
-          <div className="tac-footer-right">
-            <div className="tac-footer-motto-wrap">
-              <span className="tac-footer-submotto">From Data to Action</span>
-              <span className="tac-footer-pipe">|</span>
-              <span className="tac-footer-mainmotto">For a Safer Tomorrow</span>
-            </div>
-          </div>
-        </footer>
+        <InstitutionalFooter />
       </div>
     </div>
   );
