@@ -46,6 +46,18 @@
 }
 
 /* ==========================================================================
+   OPERATIONS PORTAL MAIN BODY CONTAINER
+   Ensures clean clearance beneath the 60px fixed header (.home-nav)
+   ========================================================================== */
+.ops-portal-body {
+  width: 100%;
+  padding-top: 60px;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: calc(100vh - 60px);
+}
+
+/* ==========================================================================
    PRIMARY NAVIGATION HEADER
    ========================================================================== */
 

@@ -421,81 +421,51 @@ function App() {
         </div>
       </nav>
 
-      {/* 4-STAGE OPERATIONAL PIPELINE (SEE ➔ UNDERSTAND ➔ PROVE ➔ ACT) */}
-      <div className="ops-pipeline-strip">
-        <div className="ops-pipeline-inner">
-          <div className="ops-pipeline-badge">
-            <span className="ops-pipeline-pulse"></span>
-            <span>DECISION PIPELINE</span>
-          </div>
-          <div className="ops-pipeline-steps">
-            {[
-              { key: 'nowcast',  num: '1', verb: 'SEE', title: 'NOWCAST', desc: 'Live Awareness' },
-              { key: 'analysis', num: '2', verb: 'UNDERSTAND', title: 'ANALYSIS', desc: 'Physical Drivers & XAI' },
-              { key: 'events',   num: '3', verb: 'PROVE', title: 'EVENTS', desc: 'Historical Validation' },
-              { key: 'alerts',   num: '4', verb: 'ACT', title: 'ALERTS', desc: 'Emergency Dispatch' },
-            ].map((st, i) => (
-              <React.Fragment key={st.key}>
-                {i > 0 && <span className="ops-pipeline-sep">→</span>}
-                <button
-                  type="button"
-                  className={`ops-pipeline-chip ${portalTab === st.key ? 'active' : ''}`}
-                  onClick={() => handleTabSwitch(st.key)}
-                  title={`Stage ${st.num}: ${st.verb} (${st.desc})`}
-                >
-                  <span className="ops-chip-num">{st.num}. {st.verb}</span>
-                  <span className="ops-chip-title">{st.title}</span>
-                  <span className="ops-chip-desc">{st.desc}</span>
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* RENDER ACTIVE OPERATIONS VIEW (Offset by 60px for fixed header) */}
+      <main className="ops-portal-body">
+        {portalTab === 'nowcast' && (
+          <TacticalNowcastView
+            onNavigateTab={handleTabSwitch}
+            showToast={showToast}
+            onDispatchAlert={async () => {
+              try {
+                await fetch('http://localhost:8000/api/alerts/broadcast', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    event: 'CLOUDBURST + FLASH FLOOD',
+                    severity: 'HIGH RISK',
+                    area: 'Chamoli, Uttarakhand',
+                    validTime: '2h',
+                    protocol: 'CAP-1.2'
+                  }),
+                });
+                showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
+              } catch {
+                showToast('Demo dispatch — CAP payload queued for Chamoli (High Risk Flash Flood)');
+              }
+            }}
+          />
+        )}
 
-      {/* RENDER ACTIVE OPERATIONS VIEW */}
-      {portalTab === 'nowcast' && (
-        <TacticalNowcastView
-          onNavigateTab={handleTabSwitch}
-          showToast={showToast}
-          onDispatchAlert={async () => {
-            try {
-              await fetch('http://localhost:8000/api/alerts/broadcast', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  event: 'CLOUDBURST + FLASH FLOOD',
-                  severity: 'HIGH RISK',
-                  area: 'Chamoli, Uttarakhand',
-                  validTime: '2h',
-                  protocol: 'CAP-1.2'
-                }),
-              });
-              showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
-            } catch {
-              showToast('Demo dispatch — CAP payload queued for Chamoli (High Risk Flash Flood)');
-            }
-          }}
-        />
-      )}
-
-      {portalTab === 'analysis' && (
-        <AnalysisView 
-          currentData={currentData} 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
-      {portalTab === 'events' && (
-        <EventsView 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
-      {portalTab === 'alerts' && (
-        <AlertsView 
-          showToast={showToast} 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
+        {portalTab === 'analysis' && (
+          <AnalysisView 
+            currentData={currentData} 
+            onNavigateTab={handleTabSwitch} 
+          />
+        )}
+        {portalTab === 'events' && (
+          <EventsView 
+            onNavigateTab={handleTabSwitch} 
+          />
+        )}
+        {portalTab === 'alerts' && (
+          <AlertsView 
+            showToast={showToast} 
+            onNavigateTab={handleTabSwitch} 
+          />
+        )}
+      </main>
 
       {/* SYSTEM STATUS & TELEMETRY UTILITY DRAWER */}
       <SystemDrawer
