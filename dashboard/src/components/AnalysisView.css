@@ -4,8 +4,8 @@
    ========================================================= */
 
 .ana-page-wrapper {
-  background: #060b17;
-  min-height: calc(100vh - 60px);
+  background: #040914;
+  flex: 1;
   width: 100%;
   box-sizing: border-box;
   color: #f8fafc;

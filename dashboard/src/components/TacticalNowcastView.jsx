@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'reac
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './TacticalNowcast.css';
-import InstitutionalFooter from './InstitutionalFooter';
 
 // Fix Leaflet marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -1640,9 +1639,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
       {/* END tac-main-dashboard */}
     </div>
     {/* END tac-operational-body */}
-
-    {/* ================= 3. FULL-WIDTH INSTITUTIONAL FOOTER ================= */}
-    <InstitutionalFooter />
   </div>
   );
 }

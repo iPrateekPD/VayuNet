@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import './AnalysisView.css';
-import InstitutionalFooter from './InstitutionalFooter';
 import { 
   MapPin, 
   ChevronDown, 
@@ -605,14 +604,7 @@ export default function AnalysisView({ onNavigateTab }) {
             </div>
 
           </div>
-
         </div>
-
-        {/* =========================================================
-            3. INSTITUTIONAL FOOTER
-            ========================================================= */}
-        <InstitutionalFooter />
-
       </div>
     </div>
   );

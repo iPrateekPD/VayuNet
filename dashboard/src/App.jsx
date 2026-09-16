@@ -16,6 +16,7 @@ import AnalysisView from './components/AnalysisView';
 import EventsView from './components/EventsView';
 import AlertsView from './components/AlertsView';
 import SystemDrawer from './components/SystemDrawer';
+import InstitutionalFooter from './components/InstitutionalFooter';
 import './components/OperationsPortal.css';
 
 function App() {
@@ -466,6 +467,9 @@ function App() {
           />
         )}
       </main>
+
+      {/* SHARED FULL-WIDTH INSTITUTIONAL FOOTER CONSISTENT ACROSS ALL 4 OPERATIONAL PAGES */}
+      <InstitutionalFooter />
 
       {/* SYSTEM STATUS & TELEMETRY UTILITY DRAWER */}
       <SystemDrawer
