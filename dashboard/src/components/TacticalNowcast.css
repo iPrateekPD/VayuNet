@@ -1152,14 +1152,17 @@
 
 .tac-clean-nowcast-root {
   background: #050a14;
-  min-height: calc(100vh - 120px);
-  padding: 14px 14px 48px 14px;
+  min-height: calc(100vh - 70px);
+  padding: 14px 20px 40px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
   box-sizing: border-box;
   font-family: var(--font-sans, 'Inter', sans-serif);
   color: #f8fafc;
+  max-width: 1560px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Top Row: Map + Threat Card */

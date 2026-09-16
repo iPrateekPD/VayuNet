@@ -227,41 +227,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
   };
 
   return (
-    <div className="tac-clean-nowcast-root" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {/* Action Stage Header Banner */}
-      <div className="tac-alerts-stage-bar">
-        <div className="tac-asb-left">
-          <span className="tac-asb-pill">STAGE 4 · ACT</span>
-          <span className="tac-asb-title">Emergency Incident Dispatch &amp; ITU-T X.1303 (CAP 1.2) Multi-Agency Broadcast</span>
-        </div>
-        <div className="tac-asb-right">
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('nowcast')}
-            title="Return to Nowcast"
-          >
-            ← 1. Live Nowcast
-          </button>
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('analysis')}
-            title="Review scientific analysis"
-          >
-            ← 2. Why? (Analysis)
-          </button>
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('events')}
-            title="Review historical validation"
-          >
-            ← 3. Proof (Events)
-          </button>
-        </div>
-      </div>
-
+    <div className="tac-clean-nowcast-root">
       {/* ================= TOP ROW: MAP + ALERT DETAILS CARD ================= */}
       <div className="tac-clean-top-row">
         

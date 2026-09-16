@@ -13,9 +13,10 @@ import {
   CheckCircle2, 
   Mountain, 
   FileText,
-  ChevronRight,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Wind,
+  Zap
 } from 'lucide-react';
 
 const HISTORICAL_EVENTS = [
@@ -39,9 +40,9 @@ const HISTORICAL_EVENTS = [
     summaryText: 'An intense cloudburst over Dharamsala triggered severe flash flooding along Manjhi Khad, causing significant damage in downstream areas. VAYUNET detected rapid CTT drop and high moisture convergence 4 hours prior to the event.',
     casualties: '14',
     takeaways: [
-      { icon: 'check', title: 'Early Detection Works', desc: 'VAYUNET detected rapid cloud-top cooling 4.2 h before the flash flood, enabling critical lead time for response.' },
-      { icon: 'mountain', title: 'Terrain Amplification', desc: 'Steep terrain over Kangra Valley amplified convective rainfall, leading to rapid runoff in Manjhi Khad.' },
-      { icon: 'doc', title: 'Model Improvement', desc: 'Post-event analysis helped refine terrain-aware precipitation modeling, reducing false alarms by 14% in similar regions.' }
+      { icon: 'check', title: 'Early Detection Proven', desc: 'VAYUNET detected rapid cloud-top cooling 4.2 h before the flash flood, providing critical advance notice.' },
+      { icon: 'mountain', title: 'Terrain Amplification', desc: 'Steep terrain over Kangra Valley amplified convective rainfall, causing rapid runoff in Manjhi Khad.' },
+      { icon: 'doc', title: 'Model Improvement', desc: 'Post-event analysis helped refine terrain-aware precipitation modeling, reducing false alarms by 14%.' }
     ]
   },
   {
@@ -183,42 +184,30 @@ export default function EventsView({ onNavigateTab }) {
     return () => clearInterval(timer);
   }, [isPlaying]);
 
-  const renderTakeawayIcon = (iconName) => {
-    switch (iconName) {
-      case 'check': return <CheckCircle2 size={18} className="hist-takeaway-icon-green" />;
-      case 'mountain': return <Mountain size={18} className="hist-takeaway-icon-blue" />;
-      case 'doc': return <FileText size={18} className="hist-takeaway-icon-doc" />;
-      default: return <CheckCircle2 size={18} />;
-    }
+  const getHazardIcon = (hazard) => {
+    if (hazard.includes('Cloudburst')) return <CloudRain size={16} color="#38bdf8" />;
+    if (hazard.includes('Cyclone')) return <Wind size={16} color="#06b6d4" />;
+    if (hazard.includes('Landslide')) return <Mountain size={16} color="#eab308" />;
+    return <AlertTriangle size={16} color="#ef4444" />;
   };
 
   return (
     <div className="hist-root">
-      
-      {/* Left Sidebar */}
+      {/* LEFT SIDEBAR: EVENT SELECTOR */}
       <div className="hist-sidebar">
         <div className="hist-sidebar-header">
-          <div className="hist-sidebar-title">Historical Events</div>
-          <div className="hist-sidebar-subtitle">Validated disaster cases to evaluate VAYUNET's performance.</div>
+          <div className="hist-sidebar-title">Historical Disasters</div>
+          <div className="hist-sidebar-subtitle">Validated disaster archives evaluating VAYUNET model accuracy</div>
         </div>
 
         <div className="hist-search-wrap">
-          <Search size={16} color="#64748b" />
+          <Search size={14} color="#64748b" />
           <input 
             className="hist-search-input" 
-            placeholder="Search events..." 
+            placeholder="Search verified events..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
-
-        <div className="hist-sort-row">
-          <span className="hist-sort-label">Sort by</span>
-          <select className="hist-sort-select">
-            <option>Date (Latest)</option>
-            <option>Severity</option>
-            <option>Location</option>
-          </select>
         </div>
 
         <div className="hist-event-list">
@@ -228,90 +217,51 @@ export default function EventsView({ onNavigateTab }) {
               className={`hist-event-item ${evt.id === selectedId ? 'active' : ''}`}
               onClick={() => setSelectedId(evt.id)}
             >
-              <img 
-                src={`https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=200&auto=format&fit=crop`} 
-                className="hist-event-thumb" 
-                alt="Event thumbnail" 
-                style={evt.id === 'mumbai-2020' ? { filter: 'hue-rotate(180deg)'} : {}}
-              />
+              <div className="hist-event-icon-box">
+                {getHazardIcon(evt.hazard)}
+              </div>
               <div className="hist-event-info">
-                <div>
-                  <div className="hist-event-name">{evt.name}</div>
-                  <div className="hist-event-hazard">{evt.hazard}</div>
-                  <div className="hist-event-date">{evt.date}</div>
+                <div className="hist-event-name">{evt.name}</div>
+                <div className="hist-event-meta-row">
+                  <span className="hist-event-hazard">{evt.hazard.split('+')[0].trim()}</span>
+                  <span className="hist-event-date">{evt.date}</span>
                 </div>
-                <div className={`hist-badge hist-badge-${evt.badge}`}>
-                  {evt.outcome}
-                </div>
+              </div>
+              <div className={`hist-badge hist-badge-${evt.badge}`}>
+                {evt.outcome}
               </div>
             </div>
           ))}
         </div>
-
-        <div className="hist-total-events">
-          <div className="hist-total-left">
-            <div className="hist-total-icon">
-              <FileText size={16} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#f1f5f9' }}>14 Validated Events</div>
-              <div style={{ fontSize: '11px', color: '#64748b' }}>(2018 - 2026)</div>
-            </div>
-          </div>
-          <ChevronRight size={18} color="#64748b" />
-        </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* RIGHT MAIN AREA */}
       <div className="hist-main">
-        
-        {/* Header Bar */}
-        <div className="hist-header-section">
+        {/* Event Header Bar */}
+        <div className="hist-header">
           <div className="hist-header-left">
-            <div className="hist-breadcrumb" style={{ color: '#38bdf8', fontWeight: 600 }}>
-              STAGE 3: HISTORICAL VALIDATION (PROVE) &gt; {selectedEvent.name}
-            </div>
             <div className="hist-title-row">
-              <div className="hist-main-title">{selectedEvent.name}</div>
-              <div className={`hist-badge hist-badge-${selectedEvent.badge}`} style={{ marginTop: 0 }}>
+              <h2 className="hist-main-title">{selectedEvent.name}</h2>
+              <span className={`hist-badge-pill hist-badge-${selectedEvent.badge}`}>
                 VERIFIED {selectedEvent.outcome}
-              </div>
+              </span>
             </div>
-            <div className="hist-main-subtitle">{selectedEvent.summaryText.split('.')[0]}.</div>
+            <p className="hist-main-subtitle">{selectedEvent.summaryText}</p>
           </div>
 
-          <div className="hist-header-right" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div className="hist-meta-box">
-              <Calendar size={16} className="hist-meta-icon" />
-              <div className="hist-meta-content">
-                <span className="hist-meta-label">Date</span>
-                <span className="hist-meta-value">{selectedEvent.date}</span>
-              </div>
+          <div className="hist-header-right">
+            <div className="hist-meta-pill">
+              <Calendar size={13} className="hist-meta-icon" />
+              <span>{selectedEvent.date}</span>
             </div>
-            <div className="hist-meta-box">
-              <MapPin size={16} className="hist-meta-icon" />
-              <div className="hist-meta-content">
-                <span className="hist-meta-label">Location</span>
-                <span className="hist-meta-value">{selectedEvent.location.split(',')[0]}</span>
-              </div>
+            <div className="hist-meta-pill">
+              <MapPin size={13} className="hist-meta-icon" />
+              <span>{selectedEvent.location.split(',')[0]}</span>
             </div>
-            <div className="hist-meta-box">
-              <AlertTriangle size={16} className="hist-meta-icon" style={{ color: '#ef4444' }} />
-              <div className="hist-meta-content">
-                <span className="hist-meta-label">Hazard Category</span>
-                <span className="hist-meta-value">{selectedEvent.hazard}</span>
-              </div>
+            <div className="hist-meta-pill">
+              <AlertTriangle size={13} className="hist-meta-icon" style={{ color: '#f59e0b' }} />
+              <span>{selectedEvent.hazard}</span>
             </div>
-
-            <button
-              type="button"
-              className="hist-vas-btn primary"
-              onClick={() => onNavigateTab && onNavigateTab('alerts')}
-              title="Proceed to alert generation in Alerts console"
-              style={{ height: '38px', alignSelf: 'center', marginLeft: '6px' }}
-            >
-              4. Dispatch Alert (ACT) →
-            </button>
           </div>
         </div>
 
@@ -319,40 +269,40 @@ export default function EventsView({ onNavigateTab }) {
         <div className="hist-stats-row">
           <div className="hist-stat-card">
             <div className="hist-stat-icon-wrap hist-stat-icon-blue">
-              <CloudRain size={20} />
+              <CloudRain size={18} />
             </div>
             <div className="hist-stat-details">
               <span className="hist-stat-label">Observed Rainfall</span>
               <span className="hist-stat-val">{selectedEvent.observedRainfall}</span>
-              <span className="hist-stat-sub">(IMD / Gauge)</span>
+              <span className="hist-stat-sub">IMD Doppler &amp; Gauge</span>
             </div>
           </div>
 
           <div className="hist-stat-card">
             <div className="hist-stat-icon-wrap hist-stat-icon-red">
-              <Target size={20} />
+              <Target size={18} />
             </div>
             <div className="hist-stat-details">
               <span className="hist-stat-label">Predicted Probability</span>
               <span className="hist-stat-val">{selectedEvent.predictedProb}</span>
-              <span className="hist-stat-sub">(VAYUNET Core Run)</span>
+              <span className="hist-stat-sub">VAYUNET Core Run</span>
             </div>
           </div>
 
           <div className="hist-stat-card">
             <div className="hist-stat-icon-wrap hist-stat-icon-cyan">
-              <Clock size={20} />
+              <Clock size={18} />
             </div>
             <div className="hist-stat-details">
               <span className="hist-stat-label">Warning Lead Time</span>
               <span className="hist-stat-val">{selectedEvent.leadTime}</span>
-              <span className="hist-stat-sub">(Advance Notice)</span>
+              <span className="hist-stat-sub">Advance Notice Window</span>
             </div>
           </div>
 
           <div className="hist-stat-card">
             <div className="hist-stat-icon-wrap hist-stat-icon-green">
-              <BarChart2 size={20} />
+              <BarChart2 size={18} />
             </div>
             <div className="hist-stat-details">
               <span className="hist-stat-label">Critical Success Index</span>
@@ -362,28 +312,22 @@ export default function EventsView({ onNavigateTab }) {
           </div>
         </div>
 
-        {/* Middle Layout */}
+        {/* Replay Section (Observed vs Predicted vs Impact) */}
         <div className="hist-middle-layout">
-          {/* Left: Replay */}
           <div className="hist-card hist-replay-panel">
             <div className="hist-replay-header">
               <div>
                 <div className="hist-replay-title">Event Replay — Observed vs Predicted</div>
-                <div className="hist-replay-subtitle">Compare VAYUNET predictions with actual observations over time.</div>
+                <div className="hist-replay-subtitle">Temporal comparison of radar observations and model output</div>
               </div>
               <div className="hist-replay-actions">
                 <button className="hist-btn-play" onClick={() => setIsPlaying(!isPlaying)}>
-                  <Play size={14} fill="currentColor" /> {isPlaying ? 'Pause Replay' : 'Play Replay'}
+                  <Play size={13} fill="currentColor" /> {isPlaying ? 'Pause' : 'Play Replay'}
                 </button>
-                <select className="hist-btn-speed">
-                  <option>1x</option>
-                  <option>2x</option>
-                  <option>0.5x</option>
-                </select>
               </div>
             </div>
 
-            {/* Timeline */}
+            {/* Timeline Scrubber */}
             <div className="hist-timeline">
               <div className="hist-timeline-line" />
               <div 
@@ -391,7 +335,11 @@ export default function EventsView({ onNavigateTab }) {
                 style={{ width: `${(TIMELINE_STEPS.findIndex(s => s.id === currentStep) / (TIMELINE_STEPS.length - 1)) * 100}%` }} 
               />
               {TIMELINE_STEPS.map((step) => (
-                <div key={step.id} className={`hist-timeline-step ${currentStep === step.id ? 'active' : ''}`}>
+                <div 
+                  key={step.id} 
+                  className={`hist-timeline-step ${currentStep === step.id ? 'active' : ''}`}
+                  onClick={() => setCurrentStep(step.id)}
+                >
                   <span className="hist-timeline-label">{step.id}</span>
                   <span className="hist-timeline-time">{step.time}</span>
                   <div className="hist-timeline-dot" />
@@ -399,187 +347,109 @@ export default function EventsView({ onNavigateTab }) {
               ))}
             </div>
 
-            {/* Map Row */}
+            {/* 3 Crisp Vector Visualizations (NO BROKEN IMAGES) */}
             <div className="hist-map-row">
+              {/* Box 1: Observed */}
               <div className="hist-map-col">
                 <div className="hist-map-title-row">
-                  <span className="hist-map-title">Observed (Radar / Gauge)</span>
+                  <span className="hist-map-title">Observed Radar Echo</span>
                   <span className="hist-map-time">{selectedEvent.date}, 22:30 IST</span>
                 </div>
-                <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Observed" style={{ filter: 'saturate(2) hue-rotate(-20deg)' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
-                    📍 {selectedEvent.location.split(',')[0]}
-                  </div>
+                <div className="hist-vector-box">
+                  <svg viewBox="0 0 200 120" width="100%" height="100%">
+                    <rect width="200" height="120" fill="#040914" />
+                    <circle cx="100" cy="55" r="48" stroke="rgba(255,255,255,0.06)" strokeWidth="1" fill="none" />
+                    <circle cx="100" cy="55" r="28" stroke="rgba(255,255,255,0.08)" strokeWidth="1" fill="none" />
+                    <ellipse cx="100" cy="54" rx="55" ry="32" fill="#0284c7" opacity="0.35" />
+                    <ellipse cx="100" cy="53" rx="36" ry="20" fill="#22c55e" opacity="0.55" />
+                    <ellipse cx="100" cy="52" rx="22" ry="13" fill="#eab308" opacity="0.75" />
+                    <ellipse cx="100" cy="51" rx="12" ry="7" fill="#ef4444" opacity="0.95" />
+                    <circle cx="100" cy="51" r="2.5" fill="#ffffff" />
+                    <text x="100" y="80" fill="#f1f5f9" fontSize="9" fontWeight="700" textAnchor="middle">📍 {selectedEvent.location.split(',')[0]}</text>
+                  </svg>
                 </div>
               </div>
 
+              {/* Box 2: Prediction */}
               <div className="hist-map-col">
                 <div className="hist-map-title-row">
-                  <span className="hist-map-title">VAYUNET Prediction</span>
-                  <span className="hist-map-time">{selectedEvent.date}, 22:30 IST</span>
+                  <span className="hist-map-title">VAYUNET Model Forecast</span>
+                  <span className="hist-map-time">Lead: {selectedEvent.leadTime}</span>
                 </div>
-                <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Prediction" style={{ filter: 'saturate(2) hue-rotate(-10deg)' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
-                    📍 {selectedEvent.location.split(',')[0]}
-                  </div>
+                <div className="hist-vector-box">
+                  <svg viewBox="0 0 200 120" width="100%" height="100%">
+                    <rect width="200" height="120" fill="#040914" />
+                    <circle cx="100" cy="55" r="48" stroke="rgba(255,255,255,0.06)" strokeWidth="1" fill="none" />
+                    <circle cx="100" cy="55" r="28" stroke="rgba(255,255,255,0.08)" strokeWidth="1" fill="none" />
+                    <ellipse cx="98" cy="53" rx="50" ry="30" fill="#0ea5e9" opacity="0.35" />
+                    <ellipse cx="98" cy="52" rx="32" ry="18" fill="#10b981" opacity="0.55" />
+                    <ellipse cx="98" cy="52" rx="19" ry="11" fill="#f59e0b" opacity="0.75" />
+                    <ellipse cx="98" cy="51" rx="10" ry="6" fill="#dc2626" opacity="0.95" />
+                    <circle cx="98" cy="51" r="2.5" fill="#ffffff" />
+                    <text x="100" y="80" fill="#f1f5f9" fontSize="9" fontWeight="700" textAnchor="middle">Prediction (CSI: {selectedEvent.csi})</text>
+                  </svg>
                 </div>
               </div>
 
+              {/* Box 3: Impact */}
               <div className="hist-map-col">
                 <div className="hist-map-title-row">
-                  <span className="hist-map-title">Affected Area & Impact</span>
+                  <span className="hist-map-title">Runoff &amp; Impact Zone</span>
                   <span className="hist-map-time" style={{ color: '#38bdf8' }}>Post Event Analysis</span>
                 </div>
-                <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Impact" style={{ filter: 'grayscale(1) brightness(0.6)' }} />
-                  <div style={{ position: 'absolute', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(239,68,68,0.4) 0%, rgba(239,68,68,0) 70%)', border: '1px dashed #ef4444', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
-                    📍 {selectedEvent.location.split(',')[0]}
-                  </div>
+                <div className="hist-vector-box">
+                  <svg viewBox="0 0 200 120" width="100%" height="100%">
+                    <rect width="200" height="120" fill="#040914" />
+                    <path d="M20 95 Q70 65 100 52 Q140 45 180 20" stroke="#0284c7" strokeWidth="2.5" fill="none" opacity="0.6" />
+                    <ellipse cx="100" cy="53" rx="42" ry="24" fill="rgba(239, 68, 68, 0.25)" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3,3" />
+                    <circle cx="100" cy="52" r="3" fill="#ef4444" />
+                    <text x="100" y="80" fill="#fca5a5" fontSize="9" fontWeight="700" textAnchor="middle">Casualties: {selectedEvent.casualties}</text>
+                  </svg>
                 </div>
               </div>
             </div>
-
-            {/* Intensity Legend */}
-            <div style={{ display: 'flex', gap: '24px', marginTop: '4px' }}>
-              <div style={{ flex: 1 }}>
-                <div className="hist-map-legend-label">Precipitation Intensity (mm/hr)</div>
-                <div className="hist-map-legend">
-                  <div className="hist-legend-ramp" />
-                  <div className="hist-legend-ticks">
-                    <span>0</span><span>5</span><span>10</span><span>20</span><span>50</span><span>100</span>
-                  </div>
-                </div>
-              </div>
-              <div style={{ flex: 1 }}>
-                <div className="hist-map-legend-label">Precipitation Intensity (mm/hr)</div>
-                <div className="hist-map-legend">
-                  <div className="hist-legend-ramp" />
-                  <div className="hist-legend-ticks">
-                    <span>0</span><span>5</span><span>10</span><span>20</span><span>50</span><span>100</span>
-                  </div>
-                </div>
-              </div>
-              <div style={{ flex: 1 }} className="hist-legend-boxes">
-                <div className="hist-legend-box-item">
-                  <div className="hist-legend-square" style={{ border: '1px solid #ef4444' }} />
-                  <span>Predicted Area</span>
-                </div>
-                <div className="hist-legend-box-item">
-                  <div className="hist-legend-square" style={{ background: '#eab308' }} />
-                  <span>Observed Extent</span>
-                </div>
-              </div>
-            </div>
-
           </div>
 
-          {/* Right: Summary and Perf */}
+          {/* Right Summary Column */}
           <div className="hist-right-panel">
             <div className="hist-card hist-info-card">
-              <div className="hist-info-title">Event Summary</div>
-              <div className="hist-summary-text">{selectedEvent.summaryText}</div>
-              
-              <div className="hist-summary-table">
-                <div className="hist-summary-row">
-                  <span className="hist-summary-key">Observed Rainfall</span>
-                  <span className="hist-summary-val">{selectedEvent.observedRainfall}</span>
-                </div>
-                <div className="hist-summary-row">
-                  <span className="hist-summary-key">Predicted Probability</span>
-                  <span className="hist-summary-val">{selectedEvent.predictedProb}</span>
-                </div>
-                <div className="hist-summary-row">
-                  <span className="hist-summary-key">Warning Lead Time</span>
-                  <span className="hist-summary-val">{selectedEvent.leadTime}</span>
-                </div>
-                <div className="hist-summary-row">
-                  <span className="hist-summary-key">Casualties</span>
-                  <span className="hist-summary-val">{selectedEvent.casualties}</span>
-                </div>
-                <div className="hist-summary-row">
-                  <span className="hist-summary-key">Outcome</span>
-                  <span className="hist-summary-val" style={{ color: '#22c55e' }}>Verified {selectedEvent.outcome}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="hist-card hist-info-card">
-              <div className="hist-info-title">Model Performance <span style={{ color: '#64748b', fontSize: '12px', fontWeight: 'normal' }}>(vs Benchmarks)</span></div>
-              
+              <div className="hist-info-title">Model Performance vs Baseline</div>
               <div className="hist-perf-table">
                 <div className="hist-perf-row">
                   <span className="hist-perf-key">Critical Success Index (CSI)</span>
                   <span className="hist-perf-val">{selectedEvent.csi}</span>
-                  <span className="hist-perf-change"><TrendingUp size={14} /> +38%</span>
+                  <span className="hist-perf-change"><TrendingUp size={13} /> +38%</span>
                 </div>
                 <div className="hist-perf-row">
-                  <span className="hist-perf-key">Probability of Detection (POD)</span>
+                  <span className="hist-perf-key">Probability of Detection</span>
                   <span className="hist-perf-val">{selectedEvent.pod}</span>
-                  <span className="hist-perf-change"><TrendingUp size={14} /> +22%</span>
+                  <span className="hist-perf-change"><TrendingUp size={13} /> +22%</span>
                 </div>
                 <div className="hist-perf-row" style={{ borderBottom: 'none' }}>
                   <span className="hist-perf-key">False Alarm Ratio (FAR)</span>
                   <span className="hist-perf-val">{selectedEvent.far}</span>
-                  <span className="hist-perf-change negative"><TrendingDown size={14} /> -35%</span>
+                  <span className="hist-perf-change negative"><TrendingDown size={13} /> -35%</span>
                 </div>
               </div>
 
               <div className="hist-perf-baseline">
-                <BarChart2 size={18} className="hist-perf-baseline-icon" />
+                <BarChart2 size={16} className="hist-perf-baseline-icon" />
                 <div>
-                  <div className="hist-perf-baseline-title">Outperformed IMD baseline</div>
+                  <div className="hist-perf-baseline-title">Outperformed IMD Baseline</div>
                   <div className="hist-perf-baseline-stats">CSI: 0.52 | POD: 0.72 | FAR: 0.31</div>
                 </div>
               </div>
             </div>
+
+            {/* Key Takeaways */}
+            <div className="hist-card hist-info-card">
+              <div className="hist-info-title">Key Takeaway</div>
+              <p style={{ fontSize: '11.5px', color: '#cbd5e1', lineHeight: '1.5', margin: 0 }}>
+                {selectedEvent.takeaways[0].desc}
+              </p>
+            </div>
           </div>
         </div>
-
-        {/* Key Takeaways */}
-        <div className="hist-card hist-takeaways-panel">
-          <div className="hist-info-title">Key Takeaways</div>
-          <div className="hist-takeaways-grid">
-            {selectedEvent.takeaways.map((takeaway, idx) => (
-              <div key={idx} className="hist-takeaway-item">
-                <div className="hist-takeaway-icon">
-                  {renderTakeawayIcon(takeaway.icon)}
-                </div>
-                <div className="hist-takeaway-text">
-                  <div className="hist-takeaway-title">{takeaway.title}</div>
-                  <div className="hist-takeaway-desc">{takeaway.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Model Validation Verdict & Action Banner */}
-        <div className="hist-verdict-action-strip">
-          <div className="hist-vas-text">
-            <span className="hist-vas-tag">BENCHMARK PROVEN</span>
-            <span>VAYUNET achieved CSI {selectedEvent.csi} and {selectedEvent.leadTime} advance lead time for {selectedEvent.name}. Model predictive credibility is confirmed for emergency action.</span>
-          </div>
-          <div className="hist-vas-actions">
-            <button
-              type="button"
-              className="hist-vas-btn secondary"
-              onClick={() => onNavigateTab && onNavigateTab('analysis')}
-            >
-              ← Review Current Physics
-            </button>
-            <button
-              type="button"
-              className="hist-vas-btn primary"
-              onClick={() => onNavigateTab && onNavigateTab('alerts')}
-            >
-              Model Verified ➔ Dispatch Emergency Alert (ACT) →
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   );
