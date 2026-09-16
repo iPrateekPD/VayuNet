@@ -220,9 +220,11 @@
 .home-nav.nav-scrolled {
   position: fixed;
   top: 0;
-  background: rgba(2, 10, 15, 0.96);
-  border-bottom: 1px solid rgba(98, 192, 191, 0.22);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 1px 0 rgba(98, 192, 191, 0.08);
+  background: #030a14 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .home-nav-inner {
@@ -8975,7 +8977,7 @@ html {
   }
 }
 
-/* Ensure fixed header on all views */
+/* Ensure fixed header on all views without downward shadow or gradient */
 .cp-header-container,
 .home-nav {
   position: fixed !important;
@@ -8983,4 +8985,15 @@ html {
   left: 0 !important;
   width: 100% !important;
   z-index: 99999 !important;
+}
+
+.home-nav.nav-scrolled {
+  background: #030a14 !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.ops-portal-body {
+  background: #040914 !important;
+  box-shadow: none !important;
 }
