@@ -1,365 +1,1054 @@
 /* =========================================================
-   AnalysisView.css — Streamlined Full-Width Explainable AI Dashboard
-   Aligned with Nowcast and Alerts layout standards
+   AnalysisView.css — High-Fidelity Explainable AI Dashboard
+   Matches the VAYUNET Operator Console Reference Mockup
    ========================================================= */
 
-.ana-root {
-  background: #050a14;
-  min-height: calc(100vh - 70px);
-  padding: 14px 20px 40px 20px;
+.ana-page-wrapper {
+  background: #060b17;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  box-sizing: border-box;
+  color: #f8fafc;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  padding: 12px 24px 24px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  box-sizing: border-box;
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  color: #f8fafc;
-  max-width: 1560px;
+}
+
+.ana-container {
+  max-width: 1480px;
   margin: 0 auto;
   width: 100%;
-}
-
-/* 1. Header */
-.ana-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #091223;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 12px 18px;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
 }
 
-.ana-header-left {
+/* =========================================================
+   1. TOP BAR / TITLE & SECTOR / TIMESTAMP
+   ========================================================= */
+.ana-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 2px;
+}
+
+.ana-top-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.ana-page-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ana-page-subtitle {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+  font-weight: 500;
+}
+
+.ana-top-center {
+  display: flex;
+  align-items: center;
+}
+
+/* Sector Selector Dropdown */
+.ana-sector-wrapper {
+  position: relative;
+}
+
+.ana-sector-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(11, 20, 36, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #f1f5f9;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: all 0.2s ease;
+}
+
+.ana-sector-pill:hover {
+  background: rgba(16, 28, 50, 0.95);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.ana-sector-pin {
+  color: #38bdf8;
+}
+
+.ana-sector-name {
+  color: #ffffff;
+}
+
+.ana-sector-chevron {
+  color: #94a3b8;
+}
+
+.ana-sector-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 230px;
+  background: #091222;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ana-sector-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ana-sector-option:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #ffffff;
+}
+
+.ana-sector-option.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Live Timestamp Pill */
+.ana-top-right {
+  display: flex;
+  align-items: center;
+}
+
+.ana-live-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(11, 20, 36, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.ana-timestamp-text {
+  font-size: 12.5px;
+  color: #e2e8f0;
+  font-family: var(--font-mono, monospace);
+  font-weight: 500;
+}
+
+.ana-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: ana-live-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ana-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.ana-live-text {
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   2. MAIN DASHBOARD 2-COLUMN GRID
+   ========================================================= */
+.ana-main-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.ana-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ana-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Base Card Styling */
+.ana-card {
+  background: #081122;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+/* Card Header */
+.ana-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+}
+
+.ana-card-header-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.ana-header-icon-box {
-  width: 38px;
-  height: 38px;
+.ana-icon-badge-blue {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
+  flex-shrink: 0;
+}
+
+.ana-icon-badge-teal {
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.ana-header-title {
-  font-size: 16px;
+.ana-card-title {
+  font-size: 15px;
   font-weight: 700;
   color: #ffffff;
-  letter-spacing: -0.2px;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.ana-header-subtitle {
+.ana-card-subtitle {
   font-size: 11.5px;
   color: #94a3b8;
-  margin-top: 2px;
+  margin: 3px 0 0 0;
 }
 
-.ana-header-right {
+/* Layer Toggle Group (Satellite | Radar) */
+.ana-layer-toggle-group {
+  display: flex;
+  background: #050a16;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.ana-layer-toggle-btn {
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 14px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ana-layer-toggle-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+/* =========================================================
+   MAP CONTAINER & OVERLAYS
+   ========================================================= */
+.ana-map-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.ana-map-container-inner {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.ana-clean-leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: #040812;
+}
+
+.ana-map-card .leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Compass Rose Badge (Top-Left) */
+.ana-map-compass-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 500;
+  background: rgba(7, 14, 25, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  padding: 4px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.ana-compass-arrow {
+  color: #ffffff;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.ana-compass-n {
+  color: #cbd5e1;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Custom Zoom Group (Bottom-Left) */
+.ana-clean-zoom-group {
+  position: absolute;
+  bottom: 50px;
+  left: 14px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 15, 27, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+}
+
+.ana-clean-zoom-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ana-clean-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.ana-clean-zoom-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Distance Scale Bar (Bottom-Left) */
+.ana-map-scale-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  z-index: 500;
+  background: rgba(7, 14, 25, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 5px;
+  padding: 4px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.ana-scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #cbd5e1;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  gap: 12px;
+}
+
+.ana-scale-ruler {
+  display: flex;
+  height: 4px;
+  margin-top: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ana-ruler-segment {
+  height: 100%;
+}
+
+.ana-ruler-segment.seg-1 {
+  width: 25%;
+  background: #ffffff;
+}
+
+.ana-ruler-segment.seg-2 {
+  width: 25%;
+  background: #000000;
+}
+
+.ana-ruler-segment.seg-3 {
+  width: 50%;
+  background: #ffffff;
+}
+
+/* Floating Precipitation Intensity Legend (Bottom-Right) */
+.ana-map-legend-box {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 500;
+  background: rgba(8, 16, 29, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 220px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.ana-legend-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 6px;
+}
+
+.ana-legend-gradient-bar {
+  height: 7px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    #0033cc 0%,
+    #0099ff 15%,
+    #00ff66 35%,
+    #ffff00 55%,
+    #ff6600 75%,
+    #ff0033 90%,
+    #b30086 100%
+  );
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ana-legend-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #cbd5e1;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* Map Marker Styles (DivIcon) */
+.ana-map-target-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ana-target-outer-ring {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: rgba(239, 68, 68, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px #ef4444, 0 0 6px #ffffff;
+}
+
+.ana-target-inner-core {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.ana-target-label-badge {
+  background: rgba(0, 0, 0, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+}
+
+.ana-map-loc-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.ana-loc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+}
+
+.ana-loc-text {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+.ana-map-river-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.ana-river-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.ana-river-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f1f5f9;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.95);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ATMOSPHERIC CONDITIONS CARD
+   ========================================================= */
+.ana-atmospheric-card {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ana-section-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ana-atm-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.ana-atm-box {
+  background: rgba(12, 22, 38, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ana-atm-box-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ana-atm-box-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ana-atm-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.ana-atm-val {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  line-height: 1.2;
+  margin: 2px 0 5px 0;
+}
+
+.ana-atm-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.ana-atm-badge.badge-high {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.ana-atm-badge.badge-mod {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  color: #facc15;
+}
+
+/* =========================================================
+   RIGHT COLUMN CARDS
+   ========================================================= */
+
+/* CARD 1: AI Analysis */
+.ana-ai-analysis-card {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ana-ai-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ana-ai-header-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.ana-pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(4, 18, 28, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.ana-ai-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ana-ai-conf-badge {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
   border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 11.5px;
-  color: #cbd5e1;
-}
-
-.ana-pill-icon {
-  color: #38bdf8;
-}
-
-.ana-pill-label {
+  padding: 3px 8px;
+  color: #f87171;
+  font-size: 11px;
   font-weight: 600;
 }
 
-.ana-conf-pill {
+.ana-ai-header-right {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  border-radius: 6px;
-  padding: 6px 12px;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
-.ana-conf-label {
+.ana-risk-label {
   font-size: 10.5px;
-  color: #86efac;
   font-weight: 600;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.ana-conf-val {
-  font-size: 14px;
-  font-weight: 800;
+.ana-risk-val {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ef4444;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  margin: 1px 0;
+}
+
+.ana-risk-time-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.ana-risk-time-row strong {
   color: #ffffff;
-  font-family: var(--font-mono, monospace);
 }
 
-/* 2. Reasoning & Feature Attribution Grid (2 Columns) */
-.ana-grid-2 {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 14px;
-}
-
-@media (max-width: 1024px) {
-  .ana-grid-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.ana-card {
-  background: #091223;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 16px 18px;
+.ana-ai-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
-}
-
-.ana-card-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ana-card-title {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.2px;
 }
 
-.ana-badge-critical {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-
-.ana-card-sub {
-  font-size: 11px;
-  color: #64748b;
-}
-
-.ana-reasoning-lead {
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: #cbd5e1;
+.ana-ai-lead-headline {
+  font-size: 17px;
+  line-height: 1.45;
   margin: 0;
 }
 
-.ana-driver-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: auto;
+.ana-headline-alert {
+  color: #ef4444;
+  font-weight: 700;
 }
 
-@media (max-width: 640px) {
-  .ana-driver-metrics-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.ana-driver-metric-box {
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
-  padding: 8px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.ana-dmb-label {
-  font-size: 9px;
+.ana-headline-cause {
+  color: #f8fafc;
   font-weight: 600;
+}
+
+.ana-ai-paragraph {
+  font-size: 13px;
   color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.ana-dmb-val {
-  font-size: 12.5px;
-  font-weight: 700;
-  font-family: var(--font-mono, monospace);
-  margin-top: 1px;
-}
-
-.ana-dmb-sub {
-  font-size: 8.5px;
-  color: #64748b;
-}
-
-/* Feature Attribution SHAP Bars */
-.ana-fa-list {
+/* CARD 2: Key Contributing Factors */
+.ana-factors-card {
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-}
-
-.ana-fa-row {
-  display: grid;
-  grid-template-columns: 190px 1fr 40px;
-  align-items: center;
-  gap: 12px;
-}
-
-.ana-fa-label {
-  font-size: 11.5px;
-  color: #cbd5e1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ana-fa-bar-bg {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.ana-fa-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.4s ease;
-}
-
-.ana-fa-pct {
-  font-size: 11px;
-  font-weight: 700;
-  color: #f1f5f9;
-  text-align: right;
-  font-family: var(--font-mono, monospace);
-}
-
-/* 3. 4-Column Atmospheric Telemetry Cards */
-.ana-maps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 14px;
 }
 
-@media (max-width: 1024px) {
-  .ana-maps-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .ana-maps-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.ana-map-card {
-  background: #091223;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  overflow: hidden;
+.ana-factors-list {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  gap: 12px;
 }
 
-.ana-map-header {
+.ana-factor-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
-  background: #060d19;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 16px;
 }
 
-.ana-map-title {
+.ana-factor-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.ana-factor-icon {
+  flex-shrink: 0;
+}
+
+.ana-factor-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f1f5f9;
+}
+
+.ana-factor-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.ana-factor-bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.ana-factor-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-out;
+}
+
+.ana-factor-pct {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono, monospace);
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* CARD 3: What This Means */
+.ana-what-means-card {
+  padding: 16px 20px;
+}
+
+.ana-what-means-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ana-bulb-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.2);
+}
+
+.ana-what-means-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ana-what-means-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2dd4bf;
+  margin: 0 0 5px 0;
+}
+
+.ana-what-means-desc {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* =========================================================
+   3. INSTITUTIONAL FOOTER
+   ========================================================= */
+.ana-clean-footer {
+  margin-top: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ana-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ana-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ana-footer-brand {
+  display: flex;
+  align-items: center;
+}
+
+.ana-footer-logo {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ana-footer-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ana-footer-inst {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.ana-footer-emblem {
+  height: 20px;
+  width: auto;
+  opacity: 0.85;
+}
+
+.ana-footer-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.ana-footer-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.ana-footer-link:hover {
+  color: #f1f5f9;
+}
+
+.ana-footer-dot {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.ana-footer-sys-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 9999px;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  color: #86efac;
+  font-weight: 600;
+}
+
+.ana-footer-sys-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.ana-footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.ana-footer-motto-muted {
+  font-size: 11px;
+  color: #64748b;
+  letter-spacing: 0.3px;
+}
+
+.ana-footer-motto-bold {
   font-size: 11.5px;
   font-weight: 700;
-  color: #ffffff;
+  color: #cbd5e1;
 }
 
-.ana-map-badge {
-  font-size: 9px;
-  font-weight: 700;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: var(--font-mono, monospace);
+/* =========================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================= */
+@media (max-width: 1200px) {
+  .ana-main-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ana-factor-bar-wrapper {
+    width: 180px;
+  }
 }
 
-.ana-vector-canvas {
-  position: relative;
-  width: 100%;
-  height: 155px;
-  background: #040914;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
+@media (max-width: 768px) {
+  .ana-page-wrapper {
+    padding: 12px 14px 24px 14px;
+  }
 
-.ana-vector-legend-h {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 10px;
-  background: rgba(4, 9, 20, 0.92);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 9px;
-  color: #94a3b8;
-  font-family: var(--font-mono, monospace);
-}
+  .ana-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 
-.ana-legend-ramp-temp {
-  flex: 1;
-  height: 5px;
-  margin: 0 8px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 30%, #8b5cf6 60%, #ec4899 85%, #f43f5e 100%);
-}
+  .ana-atm-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.ana-legend-ramp-moisture {
-  flex: 1;
-  height: 5px;
-  margin: 0 8px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #0b1728 0%, #06b6d4 40%, #0ea5e9 75%, #38bdf8 100%);
-}
+  .ana-map-container-inner {
+    height: 380px;
+  }
 
-.ana-legend-ramp-cape {
-  flex: 1;
-  height: 5px;
-  margin: 0 8px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #15803d 0%, #eab308 35%, #f97316 70%, #ef4444 100%);
+  .ana-ai-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ana-ai-header-right {
+    align-items: flex-start;
+  }
+
+  .ana-factor-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ana-factor-bar-wrapper {
+    width: 100%;
+  }
+
+  .ana-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
 }
