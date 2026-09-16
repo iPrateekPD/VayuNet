@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { INDIAN_LANGUAGES } from './HomePage';
-import DayNightToggle from './DayNightToggle';
 
 const FAST_TRACK_USERS = [
   { 
@@ -12,10 +11,9 @@ const FAST_TRACK_USERS = [
   },
 ];
 
-export default function LoginPage({ onLoginSuccess, onBackHome, theme, onToggleTheme }) {
+export default function LoginPage({ onLoginSuccess, onBackHome }) {
   const [credentials, setCredentials] = useState({ user: '', pass: '' });
   const [language, setLanguage] = useState('EN');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +72,7 @@ export default function LoginPage({ onLoginSuccess, onBackHome, theme, onToggleT
       <div className="login-page-glow-overlay" />
 
       {/* Main Navigation Bar */}
-      <nav className="home-nav nav-scrolled" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+      <nav className="home-nav nav-scrolled" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
         <div className="home-nav-inner">
           <div className="home-brand" onClick={onBackHome} style={{ cursor: 'pointer' }} title="Return to VAYUNET Home">
             <div className="home-logo">
@@ -90,16 +88,14 @@ export default function LoginPage({ onLoginSuccess, onBackHome, theme, onToggleT
           </div>
 
           <div className="home-nav-actions">
-            {/* Day / Night Theme Toggle */}
-            {onToggleTheme && <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />}
-
             {/* Language dropdown */}
-            <div className="home-lang-wrap">
+            <div className="home-lang-wrap" title="Select Language">
               <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="2" y1="12" x2="22" y2="12"/>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
               </svg>
+              <span className="home-lang-code-mobile">{language}</span>
               <select 
                 className="home-lang-select" 
                 value={language} 
@@ -135,83 +131,7 @@ export default function LoginPage({ onLoginSuccess, onBackHome, theme, onToggleT
               <span>← Return to Home</span>
             </button>
           </div>
-
-          {/* Mobile Hamburger Button */}
-          <button
-            className="mobile-hamburger-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Navigation Menu"
-          >
-            {mobileMenuOpen ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="mobile-nav-drawer">
-            <div className="mobile-nav-links">
-              {onToggleTheme && (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
-                  <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-                </div>
-              )}
-              <div className="mobile-nav-lang-row">
-                <span>Language:</span>
-                <select 
-                  className="home-lang-select" 
-                  value={language} 
-                  onChange={(e) => setLanguage(e.target.value)}
-                >
-                  {INDIAN_LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mobile-nav-divider" />
-              <button 
-                className="nav-link-item" 
-                style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                onClick={() => { setMobileMenuOpen(false); onBackHome(); }}
-              >
-                ← Return to Home
-              </button>
-              <button 
-                className="nav-link-item" 
-                style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                onClick={() => { setMobileMenuOpen(false); window.location.hash = '#/warnings'; }}
-              >
-                Public Warnings ↗
-              </button>
-              <div className="mobile-nav-divider" />
-              <button
-                className="btn-primary-nav mobile-nav-btn"
-                onClick={() => { setMobileMenuOpen(false); onBackHome(); }}
-              >
-                <span>← Back to VAYUNET Home</span>
-              </button>
-              <div className="mobile-gov-footer">
-                <div>Ministry of Earth Sciences, Government of India</div>
-                <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
-                  VAYUNET Command Gateway
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Main Authentication Terminal Content */}

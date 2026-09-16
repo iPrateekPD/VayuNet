@@ -49,11 +49,12 @@
 
 /* Top Sovereign Header Container */
 .cp-header-container {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
   width: 100%;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+  z-index: 1000;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.25);
 }
 
 /* Sovereign Emergency Broadcast Ticker */
@@ -413,7 +414,7 @@
   position: relative;
   background-size: cover;
   background-position: center;
-  padding: 48px 24px 72px 24px;
+  padding: 138px 24px 72px 24px;
   color: #ffffff;
   overflow: hidden;
 }

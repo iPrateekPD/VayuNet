@@ -3,7 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroMap from './HeroMap';
 import FusionAccordion from './FusionAccordion';
-import DayNightToggle from './DayNightToggle';
 import VayunetSplashIntro from './VayunetSplashIntro';
 import {
   WEATHER_LAYERS,
@@ -35,7 +34,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
   const [activeLayer, setActiveLayer] = useState('precipitation');
   const [scrubberIdx, setScrubberIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileLayerSheetOpen, setMobileLayerSheetOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero-section');
   const [language, setLanguage] = useState('EN');
@@ -160,7 +158,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
       }
 
       // 1. Initial State: Hide all other elements before map zooms into position on Earth
-      gsap.set(['.emergency-alert-ticker', '.home-nav'], { opacity: 0, y: -25 });
+      gsap.set(['.home-nav', '.emergency-alert-ticker'], { opacity: 0, y: -25 });
       gsap.set('.hero-text-readability-overlay', { opacity: 0 });
       gsap.set('.hero-headline', { opacity: 0, y: 25 });
       gsap.set('.hero-lead-text', { opacity: 0, y: 20 });
@@ -206,7 +204,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           ease: 'power2.out',
         }, '-=0.35')
         // 3. Primary navigation & alert ticker drop in from top
-        .to(['.emergency-alert-ticker', '.home-nav'], {
+        .to(['.home-nav', '.emergency-alert-ticker'], {
           opacity: 1,
           y: 0,
           duration: 0.45,
@@ -468,16 +466,14 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
 
           {/* Right Header Actions */}
           <div className="home-nav-actions">
-            {/* Day / Night Theme Toggle */}
-            <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-
             {/* Language Option Dropdown */}
-            <div className="home-lang-wrap">
+            <div className="home-lang-wrap" title="Select Language">
               <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="2" y1="12" x2="22" y2="12"/>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
               </svg>
+              <span className="home-lang-code-mobile">{language}</span>
               <select 
                 className="home-lang-select" 
                 value={language} 
@@ -507,82 +503,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               <span>{t.enterPortal}</span>
             </button>
           </div>
-
-          {/* Mobile Hamburger Button */}
-          <button
-            className="mobile-hamburger-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Navigation Menu"
-          >
-            {mobileMenuOpen ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="mobile-nav-drawer">
-            <div className="mobile-nav-links">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
-                <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-              </div>
-              <div className="mobile-nav-lang-row">
-                <span>{language === 'HI' ? 'भाषा चुनें (Select Language):' : 'Select Language:'}</span>
-                <select 
-                  className="home-lang-select" 
-                  value={language} 
-                  onChange={(e) => {
-                    setLanguage(e.target.value);
-                    const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                    showToast(e.target.value === 'HI' ? 'भाषा बदलकर हिंदी (हिंदी) की गई' : `Language selected: ${sel?.label || e.target.value}`);
-                  }}
-                >
-                  {INDIAN_LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mobile-nav-divider" />
-              <a href="#hero-section" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{t.home}</a>
-              <a href="#data-fusion" onClick={() => { setMobileMenuOpen(false); document.getElementById('data-fusion')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.dataSources}</a>
-              <a href="#how-it-works" onClick={() => { setMobileMenuOpen(false); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.howItWorks}</a>
-              <div className="mobile-nav-divider" />
-              <button
-                className="btn-secondary-nav mobile-nav-btn"
-                onClick={() => { setMobileMenuOpen(false); onOpenPublicWarnings(); }}
-              >
-                <span className="nav-btn-pulse-dot"></span>
-                <span>{t.publicWarnings}</span>
-              </button>
-              <button
-                className="btn-primary-nav mobile-nav-btn"
-                onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
-                id="mobile-drawer-operator-access-btn"
-              >
-                <span>🛡️ Operator Access / Portal Login →</span>
-              </button>
-              <div className="mobile-gov-footer">
-                <div>Ministry of Earth Sciences, Government of India</div>
-                <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
-                  "Science in service of people."
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* ============================================================

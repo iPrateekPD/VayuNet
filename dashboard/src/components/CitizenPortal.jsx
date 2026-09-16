@@ -4,7 +4,6 @@ import L from 'leaflet';
 import gsap from 'gsap';
 import './CitizenPortal.css';
 import { INDIAN_LANGUAGES } from './HomePage';
-import DayNightToggle from './DayNightToggle';
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
 const LOCATION_DATABASE = {
@@ -253,7 +252,6 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
   const [toastMessage, setToastMessage] = useState(null);
   const [language, setLanguage] = useState('EN');
   const [liveIstTime, setLiveIstTime] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const headerRef = useRef(null);
   const footerRef = useRef(null);
@@ -472,32 +470,6 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
     <div className="cp-wrapper">
       {/* 1. SMART REDEFINED SOVEREIGN HEADER WITH GSAP ANIMATIONS */}
       <header className="cp-header-container" ref={headerRef}>
-        {/* Top Sovereign Emergency Broadcast Ticker */}
-        <div className="cp-header-ticker">
-          <div className="cp-ticker-inner">
-            <div className="cp-ticker-left cp-nav-anim-item">
-              <span className="cp-tricolor-flag">🇮🇳</span>
-              <span className="cp-gov-title">भारत सरकार | GOVERNMENT OF INDIA</span>
-              <span className="cp-ticker-divider">/</span>
-              <span className="cp-dept-title">Ministry of Earth Sciences (MoES)</span>
-            </div>
-
-            <div className="cp-ticker-center cp-nav-anim-item">
-              <span className="cp-live-pulse-beacon"></span>
-              <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
-              <span className="cp-ticker-chip">4km Convective Grid</span>
-              <span className="cp-ticker-time">{liveIstTime || '08:30:00 PM IST'}</span>
-            </div>
-
-            <div className="cp-ticker-right cp-nav-anim-item">
-              <a href="tel:1078" className="cp-ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
-                <span className="cp-helpline-icon">🚨</span>
-                <span>NDMA Helpline: <strong>1078</strong></span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         {/* Main Smart Navigation Bar */}
         <nav className="cp-navbar">
           <div className="cp-nav-inner">
@@ -522,15 +494,13 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
             </div>
 
             <div className="home-nav-actions cp-nav-anim-item">
-              {/* Day / Night Theme Toggle */}
-              <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-
-              <div className="home-lang-wrap">
+              <div className="home-lang-wrap" title="Select Language">
                 <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10"/>
                   <line x1="2" y1="12" x2="22" y2="12"/>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                 </svg>
+                <span className="home-lang-code-mobile">{language}</span>
                 <select 
                   className="home-lang-select" 
                   value={language} 
@@ -539,6 +509,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                     const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
                     showToast(`Language switched to ${sel?.label || e.target.value}`);
                   }}
+                  aria-label="Select Language"
                 >
                   {INDIAN_LANGUAGES.map(lang => (
                     <option key={lang.code} value={lang.code}>
@@ -568,94 +539,34 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 <span>Enter Operations Portal →</span>
               </button>
             </div>
-
-            {/* Mobile Hamburger Button */}
-            <button
-              className="mobile-hamburger-btn"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              ) : (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              )}
-            </button>
           </div>
-
-          {/* Mobile Navigation Drawer */}
-          {mobileMenuOpen && (
-            <div className="mobile-nav-drawer">
-              <div className="mobile-nav-links">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
-                  <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-                </div>
-                <div className="mobile-nav-lang-row">
-                  <span>Language:</span>
-                  <select 
-                    className="home-lang-select" 
-                    value={language} 
-                    onChange={(e) => {
-                      setLanguage(e.target.value);
-                      const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                      showToast(`Language switched to ${sel?.label || e.target.value}`);
-                    }}
-                  >
-                    {INDIAN_LANGUAGES.map(lang => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mobile-nav-divider" />
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); onBackHome(); }}
-                >
-                  ← Return to Home
-                </button>
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); setGuidanceModalOpen(true); }}
-                >
-                  Safety Guide & Protocols
-                </button>
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); setShelterModalOpen(true); }}
-                >
-                  Safe Shelters & Resources
-                </button>
-                <div className="mobile-nav-divider" />
-                <button
-                  className="btn-primary-nav mobile-nav-btn"
-                  onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
-                  id="cp-mobile-drawer-operator-btn"
-                >
-                  <span>🛡️ Operator Access / Portal Login →</span>
-                </button>
-                <div className="mobile-gov-footer">
-                  <div>Ministry of Earth Sciences, Government of India</div>
-                  <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
-                    National Severe Weather Alert System
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </nav>
+
+        {/* Top Sovereign Emergency Broadcast Ticker (Below Header) */}
+        <div className="cp-header-ticker">
+          <div className="cp-ticker-inner">
+            <div className="cp-ticker-left cp-nav-anim-item">
+              <span className="cp-tricolor-flag">🇮🇳</span>
+              <span className="cp-gov-title">भारत सरकार | GOVERNMENT OF INDIA</span>
+              <span className="cp-ticker-divider">/</span>
+              <span className="cp-dept-title">Ministry of Earth Sciences (MoES)</span>
+            </div>
+
+            <div className="cp-ticker-center cp-nav-anim-item">
+              <span className="cp-live-pulse-beacon"></span>
+              <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
+              <span className="cp-ticker-chip">4km Convective Grid</span>
+              <span className="cp-ticker-time">{liveIstTime || '08:30:00 PM IST'}</span>
+            </div>
+
+            <div className="cp-ticker-right cp-nav-anim-item">
+              <a href="tel:1078" className="cp-ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
+                <span className="cp-helpline-icon">🚨</span>
+                <span>NDMA Helpline: <strong>1078</strong></span>
+              </a>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* 2. HERO BANNER WITH SEARCH BAR OVERLAY */}

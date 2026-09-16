@@ -16,7 +16,6 @@ import AnalysisView from './components/AnalysisView';
 import EventsView from './components/EventsView';
 import AlertsView from './components/AlertsView';
 import SystemDrawer from './components/SystemDrawer';
-import DayNightToggle from './components/DayNightToggle';
 import './components/OperationsPortal.css';
 
 function App() {
@@ -307,9 +306,6 @@ function App() {
 
           {/* Right Side Things: Button shape, size, color keep same */}
           <div className="home-nav-actions">
-            {/* Day / Night Theme Toggle */}
-            <DayNightToggle isDark={theme === 'dark'} onToggle={toggleTheme} />
-
             {/* Language Selector */}
             <div className="home-lang-wrap">
               <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

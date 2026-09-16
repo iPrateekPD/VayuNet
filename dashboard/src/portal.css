@@ -23,17 +23,16 @@
 .emergency-alert-ticker {
   background: linear-gradient(90deg, #18080a 0%, #04151c 25%, #04151c 75%, #18080a 100%);
   border-bottom: 1px solid rgba(239, 68, 68, 0.35);
-  height: 30px;
+  height: 32px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  margin-top: 60px;
   width: 100%;
-  z-index: 102;
+  z-index: 90;
   font-family: var(--font-sans);
 }
 
@@ -203,17 +202,18 @@
    2. STREAMLINED HOME NAVIGATION (Single Row, 52px)
    ========================================================================== */
 .home-nav {
-  position: absolute;
-  top: 30px;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
-  z-index: 101;
-  background: rgba(3, 14, 20, 0.88);
+  z-index: 1000;
+  background: rgba(3, 14, 20, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(98, 192, 191, 0.12);
+  border-bottom: 1px solid rgba(98, 192, 191, 0.15);
   height: 60px;
   box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -379,6 +379,10 @@
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.home-lang-code-mobile {
+  display: none;
 }
 
 .home-lang-icon {
@@ -720,8 +724,9 @@
 .home-hero-container {
   position: relative;
   width: 100%;
-  height: 100vh;
-  min-height: 100vh;
+  height: calc(100vh - 92px);
+  min-height: calc(100vh - 92px);
+  max-height: calc(100vh - 92px);
   background-color: #020a0f;
   display: flex;
   flex-direction: column;
@@ -733,7 +738,7 @@
 /* Real Leaflet Map Canvas Layer */
 .hero-map-backdrop {
   position: absolute;
-  inset: -35px;
+  inset: 0;
   z-index: 1;
   overflow: hidden;
   will-change: transform;
@@ -762,8 +767,9 @@
 
 .home-page.hero-intro-active #hero-section,
 .home-page.hero-intro-active .home-hero-container {
-  height: 100vh;
-  min-height: 100vh;
+  height: calc(100vh - 92px);
+  min-height: calc(100vh - 92px);
+  max-height: calc(100vh - 92px);
 }
 
 .home-page.hero-intro-active .credibility-band,
@@ -4498,7 +4504,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px 20px;
+  padding: 80px 20px 48px;
   position: relative;
   z-index: 2;
 }
@@ -6130,7 +6136,9 @@ html {
 .home-hero-container {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 100px);
+  height: calc(100vh - 92px);
+  min-height: calc(100vh - 92px);
+  max-height: calc(100vh - 92px);
   background-color: #020a0f;
   display: flex;
   flex-direction: column;
@@ -6144,34 +6152,35 @@ html {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 48px 32px 32px;
-  flex: 1;
+  padding: 24px 32px 20px;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   pointer-events: none;
 }
 
 .hero-left-content {
-  max-width: 580px;
+  max-width: 560px;
   pointer-events: auto;
 }
 
 .hero-eyebrow-tag {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
   color: #62c0bf;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .hero-headline {
-  font-size: clamp(32px, 3.8vw, 50px);
+  font-size: clamp(26px, 3.1vw, 42px);
   font-weight: 800;
-  line-height: 1.14;
+  line-height: 1.15;
   color: #ffffff;
   letter-spacing: -0.5px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .hero-headline-accent {
@@ -6181,17 +6190,17 @@ html {
 }
 
 .hero-lead-text {
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 14.5px;
+  line-height: 1.55;
   color: #a2c8d5;
-  margin-bottom: 26px;
-  max-width: 520px;
+  margin-bottom: 18px;
+  max-width: 500px;
 }
 
 .hero-cta-group {
   display: flex;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
@@ -6327,9 +6336,9 @@ html {
 /* Floating controls on hero */
 .hero-map-interactive-zone {
   position: absolute;
-  top: 96px;
-  right: 28px;
-  bottom: 24px;
+  top: 16px;
+  right: 24px;
+  bottom: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -8337,9 +8346,9 @@ html {
     pointer-events: auto !important;
   }
 
-  /* 1. Mobile Header: Sticky at top: 0 */
+  /* 1. Mobile Header: Fixed at top: 0 */
   .home-nav {
-    position: sticky !important;
+    position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
@@ -8367,15 +8376,14 @@ html {
   .home-brand {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 9px !important;
     min-width: 0 !important;
     flex: 1 !important;
-    overflow: hidden !important;
   }
 
   .home-logo {
-    width: 32px !important;
-    height: 32px !important;
+    width: 36px !important;
+    height: 36px !important;
     flex-shrink: 0 !important;
   }
 
@@ -8389,7 +8397,6 @@ html {
     display: flex !important;
     flex-direction: column !important;
     min-width: 0 !important;
-    overflow: hidden !important;
   }
 
   .brand-row {
@@ -8399,7 +8406,7 @@ html {
   }
 
   .home-title {
-    font-size: 16px !important;
+    font-size: 17px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
     letter-spacing: 0.5px !important;
@@ -8417,16 +8424,17 @@ html {
     margin-top: 1px !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 150px !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none !important;
+    display: block !important;
   }
 
   .home-nav-links-capsule {
     display: none !important;
   }
 
-  /* Right Header Actions: Compact Language capsule + Hamburger */
+  /* Right Header Actions: Compact Language pill EN only */
   .home-nav-actions {
     display: flex !important;
     align-items: center !important;
@@ -8441,50 +8449,52 @@ html {
   }
 
   .home-lang-wrap {
+    position: relative !important;
     display: flex !important;
     align-items: center !important;
-    gap: 3px !important;
-    background: rgba(4, 18, 28, 0.8) !important;
-    border: 1px solid rgba(56, 189, 248, 0.25) !important;
-    border-radius: 6px !important;
-    padding: 2px 5px !important;
-    height: 28px !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    background: rgba(4, 18, 28, 0.85) !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    border-radius: 7px !important;
+    padding: 4px 8px !important;
+    height: 30px !important;
     box-sizing: border-box !important;
     flex-shrink: 0 !important;
+    cursor: pointer !important;
   }
 
   .home-lang-icon {
-    width: 11px !important;
-    height: 11px !important;
+    width: 12px !important;
+    height: 12px !important;
     color: #38bdf8 !important;
     flex-shrink: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .home-lang-code-mobile {
+    display: inline-block !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #f1f5f9 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    pointer-events: none !important;
   }
 
   .home-lang-select {
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    color: #f1f5f9 !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
     cursor: pointer !important;
-    padding-right: 0 !important;
-    max-width: 54px !important;
+    z-index: 2 !important;
   }
 
-  .mobile-hamburger-btn {
-    display: flex !important;
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 6px !important;
-    background: rgba(4, 18, 28, 0.8) !important;
-    border: 1px solid rgba(56, 189, 248, 0.25) !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    color: #f1f5f9 !important;
-    cursor: pointer !important;
-    flex-shrink: 0 !important;
+  .mobile-hamburger-btn,
+  .mobile-nav-drawer {
+    display: none !important;
   }
 
   /* 2. Weather Alert Ticker: Directly below Header */
@@ -8493,7 +8503,7 @@ html {
     top: auto !important;
     left: auto !important;
     width: calc(100% - 32px) !important;
-    margin: 10px 16px 12px 16px !important;
+    margin: 72px 16px 12px 16px !important;
     height: 36px !important;
     border-radius: 8px !important;
     background: rgba(24, 8, 10, 0.85) !important;
@@ -8746,51 +8756,74 @@ html {
 
   .national-data-sources-row {
     display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 10px 14px !important;
+    padding: 7px 10px !important;
     background: rgba(4, 18, 28, 0.55) !important;
     border: 1px solid rgba(56, 189, 248, 0.16) !important;
     border-radius: 9px !important;
-    gap: 8px !important;
+    gap: 4px !important;
     box-sizing: border-box !important;
+    width: 100% !important;
   }
 
   .national-data-item {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 5px !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
   }
 
   .national-data-icon-box {
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 6px !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 5px !important;
     background: rgba(56, 189, 248, 0.08) !important;
     border: 1px solid rgba(56, 189, 248, 0.2) !important;
     color: #38bdf8 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .national-data-icon-box svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .national-data-meta {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    line-height: 1.1 !important;
+    overflow: hidden !important;
   }
 
   .national-data-title {
-    font-size: 11px !important;
+    font-size: 9.5px !important;
     font-weight: 700 !important;
     color: #f1f5f9 !important;
-    display: block !important;
+    white-space: nowrap !important;
+    line-height: 1.2 !important;
   }
 
   .national-data-agency {
-    font-size: 9.5px !important;
+    font-size: 8px !important;
     color: #94a3b8 !important;
-    display: block !important;
+    white-space: nowrap !important;
+    line-height: 1.2 !important;
   }
 
   .national-data-divider {
-    height: 24px !important;
+    height: 18px !important;
     width: 1px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    flex-shrink: 0 !important;
+    margin: 0 1px !important;
   }
 }
 
@@ -8887,16 +8920,12 @@ html {
   }
 }
 
-/* Ensure sticky header on all views */
-.cp-navbar,
+/* Ensure fixed header on all views */
+.cp-header-container,
 .home-nav {
-  position: sticky !important;
+  position: fixed !important;
   top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
   z-index: 1000 !important;
-}
-
-@media (max-width: 380px) {
-  .home-dept {
-    display: none !important;
-  }
 }
