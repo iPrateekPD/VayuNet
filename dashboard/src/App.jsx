@@ -270,7 +270,7 @@ function App() {
   return (
     <div className="app">
       {/* OPERATIONS PORTAL HEADER (EXACT SAME CLASSES, SIZES, SHAPES & COLORS AS HOMEPAGE) */}
-      <nav className="home-nav nav-scrolled" style={{ position: 'relative', top: 0, zIndex: 1000, width: '100%', borderBottom: '1px solid rgba(56, 189, 248, 0.16)' }}>
+      <nav className="home-nav nav-scrolled" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '60px', zIndex: 99999, background: 'rgba(3, 10, 20, 0.98)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(56, 189, 248, 0.2)' }}>
         <div className="home-nav-inner" style={{ maxWidth: '100%', padding: '0 20px' }}>
           {/* Brand Left */}
           <div className="home-brand" onClick={() => navigateTo('home')} title="Return to VAYUNET Home">

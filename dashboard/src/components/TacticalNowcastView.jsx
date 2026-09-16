@@ -340,56 +340,61 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     if (showToast) showToast(`Layer "${key.toUpperCase()}" ${!layers[key] ? 'Enabled' : 'Disabled'}`);
   };
 
-  // 1. Sidebar MAP Button: Return to default map view
+  // Handle Play/Pause toggle
+  const handleTogglePlay = () => {
+    setIsPlaying((prev) => {
+      const next = !prev;
+      if (showToast) showToast(next ? 'Forecast simulation playback started' : 'Forecast simulation paused');
+      return next;
+    });
+  };
+
+  // 1. Sidebar MAP Button (WHERE): Return to default operational map, close open panels, keep location & forecast time
   const handleRailMapClick = () => {
     setActiveRailItem('map');
     setActivePanel(null);
-    setCurrentCenter([...chamoliCenter]);
-    setCurrentZoom(9);
-    setBasemap('satellite');
-    setLayers((prev) => ({ ...prev, precip: true, satellite: true, terrain: false }));
-    if (showToast) showToast('Map view reset to default operational sector (Chamoli)');
+    setLayers((prev) => ({ ...prev, rivers: false }));
+    if (showToast) showToast('Operational map view active');
   };
 
-  // 2. Sidebar LAYERS Button: Toggle Map Layers floating drawer
+  // 2. Sidebar LAYERS Button (WHAT): Toggle Map Layers floating drawer
   const handleRailLayersClick = () => {
-    setActiveRailItem('layers');
-    setActivePanel((prev) => (prev === 'layers' ? null : 'layers'));
+    if (activeRailItem === 'layers' && activePanel === 'layers') {
+      setActivePanel(null);
+      setActiveRailItem('map');
+    } else {
+      setActiveRailItem('layers');
+      setActivePanel('layers');
+    }
   };
 
-  // 3. Sidebar FORECAST Button: Focus timeline dock and highlight
+  // 3. Sidebar FORECAST Button (WHEN): Open compact forecast control
   const handleRailForecastClick = () => {
-    setActiveRailItem('forecast');
-    setActivePanel(null);
-    setIsTimelineFocused(true);
-    timelineCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => {
-      setIsTimelineFocused(false);
-    }, 2800);
-    if (showToast) showToast(`Forecast timeline focused (${selectedStep} simulation)`);
+    if (activeRailItem === 'forecast' && activePanel === 'forecast') {
+      setActivePanel(null);
+      setActiveRailItem('map');
+    } else {
+      setActiveRailItem('forecast');
+      setActivePanel('forecast');
+      setIsTimelineFocused(true);
+      setTimeout(() => setIsTimelineFocused(false), 2200);
+      if (showToast) showToast(`Forecast control active (${selectedStep})`);
+    }
   };
 
-  // 4. Sidebar RIVERS Button: Toggle rivers and open river risk panel
+  // 4. Sidebar RIVERS Button (WHERE WATER GOES): Toggle rivers and open river risk panel
   const handleRailRiversClick = () => {
-    setActiveRailItem('rivers');
-    setLayers((prev) => {
-      const nextRivers = !prev.rivers;
-      if (showToast) showToast(nextRivers ? 'Rivers layer enabled' : 'Rivers layer hidden');
-      return { ...prev, rivers: nextRivers };
-    });
-    setActivePanel((prev) => (prev === 'rivers' ? null : 'rivers'));
-  };
-
-  // 5. Sidebar INCIDENTS Button: Open active incident drawer
-  const handleRailIncidentsClick = () => {
-    setActiveRailItem('incidents');
-    setActivePanel((prev) => (prev === 'incidents' ? null : 'incidents'));
-  };
-
-  // 6. Sidebar BOOKMARKS Button: Open saved locations drawer
-  const handleRailBookmarksClick = () => {
-    setActiveRailItem('bookmarks');
-    setActivePanel((prev) => (prev === 'bookmarks' ? null : 'bookmarks'));
+    if (activeRailItem === 'rivers') {
+      setActiveRailItem('map');
+      setActivePanel(null);
+      setLayers((prev) => ({ ...prev, rivers: false }));
+      if (showToast) showToast('Rivers visualization turned off');
+    } else {
+      setActiveRailItem('rivers');
+      setLayers((prev) => ({ ...prev, rivers: true }));
+      setActivePanel('rivers');
+      if (showToast) showToast('Rivers layer & downstream flow enabled');
+    }
   };
 
   // Select incident from drawer or threat list
@@ -550,15 +555,15 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
 
   return (
     <div className="tac-app-shell">
-      {/* ================= 1. DEDICATED LEFT VERTICAL RAIL ================= */}
+      {/* ================= 1. DEDICATED LEFT VERTICAL RAIL (EXACTLY 4 MAP CONTROLS) ================= */}
       <aside className="tac-left-rail">
         <div className="tac-rail-tools">
-          {/* 1. Map Button */}
+          {/* 1. MAP (WHERE) */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'map' && !activePanel ? 'active' : ''}`}
+            className={`tac-rail-btn ${activeRailItem === 'map' ? 'active' : ''}`}
             onClick={handleRailMapClick}
-            title="Reset to default operational weather map"
+            title="Map (WHERE) - Return to default operational map"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -570,12 +575,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Map</span>
           </button>
 
-          {/* 2. Layers Button */}
+          {/* 2. LAYERS (WHAT) */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'layers' || activePanel === 'layers' ? 'active' : ''}`}
+            className={`tac-rail-btn ${activeRailItem === 'layers' ? 'active' : ''}`}
             onClick={handleRailLayersClick}
-            title="Toggle map layers and visible data"
+            title="Layers (WHAT) - Control which map information is visible"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -587,12 +592,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Layers</span>
           </button>
 
-          {/* 3. Forecast Button */}
+          {/* 3. FORECAST (WHEN) */}
           <button
             type="button"
             className={`tac-rail-btn ${activeRailItem === 'forecast' ? 'active' : ''}`}
             onClick={handleRailForecastClick}
-            title="Focus 6-hour Nowcast simulation timeline"
+            title="Forecast (WHEN) - Control forecast time shown on map"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -604,12 +609,12 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
             <span className="tac-rail-label">Forecast</span>
           </button>
 
-          {/* 4. Rivers Button */}
+          {/* 4. RIVERS (WHERE WATER GOES) */}
           <button
             type="button"
-            className={`tac-rail-btn ${activeRailItem === 'rivers' || activePanel === 'rivers' || layers.rivers ? 'active' : ''}`}
+            className={`tac-rail-btn ${activeRailItem === 'rivers' ? 'active' : ''}`}
             onClick={handleRailRiversClick}
-            title="Toggle hydrological river flow and downstream risk"
+            title="Rivers (WHERE WATER GOES) - Show river and downstream water-flow"
           >
             <div className="tac-rail-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -619,38 +624,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               </svg>
             </div>
             <span className="tac-rail-label">Rivers</span>
-          </button>
-
-          {/* 5. Incidents Button */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${activeRailItem === 'incidents' || activePanel === 'incidents' ? 'active' : ''}`}
-            onClick={handleRailIncidentsClick}
-            title="View active incidents and threat sectors"
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <line x1="12" y1="8" x2="12" y2="12" strokeWidth="2.2" />
-                <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="2.5" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">Incidents</span>
-          </button>
-
-          {/* 6. Bookmarks Button */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${activeRailItem === 'bookmarks' || activePanel === 'bookmarks' ? 'active' : ''}`}
-            onClick={handleRailBookmarksClick}
-            title="Saved Locations & Sectors"
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">Bookmarks</span>
           </button>
         </div>
 
@@ -765,7 +738,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <button 
                     type="button" 
                     className="tac-popover-close" 
-                    onClick={() => setActivePanel(null)}
+                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); }}
                   >
                     ✕
                   </button>
@@ -778,7 +751,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('precip')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Precipitation Intensity</span>
+                    <span className="tac-toggle-text">Precipitation</span>
                   </label>
 
                   <label className="tac-layer-toggle-row">
@@ -788,17 +761,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('satellite')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Satellite (True Color)</span>
-                  </label>
-
-                  <label className="tac-layer-toggle-row">
-                    <input
-                      type="checkbox"
-                      checked={layers.terrain || basemap === 'terrain'}
-                      onChange={() => handleToggleLayer('terrain')}
-                    />
-                    <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Terrain Topography</span>
+                    <span className="tac-toggle-text">Satellite</span>
                   </label>
 
                   <label className="tac-layer-toggle-row">
@@ -808,7 +771,17 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('radar')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Doppler Radar Grid</span>
+                    <span className="tac-toggle-text">Radar</span>
+                  </label>
+
+                  <label className="tac-layer-toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={layers.terrain || basemap === 'terrain'}
+                      onChange={() => handleToggleLayer('terrain')}
+                    />
+                    <span className="tac-toggle-check" />
+                    <span className="tac-toggle-text">Terrain</span>
                   </label>
 
                   <label className="tac-layer-toggle-row">
@@ -818,7 +791,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('rivers')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Rivers &amp; Tributaries</span>
+                    <span className="tac-toggle-text">Rivers</span>
                   </label>
 
                   <label className="tac-layer-toggle-row">
@@ -828,7 +801,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('wind')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Wind Flow Streamlines</span>
+                    <span className="tac-toggle-text">Wind</span>
                   </label>
 
                   <label className="tac-layer-toggle-row">
@@ -838,7 +811,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                       onChange={() => handleToggleLayer('affectedArea')}
                     />
                     <span className="tac-toggle-check" />
-                    <span className="tac-toggle-text">Affected Inundation Area</span>
+                    <span className="tac-toggle-text">Affected Area</span>
                   </label>
                 </div>
               </div>
@@ -849,48 +822,106 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <div className="tac-floating-popover tac-popover-rivers">
                 <div className="tac-popover-header">
                   <div className="tac-popover-title">
-                    <span style={{ fontSize: '15px' }}>🌊</span>
-                    <span>RIVER RISK · ALAKNANDA BASIN</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2">
+                      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                    </svg>
+                    <span>RIVER RISK</span>
                   </div>
                   <button 
                     type="button" 
                     className="tac-popover-close" 
-                    onClick={() => setActivePanel(null)}
+                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); setLayers(p => ({ ...p, rivers: false })); }}
                   >
                     ✕
                   </button>
                 </div>
                 <div className="tac-popover-body">
-                  <div className="tac-river-stat-box">
-                    <span className="tac-river-stat-lbl">Primary River</span>
-                    <span className="tac-river-stat-val" style={{ color: '#38bdf8' }}>Alaknanda River (Ganga Headstream)</span>
+                  <div className="tac-river-spec-card">
+                    <div className="tac-river-spec-name">Alaknanda River</div>
+                    <div className="tac-river-spec-flow">↓ Downstream Flow</div>
+                    <div className="tac-river-spec-badge">High Risk</div>
+                  </div>
+                  <div className="tac-river-stat-box" style={{ marginTop: '10px' }}>
+                    <span className="tac-river-stat-lbl">Downstream Flow Path:</span>
+                    <span className="tac-river-stat-val">Chamoli Hazard → Karnaprayag → Rudraprayag</span>
                   </div>
                   <div className="tac-river-stat-box">
-                    <span className="tac-river-stat-lbl">Flow Direction</span>
-                    <span className="tac-river-stat-val">NE → SW (Badrinath Gorge → Devprayag)</span>
-                  </div>
-                  <div className="tac-river-stat-box">
-                    <span className="tac-river-stat-lbl">Surge Risk Status</span>
-                    <span className="tac-river-stat-val" style={{ color: '#ef4444', fontWeight: 800 }}>
-                      CRITICAL · PEAK SURGE ETA +1h 45m
+                    <span className="tac-river-stat-lbl">Potentially Affected Areas:</span>
+                    <span className="tac-river-stat-val" style={{ color: '#fca5a5' }}>
+                      Karnaprayag Ghats, Alaknanda Riverbed Settlements
                     </span>
                   </div>
-                  <div className="tac-river-stat-box">
-                    <span className="tac-river-stat-lbl">Downstream Affected Zones</span>
-                    <span className="tac-river-stat-val">Karnaprayag, Rudraprayag, Srinagar, Devprayag</span>
-                  </div>
+                </div>
+              </div>
+            )}
 
-                  <button
-                    type="button"
-                    className="tac-river-action-btn"
-                    onClick={() => {
-                      setCurrentCenter([30.41, 79.32]);
-                      setCurrentZoom(10);
-                      if (showToast) showToast('Focused on Alaknanda Gorge Surge Corridor');
-                    }}
+            {/* 3. FORECAST COMPACT PANEL */}
+            {activePanel === 'forecast' && (
+              <div className="tac-floating-popover tac-popover-forecast">
+                <div className="tac-popover-header">
+                  <div className="tac-popover-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>FORECAST SIMULATION</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className="tac-popover-close" 
+                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); }}
                   >
-                    📍 Focus on Alaknanda Surge Zone
+                    ✕
                   </button>
+                </div>
+                <div className="tac-popover-body">
+                  <div className="tac-forecast-popover-row">
+                    <button
+                      type="button"
+                      className={`tac-forecast-popover-play ${isPlaying ? 'playing' : ''}`}
+                      onClick={handleTogglePlay}
+                      title={isPlaying ? 'Pause forecast simulation' : 'Play 6-hour forecast progression'}
+                    >
+                      {isPlaying ? '⏸' : '▶'}
+                    </button>
+                    <div className="tac-forecast-pills-row">
+                      {TIME_STEPS.map((step) => (
+                        <button
+                          key={step}
+                          type="button"
+                          className={`tac-forecast-pill-btn ${selectedStep === step ? 'active' : ''}`}
+                          onClick={() => {
+                            setSelectedStep(step);
+                            if (showToast) showToast(`Nowcast timestep: ${step}`);
+                          }}
+                        >
+                          {step === 'Now' ? 'NOW' : step}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="tac-forecast-popover-status">
+                    <div className="tac-river-stat-box" style={{ marginTop: '8px' }}>
+                      <span className="tac-river-stat-lbl">Active Forecast:</span>
+                      <span className="tac-river-stat-val" style={{ color: '#38bdf8', fontWeight: 700 }}>
+                        {selectedStep === 'Now' ? 'NOW (Real-Time)' : `${selectedStep} Projection`}
+                      </span>
+                    </div>
+                    <div className="tac-river-stat-box">
+                      <span className="tac-river-stat-lbl">Estimated Rainfall:</span>
+                      <span className="tac-river-stat-val" style={{ color: '#f8fafc', fontWeight: 700 }}>
+                        {currentStepData.rainfall}
+                      </span>
+                    </div>
+                    <div className="tac-river-stat-box">
+                      <span className="tac-river-stat-lbl">Severity &amp; ETA:</span>
+                      <span className="tac-river-stat-val" style={{ color: currentStepData.riskColor, fontWeight: 800 }}>
+                        {currentStepData.riskLevel} · ETA {currentStepData.eta}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -1190,37 +1221,67 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               {/* Hydrological River Network */}
               {layers.rivers && (
                 <>
+                  {/* Highlighted Alaknanda Main Flow Channel */}
                   <Polyline
                     positions={alaknandaRiver}
-                    pathOptions={{ color: '#38bdf8', weight: 2.8, opacity: 0.85 }}
+                    pathOptions={{ color: '#00e5ff', weight: 4.2, opacity: 0.95 }}
                   />
                   <Polyline
                     positions={tributaryMandakini}
-                    pathOptions={{ color: '#0284c7', weight: 2, opacity: 0.8 }}
+                    pathOptions={{ color: '#0284c7', weight: 2.2, opacity: 0.85 }}
                   />
                   <Polyline
                     positions={tributaryPindar}
-                    pathOptions={{ color: '#0284c7', weight: 2, opacity: 0.8 }}
+                    pathOptions={{ color: '#0284c7', weight: 2.2, opacity: 0.85 }}
                   />
 
-                  {/* River Direction Flow Markers */}
+                  {/* River Flow Direction Markers (Alaknanda Gorge) */}
                   <Marker
                     position={[30.650, 79.520]}
                     icon={createHtmlIcon(`
-                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(210deg); text-shadow: 0 0 6px #0284c7;">➤</div>
-                    `, [14, 14], [7, 7])}
+                      <div style="color: #00e5ff; font-size: 13px; transform: rotate(210deg); text-shadow: 0 0 8px #0284c7; font-weight: bold;">➤</div>
+                    `, [16, 16], [8, 8])}
                   />
                   <Marker
                     position={[30.490, 79.430]}
                     icon={createHtmlIcon(`
-                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(220deg); text-shadow: 0 0 6px #0284c7;">➤</div>
-                    `, [14, 14], [7, 7])}
+                      <div style="color: #00e5ff; font-size: 13px; transform: rotate(220deg); text-shadow: 0 0 8px #0284c7; font-weight: bold;">➤</div>
+                    `, [16, 16], [8, 8])}
                   />
                   <Marker
                     position={[30.350, 79.260]}
                     icon={createHtmlIcon(`
-                      <div style="color: #38bdf8; font-size: 11px; transform: rotate(205deg); text-shadow: 0 0 6px #0284c7;">➤</div>
-                    `, [14, 14], [7, 7])}
+                      <div style="color: #00e5ff; font-size: 13px; transform: rotate(205deg); text-shadow: 0 0 8px #0284c7; font-weight: bold;">➤</div>
+                    `, [16, 16], [8, 8])}
+                  />
+
+                  {/* Downstream flow path connection from Chamoli Hazard area to River Path */}
+                  <Polyline
+                    positions={[
+                      [30.41, 79.32],
+                      [30.38, 79.33],
+                      [30.32, 79.28],
+                      [30.26, 79.22]
+                    ]}
+                    pathOptions={{ color: '#f43f5e', weight: 3, dashArray: '6, 6', opacity: 0.95 }}
+                  />
+
+                  {/* Downstream Affected Areas Callouts */}
+                  <Marker
+                    position={[30.26, 79.22]}
+                    icon={createHtmlIcon(`
+                      <div style="background: rgba(15, 23, 42, 0.95); border: 1px solid #f59e0b; border-radius: 5px; padding: 3px 8px; font-size: 9.5px; font-weight: 700; color: #fbbf24; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,0.85);">
+                        ⚠️ Karnaprayag (Downstream Watch)
+                      </div>
+                    `, [160, 22], [80, 11])}
+                  />
+                  <Marker
+                    position={[30.285, 78.981]}
+                    icon={createHtmlIcon(`
+                      <div style="background: rgba(15, 23, 42, 0.95); border: 1px solid #38bdf8; border-radius: 5px; padding: 3px 8px; font-size: 9.5px; font-weight: 700; color: #38bdf8; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,0.85);">
+                        ℹ Rudraprayag (Downstream Advisory)
+                      </div>
+                    `, [160, 22], [80, 11])}
                   />
                 </>
               )}
@@ -1489,7 +1550,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <button
                 type="button"
                 className="tac-clean-play-circle"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={handleTogglePlay}
                 title={isPlaying ? 'Pause Simulation' : 'Play 6-Hour Nowcast Simulation'}
               >
                 {isPlaying ? (

@@ -1174,16 +1174,18 @@
   padding: 12px 0 16px 0;
   box-sizing: border-box;
   flex-shrink: 0;
-  z-index: 20;
+  z-index: 100;
 }
 
+.tac-rail-tools,
 .tac-rail-top {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 16px;
   width: 100%;
-  padding: 0 6px;
+  padding: 6px 6px;
+  box-sizing: border-box;
 }
 
 .tac-rail-btn {
@@ -1199,32 +1201,50 @@
   justify-content: center;
   gap: 4px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: 4px;
+  user-select: none;
+  flex-shrink: 0;
 }
 
 .tac-rail-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   color: #f1f5f9;
+  transform: translateY(-1px);
+}
+
+.tac-rail-btn:hover .tac-rail-icon-wrap svg {
+  stroke: #f1f5f9;
 }
 
 .tac-rail-btn.active {
-  background: linear-gradient(145deg, #0284c7 0%, #0369a1 100%);
-  border: 1px solid #38bdf8;
-  color: #ffffff;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border: 1px solid #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.55), 0 0 4px #38bdf8 !important;
+}
+
+.tac-rail-btn.active .tac-rail-icon-wrap svg {
+  stroke: #ffffff !important;
+}
+
+.tac-rail-btn.active .tac-rail-label {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 .tac-rail-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 180ms ease;
 }
 
 .tac-rail-label {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.2px;
+  transition: color 180ms ease;
 }
 
 .tac-rail-bottom {
@@ -1342,7 +1362,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  z-index: 1000;
+  z-index: 400;
   pointer-events: none;
 }
 
@@ -2253,7 +2273,7 @@
   position: absolute;
   top: 54px;
   left: 14px;
-  z-index: 1200;
+  z-index: 500;
   width: 290px;
   background: rgba(8, 16, 30, 0.96);
   border: 1px solid rgba(56, 189, 248, 0.35);
@@ -2390,6 +2410,114 @@
 
 .tac-river-action-btn:hover {
   background: #0369a1;
+}
+
+/* River Risk Spec Card */
+.tac-river-spec-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tac-river-spec-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.tac-river-spec-flow {
+  font-size: 11px;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.tac-river-spec-badge {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  color: #f87171;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Forecast Compact Popover Controls */
+.tac-forecast-popover-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(2, 6, 15, 0.7);
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tac-forecast-popover-play {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0284c7;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tac-forecast-popover-play:hover {
+  background: #38bdf8;
+  transform: scale(1.05);
+}
+
+.tac-forecast-popover-play.playing {
+  background: #e11d48;
+}
+
+.tac-forecast-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tac-forecast-pill-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tac-forecast-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.tac-forecast-pill-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 
 /* Incidents Panel */
