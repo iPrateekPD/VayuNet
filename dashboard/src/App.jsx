@@ -271,8 +271,8 @@ function App() {
   return (
     <div className="app">
       {/* OPERATIONS PORTAL HEADER (EXACT SAME CLASSES, SIZES, SHAPES & COLORS AS HOMEPAGE) */}
-      <nav className="home-nav nav-scrolled" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '60px', zIndex: 99999, background: '#030a14', backdropFilter: 'none', WebkitBackdropFilter: 'none', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: 'none' }}>
-        <div className="home-nav-inner" style={{ maxWidth: '100%', padding: '0 20px' }}>
+      <nav className="home-nav nav-scrolled ops-portal-nav" style={{ position: 'fixed', top: 0, left: 0, width: '100%', minHeight: '60px', zIndex: 99999, background: '#030a14', backdropFilter: 'none', WebkitBackdropFilter: 'none', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: 'none' }}>
+        <div className="home-nav-inner" style={{ maxWidth: '100%', padding: '0 20px', height: '60px' }}>
           {/* Brand Left */}
           <div className="home-brand" onClick={() => navigateTo('home')} title="Return to VAYUNET Home">
             <div className="home-logo">
@@ -421,6 +421,27 @@ function App() {
           </div>
         </div>
       </nav>
+
+      {/* MOBILE OPERATIONAL TOGGLES (Exclusively displayed below header in phone view) */}
+      <div className="ops-mobile-nav-bar">
+        <div className="ops-mobile-capsule">
+          {[
+            { key: 'nowcast',  label: 'NOWCAST' },
+            { key: 'analysis', label: 'ANALYSIS' },
+            { key: 'events',   label: 'EVENTS' },
+            { key: 'alerts',   label: 'ALERTS' },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              className={`nav-link-item ${portalTab === key ? 'active' : ''}`}
+              onClick={() => handleTabSwitch(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* RENDER ACTIVE OPERATIONS VIEW (Offset by 60px for fixed header) */}
       <main className="ops-portal-body">
