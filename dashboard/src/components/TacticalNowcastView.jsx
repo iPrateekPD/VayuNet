@@ -256,8 +256,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSectorOpen, setIsSectorOpen] = useState(false);
   const [selectedSector, setSelectedSector] = useState('Chamoli, Uttarakhand');
-  const [activeRailItem, setActiveRailItem] = useState('map'); // 'map' | 'layers' | 'forecast' | 'rivers' | 'incidents' | 'bookmarks'
-  const [activePanel, setActivePanel] = useState(null); // 'layers' | 'rivers' | 'incidents' | 'bookmarks' | 'telemetry' | null
+  const [activePanel, setActivePanel] = useState(null); // 'layers' | 'incidents' | 'bookmarks' | 'telemetry' | null
   const [basemap, setBasemap] = useState('satellite'); // 'satellite' | 'terrain' | 'hybrid'
   const [selectedIncident, setSelectedIncident] = useState(INCIDENTS_DATA[0]);
   const [isTimelineFocused, setIsTimelineFocused] = useState(false);
@@ -361,46 +360,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
       if (showToast) showToast(next ? 'Forecast simulation playback started' : 'Forecast simulation paused');
       return next;
     });
-  };
-
-  // 1. Sidebar MAP Button (WHERE): Return to default operational map, close open panels, keep location & forecast time
-  const handleRailMapClick = () => {
-    setActiveRailItem('map');
-    setActivePanel(null);
-    setLayers((prev) => ({ ...prev, rivers: false }));
-    if (showToast) showToast('Operational map view active');
-  };
-
-  // 2. Sidebar LAYERS Button (WHAT): Toggle Map Layers floating drawer
-  const handleRailLayersClick = () => {
-    if (activeRailItem === 'layers' && activePanel === 'layers') {
-      setActivePanel(null);
-      setActiveRailItem('map');
-    } else {
-      setActiveRailItem('layers');
-      setActivePanel('layers');
-    }
-  };
-
-  // 3. Sidebar FORECAST Button (WHEN): Direct Play/Pause simulation toggle
-  const handleRailForecastClick = () => {
-    setActivePanel(null);
-    handleTogglePlay();
-  };
-
-  // 4. Sidebar RIVERS Button (WHERE WATER GOES): Toggle rivers and open river risk panel
-  const handleRailRiversClick = () => {
-    if (activeRailItem === 'rivers') {
-      setActiveRailItem('map');
-      setActivePanel(null);
-      setLayers((prev) => ({ ...prev, rivers: false }));
-      if (showToast) showToast('Rivers visualization turned off');
-    } else {
-      setActiveRailItem('rivers');
-      setLayers((prev) => ({ ...prev, rivers: true }));
-      setActivePanel('rivers');
-      if (showToast) showToast('Rivers layer & downstream flow enabled');
-    }
   };
 
   // Select incident from drawer or threat list
@@ -563,152 +522,102 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     <div className="tac-app-shell">
       {/* ================= OPERATIONAL BODY (Stops before the full-width footer) ================= */}
       <div className="tac-operational-body">
-        {/* ================= 1. DEDICATED LEFT VERTICAL RAIL (EXACTLY 4 MAP CONTROLS) ================= */}
-        <aside className="tac-left-rail">
-        <div className="tac-rail-tools">
-          {/* 1. MAP (WHERE) */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${activeRailItem === 'map' ? 'active' : ''}`}
-            onClick={handleRailMapClick}
-            title="Map (WHERE) - Return to default operational map"
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-                <line x1="8" y1="2" x2="8" y2="18" />
-                <line x1="16" y1="6" x2="16" y2="22" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">Map</span>
-          </button>
+        {/* ================= MAIN DASHBOARD CONTENT ================= */}
+        <div className="tac-main-dashboard">
+          {/* ================= MAIN 2-COLUMN OPERATIONAL GRID ================= */}
+          <div className="tac-clean-grid">
+            {/* LEFT COLUMN: MAP CARD + 2 OPERATIONAL CARDS */}
+            <div className="tac-clean-col-left">
+              {/* MAP CARD */}
+              <div className="tac-clean-map-card" ref={mapCardRef}>
+              
+              {/* FLOATING TOP BAR */}
+              <div className="tac-clean-map-topbar">
+                {/* Sector / Search Dropdown + Live Timestamp */}
+                <div className="tac-clean-topbar-header-wrap">
+                  {/* Sector / Search Dropdown */}
+                  <div className="tac-clean-sector-wrap">
+                    <button
+                      type="button"
+                      className="tac-clean-sector-btn"
+                      onClick={() => setIsSectorOpen(!isSectorOpen)}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                      <span>{selectedSector}</span>
+                      <span style={{ fontSize: '10px', marginLeft: '4px', opacity: 0.7 }}>▾</span>
+                    </button>
 
-          {/* 2. LAYERS (WHAT) */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${activeRailItem === 'layers' ? 'active' : ''}`}
-            onClick={handleRailLayersClick}
-            title="Layers (WHAT) - Control which map information is visible"
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">Layers</span>
-          </button>
-
-          {/* 3. FORECAST */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${isPlaying ? 'active' : ''}`}
-            onClick={handleRailForecastClick}
-            title={isPlaying ? 'Pause Forecast Simulation' : 'Play 6-Hour Forecast Simulation'}
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
-                <line x1="11" y1="19" x2="10" y2="23" strokeWidth="2" />
-                <line x1="15" y1="19" x2="14" y2="23" strokeWidth="2" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">{isPlaying ? 'Pause' : 'Forecast'}</span>
-          </button>
-
-          {/* 4. RIVERS */}
-          <button
-            type="button"
-            className={`tac-rail-btn ${activeRailItem === 'rivers' ? 'active' : ''}`}
-            onClick={handleRailRiversClick}
-            title="Rivers (WHERE WATER GOES) - Show river and downstream water-flow"
-          >
-            <div className="tac-rail-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-              </svg>
-            </div>
-            <span className="tac-rail-label">Rivers</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* ================= 2. MAIN DASHBOARD CONTENT ================= */}
-      <div className="tac-main-dashboard">
-        {/* ================= MAIN 2-COLUMN OPERATIONAL GRID ================= */}
-        <div className="tac-clean-grid">
-          {/* LEFT COLUMN: MAP CARD + 2 OPERATIONAL CARDS */}
-          <div className="tac-clean-col-left">
-            {/* MAP CARD */}
-            <div className="tac-clean-map-card" ref={mapCardRef}>
-            
-            {/* FLOATING TOP BAR */}
-            <div className="tac-clean-map-topbar">
-              {/* Sector / Search Dropdown */}
-              <div className="tac-clean-sector-wrap">
-                <button
-                  type="button"
-                  className="tac-clean-sector-btn"
-                  onClick={() => setIsSectorOpen(!isSectorOpen)}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.2">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                  <span>{selectedSector}</span>
-                  <span style={{ fontSize: '10px', marginLeft: '4px', opacity: 0.7 }}>▾</span>
-                </button>
-
-                {isSectorOpen && (
-                  <div className="tac-clean-sector-menu">
-                    {SECTOR_OPTIONS.map((opt) => (
-                      <div
-                        key={opt}
-                        className={`tac-clean-sector-option ${selectedSector === opt ? 'active' : ''}`}
-                        onClick={() => {
-                          setSelectedSector(opt);
-                          setIsSectorOpen(false);
-                          if (SECTOR_COORDS[opt]) {
-                            setCurrentCenter([...SECTOR_COORDS[opt]]);
-                            setCurrentZoom(9);
-                          }
-                          if (showToast) showToast(`Centered to ${opt}`);
-                        }}
-                      >
-                        {opt}
+                    {isSectorOpen && (
+                      <div className="tac-clean-sector-menu">
+                        {SECTOR_OPTIONS.map((opt) => (
+                          <div
+                            key={opt}
+                            className={`tac-clean-sector-option ${selectedSector === opt ? 'active' : ''}`}
+                            onClick={() => {
+                              setSelectedSector(opt);
+                              setIsSectorOpen(false);
+                              if (SECTOR_COORDS[opt]) {
+                                setCurrentCenter([...SECTOR_COORDS[opt]]);
+                                setCurrentZoom(9);
+                              }
+                              if (showToast) showToast(`Centered to ${opt}`);
+                            }}
+                          >
+                            {opt}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-              </div>
 
-              {/* Timesteps Filter Pills (Now | +1h | +2h | +3h | +4h | +5h | +6h) */}
-              <div className="tac-clean-timesteps-group">
-                {TIME_STEPS.map((step) => (
+                  {/* Live Timestamp Badge */}
+                  <div className="tac-clean-live-pill">
+                    <span className="tac-live-date-text">08 Sep 2026, </span>
+                    <span className="tac-live-time-text">11:52 PM IST</span>
+                    <span className="tac-clean-live-dot" />
+                    <span style={{ color: '#f87171', fontWeight: 700 }}>Live</span>
+                  </div>
+                </div>
+
+                {/* Timesteps Filter Pills & Forecast Play/Pause Simulation Button (near Now) */}
+                <div className="tac-clean-timesteps-group">
                   <button
-                    key={step}
                     type="button"
-                    className={`tac-clean-time-pill ${selectedStep === step ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedStep(step);
-                      if (showToast) showToast(`Nowcast timestep: ${step}`);
-                    }}
+                    className={`tac-clean-forecast-play-btn ${isPlaying ? 'playing' : ''}`}
+                    onClick={handleTogglePlay}
+                    title={isPlaying ? 'Pause 6-Hour Forecast Simulation' : 'Play 6-Hour Forecast Simulation'}
                   >
-                    {step}
+                    {isPlaying ? (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
+                      </svg>
+                    ) : (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="6 4 19 12 6 20 6 4" />
+                      </svg>
+                    )}
+                    <span>{isPlaying ? 'Pause' : 'Play'}</span>
                   </button>
-                ))}
-              </div>
 
-              {/* Live Timestamp Badge */}
-              <div className="tac-clean-live-pill">
-                <span>08 Sep 2026, 11:52 PM IST</span>
-                <span className="tac-clean-live-dot" />
-                <span style={{ color: '#f87171', fontWeight: 700 }}>Live</span>
+                  {TIME_STEPS.map((step) => (
+                    <button
+                      key={step}
+                      type="button"
+                      className={`tac-clean-time-pill ${selectedStep === step ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedStep(step);
+                        if (showToast) showToast(`Nowcast timestep: ${step}`);
+                      }}
+                    >
+                      {step}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
             {/* FLOATING DRAWERS / POPOVER PANELS */}
             
@@ -733,7 +642,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <button 
                     type="button" 
                     className="tac-popover-close-v2" 
-                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); }}
+                    onClick={() => setActivePanel(null)}
                     title="Close Layers Panel"
                   >
                     ✕
@@ -852,7 +761,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <button 
                     type="button" 
                     className="tac-layers-done-btn"
-                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); }}
+                    onClick={() => setActivePanel(null)}
                   >
                     Done
                   </button>
@@ -860,47 +769,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               </div>
             )}
 
-            {/* 2. RIVERS PANEL */}
-            {activePanel === 'rivers' && (
-              <div className="tac-floating-popover tac-popover-rivers">
-                <div className="tac-popover-header">
-                  <div className="tac-popover-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2">
-                      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                    </svg>
-                    <span>RIVER RISK</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close" 
-                    onClick={() => { setActivePanel(null); setActiveRailItem('map'); setLayers(p => ({ ...p, rivers: false })); }}
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="tac-popover-body">
-                  <div className="tac-river-spec-card">
-                    <div className="tac-river-spec-name">Alaknanda River</div>
-                    <div className="tac-river-spec-flow">↓ Downstream Flow</div>
-                    <div className="tac-river-spec-badge">High Risk</div>
-                  </div>
-                  <div className="tac-river-stat-box" style={{ marginTop: '10px' }}>
-                    <span className="tac-river-stat-lbl">Downstream Flow Path:</span>
-                    <span className="tac-river-stat-val">Chamoli Hazard → Karnaprayag → Rudraprayag</span>
-                  </div>
-                  <div className="tac-river-stat-box">
-                    <span className="tac-river-stat-lbl">Potentially Affected Areas:</span>
-                    <span className="tac-river-stat-val" style={{ color: '#fca5a5' }}>
-                      Karnaprayag Ghats, Alaknanda Riverbed Settlements
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 3. INCIDENTS PANEL */}
+            {/* 2. INCIDENTS PANEL */}
             {activePanel === 'incidents' && (
               <div className="tac-floating-popover tac-popover-incidents">
                 <div className="tac-popover-header">
@@ -1353,56 +1222,21 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               </div>
             )}
 
-            {/* FLOATING BASEMAP SELECTOR & SCALE BAR */}
+            {/* FLOATING MAP LAYERS BUTTON (BOTTOM RIGHT) */}
             <div className="tac-clean-map-bottom-right">
-              <div className="tac-clean-basemap-pills">
-                <button
-                  type="button"
-                  className={`tac-clean-basemap-pill-btn ${basemap === 'satellite' ? 'active' : ''}`}
-                  onClick={() => {
-                    setBasemap('satellite');
-                    setLayers((prev) => ({ ...prev, satellite: true, terrain: false }));
-                    if (showToast) showToast('Satellite Basemap Selected');
-                  }}
-                >
-                  Satellite
-                </button>
-
-                <button
-                  type="button"
-                  className={`tac-clean-basemap-pill-btn ${basemap === 'terrain' ? 'active' : ''}`}
-                  onClick={() => {
-                    setBasemap('terrain');
-                    setLayers((prev) => ({ ...prev, terrain: true, satellite: false }));
-                    if (showToast) showToast('Terrain Topographic Basemap Selected');
-                  }}
-                >
-                  Terrain
-                </button>
-
-                <button
-                  type="button"
-                  className={`tac-clean-basemap-pill-btn ${basemap === 'hybrid' ? 'active' : ''}`}
-                  onClick={() => {
-                    setBasemap('hybrid');
-                    setLayers((prev) => ({ ...prev, satellite: true, terrain: false }));
-                    if (showToast) showToast('Hybrid Basemap Selected');
-                  }}
-                >
-                  Hybrid
-                </button>
-              </div>
-
-              {/* Scale Bar */}
-              <div className="tac-clean-scale-wrap">
-                <div className="tac-clean-scale-ticks">
-                  <span>0</span>
-                  <span>10</span>
-                  <span>20</span>
-                  <span>40 km</span>
-                </div>
-                <div className="tac-clean-scale-bracket" />
-              </div>
+              <button
+                type="button"
+                className={`tac-clean-layers-trigger-btn ${activePanel === 'layers' ? 'active' : ''}`}
+                onClick={() => setActivePanel(activePanel === 'layers' ? null : 'layers')}
+                title="Map Layers - Show or hide information on the map"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                  <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                  <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5" />
+                </svg>
+                <span>Layers</span>
+              </button>
             </div>
           </div>
           {/* END MAP CARD */}

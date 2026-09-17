@@ -1171,134 +1171,13 @@
   box-sizing: border-box;
 }
 
-/* 1. Dedicated Left Rail - stops before footer */
-.tac-left-rail {
-  width: 74px;
-  min-width: 74px;
-  background: #030814;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+/* Topbar Header Wrap (Sector Selector + Live stamp) */
+.tac-clean-topbar-header-wrap {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  padding: 12px 0 16px 0;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  z-index: 100;
-}
-
-.tac-rail-tools,
-.tac-rail-top {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  padding: 6px 6px;
-  box-sizing: border-box;
-}
-
-.tac-rail-btn {
-  width: 60px;
-  height: 56px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: #94a3b8;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 4px;
-  user-select: none;
+  gap: 10px;
   flex-shrink: 0;
 }
-
-.tac-rail-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f1f5f9;
-  transform: translateY(-1px);
-}
-
-.tac-rail-btn:hover .tac-rail-icon-wrap svg {
-  stroke: #f1f5f9;
-}
-
-.tac-rail-btn.active {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
-  border: 1px solid #38bdf8 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.55), 0 0 4px #38bdf8 !important;
-}
-
-.tac-rail-btn.active .tac-rail-icon-wrap svg {
-  stroke: #ffffff !important;
-}
-
-.tac-rail-btn.active .tac-rail-label {
-  color: #ffffff !important;
-  font-weight: 700;
-}
-
-.tac-rail-icon-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 180ms ease;
-}
-
-.tac-rail-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  transition: color 180ms ease;
-}
-
-.tac-rail-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 0 8px;
-  position: relative;
-  margin-top: auto;
-}
-
-.tac-rail-mountain-art {
-  width: 100%;
-  height: 38px;
-  opacity: 0.65;
-  margin-bottom: 6px;
-}
-
-.tac-rail-motto {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #cbd5e1;
-  line-height: 1.25;
-  text-align: left;
-  width: 100%;
-  padding: 0 2px;
-  display: flex;
-  flex-direction: column;
-  letter-spacing: 0.2px;
-}
-
-.tac-rail-tricolor {
-  display: flex;
-  width: 100%;
-  height: 3px;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-
-.tac-tri-saffron { background: #ff9933; flex: 1; }
-.tac-tri-white { background: #ffffff; flex: 1; }
-.tac-tri-green { background: #138808; flex: 1; }
 
 /* 2. Main Dashboard Area */
 .tac-main-dashboard {
@@ -1451,11 +1330,43 @@
   font-weight: 600;
 }
 
-/* Time Pills */
+/* Time Pills & Forecast Play/Pause */
 .tac-clean-timesteps-group {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.tac-clean-forecast-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(9, 18, 34, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tac-clean-forecast-play-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.tac-clean-forecast-play-btn.playing {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #f87171;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
 }
 
 .tac-clean-time-pill {
@@ -1589,89 +1500,58 @@
   color: #94a3b8;
 }
 
-/* Floating Bottom-Right Basemap Selector & Scale Bar */
+/* Floating Bottom-Right Map Layers Trigger Button */
 .tac-clean-map-bottom-right {
   position: absolute;
   bottom: 14px;
   right: 14px;
   z-index: 1000;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.tac-clean-map-bottom-right > * {
+  align-items: center;
   pointer-events: auto;
 }
 
-.tac-clean-basemap-pills {
-  display: flex;
+.tac-clean-layers-trigger-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 3px;
-  background: rgba(9, 18, 34, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  padding: 3px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-}
-
-.tac-clean-basemap-pill-btn {
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 12px;
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.tac-clean-basemap-pill-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.tac-clean-basemap-pill-btn.active {
-  background: #0284c7;
-  color: #ffffff;
+  gap: 7px;
+  background: rgba(9, 18, 34, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #f1f5f9;
+  font-size: 12px;
   font-weight: 700;
-  box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 12px rgba(2, 132, 199, 0.25);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
 
-/* Scale Bar */
-.tac-clean-scale-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: rgba(9, 18, 34, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.tac-clean-layers-trigger-btn svg {
+  color: #38bdf8;
+  transition: transform 0.18s ease;
 }
 
-.tac-clean-scale-ticks {
-  display: flex;
-  justify-content: space-between;
-  width: 110px;
-  font-size: 8.5px;
-  color: #94a3b8;
-  font-family: var(--font-mono, monospace);
+.tac-clean-layers-trigger-btn:hover {
+  background: rgba(14, 28, 54, 0.98);
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.75), 0 0 18px rgba(56, 189, 248, 0.4);
 }
 
-.tac-clean-scale-bracket {
-  width: 110px;
-  height: 4px;
-  border: 1px solid #94a3b8;
-  border-top: none;
-  box-sizing: border-box;
+.tac-clean-layers-trigger-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.6), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+.tac-clean-layers-trigger-btn.active svg {
+  color: #ffffff;
 }
 
 /* HIGHEST THREAT PANEL (Right Column) */
@@ -2536,8 +2416,8 @@
 
 .tac-popover-layers-v2 {
   position: absolute;
-  top: 54px;
-  left: 14px;
+  bottom: 58px;
+  right: 14px;
   z-index: 1200;
   width: 375px;
   max-width: calc(100vw - 28px);
@@ -3144,7 +3024,7 @@
 }
 
 /* =========================================================
-   PHONE VIEW: MOVE SIDEBAR BELOW HEADER (MAP CONTROLS ONLY)
+   PHONE & TABLET VIEW: REFINED, CLEAN, CLUTTER-FREE MOBILE LAYOUT
    ========================================================= */
 @media (max-width: 768px) {
   .tac-app-shell {
@@ -3155,71 +3035,154 @@
     flex-direction: column;
   }
 
-  .tac-left-rail {
-    width: 100%;
-    min-width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    flex-direction: row;
-    justify-content: center;
-    padding: 8px 12px;
-    position: sticky;
-    top: 108px;
-    z-index: 90;
-    background: #030814;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
-  }
-
-  .tac-rail-tools,
-  .tac-rail-top {
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    max-width: 480px;
-    gap: 8px;
-    padding: 0;
-  }
-
-  .tac-rail-btn {
-    width: auto;
-    min-width: 68px;
-    height: 42px;
-    flex-direction: row;
-    gap: 6px;
-    padding: 6px 12px;
-  }
-
-  .tac-rail-btn .tac-rail-label {
-    font-size: 11px;
-  }
-
-  .tac-rail-bottom {
-    display: none; /* Hide non-map motto/artwork in phone view bar */
-  }
-
   .tac-main-dashboard {
-    padding: 10px 10px 30px 10px;
+    padding: 8px 8px 32px 8px;
+    gap: 12px;
   }
 
   .tac-clean-top-row {
     grid-template-columns: 1fr;
     min-height: auto;
+    gap: 12px;
   }
 
   .tac-clean-map-card {
-    min-height: 400px;
+    min-height: 440px;
+    height: 480px;
   }
 
+  /* Map Topbar - 2 distinct rows: Row 1 = Sector dropdown + Live badge, Row 2 = Play + Timesteps */
   .tac-clean-map-topbar {
-    flex-wrap: wrap;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .tac-clean-topbar-header-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
     gap: 8px;
   }
 
+  .tac-clean-sector-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tac-clean-sector-btn {
+    width: 100%;
+    max-width: 210px;
+    padding: 5px 9px;
+    font-size: 11px;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tac-clean-live-pill {
+    padding: 4px 8px;
+    font-size: 10px;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .tac-live-date-text {
+    display: none; /* Hide date on small mobile to keep pill compact */
+  }
+
   .tac-clean-timesteps-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     overflow-x: auto;
-    max-width: 100%;
+    width: 100%;
+    padding: 2px 0 3px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .tac-clean-timesteps-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tac-clean-time-pill {
+    padding: 5px 9px;
+    font-size: 10.5px;
+    flex-shrink: 0;
+  }
+
+  .tac-clean-forecast-play-btn {
+    padding: 5px 9px;
+    font-size: 10.5px;
+    flex-shrink: 0;
+  }
+
+  /* Tool Controls (+ - Recenter Fullscreen) shifted down so they never overlap topbar */
+  .tac-clean-map-tools {
+    top: 84px;
+    right: 8px;
+  }
+
+  .tac-clean-map-tool-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  /* Bottom Controls: Compact Legend on bottom-left, Layers button on bottom-right */
+  .tac-clean-legend-box {
+    bottom: 8px;
+    left: 8px;
+    padding: 5px 8px;
+    max-width: 165px;
+  }
+
+  .tac-clean-legend-title {
+    font-size: 9px;
+  }
+
+  .tac-clean-legend-ramp {
+    width: 150px;
+    height: 7px;
+  }
+
+  .tac-clean-legend-ticks {
+    font-size: 8px;
+  }
+
+  .tac-clean-map-bottom-right {
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .tac-clean-layers-trigger-btn {
+    padding: 6px 11px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .tac-clean-layers-trigger-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Mobile Layers Drawer / Modal */
+  .tac-popover-layers-v2 {
+    bottom: 48px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: calc(100% - 16px);
+    max-height: calc(100% - 64px);
+    overflow-y: auto;
+    padding: 14px 14px 12px;
   }
 }
 
