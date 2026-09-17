@@ -50,14 +50,21 @@ export default function AccessibilityMenu() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
+  // Count active options (matching "1 option enabled" in reference image)
+  const activeCount = 
+    (textSize !== 'normal' ? 1 : 0) +
+    (highContrast ? 1 : 0) +
+    (reduceMotion ? 1 : 0) +
+    (readAloud ? 1 : 0);
+
   return (
     <div className="vayu-a11y-wrap" ref={menuRef}>
-      {/* ♿ Accessibility ▾ Button (Replaces Language dropdown in header) */}
+      {/* ♿ Accessibility ▾ Header Control */}
       <button
         type="button"
         className={`vayu-a11y-btn ${isOpen ? 'active' : ''}`}
         onClick={() => setIsOpen((prev) => !prev)}
-        aria-label="Accessibility & Language"
+        aria-label="Accessibility Options"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
@@ -66,7 +73,7 @@ export default function AccessibilityMenu() {
         <span className="vayu-a11y-arrow" aria-hidden="true">▾</span>
       </button>
 
-      {/* Subtle overlay with light background blur (blur: 4px - 6px) */}
+      {/* Subtle overlay with light background blur */}
       {isOpen && (
         <div
           className="vayu-a11y-overlay"
@@ -75,26 +82,23 @@ export default function AccessibilityMenu() {
         />
       )}
 
-      {/* Compact Accessibility Panel */}
+      {/* Accessibility Panel Modal styled exactly like reference image in VAYUNET colors */}
       {isOpen && (
         <div
           className="vayu-a11y-panel"
           ref={panelRef}
           role="dialog"
-          aria-label="Accessibility & Language Settings"
+          aria-label="Accessibility Options"
         >
-          {/* Panel Header */}
-          <div className="vayu-a11y-header">
-            <div className="vayu-a11y-header-left">
-              <div className="vayu-a11y-header-title">
-                <span>♿</span>
-                <span>Accessibility</span>
-              </div>
-              <div className="vayu-a11y-header-subtitle">Accessibility & Language</div>
+          {/* Header Bar */}
+          <div className="vayu-a11y-card-header">
+            <div className="vayu-a11y-card-title">
+              <span className="vayu-a11y-header-glyph">♿</span>
+              <span>Accessibility Options</span>
             </div>
             <button
               type="button"
-              className="vayu-a11y-close-btn"
+              className="vayu-a11y-close-icon"
               onClick={() => setIsOpen(false)}
               aria-label="Close Accessibility Panel"
             >
@@ -102,131 +106,140 @@ export default function AccessibilityMenu() {
             </button>
           </div>
 
-          {/* Section 1: 🌐 Language */}
-          <div className="vayu-a11y-section">
-            <label className="vayu-a11y-section-label" htmlFor="vayu-a11y-lang-select">
+          {/* Language Selector Strip */}
+          <div className="vayu-a11y-lang-strip">
+            <div className="vayu-a11y-lang-label">
               <span>🌐</span>
               <span>Language</span>
-            </label>
-            <div className="vayu-a11y-lang-select-box">
-              <select
-                id="vayu-a11y-lang-select"
-                className="vayu-a11y-lang-select"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                {supportedLanguages.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.native} {lang.native !== lang.label ? `(${lang.label})` : ''}
-                  </option>
-                ))}
-              </select>
             </div>
-          </div>
-
-          {/* Section 2: Aa Text Size */}
-          <div className="vayu-a11y-section">
-            <div className="vayu-a11y-section-label">
-              <span>Aa</span>
-              <span>Text Size</span>
-            </div>
-            <div className="vayu-a11y-size-pills" role="group" aria-label="Text size options">
-              <button
-                type="button"
-                className={`vayu-a11y-size-pill ${textSize === 'small' ? 'active' : ''}`}
-                onClick={() => setTextSize('small')}
-                aria-pressed={textSize === 'small'}
-                title="Decrease Text Size"
-              >
-                A−
-              </button>
-              <button
-                type="button"
-                className={`vayu-a11y-size-pill ${textSize === 'normal' ? 'active' : ''}`}
-                onClick={() => setTextSize('normal')}
-                aria-pressed={textSize === 'normal'}
-                title="Default Text Size"
-              >
-                A
-              </button>
-              <button
-                type="button"
-                className={`vayu-a11y-size-pill ${textSize === 'large' ? 'active' : ''}`}
-                onClick={() => setTextSize('large')}
-                aria-pressed={textSize === 'large'}
-                title="Increase Text Size"
-              >
-                A+
-              </button>
-            </div>
-          </div>
-
-          {/* Section 3: Feature Toggles */}
-          <div className="vayu-a11y-toggles-group">
-            {/* 🔊 Read Aloud */}
-            <div
-              className="vayu-a11y-toggle-row"
-              onClick={() => setReadAloud(!readAloud)}
-              role="switch"
-              aria-checked={readAloud}
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setReadAloud(!readAloud)}
+            <select
+              className="vayu-a11y-lang-select-clean"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              aria-label="Select Language"
             >
-              <div className="vayu-a11y-toggle-info">
-                <span className="vayu-a11y-icon-glyph">🔊</span>
-                <span>Read Aloud</span>
-              </div>
-              <div className={`vayu-a11y-switch ${readAloud ? 'on' : ''}`}>
-                <div className="vayu-a11y-switch-knob" />
-              </div>
-            </div>
+              {supportedLanguages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.native} {lang.native !== lang.label ? `(${lang.label})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            {/* 👁 High Contrast */}
-            <div
-              className="vayu-a11y-toggle-row"
+          {/* 3-Column Grid matching reference image layout */}
+          <div className="vayu-a11y-grid">
+            {/* 1. Large Text */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${textSize === 'large' ? 'active' : ''}`}
+              onClick={() => setTextSize(textSize === 'large' ? 'normal' : 'large')}
+              aria-pressed={textSize === 'large'}
+            >
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">A+</span>
+                {textSize === 'large' && <span className="vayu-active-check">✓</span>}
+              </div>
+              <span className="vayu-card-btn-text">Large Text</span>
+            </button>
+
+            {/* 2. Small Text */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${textSize === 'small' ? 'active' : ''}`}
+              onClick={() => setTextSize(textSize === 'small' ? 'normal' : 'small')}
+              aria-pressed={textSize === 'small'}
+            >
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">A−</span>
+                {textSize === 'small' && <span className="vayu-active-check">✓</span>}
+              </div>
+              <span className="vayu-card-btn-text">Small Text</span>
+            </button>
+
+            {/* 3. Reset Text */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${textSize === 'normal' ? 'active' : ''}`}
+              onClick={() => setTextSize('normal')}
+              aria-pressed={textSize === 'normal'}
+            >
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">↺</span>
+                {textSize === 'normal' && <span className="vayu-active-check">✓</span>}
+              </div>
+              <span className="vayu-card-btn-text">Reset Text</span>
+            </button>
+
+            {/* 4. High Contrast */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${highContrast ? 'active' : ''}`}
               onClick={() => setHighContrast(!highContrast)}
-              role="switch"
-              aria-checked={highContrast}
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setHighContrast(!highContrast)}
+              aria-pressed={highContrast}
             >
-              <div className="vayu-a11y-toggle-info">
-                <span className="vayu-a11y-icon-glyph">👁</span>
-                <span>High Contrast</span>
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">👁</span>
+                {highContrast && <span className="vayu-active-check">✓</span>}
               </div>
-              <div className={`vayu-a11y-switch ${highContrast ? 'on' : ''}`}>
-                <div className="vayu-a11y-switch-knob" />
-              </div>
-            </div>
+              <span className="vayu-card-btn-text">High Contrast</span>
+            </button>
 
-            {/* ◐ Reduce Motion */}
-            <div
-              className="vayu-a11y-toggle-row"
+            {/* 5. Reduce Motion */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${reduceMotion ? 'active' : ''}`}
               onClick={() => setReduceMotion(!reduceMotion)}
-              role="switch"
-              aria-checked={reduceMotion}
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setReduceMotion(!reduceMotion)}
+              aria-pressed={reduceMotion}
             >
-              <div className="vayu-a11y-toggle-info">
-                <span className="vayu-a11y-icon-glyph">◐</span>
-                <span>Reduce Motion</span>
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">◐</span>
+                {reduceMotion && <span className="vayu-active-check">✓</span>}
               </div>
-              <div className={`vayu-a11y-switch ${reduceMotion ? 'on' : ''}`}>
-                <div className="vayu-a11y-switch-knob" />
+              <span className="vayu-card-btn-text">Reduce Motion</span>
+            </button>
+
+            {/* 6. Read Aloud */}
+            <button
+              type="button"
+              className={`vayu-a11y-card-btn ${readAloud ? 'active' : ''}`}
+              onClick={() => setReadAloud(!readAloud)}
+              aria-pressed={readAloud}
+            >
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">🔊</span>
+                {readAloud && <span className="vayu-active-check">✓</span>}
               </div>
-            </div>
+              <span className="vayu-card-btn-text">Read Aloud</span>
+            </button>
+
+            {/* 7. Reset All Options */}
+            <button
+              type="button"
+              className="vayu-a11y-card-btn vayu-reset-span-btn"
+              onClick={resetAccessibility}
+            >
+              <div className="vayu-a11y-squircle">
+                <span className="vayu-squircle-icon">↺</span>
+              </div>
+              <span className="vayu-card-btn-text">Reset All</span>
+            </button>
           </div>
 
-          {/* Section 4: Reset Accessibility Settings */}
-          <button
-            type="button"
-            className="vayu-a11y-reset-btn"
-            onClick={resetAccessibility}
-          >
-            <span>↺</span>
-            <span>Reset Accessibility Settings</span>
-          </button>
+          {/* Footer Bar matching reference image */}
+          <div className="vayu-a11y-card-footer">
+            <span className="vayu-a11y-count-text">
+              {activeCount === 0 ? 'Default settings (0 active)' : `${activeCount} option${activeCount === 1 ? '' : 's'} enabled`}
+            </span>
+            {activeCount > 0 && (
+              <button 
+                type="button"
+                className="vayu-a11y-footer-reset-link"
+                onClick={resetAccessibility}
+              >
+                Clear all
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

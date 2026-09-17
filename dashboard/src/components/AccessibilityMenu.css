@@ -1,8 +1,9 @@
 /* ==========================================================================
    VAYUNET ACCESSIBILITY & LANGUAGE MENU STYLES
+   Structured exactly like reference design with VAYUNET Dark Navy & Cyan Theme
    ========================================================================== */
 
-/* The header button wrapper */
+/* Header Button Wrapper */
 .vayu-a11y-wrap {
   position: relative;
   display: inline-flex;
@@ -92,18 +93,18 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  width: 350px;
+  width: 340px;
   background: rgba(11, 20, 42, 0.98);
   border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: 16px;
-  padding: 16px 18px 18px;
-  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.75), 0 0 25px rgba(6, 182, 212, 0.12);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 25px rgba(6, 182, 212, 0.15);
   z-index: 9999;
   color: #f1f5f9;
   font-family: inherit;
-  animation: vayuA11ySlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: vayuA11ySlideDown 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform-origin: top right;
-  backdrop-filter: none; /* Keep panel razor sharp */
+  backdrop-filter: none;
 }
 
 @keyframes vayuA11ySlideDown {
@@ -117,49 +118,37 @@
   }
 }
 
-/* Panel Header */
-.vayu-a11y-header {
+/* Panel Header Bar (matching reference image top banner) */
+.vayu-a11y-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 12px;
+  padding: 14px 18px;
+  background: rgba(16, 29, 58, 0.85);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 14px;
 }
 
-.vayu-a11y-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.vayu-a11y-header-title {
+.vayu-a11y-card-title {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 14.5px;
   font-weight: 700;
   color: #f8fafc;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.15px;
 }
 
-.vayu-a11y-header-title span:first-child {
+.vayu-a11y-header-glyph {
   color: #38bdf8;
-  font-size: 15px;
+  font-size: 16px;
 }
 
-.vayu-a11y-header-subtitle {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.vayu-a11y-close-btn {
+.vayu-a11y-close-icon {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #94a3b8;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -170,46 +159,42 @@
   transition: all 0.18s ease;
 }
 
-.vayu-a11y-close-btn:hover {
+.vayu-a11y-close-icon:hover {
   background: rgba(239, 68, 68, 0.2);
   border-color: rgba(239, 68, 68, 0.5);
   color: #fca5a5;
   transform: rotate(90deg);
 }
 
-/* Common Section Layout */
-.vayu-a11y-section {
-  margin-bottom: 14px;
+/* 🌐 Language Selector Strip */
+.vayu-a11y-lang-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(14, 24, 48, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.vayu-a11y-section-label {
+.vayu-a11y-lang-label {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: #cbd5e1;
-  margin-bottom: 8px;
 }
 
-.vayu-a11y-section-label svg,
-.vayu-a11y-section-label span {
+.vayu-a11y-lang-label span:first-child {
   color: #38bdf8;
 }
 
-/* 🌐 Language Select Box */
-.vayu-a11y-lang-select-box {
-  position: relative;
-  width: 100%;
-}
-
-.vayu-a11y-lang-select {
-  width: 100%;
-  background: rgba(15, 23, 42, 0.95);
+.vayu-a11y-lang-select-clean {
+  background: rgba(8, 15, 30, 0.95);
   border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: 9px;
-  padding: 8px 30px 8px 12px;
-  font-size: 12.5px;
+  border-radius: 7px;
+  padding: 5px 24px 5px 10px;
+  font-size: 12px;
   font-weight: 600;
   color: #f8fafc;
   cursor: pointer;
@@ -217,156 +202,158 @@
   font-family: inherit;
   appearance: none;
   -webkit-appearance: none;
-  transition: all 0.2s ease;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 7px center;
+  max-width: 170px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.vayu-a11y-lang-select:hover,
-.vayu-a11y-lang-select:focus {
+.vayu-a11y-lang-select-clean:hover,
+.vayu-a11y-lang-select-clean:focus {
   border-color: #38bdf8;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
 }
 
-.vayu-a11y-lang-select option {
-  background: #0b142a;
-  color: #f8fafc;
-  padding: 8px;
-}
-
-/* Aa Text Size Pill Group */
-.vayu-a11y-size-pills {
+/* 3-Column Squircle Action Cards Grid (Exact layout from reference) */
+.vayu-a11y-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 10px;
+  padding: 18px 16px;
+  align-items: start;
 }
 
-.vayu-a11y-size-pill {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 6px 0;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 700;
+.vayu-a11y-card-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
-  transition: all 0.18s ease;
+  outline: none;
+  user-select: none;
+  transition: transform 0.18s ease;
+}
+
+.vayu-a11y-card-btn:hover {
+  transform: translateY(-2px);
+}
+
+.vayu-a11y-card-btn:active {
+  transform: scale(0.96);
+}
+
+/* Squircle Icon Box */
+.vayu-a11y-squircle {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(16, 28, 54, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-.vayu-a11y-size-pill:hover {
-  background: rgba(30, 41, 59, 0.9);
-  color: #f8fafc;
-  border-color: rgba(56, 189, 248, 0.35);
+.vayu-a11y-card-btn:hover .vayu-a11y-squircle {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(22, 38, 72, 0.95);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(56, 189, 248, 0.2);
 }
 
-.vayu-a11y-size-pill.active {
-  background: rgba(6, 182, 212, 0.2);
-  border-color: #06b6d4;
+/* Active / Enabled Squircle State (Cyan/Teal Glow with Corner Checkmark) */
+.vayu-a11y-card-btn.active .vayu-a11y-squircle {
+  border: 2px solid #00e5ff;
+  background: rgba(0, 229, 255, 0.14);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.38), inset 0 0 10px rgba(0, 229, 255, 0.12);
+}
+
+.vayu-squircle-icon {
+  font-size: 20px;
+  font-weight: 700;
   color: #38bdf8;
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+  line-height: 1;
+  transition: all 0.2s ease;
 }
 
-/* Feature Toggle Rows */
-.vayu-a11y-toggles-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 12px;
+.vayu-a11y-card-btn.active .vayu-squircle-icon {
+  color: #00e5ff;
 }
 
-.vayu-a11y-toggle-row {
+/* Active Checkmark Badge in Top Right Corner (matching reference image) */
+.vayu-active-check {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 11px;
+  font-weight: 900;
+  color: #00e5ff;
+  line-height: 1;
+}
+
+/* Card Button Text Label */
+.vayu-card-btn-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.25;
+  transition: color 0.18s ease;
+}
+
+.vayu-a11y-card-btn:hover .vayu-card-btn-text,
+.vayu-a11y-card-btn.active .vayu-card-btn-text {
+  color: #f8fafc;
+}
+
+/* Reset All option spans centered in grid */
+.vayu-reset-span-btn {
+  grid-column: 2 / 3;
+}
+
+/* Panel Footer Bar (matching reference image "1 option enabled") */
+.vayu-a11y-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
-  padding: 2px 0;
+  padding: 11px 18px;
+  background: rgba(8, 14, 28, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.vayu-a11y-toggle-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #e2e8f0;
-}
-
-.vayu-a11y-toggle-info span.vayu-a11y-icon-glyph {
-  color: #38bdf8;
-  font-size: 14px;
-  width: 18px;
-  display: inline-flex;
-  justify-content: center;
-}
-
-/* Modern Toggle Switch */
-.vayu-a11y-switch {
-  position: relative;
-  width: 36px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-}
-
-.vayu-a11y-switch.on {
-  background: #0284c7;
-  box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
-}
-
-.vayu-a11y-switch-knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  background: #ffffff;
-  border-radius: 50%;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-.vayu-a11y-switch.on .vayu-a11y-switch-knob {
-  transform: translateX(16px);
-  background: #ffffff;
-}
-
-/* Reset Button */
-.vayu-a11y-reset-btn {
-  width: 100%;
-  background: transparent;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  padding: 8px 12px;
+.vayu-a11y-count-text {
   font-size: 11.5px;
   font-weight: 600;
   color: #94a3b8;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 6px;
 }
 
-.vayu-a11y-reset-btn:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.4);
+.vayu-a11y-footer-reset-link {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.18s ease;
+}
+
+.vayu-a11y-footer-reset-link:hover {
+  background: rgba(239, 68, 68, 0.15);
   color: #fca5a5;
 }
 
-/* Speaker Read Aloud Button (appears next to readable content when enabled) */
+/* ==========================================================================
+   SPEAKER READ ALOUD BUTTON
+   ========================================================================== */
 .vayu-speaker-btn {
   display: inline-flex;
   align-items: center;
@@ -537,10 +524,9 @@
     left: 4%;
     right: 4%;
     width: 92%;
-    max-width: 440px;
+    max-width: 400px;
     margin: 0 auto;
     border-radius: 20px;
-    padding: 18px 20px 20px;
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(6, 182, 212, 0.2);
     animation: vayuA11ySheetUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     transform-origin: bottom center;
@@ -557,20 +543,13 @@
     }
   }
 
-  .vayu-a11y-toggle-row {
-    padding: 6px 0;
-    min-height: 44px; /* Accessible touch target */
+  .vayu-a11y-squircle {
+    width: 54px;
+    height: 54px;
   }
 
-  .vayu-a11y-size-pill {
-    padding: 9px 0;
-    min-height: 44px;
-    font-size: 13px;
-  }
-
-  .vayu-a11y-lang-select {
-    padding: 11px 32px 11px 14px;
-    min-height: 44px;
-    font-size: 13px;
+  .vayu-a11y-grid {
+    gap: 14px 8px;
+    padding: 16px 12px;
   }
 }
