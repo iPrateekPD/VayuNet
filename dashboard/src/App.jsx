@@ -232,7 +232,7 @@ function App() {
       <>
         <CitizenPortal 
           onBackHome={() => navigateTo('home')}
-          onEnterPortal={() => navigateTo('login')}
+          onEnterPortal={() => navigateTo('portal')}
           theme={theme}
           onToggleTheme={toggleTheme}
         />

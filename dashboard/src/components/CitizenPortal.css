@@ -433,6 +433,76 @@
   margin: 0 auto;
 }
 
+/* Quick Navigation: Home & Operational Page Buttons */
+.cp-quick-nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  width: 100%;
+}
+
+.cp-quick-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  font-family: inherit;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.cp-quick-home-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cp-quick-home-btn:hover,
+.cp-quick-home-btn:active {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.cp-quick-ops-btn {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.32) 0%, rgba(14, 165, 233, 0.22) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.48);
+  color: #38bdf8;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+}
+
+.cp-quick-ops-btn:hover,
+.cp-quick-ops-btn:active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.52) 0%, rgba(14, 165, 233, 0.36) 100%);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+.cp-quick-btn-arrow {
+  font-size: 13px;
+  transition: transform 0.18s ease;
+}
+
+.cp-quick-ops-btn:hover .cp-quick-btn-arrow {
+  transform: translateX(3px);
+}
+
 .cp-hero-top {
   display: flex;
   justify-content: space-between;
@@ -1784,6 +1854,16 @@
 @media (max-width: 900px) {
   .cp-nav-links {
     display: none;
+  }
+
+  .cp-quick-nav-bar {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cp-quick-nav-btn {
+    padding: 7px 14px;
+    font-size: 12px;
   }
   
   .cp-hero-top {

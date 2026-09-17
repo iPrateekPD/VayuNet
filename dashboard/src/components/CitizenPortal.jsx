@@ -576,6 +576,37 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
       >
         <div className="cp-hero-overlay"></div>
         <div className="cp-hero-content">
+          {/* Quick Navigation: Home & Operational Page Buttons (Mobile & Phone View Navigation) */}
+          <div className="cp-quick-nav-bar">
+            <button 
+              type="button" 
+              className="cp-quick-nav-btn cp-quick-home-btn"
+              onClick={onBackHome}
+              title="Return to VAYUNET Home"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <span>Home</span>
+            </button>
+
+            <button 
+              type="button" 
+              className="cp-quick-nav-btn cp-quick-ops-btn"
+              onClick={onEnterPortal}
+              title="Navigate to Operational Page"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                <line x1="8" y1="2" x2="8" y2="18" />
+                <line x1="16" y1="6" x2="16" y2="22" />
+              </svg>
+              <span>Operational Page</span>
+              <span className="cp-quick-btn-arrow">→</span>
+            </button>
+          </div>
+
           <div className="cp-hero-top">
             <div>
               <div className="cp-hero-eyebrow">Severe Weather Warning</div>
