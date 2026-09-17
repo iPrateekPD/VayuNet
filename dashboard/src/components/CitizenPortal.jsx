@@ -686,22 +686,25 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           <div className="cp-ticker-inner">
             <div className="cp-ticker-left cp-nav-anim-item">
               <span className="cp-tricolor-flag">🇮🇳</span>
-              <span className="cp-gov-title">भारत सरकार | GOVERNMENT OF INDIA</span>
-              <span className="cp-ticker-divider">/</span>
-              <span className="cp-dept-title">Ministry of Earth Sciences (MoES)</span>
+              <span className="cp-gov-title">भारत सरकार · Government of India</span>
+              <span className="cp-ticker-dot">•</span>
+              <span className="cp-dept-title">MoES · NCMRWF</span>
             </div>
 
             <div className="cp-ticker-center cp-nav-anim-item">
-              <span className="cp-live-pulse-beacon"></span>
-              <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
-              <span className="cp-ticker-chip">4km Convective Grid</span>
-              <span className="cp-ticker-time">{liveIstTime || '08:30:00 PM IST'}</span>
+              <div className="cp-telemetry-badge">
+                <span className="cp-live-pulse-beacon" />
+                <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
+                <span className="cp-ticker-chip">4km Convective Grid</span>
+              </div>
+              <span className="cp-ticker-time">{liveIstTime || '01:24:00 PM IST'}</span>
             </div>
 
             <div className="cp-ticker-right cp-nav-anim-item">
               <a href="tel:1078" className="cp-ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
                 <span className="cp-helpline-icon">🚨</span>
-                <span>NDMA Helpline: <strong>1078</strong></span>
+                <span className="cp-helpline-text">NDMA 24x7:</span>
+                <strong className="cp-helpline-num">1078</strong>
               </a>
             </div>
           </div>
