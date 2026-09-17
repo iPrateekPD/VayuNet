@@ -619,289 +619,323 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                 </div>
               </div>
 
-            {/* FLOATING DRAWERS / POPOVER PANELS */}
-            
-            {/* 1. LAYERS PANEL (Redesigned with custom icons, subtitles & iOS switches) */}
-            {activePanel === 'layers' && (
-              <div className="tac-popover-layers-v2">
-                {/* Header: Layers Icon + Title + Subtitle + Close (X) */}
-                <div className="tac-popover-header-v2">
-                  <div className="tac-popover-header-left-v2">
-                    <div className="tac-popover-header-icon-v2">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
-                        <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
-                        <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5" />
-                      </svg>
-                    </div>
-                    <div className="tac-popover-header-text-v2">
-                      <span className="tac-popover-title-v2">Map Layers</span>
-                      <span className="tac-popover-subtitle-v2">Show or hide information on the map</span>
-                    </div>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close-v2" 
-                    onClick={() => setActivePanel(null)}
-                    title="Close Layers Panel"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                {/* Layer Items Body */}
-                <div className="tac-popover-body-v2">
-                  {/* 1. Precipitation */}
-                  <div 
-                    className={`tac-layer-card-v2 ${layers.precip ? 'active' : ''}`}
-                    onClick={() => handleToggleLayer('precip')}
-                  >
-                    <div className="tac-layer-info-v2">
-                      <div className="tac-layer-icon-wrap-v2">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                          <path d="M17.5 8c-.6-2.6-2.9-4.5-5.5-4.5-2.2 0-4.1 1.3-5 3.1-2.3.2-4 2.2-4 4.5 0 2.5 2 4.5 4.5 4.5h10c2.2 0 4-1.8 4-4 0-2.1-1.6-3.8-3.7-3.9z" fill="#38bdf8" />
-                          <path d="M7 17.5l-1.2 2.5M10.5 17.5l-1.2 2.5M14 17.5l-1.2 2.5M17.5 17.5l-1.2 2.5" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                      </div>
-                      <div className="tac-layer-text-v2">
-                        <span className="tac-layer-title-v2">Precipitation</span>
-                        <span className="tac-layer-subtitle-v2">Rainfall intensity and forecast</span>
-                      </div>
-                    </div>
-                    <div className={`tac-ios-switch ${layers.precip ? 'active' : ''}`}>
-                      <span className="tac-ios-switch-knob" />
-                    </div>
-                  </div>
-
-                  {/* 2. Satellite */}
-                  <div 
-                    className={`tac-layer-card-v2 ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}
-                    onClick={() => handleToggleLayer('satellite')}
-                  >
-                    <div className="tac-layer-info-v2">
-                      <div className="tac-layer-icon-wrap-v2">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#38bdf8" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M13 7 9 3 5 7l4 4" />
-                          <path d="m17 11 4 4-4 4-4-4" />
-                          <path d="m8 12 4 4 6-6-4-4Z" />
-                          <path d="m16 8 3-3" strokeWidth="2" fill="none" />
-                          <path d="M9 21a6 6 0 0 0-6-6" strokeWidth="2" fill="none" />
-                        </svg>
-                      </div>
-                      <div className="tac-layer-text-v2">
-                        <span className="tac-layer-title-v2">Satellite</span>
-                        <span className="tac-layer-subtitle-v2">Cloud cover (real-time)</span>
-                      </div>
-                    </div>
-                    <div className={`tac-ios-switch ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}>
-                      <span className="tac-ios-switch-knob" />
-                    </div>
-                  </div>
-
-                  {/* 3. Terrain */}
-                  <div 
-                    className={`tac-layer-card-v2 ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}
-                    onClick={() => handleToggleLayer('terrain')}
-                  >
-                    <div className="tac-layer-info-v2">
-                      <div className="tac-layer-icon-wrap-v2">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#38bdf8">
-                          <path d="M14 6l-4.5 7.5L7 10 1 20h22L14 6zm-1.8 4.2L14 7.6l2.6 4.4-1.6 1-2.8-2.8z" />
-                        </svg>
-                      </div>
-                      <div className="tac-layer-text-v2">
-                        <span className="tac-layer-title-v2">Terrain</span>
-                        <span className="tac-layer-subtitle-v2">Mountains, elevation and land</span>
-                      </div>
-                    </div>
-                    <div className={`tac-ios-switch ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}>
-                      <span className="tac-ios-switch-knob" />
-                    </div>
-                  </div>
-
-                  {/* 4. Rivers */}
-                  <div 
-                    className={`tac-layer-card-v2 ${layers.rivers ? 'active' : ''}`}
-                    onClick={() => handleToggleLayer('rivers')}
-                  >
-                    <div className="tac-layer-info-v2">
-                      <div className="tac-layer-icon-wrap-v2">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M3 6c3-2 6 2 9 0s6-2 9 0" />
-                          <path d="M3 12c3-2 6 2 9 0s6-2 9 0" />
-                          <path d="M3 18c3-2 6 2 9 0s6-2 9 0" />
-                        </svg>
-                      </div>
-                      <div className="tac-layer-text-v2">
-                        <span className="tac-layer-title-v2">Rivers</span>
-                        <span className="tac-layer-subtitle-v2">Rivers and flow direction</span>
-                      </div>
-                    </div>
-                    <div className={`tac-ios-switch ${layers.rivers ? 'active' : ''}`}>
-                      <span className="tac-ios-switch-knob" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer: Reset to Default & Done */}
-                <div className="tac-popover-footer-v2">
-                  <button 
-                    type="button" 
-                    className="tac-reset-btn-v2"
-                    onClick={handleResetLayers}
-                    title="Restore default active layers"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                    </svg>
-                    <span>Reset to Default</span>
-                  </button>
-
-                  <button 
-                    type="button" 
-                    className="tac-layers-done-btn"
-                    onClick={() => setActivePanel(null)}
-                  >
-                    Done
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* 2. INCIDENTS PANEL */}
-            {activePanel === 'incidents' && (
-              <div className="tac-floating-popover tac-popover-incidents">
-                <div className="tac-popover-header">
-                  <div className="tac-popover-title">
-                    <span style={{ color: '#ef4444' }}>⚠️</span>
-                    <span>ACTIVE INCIDENTS ({INCIDENTS_DATA.length})</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close" 
-                    onClick={() => setActivePanel(null)}
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="tac-popover-body tac-incidents-scroll">
-                  {INCIDENTS_DATA.map((inc) => (
-                    <div
-                      key={inc.id}
-                      className={`tac-incident-card-item ${selectedIncident.id === inc.id ? 'active' : ''}`}
-                      onClick={() => handleSelectIncident(inc)}
-                    >
-                      <div className="tac-inc-item-top">
-                        <div className="tac-inc-item-loc">
-                          <span className="tac-inc-dot" style={{ background: inc.riskColor }} />
-                          <span className="tac-inc-name">{inc.name.split(',')[0]}</span>
+              {/* ================= GLOBAL MODAL OVERLAY: BLURRED BACKDROP & CURVED RECTANGLE DIALOG ================= */}
+              {activePanel && (
+              <div 
+                className="tac-modal-backdrop" 
+                onClick={() => setActivePanel(null)}
+                role="dialog"
+                aria-modal="true"
+              >
+                <div className="tac-modal-card" onClick={(e) => e.stopPropagation()}>
+                  {/* 1. LAYERS MODAL */}
+                  {activePanel === 'layers' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+                              <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                              <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5" />
+                            </svg>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Map Layers</span>
+                            <span className="tac-modal-subtitle">Show or hide information on the map</span>
+                          </div>
                         </div>
-                        <span className="tac-inc-badge" style={{ color: inc.riskColor, borderColor: inc.riskColor }}>
-                          {inc.riskLevel}
-                        </span>
-                      </div>
-                      <div className="tac-inc-hazard">{inc.hazard}</div>
-                      <div className="tac-inc-meta">
-                        <span>ETA {inc.eta}</span>
-                        <span>•</span>
-                        <span>{inc.rainfall}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* 4. BOOKMARKS PANEL */}
-            {activePanel === 'bookmarks' && (
-              <div className="tac-floating-popover tac-popover-bookmarks">
-                <div className="tac-popover-header">
-                  <div className="tac-popover-title">
-                    <span style={{ color: '#eab308' }}>★</span>
-                    <span>SAVED LOCATIONS</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close" 
-                    onClick={() => setActivePanel(null)}
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="tac-popover-body">
-                  <form onSubmit={handleAddBookmark} className="tac-bookmark-add-form">
-                    <input
-                      type="text"
-                      className="tac-bookmark-input"
-                      placeholder="Add sector (e.g. Kedarnath)..."
-                      value={newBookmarkText}
-                      onChange={(e) => setNewBookmarkText(e.target.value)}
-                    />
-                    <button type="submit" className="tac-bookmark-add-btn">
-                      Add ★
-                    </button>
-                  </form>
-
-                  <div className="tac-bookmarks-list">
-                    {bookmarks.map((loc) => (
-                      <div
-                        key={loc}
-                        className={`tac-bookmark-row ${selectedSector === loc ? 'active' : ''}`}
-                        onClick={() => handleSelectBookmark(loc)}
-                      >
-                        <div className="tac-bookmark-left">
-                          <span className="tac-bm-star">★</span>
-                          <span className="tac-bm-name">{loc}</span>
-                        </div>
-                        <button
-                          type="button"
-                          className="tac-bm-del"
-                          onClick={(e) => handleRemoveBookmark(loc, e)}
-                          title="Remove bookmark"
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close (Esc)"
                         >
                           ✕
                         </button>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {/* 5. TELEMETRY SOURCE DETAIL MODAL */}
-            {activePanel === 'telemetry' && selectedTelemetrySource && (
-              <div className="tac-floating-popover tac-popover-telemetry">
-                <div className="tac-popover-header">
-                  <div className="tac-popover-title">
-                    <span>📡</span>
-                    <span>{selectedTelemetrySource.name}</span>
-                  </div>
-                  <button 
-                    type="button" 
-                    className="tac-popover-close" 
-                    onClick={() => setActivePanel(null)}
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="tac-popover-body">
-                  <div className="tac-telem-info-row">
-                    <span className="tac-telem-lbl">Telemetry Stream</span>
-                    <span className="tac-telem-val">{selectedTelemetrySource.stream}</span>
-                  </div>
-                  <div className="tac-telem-info-row">
-                    <span className="tac-telem-lbl">Refresh Frequency</span>
-                    <span className="tac-telem-val">{selectedTelemetrySource.frequency}</span>
-                  </div>
-                  <div className="tac-telem-info-row">
-                    <span className="tac-telem-lbl">Latency</span>
-                    <span className="tac-telem-val" style={{ color: '#22c55e' }}>{selectedTelemetrySource.latency}</span>
-                  </div>
-                  <div className="tac-telem-info-row">
-                    <span className="tac-telem-lbl">Ingestion Health</span>
-                    <span className="tac-telem-val" style={{ color: '#38bdf8' }}>99.98% High Precision Calibrated</span>
-                  </div>
+                      <div className="tac-modal-body">
+                        {/* 1. Precipitation */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.precip ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('precip')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.5 8c-.6-2.6-2.9-4.5-5.5-4.5-2.2 0-4.1 1.3-5 3.1-2.3.2-4 2.2-4 4.5 0 2.5 2 4.5 4.5 4.5h10c2.2 0 4-1.8 4-4 0-2.1-1.6-3.8-3.7-3.9z" fill="#38bdf8" />
+                                <path d="M7 17.5l-1.2 2.5M10.5 17.5l-1.2 2.5M14 17.5l-1.2 2.5M17.5 17.5l-1.2 2.5" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Precipitation</span>
+                              <span className="tac-layer-subtitle-v2">Rainfall intensity and forecast</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.precip ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 2. Satellite */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('satellite')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M13 7 9 3 5 7l4 4" />
+                                <path d="m17 11 4 4-4 4-4-4" />
+                                <path d="m8 12 4 4 6-6-4-4Z" />
+                                <path d="m16 8 3-3" strokeWidth="2" fill="none" />
+                                <path d="M9 21a6 6 0 0 0-6-6" strokeWidth="2" fill="none" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Satellite</span>
+                              <span className="tac-layer-subtitle-v2">Cloud cover (real-time)</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 3. Terrain */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('terrain')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8">
+                                <path d="M14 6l-4.5 7.5L7 10 1 20h22L14 6zm-1.8 4.2L14 7.6l2.6 4.4-1.6 1-2.8-2.8z" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Terrain</span>
+                              <span className="tac-layer-subtitle-v2">Mountains, elevation and land</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 4. Rivers */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.rivers ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('rivers')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6c3-2 6 2 9 0s6-2 9 0" />
+                                <path d="M3 12c3-2 6 2 9 0s6-2 9 0" />
+                                <path d="M3 18c3-2 6 2 9 0s6-2 9 0" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Rivers</span>
+                              <span className="tac-layer-subtitle-v2">Rivers and flow direction</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.rivers ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="tac-modal-footer">
+                        <button 
+                          type="button" 
+                          className="tac-reset-btn-v2"
+                          onClick={handleResetLayers}
+                          title="Restore default active layers"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                            <path d="M3 3v5h5" />
+                          </svg>
+                          <span>Reset to Default</span>
+                        </button>
+
+                        <button 
+                          type="button" 
+                          className="tac-layers-done-btn"
+                          onClick={() => setActivePanel(null)}
+                        >
+                          Done
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. INCIDENTS MODAL */}
+                  {activePanel === 'incidents' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon tac-modal-header-icon-danger">
+                            <span>⚠️</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Active Incidents ({INCIDENTS_DATA.length})</span>
+                            <span className="tac-modal-subtitle">High priority weather threats in Chamoli & Garhwal</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body tac-incidents-modal-scroll">
+                        {INCIDENTS_DATA.map((inc) => (
+                          <div
+                            key={inc.id}
+                            className={`tac-incident-card-item ${selectedIncident.id === inc.id ? 'active' : ''}`}
+                            onClick={() => {
+                              handleSelectIncident(inc);
+                              setActivePanel(null);
+                            }}
+                          >
+                            <div className="tac-inc-item-top">
+                              <div className="tac-inc-item-loc">
+                                <span className="tac-inc-dot" style={{ background: inc.riskColor }} />
+                                <span className="tac-inc-name">{inc.name}</span>
+                              </div>
+                              <span className="tac-inc-badge" style={{ color: inc.riskColor, borderColor: inc.riskColor }}>
+                                {inc.riskLevel}
+                              </span>
+                            </div>
+                            <div className="tac-inc-hazard">{inc.hazard}</div>
+                            <div className="tac-inc-meta">
+                              <span>ETA {inc.eta}</span>
+                              <span>•</span>
+                              <span>{inc.rainfall}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. BOOKMARKS MODAL */}
+                  {activePanel === 'bookmarks' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon" style={{ color: '#eab308' }}>
+                            <span>★</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Saved Locations</span>
+                            <span className="tac-modal-subtitle">Quick jump to monitored sectors</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body">
+                        <form onSubmit={handleAddBookmark} className="tac-bookmark-add-form">
+                          <input
+                            type="text"
+                            className="tac-bookmark-input"
+                            placeholder="Add sector (e.g. Kedarnath)..."
+                            value={newBookmarkText}
+                            onChange={(e) => setNewBookmarkText(e.target.value)}
+                          />
+                          <button type="submit" className="tac-bookmark-add-btn">
+                            Add ★
+                          </button>
+                        </form>
+
+                        <div className="tac-bookmarks-list">
+                          {bookmarks.map((loc) => (
+                            <div
+                              key={loc}
+                              className={`tac-bookmark-row ${selectedSector === loc ? 'active' : ''}`}
+                              onClick={() => {
+                                handleSelectBookmark(loc);
+                                setActivePanel(null);
+                              }}
+                            >
+                              <div className="tac-bookmark-left">
+                                <span className="tac-bm-star">★</span>
+                                <span className="tac-bm-name">{loc}</span>
+                              </div>
+                              <button
+                                type="button"
+                                className="tac-bm-del"
+                                onClick={(e) => handleRemoveBookmark(loc, e)}
+                                title="Remove bookmark"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. TELEMETRY SOURCE DETAIL MODAL */}
+                  {activePanel === 'telemetry' && selectedTelemetrySource && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon">
+                            <span>📡</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">{selectedTelemetrySource.name}</span>
+                            <span className="tac-modal-subtitle">Real-time Telemetry Feed Diagnostics</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body">
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Telemetry Stream</span>
+                          <span className="tac-telem-val">{selectedTelemetrySource.stream}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Refresh Frequency</span>
+                          <span className="tac-telem-val">{selectedTelemetrySource.frequency}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Latency</span>
+                          <span className="tac-telem-val" style={{ color: '#22c55e' }}>{selectedTelemetrySource.latency}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Ingestion Health</span>
+                          <span className="tac-telem-val" style={{ color: '#38bdf8' }}>99.98% High Precision Calibrated</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

@@ -2265,87 +2265,161 @@
 }
 
 /* =========================================================
-   FLOATING INTERACTIVE POPOVERS (Layers, Rivers, Incidents, Bookmarks)
+   GLOBAL MODAL OVERLAY: BLURRED BACKDROP & CURVED RECTANGLE DIALOG
    ========================================================= */
-.tac-floating-popover {
-  position: absolute;
-  top: 54px;
-  left: 14px;
-  z-index: 500;
-  width: 290px;
-  background: rgba(8, 16, 30, 0.96);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(16px);
-  padding: 14px 16px;
+.tac-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999 !important;
+  background: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  animation: tacPopoverIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: tacModalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
 }
 
-@keyframes tacPopoverIn {
+.tac-modal-card {
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(90vh - 24px);
+  background: rgba(11, 20, 42, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 20px;
+  box-shadow: 0 25px 70px -10px rgba(0, 0, 0, 0.95), 0 0 35px rgba(2, 132, 199, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: tacModalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes tacModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes tacModalScaleIn {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.97);
+    transform: scale(0.94) translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
-.tac-popover-header {
+.tac-modal-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.tac-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(14, 25, 48, 0.65);
+  flex-shrink: 0;
 }
 
-.tac-popover-title {
-  font-size: 11px;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.8px;
+.tac-modal-header-left {
   display: flex;
   align-items: center;
-  gap: 6px;
-  text-transform: uppercase;
+  gap: 12px;
 }
 
-.tac-popover-close {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.15s ease;
+.tac-modal-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  flex-shrink: 0;
 }
 
-.tac-popover-close:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+.tac-modal-header-icon-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  font-size: 16px;
 }
 
-.tac-popover-body {
+.tac-modal-header-titles {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-/* Layer Toggle Rows — matching reference UI mockup */
-.tac-popover-layers {
-  width: 270px;
-  background: rgba(8, 16, 30, 0.98);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
-  border-radius: 12px;
-  padding: 14px 16px;
+.tac-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+
+.tac-modal-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 3px;
+  line-height: 1.25;
+}
+
+.tac-modal-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.tac-modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+  transform: scale(1.06);
+}
+
+.tac-modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  max-height: calc(86vh - 120px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.tac-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(9, 17, 34, 0.5);
+  flex-shrink: 0;
+}
+
+.tac-incidents-modal-scroll {
+  gap: 10px;
 }
 
 .tac-layer-toggle-row {
@@ -3173,16 +3247,28 @@
     height: 15px;
   }
 
-  /* Mobile Layers Drawer / Modal */
-  .tac-popover-layers-v2 {
-    bottom: 48px;
-    left: 8px;
-    right: 8px;
-    width: auto;
-    max-width: calc(100% - 16px);
-    max-height: calc(100% - 64px);
-    overflow-y: auto;
-    padding: 14px 14px 12px;
+  /* Mobile Modal Dialog - Centered, Curved Rectangle with Everything Inside */
+  .tac-modal-backdrop {
+    padding: 12px;
+  }
+
+  .tac-modal-card {
+    max-width: 100%;
+    max-height: calc(92vh - 20px);
+    border-radius: 18px;
+  }
+
+  .tac-modal-header {
+    padding: 14px 16px;
+  }
+
+  .tac-modal-body {
+    padding: 14px 16px;
+    max-height: calc(88vh - 120px);
+  }
+
+  .tac-modal-footer {
+    padding: 12px 16px;
   }
 }
 
