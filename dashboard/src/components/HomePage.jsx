@@ -392,6 +392,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   // Track whether user has scrolled past ticker to stick nav at top: 0
   const [isNavScrolled, setIsNavScrolled] = useState(false);
 
+  // Always start HomePage from top (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, []);
+
   // Track active section for navigation highlights and slide dots
   useEffect(() => {
     const sectionIds = ['hero-section', 'data-fusion', 'how-it-works'];

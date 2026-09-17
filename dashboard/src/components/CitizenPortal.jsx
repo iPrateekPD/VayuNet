@@ -418,6 +418,13 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     setTimeout(() => setToastMessage(null), 3800);
   };
 
+  // Always open CitizenPortal starting from the very top of the page (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, []);
+
   // Real-time dynamic IST clock for sovereign ticker
   useEffect(() => {
     const updateClock = () => {

@@ -8160,7 +8160,7 @@ html {
     width: 100% !important;
     height: 54px !important;
     min-height: 54px !important;
-    padding: 0 16px !important;
+    padding: 0 12px !important;
     background: rgba(5, 11, 21, 0.88) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
@@ -8181,22 +8181,23 @@ html {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
 
   .home-brand {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 8px !important;
     min-width: 0 !important;
-    flex-shrink: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
     cursor: pointer !important;
     text-decoration: none !important;
   }
 
   .home-logo {
-    width: 38px !important;
-    height: 38px !important;
+    width: 32px !important;
+    height: 32px !important;
     border-radius: 0 !important;
     background: transparent !important;
     display: flex !important;
@@ -8217,22 +8218,24 @@ html {
   .brand-titles-group {
     display: flex !important;
     flex-direction: column !important;
-    gap: 2px !important;
+    gap: 1px !important;
     justify-content: center !important;
     min-width: 0 !important;
+    overflow: hidden !important;
   }
 
   .brand-row {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 6px !important;
+    min-width: 0 !important;
   }
 
   .home-title {
-    font-size: 16px !important;
+    font-size: 15px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
-    letter-spacing: 0.6px !important;
+    letter-spacing: 0.4px !important;
     line-height: 1 !important;
     white-space: nowrap !important;
   }
@@ -8240,32 +8243,38 @@ html {
   .gov-sovereign-pill {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 4px !important;
-    font-size: 9.5px !important;
+    gap: 3px !important;
+    font-size: 8.5px !important;
     font-family: var(--font-mono), 'SF Mono', monospace !important;
     font-weight: 700 !important;
     background: rgba(56, 189, 248, 0.09) !important;
     color: #7dd3fc !important;
     border: 1px solid rgba(56, 189, 248, 0.24) !important;
     border-radius: 4px !important;
-    padding: 2px 6px !important;
-    letter-spacing: 0.3px !important;
+    padding: 1.5px 5px !important;
+    letter-spacing: 0.2px !important;
     white-space: nowrap !important;
     line-height: 1 !important;
   }
 
   .home-dept {
-    font-size: 10.5px !important;
+    font-size: 9.5px !important;
     color: #94a3b8 !important;
     font-weight: 500 !important;
-    letter-spacing: 0.2px !important;
+    letter-spacing: 0.1px !important;
     margin: 0 !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    max-width: none !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 170px !important;
     display: block !important;
+  }
+
+  @media (max-width: 380px) {
+    .home-dept {
+      display: none !important;
+    }
   }
 
   .home-nav-links-capsule {
@@ -8276,7 +8285,7 @@ html {
   .home-nav-actions {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 4px !important;
     flex-shrink: 0 !important;
   }
 

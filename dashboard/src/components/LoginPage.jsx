@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { INDIAN_LANGUAGES } from './HomePage';
 
 const FAST_TRACK_USERS = [
@@ -16,6 +16,13 @@ export default function LoginPage({ onLoginSuccess, onBackHome }) {
   const [language, setLanguage] = useState('EN');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Always open LoginPage from top (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();

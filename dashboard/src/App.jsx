@@ -58,6 +58,13 @@ function App() {
 
   // Authenticated Portal Tab: 'nowcast' | 'analysis' | 'events' | 'alerts'
   const [portalTab, setPortalTab] = useState(getTabFromLocation);
+
+  // Ensure every page view and tab switch opens strictly from top of the page (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, [view, portalTab]);
   const [isSystemDrawerOpen, setIsSystemDrawerOpen] = useState(() => {
     const h = window.location.hash.toLowerCase();
     return h.includes('system') || h.includes('telemetry');
@@ -133,6 +140,10 @@ function App() {
     const handleUrlChange = () => {
       const v = getViewFromLocation();
       setView(v);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+
       if (v === 'portal') {
         const t = getTabFromLocation();
         setPortalTab(t);
@@ -153,6 +164,10 @@ function App() {
 
   const navigateTo = (newView) => {
     setView(newView);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+
     if (newView === 'home') window.location.hash = '#/';
     else if (newView === 'login') window.location.hash = '#/login';
     else if (newView === 'citizen') window.location.hash = '#/warnings';
@@ -161,6 +176,9 @@ function App() {
 
   const handleTabSwitch = (newTab) => {
     setPortalTab(newTab);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
     window.location.hash = `#/operations/${newTab}`;
   };
 

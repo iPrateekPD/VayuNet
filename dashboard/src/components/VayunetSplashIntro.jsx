@@ -5,20 +5,45 @@ export default function VayunetSplashIntro({ onComplete }) {
   const [phase, setPhase] = useState('active'); // 'active' | 'exiting' | 'done'
 
   useEffect(() => {
-    // 1. After 2.0s of animation, initiate smooth exit transition
+    // 1. Immediately lock all scrolling on body and html while splash logo screen is visible
+    document.body.classList.add('splash-active');
+    document.documentElement.classList.add('splash-active');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Prevent wheel and touch scrolling on mobile during splash
+    const preventScroll = (e) => {
+      e.preventDefault();
+    };
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('wheel', preventScroll, { passive: false });
+
+    // 2. After 2.0s of animation, initiate smooth exit transition
     const exitTimer = setTimeout(() => {
       setPhase('exiting');
     }, 2000);
 
-    // 2. After 2.5s, fully finish and notify parent to unmount
+    // 3. After 2.5s, fully finish, unlock scrolling, ensure top (0, 0) and unmount
     const doneTimer = setTimeout(() => {
       setPhase('done');
+      document.body.classList.remove('splash-active');
+      document.documentElement.classList.remove('splash-active');
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('wheel', preventScroll);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       onComplete?.();
     }, 2500);
 
     return () => {
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);
+      document.body.classList.remove('splash-active');
+      document.documentElement.classList.remove('splash-active');
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('wheel', preventScroll);
     };
   }, [onComplete]);
 

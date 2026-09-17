@@ -1,8 +1,20 @@
 /* VayunetSplashIntro.css — 2-Second Opening VAYUNET Logo Cinematic Splash */
 
+body.splash-active,
+html.splash-active {
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+}
+
 .vayunet-splash-screen {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   z-index: 999999;
   background-color: #0B1220;
   display: flex;
@@ -10,6 +22,8 @@
   justify-content: center;
   overflow: hidden;
   pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: none;
   opacity: 1;
   transform: scale(1);
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
