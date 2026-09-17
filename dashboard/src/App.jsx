@@ -17,6 +17,7 @@ import EventsView from './components/EventsView';
 import AlertsView from './components/AlertsView';
 import SystemDrawer from './components/SystemDrawer';
 import InstitutionalFooter from './components/InstitutionalFooter';
+import AccessibilityMenu from './components/AccessibilityMenu';
 import './components/OperationsPortal.css';
 
 function App() {
@@ -294,31 +295,8 @@ function App() {
 
           {/* Right Side Things: Button shape, size, color keep same */}
           <div className="home-nav-actions">
-            {/* Language Selector */}
-            <div className="home-lang-wrap">
-              <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              <span className="home-lang-code-mobile">{portalLanguage}</span>
-              <select 
-                className="home-lang-select" 
-                value={portalLanguage} 
-                onChange={(e) => {
-                  setPortalLanguage(e.target.value);
-                  const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                  showToast(`Language switched to ${sel?.label || e.target.value}`);
-                }}
-                aria-label="Select Language"
-              >
-                {INDIAN_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* ♿ Unified Accessibility & Language Control */}
+            <AccessibilityMenu />
 
             {/* System Status (exact btn-secondary-nav shape, size, color) */}
             <button

@@ -8,6 +8,9 @@ import {
   WEATHER_LAYERS,
   FORECAST_TIME_STEPS,
 } from '../services/weatherService';
+import AccessibilityMenu from './AccessibilityMenu';
+import ReadAloudButton from './ReadAloudButton';
+import { useAccessibility } from '../context/AccessibilityContext';
 import './CitizenPortal.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -28,6 +31,7 @@ export const INDIAN_LANGUAGES = [
 ];
 
 export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
+  const { language } = useAccessibility();
   const [showSplash, setShowSplash] = useState(true);
   const [telemetryTime, setTelemetryTime] = useState('');
   const [displayDate, setDisplayDate] = useState('');
@@ -36,7 +40,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileLayerSheetOpen, setMobileLayerSheetOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero-section');
-  const [language, setLanguage] = useState('EN');
   const [toastMsg, setToastMsg] = useState(null);
 
   const showToast = (msg) => {
@@ -87,7 +90,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
     }
   };
 
-  const t = navLabels[language] || navLabels.EN;
+  const langKey = (language || 'en').toUpperCase();
+  const t = navLabels[langKey] || navLabels.EN;
 
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   const introCompleteRef = useRef(false);
@@ -466,31 +470,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
           {/* Right Header Actions */}
           <div className="home-nav-actions">
-            {/* Language Option Dropdown */}
-            <div className="home-lang-wrap" title="Select Language">
-              <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              <span className="home-lang-code-mobile">{language}</span>
-              <select 
-                className="home-lang-select" 
-                value={language} 
-                onChange={(e) => {
-                  setLanguage(e.target.value);
-                  const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                  showToast(e.target.value === 'HI' ? 'भाषा बदलकर हिंदी (हिंदी) की गई' : `Language selected: ${sel?.label || e.target.value}`);
-                }}
-                aria-label="Select Language"
-              >
-                {INDIAN_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* ♿ Unified Accessibility & Language Control (replaces English dropdown) */}
+            <AccessibilityMenu />
 
             {/* Public Warnings Radar Button */}
             <button className="btn-secondary-nav" onClick={onOpenPublicWarnings} id="nav-public-warnings-btn">
@@ -513,6 +494,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         <div className="ticker-badge">
           <span className="ticker-pulse-beacon" />
           <span className="ticker-badge-text">{t.tickerTitle}</span>
+          <ReadAloudButton text={`${t.ticker1Tag}: ${t.ticker1Loc}. ${t.ticker1Desc}`} label="Read live weather alert aloud" />
         </div>
         <div className="ticker-track">
           {/* Content duplicated for seamless infinite marquee loop */}

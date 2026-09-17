@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Circle, Marker, Popup, useMap } from 'react-le
 import L from 'leaflet';
 import gsap from 'gsap';
 import './CitizenPortal.css';
+import AccessibilityMenu from './AccessibilityMenu';
+import ReadAloudButton from './ReadAloudButton';
 import { INDIAN_LANGUAGES } from './HomePage';
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
@@ -646,30 +648,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             </div>
 
             <div className="home-nav-actions cp-nav-anim-item">
-              <div className="home-lang-wrap" title="Select Language">
-                <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-                <span className="home-lang-code-mobile">{language}</span>
-                <select 
-                  className="home-lang-select" 
-                  value={language} 
-                  onChange={(e) => {
-                    setLanguage(e.target.value);
-                    const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                    showToast(`Language switched to ${sel?.label || e.target.value}`);
-                  }}
-                  aria-label="Select Language"
-                >
-                  {INDIAN_LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* ♿ Unified Accessibility & Language Control */}
+              <AccessibilityMenu />
 
               {/* 2. Home Navigation Option */}
               <button 
@@ -877,6 +857,10 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 <div className={`cp-lead-pill ${loc.isAffected ? '' : 'green'}`}>
                   {loc.timeframe}
                 </div>
+                <ReadAloudButton 
+                  text={`Public Weather Warning. Location: ${loc.name}, ${loc.district}. Status: ${loc.riskLevel}. Hazard: ${loc.hazard}. ${loc.description}. Designated safe shelter: ${loc.safeShelter.name} at ${loc.safeShelter.address}.`}
+                  label="Read public weather alert aloud" 
+                />
               </div>
 
               <h2 className="cp-warning-loc-title">{loc.name}</h2>

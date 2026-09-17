@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import ReadAloudButton from './ReadAloudButton';
 import './TacticalNowcast.css';
 
 // Fix Leaflet marker icons in React
@@ -1467,6 +1468,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
                 <span>{selectedIncident.badge}</span>
+                <ReadAloudButton 
+                  text={`${selectedIncident.badge}: ${selectedIncident.hazard}. ${currentStepData.riskLevel} at ${selectedIncident.name}. Estimated arrival: ${currentStepData.arrival}. ${selectedIncident.narrative}`} 
+                  label="Read threat details aloud"
+                />
               </div>
               <div className="tac-clean-forecast-pill">Forecast: +{currentStepData.eta}</div>
             </div>
@@ -1540,6 +1545,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
               <div className="tac-clean-action-head">
                 <span style={{ fontSize: '13px' }}>⚠️</span>
                 <span>Recommended Action</span>
+                <ReadAloudButton 
+                  text="Recommended Action: Move away from riverbeds and low-lying areas. Be prepared for possible evacuation. Follow local authority instructions."
+                  label="Read recommended actions aloud"
+                />
               </div>
               <ul className="tac-clean-action-list">
                 <li>Move away from riverbeds and low-lying areas.</li>

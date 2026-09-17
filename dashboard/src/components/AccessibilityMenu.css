@@ -1,0 +1,576 @@
+/* ==========================================================================
+   VAYUNET ACCESSIBILITY & LANGUAGE MENU STYLES
+   ========================================================================== */
+
+/* The header button wrapper */
+.vayu-a11y-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ♿ Accessibility ▾ Header Control */
+.vayu-a11y-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(7, 24, 34, 0.85);
+  border: 1px solid rgba(98, 192, 191, 0.22);
+  border-radius: 8px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.vayu-a11y-btn:hover {
+  border-color: rgba(98, 192, 191, 0.55);
+  background: rgba(10, 32, 44, 0.95);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(98, 192, 191, 0.22);
+}
+
+.vayu-a11y-btn.active {
+  border-color: #06b6d4;
+  background: rgba(8, 36, 52, 0.98);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+}
+
+.vayu-a11y-icon {
+  font-size: 13px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  color: #38bdf8;
+}
+
+.vayu-a11y-label {
+  letter-spacing: 0.2px;
+}
+
+.vayu-a11y-arrow {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.vayu-a11y-btn.active .vayu-a11y-arrow {
+  transform: rotate(180deg);
+  color: #38bdf8;
+}
+
+/* Subtle Transparent Overlay with Light Background Blur */
+.vayu-a11y-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 8, 20, 0.48);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9998;
+  animation: vayuA11yFadeIn 0.22s ease-out forwards;
+}
+
+@keyframes vayuA11yFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Compact Accessibility Panel (Desktop) */
+.vayu-a11y-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 350px;
+  background: rgba(11, 20, 42, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.75), 0 0 25px rgba(6, 182, 212, 0.12);
+  z-index: 9999;
+  color: #f1f5f9;
+  font-family: inherit;
+  animation: vayuA11ySlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+  backdrop-filter: none; /* Keep panel razor sharp */
+}
+
+@keyframes vayuA11ySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Panel Header */
+.vayu-a11y-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+}
+
+.vayu-a11y-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vayu-a11y-header-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.2px;
+}
+
+.vayu-a11y-header-title span:first-child {
+  color: #38bdf8;
+  font-size: 15px;
+}
+
+.vayu-a11y-header-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.vayu-a11y-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.18s ease;
+}
+
+.vayu-a11y-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  transform: rotate(90deg);
+}
+
+/* Common Section Layout */
+.vayu-a11y-section {
+  margin-bottom: 14px;
+}
+
+.vayu-a11y-section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.vayu-a11y-section-label svg,
+.vayu-a11y-section-label span {
+  color: #38bdf8;
+}
+
+/* 🌐 Language Select Box */
+.vayu-a11y-lang-select-box {
+  position: relative;
+  width: 100%;
+}
+
+.vayu-a11y-lang-select {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 9px;
+  padding: 8px 30px 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #f8fafc;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.vayu-a11y-lang-select:hover,
+.vayu-a11y-lang-select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+}
+
+.vayu-a11y-lang-select option {
+  background: #0b142a;
+  color: #f8fafc;
+  padding: 8px;
+}
+
+/* Aa Text Size Pill Group */
+.vayu-a11y-size-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.vayu-a11y-size-pill {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 6px 0;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.vayu-a11y-size-pill:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #f8fafc;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.vayu-a11y-size-pill.active {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+/* Feature Toggle Rows */
+.vayu-a11y-toggles-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+}
+
+.vayu-a11y-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 0;
+}
+
+.vayu-a11y-toggle-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.vayu-a11y-toggle-info span.vayu-a11y-icon-glyph {
+  color: #38bdf8;
+  font-size: 14px;
+  width: 18px;
+  display: inline-flex;
+  justify-content: center;
+}
+
+/* Modern Toggle Switch */
+.vayu-a11y-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.vayu-a11y-switch.on {
+  background: #0284c7;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+}
+
+.vayu-a11y-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.vayu-a11y-switch.on .vayu-a11y-switch-knob {
+  transform: translateX(16px);
+  background: #ffffff;
+}
+
+/* Reset Button */
+.vayu-a11y-reset-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.vayu-a11y-reset-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+/* Speaker Read Aloud Button (appears next to readable content when enabled) */
+.vayu-speaker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(2, 132, 199, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  transition: all 0.18s ease;
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.vayu-speaker-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.vayu-speaker-btn.speaking {
+  background: #e11d48;
+  border-color: #f43f5e;
+  color: #ffffff;
+  animation: vayuSpeakerPulse 0.9s infinite alternate;
+}
+
+@keyframes vayuSpeakerPulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 4px #e11d48;
+  }
+  to {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px #f43f5e;
+  }
+}
+
+/* Non-blocking A11y Toast Banner */
+.vayu-a11y-toast-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(11, 20, 42, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #f1f5f9;
+  padding: 9px 18px;
+  border-radius: 30px;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 99999;
+  animation: vayuA11yToastPop 0.25s ease forwards;
+}
+
+@keyframes vayuA11yToastPop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.vayu-a11y-toast-icon {
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   GLOBAL ACCESSIBILITY TRANSFORMATIONS (CONTROLLED SCALING & HIGH CONTRAST)
+   ========================================================================== */
+
+/* 1. Text Size Scaling */
+:root[data-vayunet-text-size="small"] {
+  font-size: 14.5px;
+}
+
+:root[data-vayunet-text-size="normal"] {
+  font-size: 16px;
+}
+
+:root[data-vayunet-text-size="large"] {
+  font-size: 17.5px;
+}
+
+:root[data-vayunet-text-size="small"] .hero-headline,
+:root[data-vayunet-text-size="small"] .tac-clean-topbar-title {
+  font-size: 92%;
+}
+
+:root[data-vayunet-text-size="large"] .hero-headline,
+:root[data-vayunet-text-size="large"] .tac-clean-topbar-title {
+  font-size: 108%;
+}
+
+/* 2. High Contrast Theme (Preserves dark navy/cyan visual identity) */
+:root[data-vayunet-contrast="high"] {
+  --border-subtle: rgba(56, 189, 248, 0.45);
+}
+
+:root[data-vayunet-contrast="high"] body {
+  background-color: #030712 !important;
+  color: #ffffff !important;
+}
+
+:root[data-vayunet-contrast="high"] .vayu-header,
+:root[data-vayunet-contrast="high"] .tac-clean-map-topbar,
+:root[data-vayunet-contrast="high"] .tac-clean-map-card,
+:root[data-vayunet-contrast="high"] .cp-hazard-warning-card,
+:root[data-vayunet-contrast="high"] .tac-clean-action-box,
+:root[data-vayunet-contrast="high"] .card,
+:root[data-vayunet-contrast="high"] .emergency-alert-ticker {
+  background-color: #060e1d !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+}
+
+:root[data-vayunet-contrast="high"] button {
+  border-color: rgba(56, 189, 248, 0.7) !important;
+}
+
+:root[data-vayunet-contrast="high"] p,
+:root[data-vayunet-contrast="high"] span,
+:root[data-vayunet-contrast="high"] .ticker-item {
+  color: #f8fafc !important;
+}
+
+/* 3. Reduce Motion Mode */
+:root[data-vayunet-motion="reduced"] *,
+:root[data-vayunet-motion="reduced"] *::before,
+:root[data-vayunet-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Weather & Radar Loops explicitly exempt to preserve real-time weather progression */
+:root[data-vayunet-motion="reduced"] .radar-loop,
+:root[data-vayunet-motion="reduced"] .tac-forecast-progression {
+  animation-duration: inherit !important;
+  animation-iteration-count: infinite !important;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM-SHEET PRESENTATION
+   ========================================================================== */
+@media (max-width: 768px) {
+  .vayu-a11y-label {
+    display: inline-block;
+  }
+
+  .vayu-a11y-panel {
+    position: fixed;
+    top: auto;
+    bottom: 16px;
+    left: 4%;
+    right: 4%;
+    width: 92%;
+    max-width: 440px;
+    margin: 0 auto;
+    border-radius: 20px;
+    padding: 18px 20px 20px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(6, 182, 212, 0.2);
+    animation: vayuA11ySheetUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: bottom center;
+  }
+
+  @keyframes vayuA11ySheetUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .vayu-a11y-toggle-row {
+    padding: 6px 0;
+    min-height: 44px; /* Accessible touch target */
+  }
+
+  .vayu-a11y-size-pill {
+    padding: 9px 0;
+    min-height: 44px;
+    font-size: 13px;
+  }
+
+  .vayu-a11y-lang-select {
+    padding: 11px 32px 11px 14px;
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
