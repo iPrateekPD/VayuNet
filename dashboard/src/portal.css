@@ -8318,7 +8318,7 @@ html {
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   /* Page structure: Natural document flow */
   .home-page {
     display: block !important;
@@ -8346,82 +8346,116 @@ html {
     pointer-events: auto !important;
   }
 
-  /* 1. Mobile Header: Fixed at top: 0 */
-  .home-nav {
+  /* 1. Mobile Header: Fixed at top: 0 (Exact match of Public Warning CitizenPortal header) */
+  .home-nav,
+  .cp-navbar,
+  .ops-portal-nav {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 62px !important;
+    height: 54px !important;
+    min-height: 54px !important;
     padding: 0 16px !important;
-    background: rgba(2, 10, 15, 0.96) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
+    background: rgba(5, 11, 21, 0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.25) !important;
     display: flex !important;
     align-items: center !important;
-    z-index: 1000 !important;
+    z-index: 100000 !important;
     box-sizing: border-box !important;
   }
 
-  .home-nav-inner {
+  .home-nav-inner,
+  .cp-nav-inner {
     padding: 0 !important;
     width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
   .home-brand {
     display: flex !important;
     align-items: center !important;
-    gap: 9px !important;
+    gap: 12px !important;
     min-width: 0 !important;
-    flex: 1 !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
   }
 
   .home-logo {
-    width: 36px !important;
-    height: 36px !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     flex-shrink: 0 !important;
+    overflow: visible !important;
   }
 
   .home-logo-img {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.25)) !important;
   }
 
   .brand-titles-group {
     display: flex !important;
     flex-direction: column !important;
+    gap: 2px !important;
+    justify-content: center !important;
     min-width: 0 !important;
   }
 
   .brand-row {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
   .home-title {
-    font-size: 17px !important;
+    font-size: 16px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
-    letter-spacing: 0.5px !important;
-    line-height: 1.1 !important;
+    letter-spacing: 0.6px !important;
+    line-height: 1 !important;
     white-space: nowrap !important;
   }
 
   .gov-sovereign-pill {
-    display: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 9.5px !important;
+    font-family: var(--font-mono), 'SF Mono', monospace !important;
+    font-weight: 700 !important;
+    background: rgba(56, 189, 248, 0.09) !important;
+    color: #7dd3fc !important;
+    border: 1px solid rgba(56, 189, 248, 0.24) !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
   }
 
   .home-dept {
-    font-size: 9.5px !important;
+    font-size: 10.5px !important;
     color: #94a3b8 !important;
-    margin-top: 1px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    margin: 0 !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
     overflow: visible !important;
@@ -8516,7 +8550,7 @@ html {
     top: auto !important;
     left: auto !important;
     width: calc(100% - 32px) !important;
-    margin: 72px 16px 12px 16px !important;
+    margin: 64px 16px 12px 16px !important;
     height: 36px !important;
     border-radius: 8px !important;
     background: rgba(24, 8, 10, 0.85) !important;

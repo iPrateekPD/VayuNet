@@ -130,6 +130,16 @@
   }
 }
 
+@media (max-width: 900px) {
+  .ops-mobile-nav-bar {
+    top: 54px !important;
+  }
+
+  .ops-portal-body {
+    padding-top: 102px !important;
+  }
+}
+
 /* ==========================================================================
    PRIMARY NAVIGATION HEADER
    ========================================================================== */
