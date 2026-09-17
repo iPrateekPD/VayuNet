@@ -5,6 +5,7 @@ from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+import api.ai_dispatcher as ai_dispatcher
 
 # Ensure project root is on sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -352,6 +353,27 @@ def predict_nowcast(req: NowcastRequest):
         "model_architecture": "Multi-Modal Spatiotemporal Transformer (MTL)",
         "inference_latency_ms": 142.5,
         "engine_mode": "Phase 1: Deterministic Atmospheric Matrix (Demo Mode)"
+    }
+
+class AIDispatchRequest(BaseModel):
+    hazard_type: str = Field(..., example="Cloudburst")
+    severity: str = Field(..., example="Extreme")
+    location_name: str = Field(..., example="Dharamsala, HP")
+    lead_time_hours: str = Field(..., example="2")
+
+@app.post("/api/alerts/ai-dispatch")
+def ai_dispatch_alert(alert: AIDispatchRequest):
+    # Generates a localized multilingual alert using AI/LLM
+    result = ai_dispatcher.generate_multilingual_alert(
+        hazard_type=alert.hazard_type,
+        severity=alert.severity,
+        location=alert.location_name,
+        lead_time=alert.lead_time_hours
+    )
+    return {
+        "status": "SUCCESS",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "generated_content": result
     }
 
 @app.post("/api/alerts/broadcast")

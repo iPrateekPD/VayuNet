@@ -5907,6 +5907,84 @@ table.forensics-metrics td:first-child {
   filter: brightness(1.1);
 }
 
+/* AI Auto-Dispatch Styling */
+.btn-ai-dispatch {
+  width: 100%;
+  background: rgba(147, 51, 234, 0.15);
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  color: #d8b4fe;
+  padding: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ai-dispatch:hover:not(:disabled) {
+  background: rgba(147, 51, 234, 0.25);
+  box-shadow: 0 0 12px rgba(147, 51, 234, 0.3);
+}
+
+.btn-ai-dispatch:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  animation: pulse-ai 1.5s infinite alternate;
+}
+
+@keyframes pulse-ai {
+  0% { box-shadow: 0 0 0 rgba(147, 51, 234, 0); }
+  100% { box-shadow: 0 0 15px rgba(147, 51, 234, 0.4); }
+}
+
+.ai-dispatch-result {
+  margin-top: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-dispatch-source {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #d8b4fe;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-dispatch-source::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #d8b4fe;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #d8b4fe;
+}
+
+.ai-alert-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid #d8b4fe;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #fff;
+  font-family: var(--font-sans);
+}
+
+.ai-alert-box.regional-text {
+  font-family: system-ui, -apple-system, sans-serif;
+  border-left-color: #60a5fa;
+}
+
 /* =========================================================
    9. SYSTEM HEALTH — Enterprise observability pipeline
    ========================================================= */
