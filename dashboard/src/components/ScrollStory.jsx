@@ -76,7 +76,8 @@ export default function ScrollStory() {
       if (i === 0) {
         gsap.set(img, { xPercent: 0, opacity: 1, scale: 1, zIndex: 10 });
       } else {
-        gsap.set(img, { xPercent: prefersReducedMotion ? 0 : -100, opacity: 0, scale: 0.98, zIndex: 1 });
+        // Next images are positioned off-screen to the left, fully opaque, ready to slide in over the current one
+        gsap.set(img, { xPercent: prefersReducedMotion ? 0 : -105, opacity: prefersReducedMotion ? 0 : 1, scale: 1, zIndex: 10 + i });
       }
     });
     
@@ -95,11 +96,11 @@ export default function ScrollStory() {
         start: "top top",
         end: () => "+=" + (window.innerHeight * 5), // 5 states
         pin: true,
-        scrub: 1,
+        scrub: 0.8, // 0.8 scrub provides natural smoothing without lagging
         onUpdate: (self) => {
           // Calculate active index based on scroll progress (0 to 1)
           const p = self.progress;
-          // Split progress into chunks: 0-0.2 is state 0, 0.2-0.4 is state 1, etc.
+          // Split progress into chunks
           let newIndex = Math.floor(p * totalStates);
           if (newIndex >= totalStates) newIndex = totalStates - 1;
           
@@ -109,57 +110,71 @@ export default function ScrollStory() {
     });
 
     // Build the timeline animations for each transition
+    // A single scroll segment has a conceptual duration of 1.
+    // 0.0 - 0.35: Hold
+    // 0.35 - 0.65: Transition
+    // 0.65 - 1.0: Hold
+    
     for (let i = 0; i < totalStates - 1; i++) {
       const currentImg = imagesRef.current[i];
       const nextImg = imagesRef.current[i + 1];
       const currentTxt = textsRef.current[i];
       const nextTxt = textsRef.current[i + 1];
 
-      // We add a label for snapping if we wanted to, or just to organize the timeline
-      tl.addLabel(`step${i}`);
-
-      // Setup the next image z-index so it appears OVER the previous one
-      tl.set(nextImg, { zIndex: i + 11 }, `step${i}`);
+      const startTime = i + 0.35;
+      const transitionDuration = 0.30;
       
-      const tlStep = gsap.timeline();
-
       if (prefersReducedMotion) {
         // Simple crossfade for reduced motion
-        tlStep.to(currentImg, { opacity: 0, duration: 1 }, 0)
-              .to(nextImg, { opacity: 1, duration: 1 }, 0);
+        tl.to(currentImg, { opacity: 0, duration: transitionDuration }, startTime)
+          .to(nextImg, { opacity: 1, duration: transitionDuration }, startTime);
       } else {
-        // Cinematic Slide Transition
-        tlStep.to(currentImg, { 
-                xPercent: -6, 
-                scale: 0.97, 
-                opacity: 0, 
-                duration: 1,
-                ease: "power2.inOut"
-              }, 0)
-              .to(nextImg, { 
-                xPercent: 0, 
-                scale: 1, 
-                opacity: 1, 
-                duration: 1,
-                ease: "power2.inOut"
-              }, 0);
+        // Cinematic Physical Slide Transition
+        // Outgoing moves slightly left and back
+        tl.to(currentImg, { 
+          xPercent: -6, 
+          scale: 0.985, 
+          opacity: 0.8, 
+          duration: transitionDuration,
+          ease: "none"
+        }, startTime);
+
+        // Incoming enters completely from the left
+        tl.to(nextImg, { 
+          xPercent: 0, 
+          scale: 1, 
+          opacity: 1, 
+          duration: transitionDuration,
+          ease: "none"
+        }, startTime);
       }
 
-      // Text transition
-      tlStep.to(currentTxt, { 
-              opacity: 0, 
-              y: -12, 
-              duration: 0.5,
-              ease: "power1.in"
-            }, 0)
-            .to(nextTxt, { 
-              opacity: 1, 
-              y: 0, 
-              duration: 0.5,
-              ease: "power1.out"
-            }, 0.5);
+      // Text transition: 
+      // Image transition takes 0.30. 45% into transition = 0.30 * 0.45 = ~0.135
+      // Text fades out starting at +0.135, taking 0.07 (ends at +0.205)
+      // Text fades in starting at +0.205, taking 0.095 (ends at +0.30)
+      const textFadeOutStart = startTime + 0.135;
+      const textFadeOutDuration = 0.07;
+      const textFadeInStart = textFadeOutStart + textFadeOutDuration;
+      const textFadeInDuration = transitionDuration - (0.135 + textFadeOutDuration); // ~0.095
 
-      tl.add(tlStep, `step${i}`);
+      tl.to(currentTxt, { 
+        opacity: 0, 
+        y: -12, 
+        duration: textFadeOutDuration,
+        ease: "none"
+      }, textFadeOutStart);
+
+      tl.to(nextTxt, { 
+        opacity: 1, 
+        y: 0, 
+        duration: textFadeInDuration,
+        ease: "none"
+      }, textFadeInStart);
+      
+      // Ensure the timeline spans all the way to i + 1 even if the last animation ended at i + 0.65
+      // by inserting a dummy set if necessary, though GSAP automatically pads if we just let the loop continue.
+      tl.set({}, {}, i + 1);
     }
 
     return () => {

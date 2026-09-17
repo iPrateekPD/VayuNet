@@ -467,8 +467,15 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
                 className={`nav-link-item ${activeSection === link.id ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  const targetY = link.id === 'hero-section' ? 0 : Math.max(0, (document.getElementById(link.id)?.offsetTop || 0) - 52);
-                  window.scrollTo({ top: targetY, behavior: 'smooth' });
+                  if (link.id === 'hero-section') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    const el = document.getElementById(link.id);
+                    if (el) {
+                      const targetY = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - 52);
+                      window.scrollTo({ top: targetY, behavior: 'smooth' });
+                    }
+                  }
                 }}
               >
                 {link.label}
