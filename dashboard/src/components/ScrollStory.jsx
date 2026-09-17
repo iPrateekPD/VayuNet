@@ -66,9 +66,6 @@ export default function ScrollStory() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useLayoutEffect(() => {
-    // Media query for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     const totalStates = STORY_STATES.length;
     
     // Set initial states for images and texts
@@ -76,8 +73,8 @@ export default function ScrollStory() {
       if (i === 0) {
         gsap.set(img, { xPercent: 0, opacity: 1, scale: 1, zIndex: 10 });
       } else {
-        // Next images are positioned off-screen to the left, fully opaque, ready to slide in over the current one
-        gsap.set(img, { xPercent: prefersReducedMotion ? 0 : -105, opacity: prefersReducedMotion ? 0 : 1, scale: 1, zIndex: 10 + i });
+        // Next images are positioned exactly off-screen to the left, fully opaque, slightly scaled down
+        gsap.set(img, { xPercent: -100, opacity: 1, scale: 0.985, zIndex: 10 + i });
       }
     });
     
@@ -124,39 +121,33 @@ export default function ScrollStory() {
       const startTime = i + 0.35;
       const transitionDuration = 0.30;
       
-      if (prefersReducedMotion) {
-        // Simple crossfade for reduced motion
-        tl.to(currentImg, { opacity: 0, duration: transitionDuration }, startTime)
-          .to(nextImg, { opacity: 1, duration: transitionDuration }, startTime);
-      } else {
-        // Cinematic Physical Slide Transition
-        // Outgoing moves slightly left and back
-        tl.to(currentImg, { 
-          xPercent: -6, 
-          scale: 0.985, 
-          opacity: 0.8, 
-          duration: transitionDuration,
-          ease: "none"
-        }, startTime);
+      // Cinematic Physical Slide Transition
+      // Outgoing moves slightly left and back
+      tl.to(currentImg, { 
+        xPercent: -6, 
+        scale: 0.985, 
+        opacity: 0.8, 
+        duration: transitionDuration,
+        ease: "none"
+      }, startTime);
 
-        // Incoming enters completely from the left
-        tl.to(nextImg, { 
-          xPercent: 0, 
-          scale: 1, 
-          opacity: 1, 
-          duration: transitionDuration,
-          ease: "none"
-        }, startTime);
-      }
+      // Incoming enters completely from the left and scales up to 1
+      tl.to(nextImg, { 
+        xPercent: 0, 
+        scale: 1, 
+        opacity: 1, 
+        duration: transitionDuration,
+        ease: "none"
+      }, startTime);
 
       // Text transition: 
-      // Image transition takes 0.30. 45% into transition = 0.30 * 0.45 = ~0.135
-      // Text fades out starting at +0.135, taking 0.07 (ends at +0.205)
-      // Text fades in starting at +0.205, taking 0.095 (ends at +0.30)
-      const textFadeOutStart = startTime + 0.135;
-      const textFadeOutDuration = 0.07;
+      // Image transition takes 0.30. 40% into transition = 0.30 * 0.40 = 0.12
+      // Text fades out starting at +0.12, taking 0.08 (ends at +0.20)
+      // Text fades in starting at +0.20, taking 0.10 (ends at +0.30)
+      const textFadeOutStart = startTime + 0.12;
+      const textFadeOutDuration = 0.08;
       const textFadeInStart = textFadeOutStart + textFadeOutDuration;
-      const textFadeInDuration = transitionDuration - (0.135 + textFadeOutDuration); // ~0.095
+      const textFadeInDuration = transitionDuration - (0.12 + textFadeOutDuration); // 0.10
 
       tl.to(currentTxt, { 
         opacity: 0, 
