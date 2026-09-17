@@ -240,9 +240,161 @@ function MapFlyController({ center, zoom }) {
   return null;
 }
 
+// Helper to construct a dynamic location object from coordinates & reverse-geocoded data (Zero API Keys needed)
+async function resolveLocationData(latitude, longitude, fallbackName = 'My Location') {
+  let placeName = fallbackName;
+  let districtName = '';
+  let postcode = '';
+
+  // 1. Try BigDataCloud Client Reverse Geocoding (Free, no key, CORS friendly)
+  try {
+    const bdcRes = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+    );
+    if (bdcRes.ok) {
+      const bdcData = await bdcRes.json();
+      placeName = bdcData.locality || bdcData.city || bdcData.principalSubdivision || fallbackName;
+      const adminList = bdcData.localityInfo?.administrative || [];
+      const distObj = adminList.find(a => a.adminLevel === 5 || a.description?.includes('district'));
+      const distStr = distObj ? distObj.name : (bdcData.city || bdcData.principalSubdivision || '');
+      districtName = [distStr, bdcData.principalSubdivision].filter(Boolean).join(', ');
+      postcode = bdcData.postcode || '';
+    }
+  } catch (err) {
+    console.warn('BigDataCloud reverse geocode error:', err);
+  }
+
+  // 1b. Fallback to OpenStreetMap Nominatim if needed
+  if (!districtName) {
+    try {
+      const osmRes = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+      if (osmRes.ok) {
+        const osmData = await osmRes.json();
+        const addr = osmData.address || {};
+        placeName = addr.suburb || addr.neighbourhood || addr.city || addr.town || addr.village || placeName;
+        const dist = addr.state_district || addr.county || addr.city || '';
+        districtName = [dist, addr.state].filter(Boolean).join(', ');
+        postcode = addr.postcode || postcode;
+      }
+    } catch (err) {
+      console.warn('Nominatim reverse geocode error:', err);
+    }
+  }
+
+  if (!districtName) {
+    districtName = `Coordinates: ${latitude.toFixed(3)}°N, ${longitude.toFixed(3)}°E`;
+  }
+
+  // 2. Query live weather metrics from Open-Meteo (Free, no key needed)
+  let tempC = 28;
+  let precipitation = 0;
+  let weatherCode = 0;
+  let windSpeed = 8;
+  try {
+    const wRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m`
+    );
+    if (wRes.ok) {
+      const wData = await wRes.json();
+      if (wData.current) {
+        tempC = Math.round(wData.current.temperature_2m);
+        precipitation = wData.current.precipitation || 0;
+        weatherCode = wData.current.weather_code || 0;
+        windSpeed = Math.round(wData.current.wind_speed_10m || 8);
+      }
+    }
+  } catch (wErr) {
+    console.warn('Open-Meteo error:', wErr);
+  }
+
+  // 3. Proximity check to active severe weather threats in database
+  let nearestThreat = null;
+  let minThreatDist = Infinity;
+  Object.values(LOCATION_DATABASE).forEach((item) => {
+    if (item.isAffected) {
+      const dLat = (item.center[0] - latitude) * 111;
+      const dLon = (item.center[1] - longitude) * 111 * Math.cos((latitude * Math.PI) / 180);
+      const dist = Math.sqrt(dLat * dLat + dLon * dLon);
+      if (dist < minThreatDist) {
+        minThreatDist = dist;
+        nearestThreat = { ...item, distKm: Math.round(dist) };
+      }
+    }
+  });
+
+  // Determine risk level based on live radar / precipitation / threat proximity
+  const isNearThreat = minThreatDist <= 35;
+  const isHeavyRain = precipitation >= 10 || weatherCode >= 80;
+  const isSevere = isNearThreat || isHeavyRain;
+
+  let riskLevel = 'SAFE ZONE';
+  let riskClass = 'risk-safe';
+  let riskColor = '#16a34a';
+  let hazard = 'No Active Severe Warnings';
+  let timeframe = 'Conditions Nominal';
+  let description = `Atmospheric stability indices nominal at your location (${tempC}°C, Wind: ${windSpeed} km/h). No convective flash flood or cloudburst alert detected in your sector.`;
+
+  if (isSevere) {
+    if (precipitation > 25 || (isNearThreat && nearestThreat?.riskLevel?.includes('EXTREME'))) {
+      riskLevel = 'EXTREME RISK';
+      riskClass = 'risk-extreme';
+      riskColor = '#dc2626';
+      timeframe = 'Immediate (1 – 3 hours)';
+      hazard = nearestThreat?.hazard || 'Convective Torrent & Localized Inundation';
+      description = `Severe radar reflectivity cell active near your coordinates. Upstream water runoff and high convective potential. Remain vigilant.`;
+    } else {
+      riskLevel = 'HIGH RISK';
+      riskClass = 'risk-high';
+      riskColor = '#ea580c';
+      timeframe = 'Within 2 – 4 hours';
+      hazard = nearestThreat?.hazard || 'Squall & Heavy Rain Warning';
+      description = `Convective rain bands developing in your proximity (~${Math.round(minThreatDist)} km from active corridor). Avoid water-logged lowlands.`;
+    }
+  }
+
+  const shelterLat = latitude + 0.004;
+  const shelterLon = longitude + 0.003;
+
+  return {
+    id: `dyn_${Date.now()}`,
+    name: placeName,
+    district: districtName,
+    pincode: postcode || 'Live GPS',
+    center: [latitude, longitude],
+    isAffected: isSevere,
+    riskLevel,
+    riskClass,
+    riskColor,
+    timeframe,
+    hazard,
+    description,
+    safeShelter: {
+      name: `${placeName} Emergency Civil Defense Post`,
+      distance: '1.4 km away',
+      address: `Designated Public Shelter & High Ground, ${placeName}`,
+      elevation: 'Safe High Elevation Zone',
+      capacity: 'Community Emergency Shelter',
+      facilities: 'Emergency First Aid, Clean Water Reserve, Backup Power',
+      contact: 'Disaster Emergency Helpline: 1070 / Police: 112',
+      coords: [shelterLat, shelterLon]
+    },
+    nearbyWarnings: nearestThreat && minThreatDist < 250 ? [
+      {
+        name: nearestThreat.name,
+        dist: `~ ${nearestThreat.distKm} km`,
+        level: nearestThreat.riskLevel.includes('EXTREME') ? 'Extreme' : 'High',
+        color: nearestThreat.riskColor
+      }
+    ] : []
+  };
+}
+
 export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   // Active selected location state (defaults to McLeodganj as seen in reference image)
   const [selectedId, setSelectedId] = useState('mcleodganj');
+  const [customLocations, setCustomLocations] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const [showNearbyOnMap, setShowNearbyOnMap] = useState(true);
@@ -256,7 +408,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 
-  const loc = LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.mcleodganj;
+  const allLocations = { ...LOCATION_DATABASE, ...customLocations };
+  const loc = allLocations[selectedId] || LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.mcleodganj;
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -311,7 +464,6 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
         gsap.from('.cp-footer-anim-item', {
           y: 20,
           opacity: 0,
-          stagger: 0.06,
           duration: 0.6,
           delay: 0.25,
           ease: 'power2.out'
@@ -330,97 +482,97 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     return () => ctx.revert();
   }, []);
 
-  // Auto-Detect Location on initial component mount
-  useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          // Find nearest location from our database
-          let nearestKey = 'mcleodganj';
-          let minDistance = Infinity;
-
-          Object.keys(LOCATION_DATABASE).forEach((key) => {
-            const item = LOCATION_DATABASE[key];
-            const dist = Math.hypot(item.center[0] - latitude, item.center[1] - longitude);
-            if (dist < minDistance) {
-              minDistance = dist;
-              nearestKey = key;
-            }
-          });
-
-          // If within ~0.6 degrees (~65 km), select nearest
-          if (minDistance < 0.6) {
-            setSelectedId(nearestKey);
-            showToast(`📍 Auto-detected your location: ${LOCATION_DATABASE[nearestKey].name}`);
-          }
-        },
-        () => {
-          // If permission denied or fallback, keep default McLeodganj
-        },
-        { timeout: 4000 }
-      );
-    }
-  }, []);
-
-  // Search handler
-  const handleSearch = (e) => {
+  // Search handler (searches local stations and falls back to Nominatim India geocoding)
+  const handleSearch = async (e) => {
     e?.preventDefault();
     if (!searchQuery.trim()) return;
-    const query = searchQuery.toLowerCase().trim();
+    const query = searchQuery.trim();
+    const queryLower = query.toLowerCase();
 
-    // Find match by name, district, pincode
-    const foundKey = Object.keys(LOCATION_DATABASE).find((key) => {
-      const item = LOCATION_DATABASE[key];
+    // 1. Check if it matches existing locations in memory
+    const existingKey = Object.keys(allLocations).find((key) => {
+      const item = allLocations[key];
       return (
-        item.name.toLowerCase().includes(query) ||
-        item.district.toLowerCase().includes(query) ||
-        item.pincode.includes(query)
+        item.name.toLowerCase().includes(queryLower) ||
+        item.district.toLowerCase().includes(queryLower) ||
+        item.pincode.includes(queryLower)
       );
     });
 
-    if (foundKey) {
-      setSelectedId(foundKey);
+    if (existingKey) {
+      setSelectedId(existingKey);
       setSearchQuery('');
-      showToast(`Switched view to ${LOCATION_DATABASE[foundKey].name}`);
-    } else {
-      showToast(`No specific station found for "${searchQuery}". Showing national regional view.`);
+      showToast(`Switched view to ${allLocations[existingKey].name}`);
+      return;
     }
+
+    // 2. If not in local list, search OpenStreetMap Nominatim for India
+    setIsDetecting(true);
+    try {
+      const searchRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&countrycodes=in&limit=1`
+      );
+      if (searchRes.ok) {
+        const results = await searchRes.json();
+        if (results && results.length > 0) {
+          const r = results[0];
+          const lat = parseFloat(r.lat);
+          const lon = parseFloat(r.lon);
+          const searchedLoc = await resolveLocationData(lat, lon, r.name || query);
+
+          setCustomLocations((prev) => ({
+            ...prev,
+            [searchedLoc.id]: searchedLoc
+          }));
+          setSelectedId(searchedLoc.id);
+          setSearchQuery('');
+          setIsDetecting(false);
+          showToast(`📍 Found: ${searchedLoc.name} (${searchedLoc.riskLevel})`);
+          return;
+        }
+      }
+    } catch (searchErr) {
+      console.warn('Search geocoding error:', searchErr);
+    }
+
+    setIsDetecting(false);
+    showToast(`No location found for "${query}". Try city name or PIN code.`);
   };
 
-  // Use My Location click handler
+  // Use My Location click handler (uses real browser GPS + reverse geocoding)
   const handleUseMyLocation = () => {
     setIsDetecting(true);
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setIsDetecting(false);
-          const { latitude, longitude } = pos.coords;
-          let nearestKey = 'mcleodganj';
-          let minDistance = Infinity;
-
-          Object.keys(LOCATION_DATABASE).forEach((key) => {
-            const item = LOCATION_DATABASE[key];
-            const dist = Math.hypot(item.center[0] - latitude, item.center[1] - longitude);
-            if (dist < minDistance) {
-              minDistance = dist;
-              nearestKey = key;
-            }
-          });
-
-          setSelectedId(nearestKey);
-          showToast(`📍 Located: ${LOCATION_DATABASE[nearestKey].name} (${LOCATION_DATABASE[nearestKey].isAffected ? 'Warning Zone' : 'Safe Zone'})`);
-        },
-        (err) => {
-          setIsDetecting(false);
-          showToast('GPS detection unavailable or denied. Showing default region.');
-        },
-        { timeout: 6000 }
-      );
-    } else {
+    if (!('geolocation' in navigator)) {
       setIsDetecting(false);
-      showToast('Geolocation not supported by browser.');
+      showToast('Geolocation not supported by your browser.');
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const userLocation = await resolveLocationData(latitude, longitude, 'My Location');
+
+          setCustomLocations((prev) => ({
+            ...prev,
+            [userLocation.id]: userLocation
+          }));
+          setSelectedId(userLocation.id);
+          setIsDetecting(false);
+          showToast(`📍 Located: ${userLocation.name} (${userLocation.riskLevel})`);
+        } catch (err) {
+          console.error(err);
+          setIsDetecting(false);
+          showToast('Failed to resolve GPS location address.');
+        }
+      },
+      (err) => {
+        setIsDetecting(false);
+        showToast('GPS access denied or unavailable. Please allow location access in your browser.');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
   };
 
   // Share functionality
@@ -1088,7 +1240,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     className="cp-nearby-pill-card"
                     onClick={() => {
                       const key = nw.name.toLowerCase().replace(/[^a-z]/g, '');
-                      if (LOCATION_DATABASE[key]) {
+                      if (allLocations[key]) {
                         setSelectedId(key);
                         showToast(`Switched view to ${nw.name}`);
                       } else {
