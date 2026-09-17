@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroMap from './HeroMap';
 import FusionAccordion from './FusionAccordion';
+import ScrollStory from './ScrollStory';
 import VayunetSplashIntro from './VayunetSplashIntro';
 import {
   WEATHER_LAYERS,
@@ -970,120 +971,11 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       <FusionAccordion onEnterPortal={onEnterPortal} />
 
       {/* ============================================================
-          7. OPERATIONAL WORKFLOW
+          7. OPERATIONAL WORKFLOW (Scroll Story)
           ============================================================ */}
-      <section id="how-it-works" className="section-workflow">
-        <div className="workflow-header-wrap">
-          <div className="workflow-header-left">
-            <div className="section-eyebrow">OPERATIONAL WORKFLOW</div>
-            <h2 className="workflow-title">
-              From data to <span className="workflow-title-blue">decisions.</span>
-            </h2>
-            <p className="workflow-desc">
-              An automated end-to-end pipeline linking sovereign observation streams
-              with physics-grounded AI nowcasting and standardized emergency dispatch.
-            </p>
-          </div>
-          <div className="workflow-header-right">
-            <div className="workflow-breadcrumbs">OBSERVE → PREDICT → EXPLAIN → DISPATCH</div>
-            <div className="workflow-breadcrumbs-sub">FASTER WARNINGS. SAFER COMMUNITIES.</div>
-          </div>
-        </div>
-
-        <div className="workflow-steps-horizontal">
-          {/* Step 01 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
-                <span>01 OBSERVE</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/satellite_insat.jpg" alt="01 Observe" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Satellite, Reanalysis &amp; Terrain Data</h4>
-            <p className="step-v3-desc">
-              Continuous ingestion of INSAT-3D/3DR radiances, IMDAA atmospheric baselines,
-              and CartoDEM topography harmonized into a 12-channel tensor.
-            </p>
-            <div className="step-highlight-pill">12-Channel Synchronized Tensor</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 02 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                <span>02 PREDICT</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_predict.jpg" alt="02 Predict" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Multi-Hazard Nowcasting (2–6 h)</h4>
-            <p className="step-v3-desc">
-              Cross-attention transformer computes joint probability grids for thunderstorms,
-              cloudburst cores, and flash flood paths at 4 km resolution in &lt; 150 ms.
-            </p>
-            <div className="step-highlight-pill">Joint 4 km Probability Grids (&lt; 150 ms)</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 03 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span>03 EXPLAIN</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_explain.jpg" alt="03 Explain" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Physical Drivers &amp; XAI Insights</h4>
-            <p className="step-v3-desc">
-              Captum Integrated Gradients decompose every alert polygon into verifiable
-              physical contributions (IWV, CAPE, CTT rate, slope) eliminating black-box doubt.
-            </p>
-            <div className="step-highlight-pill">Captum Feature Attribution Weights</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 04 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill alert-beacon-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                <span>04 DISPATCH</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_dispatch.jpg" alt="04 Dispatch" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">CAP Alerts &amp; Emergency Response</h4>
-            <p className="step-v3-desc">
-              Automated ITU-T X.1303 / CAP 1.2 standardized warning payloads transmitted
-              directly to NDMA SACHET, SDRF Battalion EOCs, and community sirens.
-            </p>
-            <div className="step-highlight-pill">Automated CAP 1.2 / SACHET Broadcast</div>
-          </div>
-        </div>
-      </section>
+      <div style={{ display: 'block', width: '100%', flexShrink: 0 }}>
+        <ScrollStory />
+      </div>
 
       {/* ============================================================
           3. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)

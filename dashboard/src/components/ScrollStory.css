@@ -1,0 +1,212 @@
+/* ScrollStory.css */
+
+.scroll-story-wrapper {
+  position: relative;
+  background-color: #030712; /* Deep navy / near-black */
+  color: #f8fafc;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.scroll-story-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* LEFT: Visual Area */
+.story-visual-side {
+  flex: 0 0 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+}
+
+.story-visual-container {
+  width: 100%;
+  height: 80%;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 40px rgba(6, 182, 212, 0.15); /* cyan glow */
+}
+
+/* Overlay for glassmorphism / styling */
+.story-visual-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(3, 7, 18, 0.2) 0%, rgba(3, 7, 18, 0.6) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.story-image-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+/* Contextual Overlays inside visuals */
+.story-visual-overlay {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 20;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overlay-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.overlay-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #22d3ee; /* cyan */
+}
+
+
+/* RIGHT: Content Area */
+.story-content-side {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  position: relative;
+}
+
+.story-text-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 250px; /* fixed height to prevent jumping */
+}
+
+.story-text-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: opacity, transform;
+}
+
+.story-step-number {
+  font-size: 0.875rem;
+  color: #22d3ee;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.story-step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.story-step-subtitle {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.story-step-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* Progress Indicator */
+.story-progress-indicator {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #334155;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.progress-dot.active {
+  background-color: #22d3ee;
+  transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+.progress-line {
+  height: 2px;
+  width: 24px;
+  background-color: #334155;
+}
+
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 1024px) {
+  .scroll-story-container {
+    flex-direction: column;
+  }
+  
+  .story-visual-side {
+    flex: 0 0 55%;
+    padding: 20px;
+  }
+  
+  .story-content-side {
+    flex: 0 0 45%;
+    padding: 30px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .story-text-container {
+    height: auto;
+    min-height: 200px;
+    align-items: center;
+  }
+  
+  .story-text-layer {
+    align-items: center;
+  }
+  
+  .story-progress-indicator {
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
