@@ -414,7 +414,7 @@
   position: relative;
   background-size: cover;
   background-position: center;
-  padding: 138px 24px 72px 24px;
+  padding: 104px 24px 64px 24px;
   color: #ffffff;
   overflow: hidden;
 }
@@ -1852,13 +1852,24 @@
 
 /* Responsive Mobile Layout (Matching phone mockup) */
 @media (max-width: 900px) {
+  .cp-header-ticker {
+    display: none;
+  }
+
   .cp-nav-links {
     display: none;
   }
 
+  .cp-hero {
+    padding-top: 66px;
+    padding-bottom: 36px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .cp-quick-nav-bar {
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .cp-quick-nav-btn {
