@@ -27,7 +27,7 @@ export const INDIAN_LANGUAGES = [
   { code: 'AS', label: 'অসমীয়া — Assamese' },
 ];
 
-export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 'dark', onToggleTheme }) {
+export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   const [showSplash, setShowSplash] = useState(true);
   const [telemetryTime, setTelemetryTime] = useState('');
   const [displayDate, setDisplayDate] = useState('');

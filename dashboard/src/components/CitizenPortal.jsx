@@ -240,7 +240,7 @@ function MapFlyController({ center, zoom }) {
   return null;
 }
 
-export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark', onToggleTheme }) {
+export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   // Active selected location state (defaults to McLeodganj as seen in reference image)
   const [selectedId, setSelectedId] = useState('mcleodganj');
   const [searchQuery, setSearchQuery] = useState('');

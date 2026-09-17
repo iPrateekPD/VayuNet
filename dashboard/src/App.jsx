@@ -20,20 +20,13 @@ import InstitutionalFooter from './components/InstitutionalFooter';
 import './components/OperationsPortal.css';
 
 function App() {
-  // Theme state: 'dark' | 'light'
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('vayunet-theme') || 'dark';
-  });
-
+  // Enforce Sovereign Dark Mode permanently across all browsers and devices
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('vayunet-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+    localStorage.setItem('vayunet-theme', 'dark');
+  }, []);
 
   const getViewFromLocation = () => {
     const hash = window.location.hash.toLowerCase();
@@ -218,8 +211,6 @@ function App() {
         <HomePage 
           onEnterPortal={() => navigateTo('login')}
           onOpenPublicWarnings={() => navigateTo('citizen')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -233,8 +224,6 @@ function App() {
         <CitizenPortal 
           onBackHome={() => navigateTo('home')}
           onEnterPortal={() => navigateTo('portal')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -253,8 +242,6 @@ function App() {
             showToast(`Welcome, ${userData.role} (${userData.user}). Operations portal unlocked.`);
           }}
           onBackHome={() => navigateTo('home')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
