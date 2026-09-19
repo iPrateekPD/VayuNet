@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import i18n, { SUPPORTED_LANGUAGES } from '../i18n';
 
 const AccessibilityContext = createContext(null);
