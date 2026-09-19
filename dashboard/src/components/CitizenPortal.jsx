@@ -7,6 +7,7 @@ import AccessibilityMenu from './AccessibilityMenu';
 import ReadAloudButton from './ReadAloudButton';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { INDIAN_LANGUAGES } from './HomePage';
+import { getNavTranslation } from '../translations';
 import { DotPattern } from "@/registry/magicui/dot-pattern";
 import { cn } from "@/lib/utils";
 
@@ -409,6 +410,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   const [toastMessage, setToastMessage] = useState(null);
   const { language, setLanguage } = useAccessibility();
   const langKey = (language || 'en').toUpperCase();
+  const t = getNavTranslation(language);
   const isHi = langKey === 'HI';
   const [liveIstTime, setLiveIstTime] = useState('');
 
@@ -648,15 +650,15 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                   <span className="home-title">VAYUNET</span>
                   <span className="gov-sovereign-pill">🇮🇳 MoES · NCMRWF</span>
                 </div>
-                <div className="home-dept">{isHi ? 'सुरक्षित भारत के लिए मौसम बुद्धिमत्ता' : 'Weather Intelligence for a Safer India'}</div>
+                <div className="home-dept">{t.brandSubtitle}</div>
               </div>
             </div>
 
             <div className="home-nav-links-capsule cp-nav-anim-item">
-              <button className="nav-link-item" onClick={onBackHome}>{isHi ? 'मुख्य पृष्ठ' : 'Home'}</button>
-              <button className="nav-link-item active">{isHi ? 'सार्वजनिक चेतावनियाँ' : 'Public Warnings'}</button>
-              <button className="nav-link-item" onClick={() => setGuidanceModalOpen(true)}>{isHi ? 'सुरक्षा निर्देशिका' : 'Safety Guide'}</button>
-              <button className="nav-link-item" onClick={() => setShelterModalOpen(true)}>{isHi ? 'संसाधन' : 'Resources'}</button>
+              <button className="nav-link-item" onClick={onBackHome}>{t.home}</button>
+              <button className="nav-link-item active">{t.legalWarnings || t.publicWarnings}</button>
+              <button className="nav-link-item" onClick={() => setGuidanceModalOpen(true)}>{t.footerProtocols || 'Safety Guide'}</button>
+              <button className="nav-link-item" onClick={() => setShelterModalOpen(true)}>{t.footerShelter || 'Resources'}</button>
             </div>
 
             <div className="home-nav-actions cp-nav-anim-item">
@@ -670,7 +672,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 id="nav-home-btn"
                 title="Return to VAYUNET Home"
               >
-                <span>{isHi ? '← मुख्य पृष्ठ' : '← Home'}</span>
+                <span>← {t.home}</span>
               </button>
 
               {/* 3. Enter Operations Portal Option */}
@@ -680,7 +682,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 id="nav-enter-portal-btn"
                 title="Enter Operations Portal"
               >
-                <span>{isHi ? 'ऑपरेशंस पोर्टल →' : 'Enter Operations Portal →'}</span>
+                <span>{t.enterPortal}</span>
               </button>
             </div>
           </div>
@@ -1342,16 +1344,16 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           <div className="cp-telemetry-inner">
             <div className="cp-telemetry-status">
               <span className="cp-footer-telemetry-dot"></span>
-              <span><strong>{isHi ? 'वायुनेट परिचालन टेलीमेट्री' : 'VAYUNET OPERATIONAL TELEMETRY'}:</strong> {isHi ? 'सभी इनपुट पाइपलाइनें सामान्य' : 'All Ingest Pipelines Nominal'}</span>
+              <span><strong>{t.telemetryTitle}:</strong> {t.telemetryNominal}</span>
             </div>
             <div className="cp-telemetry-metrics">
-              <span>{isHi ? '🛰️ इनसैट-3डीआर मल्टीस्पेक्ट्रल:' : '🛰️ INSAT-3DR Multispectral:'} <strong>{isHi ? 'ऑनलाइन (100%)' : 'ONLINE (100%)'}</strong></span>
+              <span>{t.telemetryInsat} <strong>{t.online100}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>{isHi ? '🌪️ आईएमडीएए 4किमी पुनर्विश्लेषण:' : '🌪️ IMDAA 4km Reanalysis:'} <strong>{isHi ? 'संबद्ध' : 'COUPLED'}</strong></span>
+              <span>{t.telemetryImdaa} <strong>{t.coupled}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>{isHi ? '⚡ अनुमान विलंबता:' : '⚡ Inference Latency:'} <strong>&lt; 120 ms</strong></span>
+              <span>{t.telemetryLatency} <strong>&lt; 120 ms</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>{isHi ? '📡 ITU-T X.1303 सीएपी 1.2:' : '📡 ITU-T X.1303 CAP 1.2:'} <strong>{isHi ? 'सक्रिय' : 'ACTIVE'}</strong></span>
+              <span>{t.telemetryCap} <strong>{t.activeStatus}</strong></span>
             </div>
           </div>
         </div>
@@ -1367,58 +1369,56 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 </div>
                 <div>
                   <h2>VAYUNET</h2>
-                  <p>{isHi ? 'राष्ट्रीय गंभीर मौसम नाउकास्टिंग इंजन' : 'National Severe Weather Nowcasting Engine'}</p>
+                  <p>{t.footerSubtitle}</p>
                 </div>
               </div>
               <p className="cp-footer-desc">
-                {isHi
-                  ? 'पृथ्वी विज्ञान मंत्रालय (MoES), भारत सरकार के तत्वावधान में विकसित एक वायुमंडलीय कृत्रिम बुद्धिमत्ता प्लेटफॉर्म। बादल फटने, गंभीर तड़ित-झंझावात और अचानक बाढ़ के विरुद्ध 2-6 घंटे का जीवन-रक्षक अग्रिम समय प्रदान करता है।'
-                  : 'An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.'}
+                {t.footerDesc}
               </p>
               <div className="cp-footer-emblem-badge">
                 <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
-                  {isHi ? 'पृथ्वी विज्ञान मंत्रालय' : 'Ministry of Earth Sciences'}
-                  <span style={{ color: '#94a3b8' }}>{isHi ? 'भारत सरकार' : 'Government of India'}</span>
+                  {t.moes}
+                  <span style={{ color: '#94a3b8' }}>{t.goi}</span>
                 </div>
               </div>
             </div>
 
             {/* Col 2: Public Safety & Early Warnings */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">{isHi ? 'सार्वजनिक चेतावनी सेवाएँ' : 'Public Warning Services'}</h3>
+              <h3 className="cp-footer-heading">{t.footerCol2Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><button className="cp-footer-btn-link" onClick={() => setSelectedId('mcleodganj')}>{isHi ? 'सक्रिय जिला चेतावनी रडार' : 'Active District Warning Radar'}</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setShelterModalOpen(true)}>{isHi ? 'निकटतम सुरक्षित आश्रय खोजक' : 'Nearest Safe Shelter Locator'}</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{isHi ? 'अचानक बाढ़ सुरक्षा दिशानिर्देश' : 'Flash Flood Safety Protocols'}</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{isHi ? 'बादल फटने पर निकासी नियमावली' : 'Cloudburst Evacuation Guidelines'}</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => showToast('CAP 1.2 XML Feed is broadcasting on /api/cap-feed')}>{isHi ? 'सीएपी 1.2 कॉमन अलर्टिंग फीड' : 'CAP 1.2 Common Alerting Feed'}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setSelectedId('mcleodganj')}>{t.footerRadar}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setShelterModalOpen(true)}>{t.footerShelter}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{t.footerProtocols}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{t.footerEvac}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => showToast('CAP 1.2 XML Feed is broadcasting on /api/cap-feed')}>{t.footerCap}</button></li>
               </ul>
             </div>
 
             {/* Col 3: 24x7 Emergency Hotlines */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">{isHi ? 'आपातकालीन हेल्पलाइन (24x7)' : 'Emergency Hotlines (24x7)'}</h3>
+              <h3 className="cp-footer-heading">{t.footerCol3Title}</h3>
               <div className="cp-footer-hotlines">
                 <a href="tel:112" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">112</div>
                   <div className="cp-hotline-desc">
-                    <strong>{isHi ? 'राष्ट्रीय आपातकाल' : 'National Emergency'}</strong>
-                    <span>{isHi ? 'पुलिस, अग्निशमन एवं चिकित्सा' : 'Police, Fire & Medical'}</span>
+                    <strong>{t.hotline112Title}</strong>
+                    <span>{t.hotline112Sub}</span>
                   </div>
                 </a>
                 <a href="tel:108" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">108</div>
                   <div className="cp-hotline-desc">
-                    <strong>{isHi ? 'आपदा एम्बुलेंस' : 'Disaster Ambulance'}</strong>
-                    <span>{isHi ? 'आपातकालीन चिकित्सा सेवा' : 'Emergency Medical Response'}</span>
+                    <strong>{t.hotline108Title}</strong>
+                    <span>{t.hotline108Sub}</span>
                   </div>
                 </a>
                 <a href="tel:1078" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">1078</div>
                   <div className="cp-hotline-desc">
-                    <strong>{isHi ? 'एनडीएमए आपदा लाइन' : 'NDMA Disaster Line'}</strong>
-                    <span>{isHi ? 'राष्ट्रीय नियंत्रण केंद्र' : 'National Control Center'}</span>
+                    <strong>{t.hotline1078Title}</strong>
+                    <span>{t.hotline1078Sub}</span>
                   </div>
                 </a>
               </div>
@@ -1426,13 +1426,13 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
             {/* Col 4: Sovereign Institutional Partners */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">{isHi ? 'संस्थागत शासन एवं सहभागिता' : 'Institutional Governance'}</h3>
+              <h3 className="cp-footer-heading">{t.footerCol4Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">{isHi ? 'पृथ्वी विज्ञान मंत्रालय (MoES) ↗' : 'Ministry of Earth Sciences (MoES) ↗'}</a></li>
-                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">{isHi ? 'भारत मौसम विज्ञान विभाग (IMD) ↗' : 'India Meteorological Department (IMD) ↗'}</a></li>
-                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">{isHi ? 'एनसीएमआरडब्ल्यूएफ मौसम संगणना ↗' : 'NCMRWF Weather Computing ↗'}</a></li>
-                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">{isHi ? 'राष्ट्रीय आपदा प्रबंधन प्राधिकरण ↗' : 'National Disaster Management Authority ↗'}</a></li>
-                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">{isHi ? 'इसरो / मॉसडैक उपग्रह डेटा ↗' : 'ISRO / MOSDAC Satellite Data ↗'}</a></li>
+                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">{t.instMoes}</a></li>
+                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">{t.instImd}</a></li>
+                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">{t.instNcmrwf}</a></li>
+                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">{t.instNdma}</a></li>
+                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">{t.instIsro}</a></li>
               </ul>
             </div>
           </div>
@@ -1442,14 +1442,14 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
         <div className="cp-footer-bottom cp-footer-anim-item">
           <div className="cp-footer-bottom-inner">
             <div className="cp-footer-legal">
-              <span>{isHi ? '© 2026 वायुनेट · पृथ्वी विज्ञान मंत्रालय, भारत सरकार। सर्वाधिकार सुरक्षित।' : '© 2026 VAYUNET · Ministry of Earth Sciences, Government of India. All rights reserved.'}</span>
-              <span>{isHi ? 'ITU-T X.1303 CAP 1.2 प्रोटोकॉल एवं WCAG 2.1 लेवल AA अनुपालक' : 'Compliant with ITU-T X.1303 CAP 1.2 Protocol · WCAG 2.1 Level AA'}</span>
+              <span>{t.legalCopyright}</span>
+              <span>{t.legalCompliance}</span>
             </div>
             <div className="cp-footer-bottom-links">
-              <span onClick={() => showToast('VAYUNET Privacy Policy: No personal location data is stored permanently.')}>{isHi ? 'गोपनीयता नीति' : 'Privacy Policy'}</span>
-              <span onClick={() => showToast('Terms of Service: Public alerts provided for early safety awareness.')}>{isHi ? 'उपयोग की शर्तें' : 'Terms of Use'}</span>
-              <span onClick={onEnterPortal}>{isHi ? 'ऑपरेशंस पोर्टल' : 'Operations Portal'}</span>
-              <span onClick={() => setShareModalOpen(true)}>{isHi ? 'चेतावनी साझा करें' : 'Share Warning'}</span>
+              <span onClick={() => showToast('VAYUNET Privacy Policy: No personal location data is stored permanently.')}>{t.legalPrivacy}</span>
+              <span onClick={() => showToast('Terms of Service: Public alerts provided for early safety awareness.')}>{t.legalTerms}</span>
+              <span onClick={onEnterPortal}>{t.legalPortal}</span>
+              <span onClick={() => setShareModalOpen(true)}>{t.legalWarnings}</span>
             </div>
           </div>
         </div>
