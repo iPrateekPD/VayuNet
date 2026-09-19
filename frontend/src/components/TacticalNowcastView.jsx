@@ -1,0 +1,1339 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import ReadAloudButton from './ReadAloudButton';
+import PredictionPanel from './PredictionPanel';
+import './TacticalNowcast.css';
+
+// Fix Leaflet marker icons in React
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
+
+// Map Controller for programmatically recentering / flying to locations
+function MapController({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.flyTo(center, zoom, { duration: 1.2 });
+    }
+  }, [center, zoom, map]);
+  return null;
+}
+
+// Map Custom Right-Side Tool Controls (+, -, target recenter, fullscreen)
+function MapToolControls({ onRecenter, onToggleFullscreen }) {
+  const map = useMap();
+  return (
+    <div className="tac-clean-map-tools">
+      <button
+        type="button"
+        className="tac-clean-map-tool-btn"
+        onClick={() => map.zoomIn()}
+        title="Zoom In"
+      >
+        +
+      </button>
+      <button
+        type="button"
+        className="tac-clean-map-tool-btn"
+        onClick={() => map.zoomOut()}
+        title="Zoom Out"
+      >
+        −
+      </button>
+      <button
+        type="button"
+        className="tac-clean-map-tool-btn"
+        onClick={onRecenter}
+        title="Recenter to Chamoli Incident"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <circle cx="12" cy="12" r="8" />
+          <line x1="12" y1="2" x2="12" y2="6" />
+          <line x1="12" y1="18" x2="12" y2="22" />
+          <line x1="2" y1="12" x2="6" y2="12" />
+          <line x1="18" y1="12" x2="22" y2="12" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        className="tac-clean-map-tool-btn"
+        onClick={onToggleFullscreen}
+        title="Toggle Fullscreen"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+// Custom DivIcon creator
+function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
+  return L.divIcon({
+    html,
+    className: 'tac-leaflet-div-icon',
+    iconSize: size,
+    iconAnchor: anchor,
+  });
+}
+
+// Helper to scale coordinates around a geographic center
+function scaleCoords(coords, factor, center = [30.41, 79.32]) {
+  return coords.map(([lat, lng]) => [
+    Number((center[0] + (lat - center[0]) * factor).toFixed(5)),
+    Number((center[1] + (lng - center[1]) * factor).toFixed(5)),
+  ]);
+}
+
+const TIME_STEPS = ['Now', '+1h', '+2h', '+3h', '+4h', '+5h', '+6h'];
+
+// Supported sector coordinates
+const SECTOR_COORDS = {
+  'Chamoli, Uttarakhand': [30.41, 79.32],
+  'Joshimath, Uttarakhand': [30.556, 79.566],
+  'Rudraprayag, Uttarakhand': [30.285, 78.981],
+  'Uttarkashi, Uttarakhand': [30.726, 78.435],
+  'Kangra, Himachal Pradesh': [32.099, 76.269],
+  'Wayanad, Kerala': [11.685, 76.132],
+  'Mumbai, Maharashtra': [19.076, 72.877],
+  'Pithoragarh, Uttarakhand': [29.582, 80.218],
+};
+
+const SECTOR_OPTIONS = Object.keys(SECTOR_COORDS);
+
+// Active Incidents Data
+const INCIDENTS_DATA = [
+  {
+    id: 'chamoli',
+    name: 'Chamoli, Uttarakhand',
+    center: [30.41, 79.32],
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH RISK',
+    riskColor: '#ef4444',
+    eta: '1h 45m',
+    rainfall: '124 mm',
+    confidence: '82%',
+    area: '412 km²',
+    narrative: 'Intense rainfall may cause sudden rises in rivers and flash flooding in downstream areas.',
+    action: 'Move away from riverbeds and low-lying areas.',
+    badge: 'HIGHEST THREAT',
+  },
+  {
+    id: 'joshimath',
+    name: 'Joshimath, Uttarakhand',
+    center: [30.556, 79.566],
+    hazard: 'HEAVY RAINFALL',
+    riskLevel: 'MODERATE RISK',
+    riskColor: '#f97316',
+    eta: '2h 30m',
+    rainfall: '82 mm',
+    confidence: '79%',
+    area: '260 km²',
+    narrative: 'High moisture condensation and slope runoff approaching vulnerable transit routes.',
+    action: 'Halt pilgrimage transit and avoid unstable hill slopes.',
+    badge: 'ACTIVE WATCH',
+  },
+  {
+    id: 'rudraprayag',
+    name: 'Rudraprayag, Uttarakhand',
+    center: [30.285, 78.981],
+    hazard: 'THUNDERSTORM',
+    riskLevel: 'WATCH',
+    riskColor: '#eab308',
+    eta: '3h 10m',
+    rainfall: '45 mm',
+    confidence: '71%',
+    area: '185 km²',
+    narrative: 'Convective cells generating localized lightning and brief torrential bursts.',
+    action: 'Seek indoor shelter away from open ridges and electrical poles.',
+    badge: 'ADVISORY',
+  },
+  {
+    id: 'uttarkashi',
+    name: 'Uttarkashi, Uttarakhand',
+    center: [30.726, 78.435],
+    hazard: 'CLOUDBURST WATCH',
+    riskLevel: 'ADVISORY',
+    riskColor: '#38bdf8',
+    eta: '4h 15m',
+    rainfall: '35 mm',
+    confidence: '68%',
+    area: '140 km²',
+    narrative: 'Atmospheric instability index rising above Bhagirathi catchment headwaters.',
+    action: 'Activate telemetry alerts and verify automated sirens.',
+    badge: 'MONITORING',
+  },
+];
+
+// Timestep forecast telemetry variations for Chamoli
+const TIMESTEP_DATA = {
+  'Now': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'ACTIVE CONVECTIVE CORE',
+    eta: '0m (Live)',
+    rainfall: '42 mm',
+    arrival: 'Now Active',
+    confidence: '94%',
+    area: '210 km²',
+    scale: 0.78,
+    action: 'Immediate evacuation of Alaknanda riverbanks.',
+  },
+  '+1h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH SURGE INCOMING',
+    eta: '45m',
+    rainfall: '88 mm',
+    arrival: '45m',
+    confidence: '89%',
+    area: '320 km²',
+    scale: 0.90,
+    action: 'Clear low-lying bridges and drainage corridors.',
+  },
+  '+2h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'HIGH RISK',
+    eta: '1h 45m',
+    rainfall: '124 mm',
+    arrival: '1h 45m',
+    confidence: '82%',
+    area: '412 km²',
+    scale: 1.0,
+    action: 'Move away from riverbeds and low-lying areas.',
+  },
+  '+3h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'PEAK RUNOFF DISCHARGE',
+    eta: '2h 30m',
+    rainfall: '152 mm',
+    arrival: '2h 30m',
+    confidence: '76%',
+    area: '480 km²',
+    scale: 1.22,
+    action: 'Downstream dam gates throttling; alert Karnaprayag & Srinagar.',
+  },
+  '+4h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'RECEDING CONVECTIVE FLUX',
+    eta: '3h 45m',
+    rainfall: '110 mm',
+    arrival: '3h 45m',
+    confidence: '70%',
+    area: '520 km²',
+    scale: 1.15,
+    action: 'Monitor secondary slope saturation and mudflow risks.',
+  },
+  '+5h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'MODERATE RUNOFF',
+    eta: '4h 50m',
+    rainfall: '65 mm',
+    arrival: '4h 50m',
+    confidence: '64%',
+    area: '440 km²',
+    scale: 0.95,
+    action: 'Relief and search reconnaissance access clearance.',
+  },
+  '+6h': {
+    hazard: 'FLASH FLOOD',
+    riskLevel: 'RESIDUAL INUNDATION',
+    eta: '5h 55m',
+    rainfall: '35 mm',
+    arrival: '5h 55m',
+    confidence: '58%',
+    area: '310 km²',
+    scale: 0.72,
+    action: 'Assess infrastructure integrity along NH-7 corridor.',
+  },
+};
+
+export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavigateTab }) {
+  const [selectedStep, setSelectedStep] = useState('+2h');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isSectorOpen, setIsSectorOpen] = useState(false);
+  const [selectedSector, setSelectedSector] = useState('Chamoli, Uttarakhand');
+  const [activePanel, setActivePanel] = useState(null); // 'layers' | 'incidents' | 'bookmarks' | 'telemetry' | null
+  const [basemap, setBasemap] = useState('satellite'); // 'satellite' | 'terrain' | 'hybrid'
+  const [selectedIncident, setSelectedIncident] = useState(INCIDENTS_DATA[0]);
+  const [isTimelineFocused, setIsTimelineFocused] = useState(false);
+  const [selectedTelemetrySource, setSelectedTelemetrySource] = useState(null);
+  const [newBookmarkText, setNewBookmarkText] = useState('');
+  const mapCardRef = useRef(null);
+  const timelineCardRef = useRef(null);
+
+  // Bookmarks with localStorage persistence
+  const [bookmarks, setBookmarks] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vayunet_saved_bookmarks');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn(e);
+    }
+    return [
+      'Chamoli, Uttarakhand',
+      'Joshimath, Uttarakhand',
+      'Wayanad, Kerala',
+      'Mumbai, Maharashtra',
+      'Kangra, Himachal Pradesh',
+    ];
+  });
+
+  // Layer switches (Interactive Map Layers)
+  const [layers, setLayers] = useState({
+    precip: true,
+    satellite: true,
+    terrain: false,
+    radar: false,
+    rivers: true,
+    wind: false,
+    affectedArea: false,
+  });
+
+  const handleResetLayers = () => {
+    setLayers({
+      precip: true,
+      satellite: true,
+      terrain: false,
+      radar: false,
+      rivers: true,
+      wind: false,
+      affectedArea: false,
+    });
+    setBasemap('satellite');
+    if (showToast) showToast('Map layers reset to default');
+  };
+
+  // Coordinates for Default Center
+  const defaultCenter = SECTOR_COORDS[selectedSector] || [30.41, 79.32];
+  const [currentCenter, setCurrentCenter] = useState(defaultCenter);
+  const [currentZoom, setCurrentZoom] = useState(9);
+
+  const [aiPredictions, setAiPredictions] = useState(null);
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [aiSeverity, setAiSeverity] = useState('gray');
+
+  // Persist bookmarks
+  useEffect(() => {
+    try {
+      localStorage.setItem('vayunet_saved_bookmarks', JSON.stringify(bookmarks));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [bookmarks]);
+
+  // Simulation Playback Loop (Now → +6h)
+  useEffect(() => {
+    let timer;
+    if (isPlaying) {
+      timer = setInterval(() => {
+        setSelectedStep((prev) => {
+          const idx = TIME_STEPS.indexOf(prev);
+          const nextIdx = (idx + 1) % TIME_STEPS.length;
+          return TIME_STEPS[nextIdx];
+        });
+      }, 1500);
+    }
+    return () => clearInterval(timer);
+  }, [isPlaying]);
+
+  // AI Prediction Fetch Loop
+  useEffect(() => {
+    let leadTime = 0;
+    if (selectedStep.includes('1h')) leadTime = 1;
+    else if (selectedStep.includes('2h')) leadTime = 2;
+    else if (selectedStep.includes('3h')) leadTime = 3;
+    else if (selectedStep.includes('4h')) leadTime = 4;
+    else if (selectedStep.includes('5h')) leadTime = 5;
+    else if (selectedStep.includes('6h')) leadTime = 6;
+
+    const fetchPrediction = async () => {
+      setIsPredicting(true);
+      try {
+        const response = await fetch('http://localhost:8000/api/nowcast/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lat: currentCenter[0],
+            lng: currentCenter[1],
+            lead_time_hours: leadTime,
+            location_id: selectedSector
+          })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.predictions) {
+            setAiPredictions(data.predictions);
+            if (data.predictions.composite_threat_level) {
+              setAiSeverity(data.predictions.composite_threat_level.toLowerCase());
+            }
+          }
+        }
+      } catch (e) {
+        console.error("AI inference error", e);
+      } finally {
+        setIsPredicting(false);
+      }
+    };
+
+    fetchPrediction();
+  }, [selectedSector, selectedStep, currentCenter]);
+
+  // Handle Layer Toggle
+  const handleToggleLayer = (key) => {
+    setLayers((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      // If satellite or terrain is toggled, synchronize basemap
+      if (key === 'satellite' && next.satellite) {
+        setBasemap('satellite');
+        next.terrain = false;
+      } else if (key === 'terrain' && next.terrain) {
+        setBasemap('terrain');
+        next.satellite = false;
+      }
+      return next;
+    });
+    if (showToast) showToast(`Layer "${key.toUpperCase()}" ${!layers[key] ? 'Enabled' : 'Disabled'}`);
+  };
+
+  // Handle Play/Pause toggle
+  const handleTogglePlay = () => {
+    setIsPlaying((prev) => {
+      const next = !prev;
+      if (showToast) showToast(next ? 'Forecast simulation playback started' : 'Forecast simulation paused');
+      return next;
+    });
+  };
+
+  // Select incident from drawer or threat list
+  const handleSelectIncident = (inc) => {
+    setSelectedIncident(inc);
+    setSelectedSector(inc.name);
+    setCurrentCenter([...inc.center]);
+    setCurrentZoom(9.5);
+    if (showToast) showToast(`Centered on ${inc.name} (${inc.hazard})`);
+  };
+
+  // Select bookmark location
+  const handleSelectBookmark = (loc) => {
+    setSelectedSector(loc);
+    if (SECTOR_COORDS[loc]) {
+      setCurrentCenter([...SECTOR_COORDS[loc]]);
+      setCurrentZoom(9.5);
+      if (showToast) showToast(`Navigated to saved bookmark: ${loc}`);
+    } else {
+      if (showToast) showToast(`Selected bookmark: ${loc}`);
+    }
+  };
+
+  // Add new bookmark
+  const handleAddBookmark = (e) => {
+    e?.preventDefault();
+    const clean = newBookmarkText.trim() || selectedSector;
+    if (clean && !bookmarks.includes(clean)) {
+      setBookmarks((prev) => [clean, ...prev]);
+      setNewBookmarkText('');
+      if (showToast) showToast(`Saved location: ${clean}`);
+    }
+  };
+
+  // Remove bookmark
+  const handleRemoveBookmark = (item, e) => {
+    e.stopPropagation();
+    setBookmarks((prev) => prev.filter((b) => b !== item));
+    if (showToast) showToast(`Removed bookmark: ${item}`);
+  };
+
+  // Recenter map handler
+  const handleRecenter = () => {
+    setCurrentCenter([...(SECTOR_COORDS[selectedSector] || [30.41, 79.32])]);
+    setCurrentZoom(9);
+    if (showToast) showToast(`Recentered to ${selectedSector}`);
+  };
+
+  // Toggle fullscreen
+  const handleToggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (mapCardRef.current) {
+      mapCardRef.current.requestFullscreen();
+    }
+  };
+
+  // Dispatch alert action
+  const handleDispatch = () => {
+    if (onNavigateTab) {
+      onNavigateTab('alerts');
+    } else if (onDispatchAlert) {
+      onDispatchAlert();
+    } else if (showToast) {
+      showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
+    }
+  };
+
+  // Dynamic scaling based on current forecast timestep
+  const currentStepData = TIMESTEP_DATA[selectedStep] || TIMESTEP_DATA['+2h'];
+
+  return (
+    <div className="tac-app-shell">
+      {/* ================= OPERATIONAL BODY (Stops before the full-width footer) ================= */}
+      <div className="tac-operational-body">
+        {/* ================= MAIN DASHBOARD CONTENT ================= */}
+        <div className="tac-main-dashboard">
+          {/* ================= MAIN 2-COLUMN OPERATIONAL GRID ================= */}
+          <div className="tac-clean-grid">
+            {/* LEFT COLUMN: MAP CARD + 2 OPERATIONAL CARDS */}
+            <div className="tac-clean-col-left">
+              {/* MAP CARD */}
+              <div className="tac-clean-map-card" ref={mapCardRef}>
+              
+              {/* FLOATING TOP BAR */}
+              <div className="tac-clean-map-topbar">
+                {/* Sector / Search Dropdown + Live Timestamp */}
+                <div className="tac-clean-topbar-header-wrap">
+                  {/* Sector / Search Dropdown */}
+                  <div className="tac-clean-sector-wrap">
+                    <button
+                      type="button"
+                      className="tac-clean-sector-btn"
+                      onClick={() => setIsSectorOpen(!isSectorOpen)}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                      <span>{selectedSector}</span>
+                      <span style={{ fontSize: '10px', marginLeft: '4px', opacity: 0.7 }}>▾</span>
+                    </button>
+
+                    {isSectorOpen && (
+                      <div className="tac-clean-sector-menu">
+                        {SECTOR_OPTIONS.map((opt) => (
+                          <div
+                            key={opt}
+                            className={`tac-clean-sector-option ${selectedSector === opt ? 'active' : ''}`}
+                            onClick={() => {
+                              setSelectedSector(opt);
+                              setIsSectorOpen(false);
+                              if (SECTOR_COORDS[opt]) {
+                                setCurrentCenter([...SECTOR_COORDS[opt]]);
+                                setCurrentZoom(9);
+                              }
+                              if (showToast) showToast(`Centered to ${opt}`);
+                            }}
+                          >
+                            {opt}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Live Timestamp Badge */}
+                  <div className="tac-clean-live-pill">
+                    <span className="tac-live-date-text">08 Sep 2026, </span>
+                    <span className="tac-live-time-text">11:52 PM IST</span>
+                    <span className="tac-clean-live-dot" />
+                    <span style={{ color: '#f87171', fontWeight: 700 }}>Live</span>
+                  </div>
+                </div>
+
+                {/* Timesteps Filter Pills & Forecast Play/Pause Simulation Button (near Now) */}
+                <div className="tac-clean-timesteps-group">
+                  <button
+                    type="button"
+                    className={`tac-clean-forecast-play-btn ${isPlaying ? 'playing' : ''}`}
+                    onClick={handleTogglePlay}
+                    title={isPlaying ? 'Pause 6-Hour Forecast Simulation' : 'Play 6-Hour Forecast Simulation'}
+                  >
+                    {isPlaying ? (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
+                      </svg>
+                    ) : (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="6 4 19 12 6 20 6 4" />
+                      </svg>
+                    )}
+                    <span>{isPlaying ? 'Pause' : 'Play'}</span>
+                  </button>
+
+                  {TIME_STEPS.map((step) => (
+                    <button
+                      key={step}
+                      type="button"
+                      className={`tac-clean-time-pill ${selectedStep === step ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedStep(step);
+                        if (showToast) showToast(`Nowcast timestep: ${step}`);
+                      }}
+                    >
+                      {step}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* ================= GLOBAL MODAL OVERLAY: BLURRED BACKDROP & CURVED RECTANGLE DIALOG ================= */}
+              {activePanel && (
+              <div 
+                className="tac-modal-backdrop" 
+                onClick={() => setActivePanel(null)}
+                role="dialog"
+                aria-modal="true"
+              >
+                <div className="tac-modal-card" onClick={(e) => e.stopPropagation()}>
+                  {/* 1. LAYERS MODAL */}
+                  {activePanel === 'layers' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+                              <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                              <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5" />
+                            </svg>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Map Layers</span>
+                            <span className="tac-modal-subtitle">Show or hide information on the map</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close (Esc)"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body">
+                        {/* 1. Precipitation */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.precip ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('precip')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.5 8c-.6-2.6-2.9-4.5-5.5-4.5-2.2 0-4.1 1.3-5 3.1-2.3.2-4 2.2-4 4.5 0 2.5 2 4.5 4.5 4.5h10c2.2 0 4-1.8 4-4 0-2.1-1.6-3.8-3.7-3.9z" fill="#38bdf8" />
+                                <path d="M7 17.5l-1.2 2.5M10.5 17.5l-1.2 2.5M14 17.5l-1.2 2.5M17.5 17.5l-1.2 2.5" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Precipitation</span>
+                              <span className="tac-layer-subtitle-v2">Rainfall intensity and forecast</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.precip ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 2. Satellite */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('satellite')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8" stroke="#38bdf8" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M13 7 9 3 5 7l4 4" />
+                                <path d="m17 11 4 4-4 4-4-4" />
+                                <path d="m8 12 4 4 6-6-4-4Z" />
+                                <path d="m16 8 3-3" strokeWidth="2" fill="none" />
+                                <path d="M9 21a6 6 0 0 0-6-6" strokeWidth="2" fill="none" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Satellite</span>
+                              <span className="tac-layer-subtitle-v2">Cloud cover (real-time)</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.satellite || basemap === 'satellite' ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 3. Terrain */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('terrain')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8">
+                                <path d="M14 6l-4.5 7.5L7 10 1 20h22L14 6zm-1.8 4.2L14 7.6l2.6 4.4-1.6 1-2.8-2.8z" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Terrain</span>
+                              <span className="tac-layer-subtitle-v2">Mountains, elevation and land</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.terrain || basemap === 'terrain' ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+
+                        {/* 4. Rivers */}
+                        <div 
+                          className={`tac-layer-card-v2 ${layers.rivers ? 'active' : ''}`}
+                          onClick={() => handleToggleLayer('rivers')}
+                        >
+                          <div className="tac-layer-info-v2">
+                            <div className="tac-layer-icon-wrap-v2">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6c3-2 6 2 9 0s6-2 9 0" />
+                                <path d="M3 12c3-2 6 2 9 0s6-2 9 0" />
+                                <path d="M3 18c3-2 6 2 9 0s6-2 9 0" />
+                              </svg>
+                            </div>
+                            <div className="tac-layer-text-v2">
+                              <span className="tac-layer-title-v2">Rivers</span>
+                              <span className="tac-layer-subtitle-v2">Rivers and flow direction</span>
+                            </div>
+                          </div>
+                          <div className={`tac-ios-switch ${layers.rivers ? 'active' : ''}`}>
+                            <span className="tac-ios-switch-knob" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="tac-modal-footer">
+                        <button 
+                          type="button" 
+                          className="tac-reset-btn-v2"
+                          onClick={handleResetLayers}
+                          title="Restore default active layers"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                            <path d="M3 3v5h5" />
+                          </svg>
+                          <span>Reset to Default</span>
+                        </button>
+
+                        <button 
+                          type="button" 
+                          className="tac-layers-done-btn"
+                          onClick={() => setActivePanel(null)}
+                        >
+                          Done
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. INCIDENTS MODAL */}
+                  {activePanel === 'incidents' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon tac-modal-header-icon-danger">
+                            <span>⚠️</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Active Incidents ({INCIDENTS_DATA.length})</span>
+                            <span className="tac-modal-subtitle">High priority weather threats in Chamoli & Garhwal</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body tac-incidents-modal-scroll">
+                        {INCIDENTS_DATA.map((inc) => (
+                          <div
+                            key={inc.id}
+                            className={`tac-incident-card-item ${selectedIncident.id === inc.id ? 'active' : ''}`}
+                            onClick={() => {
+                              handleSelectIncident(inc);
+                              setActivePanel(null);
+                            }}
+                          >
+                            <div className="tac-inc-item-top">
+                              <div className="tac-inc-item-loc">
+                                <span className="tac-inc-dot" style={{ background: inc.riskColor }} />
+                                <span className="tac-inc-name">{inc.name}</span>
+                              </div>
+                              <span className="tac-inc-badge" style={{ color: inc.riskColor, borderColor: inc.riskColor }}>
+                                {inc.riskLevel}
+                              </span>
+                            </div>
+                            <div className="tac-inc-hazard">{inc.hazard}</div>
+                            <div className="tac-inc-meta">
+                              <span>ETA {inc.eta}</span>
+                              <span>•</span>
+                              <span>{inc.rainfall}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. BOOKMARKS MODAL */}
+                  {activePanel === 'bookmarks' && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon" style={{ color: '#eab308' }}>
+                            <span>★</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">Saved Locations</span>
+                            <span className="tac-modal-subtitle">Quick jump to monitored sectors</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body">
+                        <form onSubmit={handleAddBookmark} className="tac-bookmark-add-form">
+                          <input
+                            type="text"
+                            className="tac-bookmark-input"
+                            placeholder="Add sector (e.g. Kedarnath)..."
+                            value={newBookmarkText}
+                            onChange={(e) => setNewBookmarkText(e.target.value)}
+                          />
+                          <button type="submit" className="tac-bookmark-add-btn">
+                            Add ★
+                          </button>
+                        </form>
+
+                        <div className="tac-bookmarks-list">
+                          {bookmarks.map((loc) => (
+                            <div
+                              key={loc}
+                              className={`tac-bookmark-row ${selectedSector === loc ? 'active' : ''}`}
+                              onClick={() => {
+                                handleSelectBookmark(loc);
+                                setActivePanel(null);
+                              }}
+                            >
+                              <div className="tac-bookmark-left">
+                                <span className="tac-bm-star">★</span>
+                                <span className="tac-bm-name">{loc}</span>
+                              </div>
+                              <button
+                                type="button"
+                                className="tac-bm-del"
+                                onClick={(e) => handleRemoveBookmark(loc, e)}
+                                title="Remove bookmark"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. TELEMETRY SOURCE DETAIL MODAL */}
+                  {activePanel === 'telemetry' && selectedTelemetrySource && (
+                    <div className="tac-modal-content">
+                      <div className="tac-modal-header">
+                        <div className="tac-modal-header-left">
+                          <div className="tac-modal-header-icon">
+                            <span>📡</span>
+                          </div>
+                          <div className="tac-modal-header-titles">
+                            <span className="tac-modal-title">{selectedTelemetrySource.name}</span>
+                            <span className="tac-modal-subtitle">Real-time Telemetry Feed Diagnostics</span>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="tac-modal-close-btn" 
+                          onClick={() => setActivePanel(null)}
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <div className="tac-modal-body">
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Telemetry Stream</span>
+                          <span className="tac-telem-val">{selectedTelemetrySource.stream}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Refresh Frequency</span>
+                          <span className="tac-telem-val">{selectedTelemetrySource.frequency}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Latency</span>
+                          <span className="tac-telem-val" style={{ color: '#22c55e' }}>{selectedTelemetrySource.latency}</span>
+                        </div>
+                        <div className="tac-telem-info-row">
+                          <span className="tac-telem-lbl">Ingestion Health</span>
+                          <span className="tac-telem-val" style={{ color: '#38bdf8' }}>99.98% High Precision Calibrated</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* LEAFLET MAP */}
+            <MapContainer
+              center={currentCenter}
+              zoom={9}
+              scrollWheelZoom={false}
+              className="tac-clean-leaflet-container"
+              zoomControl={false}
+              attributionControl={false}
+            >
+              <MapController center={currentCenter} zoom={currentZoom} />
+              <MapToolControls
+                onRecenter={handleRecenter}
+                onToggleFullscreen={handleToggleFullscreen}
+              />
+
+              {/* Dynamic Basemap Switching (Satellite | Terrain | Hybrid) */}
+              {basemap === 'satellite' && (
+                <TileLayer
+                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                  attribution="Esri World Imagery"
+                  maxZoom={18}
+                />
+              )}
+
+              {basemap === 'terrain' && (
+                <TileLayer
+                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+                  attribution="Esri Topo Map"
+                  maxZoom={18}
+                />
+              )}
+
+              {basemap === 'hybrid' && (
+                <>
+                  <TileLayer
+                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    attribution="Esri World Imagery"
+                    maxZoom={18}
+                  />
+                  <TileLayer
+                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+                    subdomains="abcd"
+                    opacity={0.85}
+                  />
+                </>
+              )}
+
+              {/* Geographic labels (if in satellite mode) */}
+              {basemap === 'satellite' && (
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+                  subdomains="abcd"
+                  opacity={0.7}
+                />
+              )}
+
+              {/* Radar Grid Layer */}
+              {layers.radar && (
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png"
+                  subdomains="abcd"
+                  opacity={0.9}
+                />
+              )}
+
+              {/* Dynamic Sector Marker */}
+              {SECTOR_COORDS[selectedSector] && (
+                <Marker
+                  position={SECTOR_COORDS[selectedSector]}
+                  icon={createHtmlIcon(`
+                    <div style="position: relative; display: flex; align-items: center;">
+                      <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 10px #ffffff, 0 0 20px #38bdf8; position: absolute; left: 0; top: 12px; z-index: 10;"></div>
+                      <div style="margin-left: 20px; background: rgba(8, 14, 25, 0.94); border: 1px solid rgba(56, 189, 248, 0.6); border-radius: 6px; padding: 6px 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.85); min-width: 96px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #ffffff;">${selectedSector.split(',')[0]}</div>
+                        <div style="font-size: 9.5px; color: #94a3b8; font-family: monospace;">Monitoring Sector</div>
+                      </div>
+                    </div>
+                  `, [160, 48], [6, 18])}
+                />
+              )}
+            </MapContainer>
+
+            {/* FLOATING PRECIPITATION INTENSITY LEGEND */}
+            {activePanel !== 'layers' && (
+              <div className="tac-clean-legend-box">
+                <div className="tac-clean-legend-title">Precipitation Intensity (mm/hr)</div>
+                <div className="tac-clean-legend-ramp" />
+                <div className="tac-clean-legend-ticks">
+                  <span>0</span>
+                  <span>1</span>
+                  <span>5</span>
+                  <span>10</span>
+                  <span>20</span>
+                  <span>50</span>
+                  <span>100</span>
+                </div>
+              </div>
+            )}
+
+            {/* FLOATING MAP LAYERS BUTTON (BOTTOM RIGHT) */}
+            <div className="tac-clean-map-bottom-right">
+              <button
+                type="button"
+                className={`tac-clean-layers-trigger-btn ${activePanel === 'layers' ? 'active' : ''}`}
+                onClick={() => setActivePanel(activePanel === 'layers' ? null : 'layers')}
+                title="Map Layers - Show or hide information on the map"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                  <path d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L2 12.5" />
+                  <path d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L2 17.5" />
+                </svg>
+                <span>Layers</span>
+              </button>
+            </div>
+          </div>
+          {/* END MAP CARD */}
+
+          {/* ================= BOTTOM ROW: 2 OPERATIONAL CARDS ================= */}
+          <div className="tac-clean-bottom-row">
+            {/* Card 1: Other Active Threats */}
+            <div className="tac-clean-card">
+              <div className="tac-clean-card-title-row">
+                <span className="tac-clean-card-title">Other Active Threats (Next 6 Hours)</span>
+                <button
+                  type="button"
+                  className="tac-clean-viewall-btn"
+                  onClick={() => setActivePanel('incidents')}
+                >
+                  View All →
+                </button>
+              </div>
+
+              <div className="tac-clean-threats-list">
+                <div
+                  className="tac-clean-threat-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleSelectIncident(INCIDENTS_DATA[0])}
+                  title="Select Cloudburst Threat"
+                >
+                  <div className="tac-clean-threat-left">
+                    <span style={{ color: '#eab308', fontSize: '13px' }}>⚠️</span>
+                    <span className="tac-clean-threat-name">Cloudburst</span>
+                  </div>
+                  <div className="tac-clean-threat-bar-wrap">
+                    <div className="tac-clean-threat-bar-fill fill-cloudburst" />
+                  </div>
+                  <span className="tac-clean-threat-pct">48%</span>
+                  <span className="tac-clean-threat-eta">ETA 2h 30m</span>
+                </div>
+
+                <div
+                  className="tac-clean-threat-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleSelectIncident(INCIDENTS_DATA[2])}
+                  title="Select Thunderstorm Threat"
+                >
+                  <div className="tac-clean-threat-left">
+                    <span style={{ color: '#38bdf8', fontSize: '13px' }}>🌧️</span>
+                    <span className="tac-clean-threat-name">Thunderstorm</span>
+                  </div>
+                  <div className="tac-clean-threat-bar-wrap">
+                    <div className="tac-clean-threat-bar-fill fill-thunderstorm" />
+                  </div>
+                  <span className="tac-clean-threat-pct">30%</span>
+                  <span className="tac-clean-threat-eta">ETA 3h 10m</span>
+                </div>
+
+                <div
+                  className="tac-clean-threat-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleSelectIncident(INCIDENTS_DATA[1])}
+                  title="Select Heavy Rainfall Threat"
+                >
+                  <div className="tac-clean-threat-left">
+                    <span style={{ color: '#0ea5e9', fontSize: '13px' }}>🌧️</span>
+                    <span className="tac-clean-threat-name">Heavy Rainfall</span>
+                  </div>
+                  <div className="tac-clean-threat-bar-wrap">
+                    <div className="tac-clean-threat-bar-fill fill-heavyrain" />
+                  </div>
+                  <span className="tac-clean-threat-pct">20%</span>
+                  <span className="tac-clean-threat-eta">ETA 4h 20m</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: Data Freshness */}
+            <div className="tac-clean-card">
+              <div className="tac-clean-card-title-row">
+                <span className="tac-clean-card-title">Data Freshness</span>
+                <span className="tac-clean-live-pill-sm">
+                  <span className="tac-clean-live-dot" />
+                  Live
+                </span>
+              </div>
+
+              <div className="tac-clean-freshness-list">
+                <div
+                  className="tac-clean-fresh-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSelectedTelemetrySource({
+                      name: 'INSAT-3D / 3DR Geostationary Imager',
+                      stream: 'Thermal Infrared (TIR-1) + Water Vapor (WV)',
+                      frequency: '15 Minutes Scanning Interval',
+                      latency: '2 minutes ago',
+                    });
+                    setActivePanel('telemetry');
+                  }}
+                  title="Inspect INSAT telemetry stream"
+                >
+                  <div className="tac-clean-fresh-left">
+                    <span className="tac-clean-dot-green" />
+                    <span className="tac-clean-feed-name">INSAT-3D/3DR</span>
+                  </div>
+                  <div className="tac-clean-feed-right">
+                    <span className="tac-clean-fresh-time">2 min ago</span>
+                    <span className="tac-clean-feed-chevron">›</span>
+                  </div>
+                </div>
+
+                <div
+                  className="tac-clean-fresh-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSelectedTelemetrySource({
+                      name: 'IMDAA High-Resolution Reanalysis',
+                      stream: 'NCMRWF Unified Model Convective Variables',
+                      frequency: 'Hourly Reanalysis Assimilation',
+                      latency: '6 minutes ago',
+                    });
+                    setActivePanel('telemetry');
+                  }}
+                  title="Inspect IMDAA telemetry stream"
+                >
+                  <div className="tac-clean-fresh-left">
+                    <span className="tac-clean-dot-green" />
+                    <span className="tac-clean-feed-name">IMDAA Reanalysis</span>
+                  </div>
+                  <div className="tac-clean-feed-right">
+                    <span className="tac-clean-fresh-time">6 min ago</span>
+                    <span className="tac-clean-feed-chevron">›</span>
+                  </div>
+                </div>
+
+                <div
+                  className="tac-clean-fresh-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSelectedTelemetrySource({
+                      name: 'CartoDEM Elevation & Slope Mesh',
+                      stream: 'ISRO National Remote Sensing Centre (NRSC)',
+                      frequency: 'Dynamic Inundation DEM Mesh',
+                      latency: '12 minutes ago',
+                    });
+                    setActivePanel('telemetry');
+                  }}
+                  title="Inspect CartoDEM mesh stream"
+                >
+                  <div className="tac-clean-fresh-left">
+                    <span className="tac-clean-dot-green" />
+                    <span className="tac-clean-feed-name">CartoDEM</span>
+                  </div>
+                  <div className="tac-clean-feed-right">
+                    <span className="tac-clean-fresh-time">12 min ago</span>
+                    <span className="tac-clean-feed-chevron">›</span>
+                  </div>
+                </div>
+
+                <div
+                  className="tac-clean-fresh-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSelectedTelemetrySource({
+                      name: 'IMD Automated Weather Stations (AWS)',
+                      stream: 'Surface Pressure, Rain Gauge, Wind Vector',
+                      frequency: 'Real-time telemetry pulse',
+                      latency: '3 minutes ago',
+                    });
+                    setActivePanel('telemetry');
+                  }}
+                  title="Inspect IMD Observations"
+                >
+                  <div className="tac-clean-fresh-left">
+                    <span className="tac-clean-dot-green" />
+                    <span className="tac-clean-feed-name">IMD Observations</span>
+                  </div>
+                  <div className="tac-clean-feed-right">
+                    <span className="tac-clean-fresh-time">3 min ago</span>
+                    <span className="tac-clean-feed-chevron">›</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* END LEFT COLUMN */}
+
+        {/* ================= RIGHT COLUMN: HIGHEST THREAT CARD + OPERATIONAL ACTIONS ================= */}
+        <div className="tac-clean-col-right">
+          <div className="tac-clean-threat-card">
+            <div className="tac-clean-threat-head">
+              <div className="tac-clean-flame-tag">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.2">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <span>{selectedIncident.badge}</span>
+                <ReadAloudButton 
+                  text={`${selectedIncident.badge}: ${selectedIncident.hazard}. ${currentStepData.riskLevel} at ${selectedIncident.name}. Estimated arrival: ${currentStepData.arrival}. ${selectedIncident.narrative}`} 
+                  label="Read threat details aloud"
+                />
+              </div>
+              <div className="tac-clean-forecast-pill">Forecast: +{currentStepData.eta}</div>
+            </div>
+
+            {/* Warning Title with Left Alert Icon */}
+            <div className="tac-clean-warn-title-group">
+              <div className="tac-clean-warn-title-row">
+                <div className="tac-clean-warn-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.2">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  </svg>
+                </div>
+                <div className="tac-clean-warn-text-col">
+                  <div className="tac-clean-warn-main">{selectedIncident.hazard}</div>
+                  <div className="tac-clean-warn-main">{currentStepData.riskLevel}</div>
+                </div>
+              </div>
+              <div className="tac-clean-warn-loc">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span>{selectedIncident.name}</span>
+              </div>
+            </div>
+
+            {/* Narrative */}
+            <div className="tac-clean-narrative">
+              {selectedIncident.narrative}
+            </div>
+
+            {/* 4 Metric Chips (2x2 Grid) */}
+            <div className="tac-clean-chips-grid">
+              <div className="tac-clean-chip">
+                <div className="tac-clean-chip-top">
+                  <span className="tac-clean-chip-icon">🌧️</span>
+                  <span className="tac-clean-chip-val">{currentStepData.rainfall}</span>
+                </div>
+                <span className="tac-clean-chip-label">Est. rainfall ({selectedStep})</span>
+              </div>
+
+              <div className="tac-clean-chip">
+                <div className="tac-clean-chip-top">
+                  <span className="tac-clean-chip-icon">🕒</span>
+                  <span className="tac-clean-chip-val">{currentStepData.arrival}</span>
+                </div>
+                <span className="tac-clean-chip-label">Estimated arrival</span>
+              </div>
+
+              <div className="tac-clean-chip">
+                <div className="tac-clean-chip-top">
+                  <span className="tac-clean-chip-icon">📊</span>
+                  <span className="tac-clean-chip-val">{currentStepData.confidence}</span>
+                </div>
+                <span className="tac-clean-chip-label">Model confidence</span>
+              </div>
+
+              <div className="tac-clean-chip">
+                <div className="tac-clean-chip-top">
+                  <span className="tac-clean-chip-icon">🗺️</span>
+                  <span className="tac-clean-chip-val">{currentStepData.area}</span>
+                </div>
+                <span className="tac-clean-chip-label">Affected area</span>
+              </div>
+            </div>
+
+            {/* Recommended Action */}
+            <div className="tac-clean-action-box">
+              <div className="tac-clean-action-head">
+                <span style={{ fontSize: '13px' }}>⚠️</span>
+                <span>Recommended Action</span>
+                <ReadAloudButton 
+                  text="Recommended Action: Move away from riverbeds and low-lying areas. Be prepared for possible evacuation. Follow local authority instructions."
+                  label="Read recommended actions aloud"
+                />
+              </div>
+              <ul className="tac-clean-action-list">
+                <li>Move away from riverbeds and low-lying areas.</li>
+                <li>Be prepared for possible evacuation.</li>
+                <li>Follow local authority instructions.</li>
+              </ul>
+            </div>
+
+            {/* AI Deep Learning Inference Panel */}
+            <div style={{ padding: '0 16px 16px', opacity: isPredicting ? 0.6 : 1, transition: 'opacity 0.3s ease' }}>
+               <PredictionPanel predictions={aiPredictions} severity={aiSeverity} />
+            </div>
+          </div>
+
+          {/* Operational Action Buttons (placed below the threat card, aligning with bottom cards) */}
+          <div className="tac-clean-actions-group">
+            <button
+              type="button"
+              className="tac-clean-investigate-btn"
+              onClick={() => onNavigateTab && onNavigateTab('analysis')}
+              title="Examine CTT, IWV, CAPE and atmospheric drivers in Analysis view"
+            >
+              <span style={{ fontSize: '14px' }}>📊</span>
+              <span>Investigate Drivers (Why?) →</span>
+            </button>
+
+            <button
+              type="button"
+              className="tac-clean-dispatch-btn"
+              onClick={handleDispatch}
+              title="Open Alert & Incident Command to broadcast CAP 1.2 payload"
+            >
+              <span style={{ fontSize: '15px' }}>((•))</span>
+              <span>Prepare &amp; Dispatch Alert (Act) →</span>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+      {/* END tac-main-dashboard */}
+    </div>
+    {/* END tac-operational-body */}
+  </div>
+  );
+}
