@@ -7,6 +7,7 @@ import {
   WeatherLayerProvider,
   FORECAST_TIME_STEPS,
 } from '../services/weatherService';
+import { fetchLiveMapStations } from '../services/liveWeatherService';
 
 // Fix default leaflet marker icon issue in bundlers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -127,9 +128,40 @@ export default function HeroMap({
 
   // Static meteorological layers
   const dwrStations = useMemo(() => WeatherLayerProvider.getDwrNetwork(), []);
-  const awsStations = useMemo(() => WeatherLayerProvider.getAwsStations(), []);
+  const [awsStations, setAwsStations] = useState(() => WeatherLayerProvider.getAwsStations());
+  const [isMapLive, setIsMapLive] = useState(false);
+  const [mapLastUpdated, setMapLastUpdated] = useState('');
   const synopticFeatures = useMemo(() => WeatherLayerProvider.getSynopticFeatures(), []);
   const windStreamlines = useMemo(() => WeatherLayerProvider.getWindStreamlines(), []);
+
+  // Live Automatic Weather Station (AWS) telemetry sync from weather.indianapi.in & IMD network
+  useEffect(() => {
+    let isMounted = true;
+    const syncLiveStations = async () => {
+      try {
+        const live = await fetchLiveMapStations(WeatherLayerProvider.getAwsStations());
+        if (isMounted && live && live.length > 0) {
+          setAwsStations(live);
+          setIsMapLive(true);
+          setMapLastUpdated(
+            new Date().toLocaleTimeString('en-IN', {
+              timeZone: 'Asia/Kolkata',
+              hour: '2-digit',
+              minute: '2-digit',
+            }) + ' IST'
+          );
+        }
+      } catch (err) {
+        console.warn('[VAYUNET Live] Map live telemetry sync warning:', err);
+      }
+    };
+    syncLiveStations();
+    const interval = setInterval(syncLiveStations, 40000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   // Helper to create custom Leaflet DivIcon for pins
   const createPinIcon = (pin) => {
@@ -185,17 +217,19 @@ export default function HeroMap({
 
   // National AWS City Station DivIcon
   const createAwsIcon = (station) => {
+    const isRaining = station.rainVal > 0 || (station.rain && !station.rain.startsWith('0 ') && !station.rain.startsWith('0.0'));
     return L.divIcon({
       className: 'leaflet-aws-marker',
       html: `
-        <div class="aws-city-badge">
-          <span class="aws-dot"></span>
+        <div class="aws-city-badge ${station.isLive ? 'is-live-telemetry' : ''}">
+          <span class="aws-dot ${isRaining ? 'aws-rain-active' : ''}"></span>
           <span class="aws-city-name">${station.name.split(' ')[0]}</span>
           <span class="aws-city-temp">${station.temp}</span>
+          ${isRaining ? `<span class="aws-city-rain-val">${station.rain}</span>` : ''}
         </div>
       `,
-      iconSize: [96, 24],
-      iconAnchor: [48, 12],
+      iconSize: [isRaining ? 122 : 96, 24],
+      iconAnchor: [isRaining ? 61 : 48, 12],
     });
   };
 
@@ -553,13 +587,21 @@ export default function HeroMap({
                 icon={createAwsIcon(station)}
               >
                 <Tooltip sticky direction="top" offset={[0, -10]}>
-                  <div style={{ fontFamily: 'IBM Plex Sans, sans-serif', fontSize: 11, minWidth: 140 }}>
-                    <strong style={{ color: '#f8fafc', fontSize: 12 }}>{station.name}</strong><br />
-                    Temperature: <strong>{station.temp}</strong><br />
-                    Rainfall Rate: <strong style={{ color: '#38bdf8' }}>{station.rain}</strong><br />
-                    Pressure: <strong>{station.pressure}</strong><br />
-                    Humidity: <strong>{station.humidity}</strong> | Wind: <strong>{station.wind}</strong><br />
-                    Status: <strong style={{ color: '#fbbf24' }}>{station.status}</strong>
+                  <div style={{ fontFamily: 'IBM Plex Sans, sans-serif', fontSize: 11, minWidth: 150 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 3 }}>
+                      <strong style={{ color: '#f8fafc', fontSize: 12 }}>{station.name}</strong>
+                      <span style={{ fontSize: 9, color: '#10b981', background: 'rgba(16,185,129,0.18)', border: '1px solid rgba(16,185,129,0.4)', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>LIVE AWS</span>
+                    </div>
+                    <div>Temperature: <strong style={{ color: '#62c0bf' }}>{station.temp}</strong></div>
+                    <div>Rainfall Rate: <strong style={{ color: station.rainVal > 0 ? '#38bdf8' : '#94a3b8' }}>{station.rain}</strong></div>
+                    <div>Pressure: <strong>{station.pressure}</strong></div>
+                    <div>Humidity: <strong>{station.humidity}</strong> | Wind: <strong>{station.wind}</strong></div>
+                    <div style={{ marginTop: 2 }}>Condition: <strong style={{ color: '#fbbf24' }}>{station.status}</strong></div>
+                    {station.lastUpdated && (
+                      <div style={{ fontSize: 9, color: '#94a3b8', marginTop: 4, borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: 2 }}>
+                        Live IMD/AWS Sync: {station.lastUpdated}
+                      </div>
+                    )}
                   </div>
                 </Tooltip>
               </Marker>
@@ -783,6 +825,16 @@ export default function HeroMap({
 
       {/* Floating Subcontinent Map Overlays Quick-Toggle Bar */}
       <div className="subcontinent-map-quick-toggles">
+        <div
+          className="quick-toggle-pill active live-telemetry-pill"
+          title="Live meteorological stream from weather.indianapi.in & IMD network"
+          style={{ borderColor: 'rgba(16, 185, 129, 0.4)', background: 'rgba(6, 78, 59, 0.4)', cursor: 'default' }}
+        >
+          <span className="toggle-indicator-dot" style={{ background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+          <span style={{ color: '#6ee7b7', fontWeight: 600 }}>LIVE AWS</span>
+          {mapLastUpdated && <span style={{ color: '#94a3b8', fontSize: 10, marginLeft: 2 }}>({mapLastUpdated})</span>}
+        </div>
+
         <button
           type="button"
           className={`quick-toggle-pill ${showDwrRings ? 'active' : ''}`}

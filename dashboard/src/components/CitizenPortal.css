@@ -2035,3 +2035,77 @@
     align-items: flex-start;
   }
 }
+
+/* Live Real-Time Telemetry Strip inside Warning Card */
+.cp-live-telemetry-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 16px 0;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.cp-telemetry-chip {
+  display: flex;
+  flex-direction: column;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 6px;
+  padding: 4px 8px;
+  min-width: 80px;
+}
+
+.cp-telemetry-chip .chip-label {
+  font-size: 9.5px;
+  color: #94a3b8;
+  font-family: var(--font-sans, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.cp-telemetry-chip .chip-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: var(--font-mono, monospace);
+  margin-top: 2px;
+}
+
+.cp-telemetry-chip.live-source {
+  margin-left: auto;
+  align-self: center;
+  background: none;
+  border: none;
+  min-width: unset;
+  padding: 0;
+}
+
+.live-stream-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.live-stream-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-dot-anim 1.5s infinite;
+}

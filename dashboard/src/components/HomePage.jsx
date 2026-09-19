@@ -9,6 +9,7 @@ import {
   WEATHER_LAYERS,
   FORECAST_TIME_STEPS,
 } from '../services/weatherService';
+import { fetchLiveHeaderAlerts } from '../services/liveWeatherService';
 import AccessibilityMenu from './AccessibilityMenu';
 import ReadAloudButton from './ReadAloudButton';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -43,6 +44,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
   const [scrubberIdx, setScrubberIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileLayerSheetOpen, setMobileLayerSheetOpen] = useState(false);
+  const [liveAlerts, setLiveAlerts] = useState([]);
   const [activeSection, setActiveSection] = useState('hero-section');
   const [toastMsg, setToastMsg] = useState(null);
 
@@ -95,6 +97,27 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
     updateTime();
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Live Emergency Alert Ticker from weather.indianapi.in & IMD Network
+  useEffect(() => {
+    let isMounted = true;
+    const loadAlerts = async () => {
+      try {
+        const alerts = await fetchLiveHeaderAlerts();
+        if (isMounted && alerts && alerts.length > 0) {
+          setLiveAlerts(alerts);
+        }
+      } catch (err) {
+        console.warn('[VAYUNET Live] Live alert sync error:', err);
+      }
+    };
+    loadAlerts();
+    const alertInterval = setInterval(loadAlerts, 45000);
+    return () => {
+      isMounted = false;
+      clearInterval(alertInterval);
+    };
   }, []);
 
   // Time scrubber auto-play
@@ -437,48 +460,85 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       <div className="emergency-alert-ticker" role="alert">
         <div className="ticker-badge">
           <span className="ticker-pulse-beacon" />
-          <span className="ticker-badge-text">{t.tickerTitle}</span>
-          <ReadAloudButton text={`${t.ticker1Tag}: ${t.ticker1Loc}. ${t.ticker1Desc}`} label="Read live weather alert aloud" />
+          <span className="ticker-badge-text">{t.tickerTitle || 'LIVE DISASTER NOWCAST'}</span>
+          <ReadAloudButton
+            text={
+              liveAlerts.length > 0
+                ? `${liveAlerts[0].tag}: ${liveAlerts[0].loc}. ${liveAlerts[0].desc}`
+                : `${t.ticker1Tag}: ${t.ticker1Loc}. ${t.ticker1Desc}`
+            }
+            label="Read live weather alert aloud"
+          />
         </div>
         <div className="ticker-track">
           {/* Content duplicated for seamless infinite marquee loop */}
           <div className="ticker-content">
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
+            {liveAlerts.length > 0 ? (
+              <>
+                {liveAlerts.map((alert, idx) => (
+                  <React.Fragment key={`live-a-${idx}`}>
+                    <span className={`ticker-item ${alert.alertClass || 'red-alert'}`}>
+                      <span className="alert-tag">{alert.tag}</span>
+                      <strong>{alert.loc}</strong> — {alert.desc}
+                    </span>
+                    <span className="ticker-dot">•</span>
+                  </React.Fragment>
+                ))}
+                {/* Duplicated for seamless infinite loop */}
+                {liveAlerts.map((alert, idx) => (
+                  <React.Fragment key={`live-b-${idx}`}>
+                    <span className={`ticker-item ${alert.alertClass || 'red-alert'}`}>
+                      <span className="alert-tag">{alert.tag}</span>
+                      <strong>{alert.loc}</strong> — {alert.desc}
+                    </span>
+                    <span className="ticker-dot">•</span>
+                  </React.Fragment>
+                ))}
+              </>
+            ) : (
+              <>
+                <span className="ticker-item red-alert">
+                  <span className="alert-tag">{t.ticker1Tag}</span>
+                  <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item orange-alert">
+                  <span className="alert-tag">{t.ticker2Tag}</span>
+                  <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item yellow-alert">
+                  <span className="alert-tag">{t.ticker3Tag}</span>
+                  <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item red-alert">
+                  <span className="alert-tag">{t.ticker1Tag}</span>
+                  <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item orange-alert">
+                  <span className="alert-tag">{t.ticker2Tag}</span>
+                  <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item yellow-alert">
+                  <span className="alert-tag">{t.ticker3Tag}</span>
+                  <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+              </>
+            )}
           </div>
         </div>
 
         {/* Dedicated Mobile Clean Alert Row (matches reference) */}
         <div className="ticker-mobile-preview" onClick={onOpenPublicWarnings}>
-          <span className="ticker-mobile-text">{t.tickerMobileText}</span>
+          <span className="ticker-mobile-text">
+            {liveAlerts.length > 0
+              ? `🔴 ${liveAlerts[0].tag}: ${liveAlerts[0].loc} — ${liveAlerts[0].desc}`
+              : t.tickerMobileText}
+          </span>
           <span className="ticker-mobile-arrow">›</span>
         </div>
 

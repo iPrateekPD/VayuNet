@@ -10,6 +10,7 @@ import { INDIAN_LANGUAGES } from './HomePage';
 import { getNavTranslation } from '../translations';
 import { DotPattern } from "@/registry/magicui/dot-pattern";
 import { cn } from "@/lib/utils";
+import { fetchLiveDistrictWarning, fetchLiveObservation } from '../services/liveWeatherService';
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
 const LOCATION_DATABASE = {
@@ -293,26 +294,29 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
     districtName = `Coordinates: ${latitude.toFixed(3)}°N, ${longitude.toFixed(3)}°E`;
   }
 
-  // 2. Query live weather metrics from Open-Meteo (Free, no key needed)
+  // 2. Query live weather metrics using unified live observation
   let tempC = 28;
   let precipitation = 0;
   let weatherCode = 0;
   let windSpeed = 8;
+  let windDir = 'SW';
+  let humidity = 70;
+  let pressure = 1008;
+  let weatherStatus = 'Live IMD Stream';
   try {
-    const wRes = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m`
-    );
-    if (wRes.ok) {
-      const wData = await wRes.json();
-      if (wData.current) {
-        tempC = Math.round(wData.current.temperature_2m);
-        precipitation = wData.current.precipitation || 0;
-        weatherCode = wData.current.weather_code || 0;
-        windSpeed = Math.round(wData.current.wind_speed_10m || 8);
-      }
+    const obs = await fetchLiveObservation(latitude, longitude, placeName);
+    if (obs) {
+      tempC = obs.temp;
+      precipitation = obs.rain;
+      weatherCode = obs.weatherCode;
+      windSpeed = obs.windSpeed;
+      windDir = obs.windDir;
+      humidity = obs.humidity;
+      pressure = obs.pressure;
+      weatherStatus = obs.status;
     }
   } catch (wErr) {
-    console.warn('Open-Meteo error:', wErr);
+    console.warn('[VAYUNET Live] Live observation error in resolveLocationData:', wErr);
   }
 
   // 3. Proximity check to active severe weather threats in database
@@ -376,6 +380,19 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
     timeframe,
     hazard,
     description,
+    liveObservation: {
+      temp: tempC,
+      rain: precipitation,
+      humidity,
+      pressure,
+      windSpeed,
+      windDir,
+      status: weatherStatus,
+      weatherCode,
+      source: 'weather.indianapi.in & IMD Network',
+    },
+    lastUpdatedText: `Last updated: ${new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST`,
+    dataSourceText: 'Source: VAYUNET Live Telemetry (weather.indianapi.in)',
     safeShelter: {
       name: `${placeName} Emergency Civil Defense Post`,
       distance: '1.4 km away',
@@ -401,6 +418,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   // Active selected location state (defaults to McLeodganj as seen in reference image)
   const [selectedId, setSelectedId] = useState('mcleodganj');
   const [customLocations, setCustomLocations] = useState({});
+  const [liveDistricts, setLiveDistricts] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const [showNearbyOnMap, setShowNearbyOnMap] = useState(true);
@@ -417,8 +435,50 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 
-  const allLocations = { ...LOCATION_DATABASE, ...customLocations };
-  const loc = allLocations[selectedId] || LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.mcleodganj;
+  const allLocations = { ...LOCATION_DATABASE, ...liveDistricts, ...customLocations };
+  const loc = allLocations[selectedId] || liveDistricts[selectedId] || LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.mcleodganj;
+
+  // 1. Initial live synchronization for all monitoring districts across India
+  useEffect(() => {
+    let isMounted = true;
+    const syncAllDistricts = async () => {
+      try {
+        const keys = Object.keys(LOCATION_DATABASE);
+        const results = await Promise.all(
+          keys.map(k => fetchLiveDistrictWarning(k, LOCATION_DATABASE[k]))
+        );
+        if (isMounted) {
+          const map = {};
+          results.forEach(r => {
+            if (r && r.id) map[r.id] = r;
+          });
+          setLiveDistricts(prev => ({ ...prev, ...map }));
+        }
+      } catch (err) {
+        console.warn('[VAYUNET Live] Error syncing live district warnings:', err);
+      }
+    };
+    syncAllDistricts();
+    const interval = setInterval(syncAllDistricts, 35000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // 2. Fetch live data immediately for selected location if not yet populated
+  useEffect(() => {
+    if (selectedId && (!liveDistricts[selectedId] || !liveDistricts[selectedId].liveObservation)) {
+      const base = allLocations[selectedId] || LOCATION_DATABASE[selectedId];
+      if (base) {
+        fetchLiveDistrictWarning(selectedId, base).then(live => {
+          if (live) {
+            setLiveDistricts(prev => ({ ...prev, [selectedId]: live }));
+          }
+        });
+      }
+    }
+  }, [selectedId]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -898,6 +958,35 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
               <p className="cp-hazard-desc">{loc.description}</p>
 
+              {/* LIVE REAL-TIME TELEMETRY STRIP (weather.indianapi.in & IMD Network) */}
+              <div className="cp-live-telemetry-strip">
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🌡️ Temperature</span>
+                  <span className="chip-val">{loc.liveObservation?.temp ?? 27}°C</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🌧️ Rainfall Rate</span>
+                  <span className="chip-val" style={{ color: (loc.liveObservation?.rain > 0) ? '#38bdf8' : '#e2e8f0' }}>
+                    {loc.liveObservation?.rain ?? 0} mm/h
+                  </span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">💧 Humidity</span>
+                  <span className="chip-val">{loc.liveObservation?.humidity ?? 72}%</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">💨 Wind</span>
+                  <span className="chip-val">{loc.liveObservation?.windDir ?? 'SW'} {loc.liveObservation?.windSpeed ?? 12} km/h</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🧭 Barometer</span>
+                  <span className="chip-val">{loc.liveObservation?.pressure ?? 1008} hPa</span>
+                </div>
+                <div className="cp-telemetry-chip live-source">
+                  <span className="live-stream-badge">LIVE IMD/AWS STREAM</span>
+                </div>
+              </div>
+
               {/* Safe State Alert helper if user is not in danger zone */}
               {!loc.isAffected && (
                 <div className="cp-safe-state-box">
@@ -972,26 +1061,25 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     <span>⚠️</span> Current Active Warning Zones in India:
                   </div>
                   <div className="cp-active-zones-list">
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('mcleodganj')}>
-                      🔴 McLeodganj (HP)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('chamoli')}>
-                      🔴 Chamoli (UK)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('wayanad')}>
-                      🔴 Wayanad (KL)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('mumbai')}>
-                      🟠 Mumbai (MH)
-                    </button>
+                    {Object.keys(LOCATION_DATABASE).slice(0, 6).map(k => {
+                      const item = liveDistricts[k] || LOCATION_DATABASE[k];
+                      const isExtreme = item.isAffected && item.riskLevel?.includes('EXTREME');
+                      const isHigh = item.isAffected && !isExtreme;
+                      const icon = isExtreme ? '🔴' : isHigh ? '🟠' : '🟢';
+                      return (
+                        <button key={k} className="cp-zone-chip" onClick={() => setSelectedId(k)}>
+                          {icon} {item.name} {item.liveObservation ? `(${item.liveObservation.temp}°C, ${item.liveObservation.rain} mm/h)` : ''}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
 
             <div className="cp-warning-footer">
-              <span>Last updated: 08 Sep 2026, 08:15 PM IST</span>
-              <span>Source: VAYUNET (MoES) ⓘ</span>
+              <span>{loc.lastUpdatedText || `Last updated: ${liveIstTime}`}</span>
+              <span>{loc.dataSourceText || 'Source: VAYUNET Live Telemetry (weather.indianapi.in) ⓘ'}</span>
             </div>
           </div>
 

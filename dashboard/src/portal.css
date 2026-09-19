@@ -1230,6 +1230,30 @@
   font-size: 10px;
 }
 
+.aws-dot.aws-rain-active {
+  background: #38bdf8 !important;
+  box-shadow: 0 0 8px #38bdf8 !important;
+  animation: pulse-dot-anim 1.2s infinite;
+}
+
+.aws-city-rain-val {
+  color: #38bdf8;
+  font-size: 9.5px;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-left: 2px;
+}
+
+.quick-toggle-pill.live-telemetry-pill {
+  pointer-events: none;
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  background: rgba(6, 78, 59, 0.35) !important;
+}
+
 /* Synoptic Depression Low Center */
 .leaflet-synoptic-low-marker {
   background: none !important;
