@@ -157,7 +157,7 @@ def run_training(
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"🧠 [Model] VAYUNET Spatiotemporal MTL Transformer initialized. Trainable Parameters: {total_params:,}")
+    print(f"[Model] VAYUNET Spatiotemporal MTL Transformer initialized. Trainable Parameters: {total_params:,}")
 
     criterion = VayunetMultiTaskLoss(
         weight_thunderstorm=1.0,
@@ -172,6 +172,7 @@ def run_training(
     os.makedirs(save_dir, exist_ok=True)
     best_val_loss = float("inf")
     best_checkpoint_path = os.path.join(save_dir, "vayunet_mtl_best.pt")
+    metadata_path = os.path.join(save_dir, "model_metadata.json")
 
     start_time = time.time()
     for epoch in range(1, num_epochs + 1):
@@ -187,7 +188,7 @@ def run_training(
 
         ep_duration = time.time() - ep_start
         print(
-            f"Epoch [{epoch:02d}/{num_epochs:02d}] ({ep_duration:.1f}s) — "
+            f"Epoch [{epoch:02d}/{num_epochs:02d}] ({ep_duration:.1f}s) - "
             f"Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | "
             f"Cloudburst [CSI: {cb_csi:.2f}, POD: {cb_pod:.2f}] | Flood [CSI: {ff_csi:.2f}]"
         )
@@ -210,10 +211,22 @@ def run_training(
                     "num_heads": 8
                 }
             }, best_checkpoint_path)
-            print(f"   ⭐ Saved new best checkpoint to: {best_checkpoint_path}")
+            print(f"   [OK] Saved new best checkpoint to: {best_checkpoint_path}")
+
+            # Export model metadata
+            import json
+            metadata = {
+                "model_version": "VAYUNET-MTL-v2.0",
+                "trained_epoch": epoch,
+                "target_img_size": 32,
+                "val_loss": best_val_loss,
+                "metrics": val_metrics
+            }
+            with open(metadata_path, "w", encoding="utf-8") as f:
+                json.dump(metadata, f, indent=2)
 
     total_time = time.time() - start_time
-    print(f"\n✅ [VAYUNET] Training completed in {total_time:.1f}s. Best Val Loss: {best_val_loss:.4f}")
+    print(f"\n[OK] [VAYUNET] Training completed in {total_time:.1f}s. Best Val Loss: {best_val_loss:.4f}")
     return best_checkpoint_path
 
 

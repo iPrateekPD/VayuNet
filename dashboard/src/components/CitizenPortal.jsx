@@ -253,6 +253,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
   const [toastMessage, setToastMessage] = useState(null);
   const [language, setLanguage] = useState('EN');
   const [liveIstTime, setLiveIstTime] = useState('');
+  const [liveIstDate, setLiveIstDate] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const headerRef = useRef(null);
@@ -265,11 +266,12 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
     setTimeout(() => setToastMessage(null), 3800);
   };
 
-  // Real-time dynamic IST clock for sovereign ticker
+  // Real-time dynamic IST clock for sovereign ticker & warning footer
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
       setLiveIstTime(now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST');
+      setLiveIstDate(now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }));
     };
     updateClock();
     const timer = setInterval(updateClock, 1000);
@@ -884,7 +886,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
             </div>
 
             <div className="cp-warning-footer">
-              <span>Last updated: 08 Sep 2026, 08:15 PM IST</span>
+              <span>Last updated: {liveIstDate || 'Today'}, {liveIstTime || 'Live IST'}</span>
               <span>Source: VAYUNET (MoES) ⓘ</span>
             </div>
           </div>

@@ -27,6 +27,9 @@ def compute_contingency_table(
     Returns:
         (hits, false_alarms, misses, correct_negatives)
     """
+    pred_probs = torch.as_tensor(pred_probs)
+    targets = torch.as_tensor(targets)
+
     preds_binary = (pred_probs >= threshold).float()
     targets_binary = (targets >= 0.5).float()
 
@@ -62,6 +65,9 @@ def calculate_nowcast_metrics(
     # Critical Success Index (CSI) = Hits / (Hits + Misses + False Alarms)
     csi = hits / (hits + misses + false_alarms + 1e-6) if (hits + misses + false_alarms) > 0 else 0.0
 
+    # F1 Score = 2*Hits / (2*Hits + Misses + False Alarms)
+    f1 = (2.0 * hits) / (2.0 * hits + misses + false_alarms + 1e-6) if (2 * hits + misses + false_alarms) > 0 else 0.0
+
     # Overall Accuracy
     total = hits + false_alarms + misses + correct_negatives
     accuracy = (hits + correct_negatives) / (total + 1e-6) if total > 0 else 0.0
@@ -70,8 +76,10 @@ def calculate_nowcast_metrics(
         "csi": round(csi, 4),
         "pod": round(pod, 4),
         "far": round(far, 4),
+        "f1": round(f1, 4),
         "accuracy": round(accuracy, 4),
         "hits": hits,
         "misses": misses,
-        "false_alarms": false_alarms
+        "false_alarms": false_alarms,
+        "correct_negatives": correct_negatives
     }

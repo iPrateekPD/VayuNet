@@ -129,8 +129,9 @@ class TestVayunetAIModel(unittest.TestCase):
         self.assertIn("scientific_verdict", result)
         self.assertIn("xai_attribution", result)
         self.assertEqual(sum(result["xai_attribution"].values()), 100)
-        self.assertLess(duration_ms, 180.0, f"Inference latency {duration_ms:.1f}ms exceeds 180ms threshold!")
-        print(f"\n⚡ [Benchmark] Single-frame VAYUNET CPU inference latency: {duration_ms:.2f} ms (Target: < 180 ms)")
+        # VAYUNET strict SLA constraint: Sub-180ms nowcast latency
+        self.assertLess(duration_ms, 180.0)
+        print(f"\n[Benchmark] Single-frame VAYUNET CPU inference latency: {duration_ms:.2f} ms (Target: < 180 ms)")
 
 
 if __name__ == "__main__":

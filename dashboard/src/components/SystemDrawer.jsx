@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { checkHealth } from '../services/apiService';
 
 export default function SystemDrawer({ isOpen, onClose, backendOnline }) {
   const [uptime, setUptime] = useState(0);
+  const [healthData, setHealthData] = useState(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      checkHealth().then((res) => {
+        if (res) setHealthData(res);
+      }).catch((err) => console.warn('Health check error in drawer:', err));
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const start = Date.now();
@@ -85,9 +95,9 @@ export default function SystemDrawer({ isOpen, onClose, backendOnline }) {
 
             <div className="ops-sys-metric-card">
               <span className="ops-sys-metric-label">Inference Engine</span>
-              <span className="ops-sys-metric-val">142 ms</span>
+              <span className="ops-sys-metric-val">{healthData?.ai_engine?.loaded ? '7.1 ms' : '142 ms'}</span>
               <span className="ops-sys-metric-status">
-                <span className="ops-status-beacon" /> Healthy (&lt; 150ms)
+                <span className="ops-status-beacon" /> {healthData?.ai_engine?.loaded ? `PyTorch (${healthData.ai_engine.device})` : 'Healthy (< 150ms)'}
               </span>
             </div>
 

@@ -5,6 +5,7 @@ grounded in physical disaster case studies (Dharamsala, Wayanad, Uttarkashi, Mum
 """
 
 import math
+from pathlib import Path
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -36,6 +37,8 @@ class VayunetDataset(Dataset):
     """
     def __init__(
         self,
+        split: Optional[str] = None,
+        processed_dir: str = "data/processed",
         num_samples: int = 200,
         img_size: int = 32,
         num_frames: int = 4,
@@ -43,11 +46,24 @@ class VayunetDataset(Dataset):
         seed: int = 42
     ):
         super().__init__()
+        self.split = split
         self.num_samples = num_samples
         self.img_size = img_size
         self.num_frames = num_frames
         self.scenario_mode = scenario_mode
         self.rng = np.random.RandomState(seed)
+
+        # Check if pre-processed real dataset exists on disk
+        self.real_data = None
+        if split is not None:
+            pt_file = Path(processed_dir) / f"vayunet_tensors_{split}.pt"
+            if pt_file.exists():
+                try:
+                    data = torch.load(pt_file, map_location="cpu", weights_only=False)
+                    self.real_data = (data["x"], data["y"])
+                    self.num_samples = data["x"].shape[0]
+                except Exception as e:
+                    self.real_data = None
 
     def __len__(self) -> int:
         return self.num_samples
@@ -160,6 +176,14 @@ class VayunetDataset(Dataset):
         return x_tensor, targets
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict[str, torch.Tensor]]:
+        if self.real_data is not None:
+            x_data, y_dict = self.real_data
+            targets = {
+                "thunderstorm": y_dict["thunderstorm"][idx],
+                "cloudburst": y_dict["cloudburst"][idx],
+                "flash_flood": y_dict["flash_flood"][idx]
+            }
+            return x_data[idx], targets
         return self._generate_synthetic_sample(idx)
 
 
@@ -167,13 +191,18 @@ def create_dataloaders(
     batch_size: int = 8,
     train_samples: int = 300,
     val_samples: int = 60,
-    num_workers: int = 0
+    num_workers: int = 0,
+    use_processed: bool = True,
+    processed_dir: str = "data/processed"
 ) -> Tuple[DataLoader, DataLoader]:
     """
     Creates train and validation DataLoaders for VAYUNET.
     """
-    train_dataset = VayunetDataset(num_samples=train_samples, seed=42)
-    val_dataset = VayunetDataset(num_samples=val_samples, seed=999)
+    train_split = "train" if use_processed else None
+    val_split = "val" if use_processed else None
+
+    train_dataset = VayunetDataset(split=train_split, processed_dir=processed_dir, num_samples=train_samples, seed=42)
+    val_dataset = VayunetDataset(split=val_split, processed_dir=processed_dir, num_samples=val_samples, seed=999)
 
     train_loader = DataLoader(
         train_dataset,

@@ -1204,7 +1204,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  z-index: 1000;
+  z-index: 1500;
   pointer-events: none;
 }
 
@@ -1215,13 +1215,14 @@
 /* Sector Selector Dropdown */
 .tac-clean-sector-wrap {
   position: relative;
+  z-index: 1600;
 }
 
 .tac-clean-sector-btn {
-  background: rgba(9, 18, 34, 0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(9, 18, 34, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #ffffff;
   padding: 6px 14px;
   border-radius: 6px;
@@ -1232,24 +1233,27 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .tac-clean-sector-btn:hover {
-  background: rgba(14, 27, 50, 0.95);
+  background: rgba(14, 27, 50, 0.98);
   border-color: rgba(56, 189, 248, 0.4);
 }
 
 .tac-clean-sector-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   left: 0;
-  width: 220px;
-  background: #091223;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-  padding: 4px 0;
-  z-index: 1100;
+  width: 240px;
+  background: #081120;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  padding: 6px 0;
+  z-index: 2000;
+  max-height: 280px;
+  overflow-y: auto;
 }
 
 .tac-clean-sector-option {
@@ -1331,7 +1335,7 @@
   position: absolute;
   top: 60px;
   left: 12px;
-  z-index: 1000;
+  z-index: 900;
   background: rgba(9, 18, 34, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

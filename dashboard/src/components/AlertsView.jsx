@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { getRealtimeWeather, predictNowcast, broadcastAlert } from '../services/apiService';
 
 // Reuse the exact same CSS
 import './TacticalNowcast.css';
@@ -13,6 +14,17 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
+
+function formatISTDate(date, addHours = 0) {
+  const d = new Date(date.getTime() + addHours * 3600 * 1000);
+  const day = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
+  const time = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' });
+  return `${day} · ${time} IST`;
+}
+
+function formatISTTime(date) {
+  return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+}
 
 // Map recentering controller
 function MapController({ center, zoom }) {
@@ -106,11 +118,8 @@ const INITIAL_INCIDENTS = [
     hazard: 'Flash Flood + Cloudburst',
     eta: '1h 45m',
     status: 'ACTIVE',
-    lastUpdated: '11:52 PM',
     area: 'Alaknanda River Catchment (Joshimath, Pipalkoti, Helang)',
     confidence: '82%',
-    validFrom: '08 Sep 2026 · 23:50 IST',
-    validUntil: '09 Sep 2026 · 03:50 IST',
     headline: 'CRITICAL: Severe Flash Flood Warning for Alaknanda Valley',
     description: 'Convective cloudburst signature detected upstream with peak precipitation rate of 124 mm. Sudden surge in river levels anticipated in downstream gorges.',
     instructions: 'Evacuate all low-lying riverbeds, temporary settlements, and ghats immediately. Restrict pedestrian transit across suspension bridges.',
@@ -127,11 +136,8 @@ const INITIAL_INCIDENTS = [
     hazard: 'Severe Thunderstorm & Squall',
     eta: '3h 00m',
     status: 'MONITORING',
-    lastUpdated: '11:30 PM',
     area: 'Mumbai Suburban & Coastal Thane Corridor',
     confidence: '71%',
-    validFrom: '09 Sep 2026 · 01:00 IST',
-    validUntil: '09 Sep 2026 · 05:00 IST',
     headline: 'ADVISORY: Severe Thunderstorm & Urban Waterlogging Risk',
     description: 'Organized convective line moving eastward from Arabian Sea. Gusty surface winds exceeding 65 km/h with localized street flooding.',
     instructions: 'Commuters advised to avoid subway underpasses and shoreline promenades. Pre-position dewatering mobile pump units.',
@@ -148,11 +154,8 @@ const INITIAL_INCIDENTS = [
     hazard: 'Slope Runoff & Saturated Soil',
     eta: '4h 15m',
     status: 'ADVISORY',
-    lastUpdated: '11:15 PM',
     area: 'Vythiri, Meppadi, and Chooralmala Slopes',
     confidence: '68%',
-    validFrom: '09 Sep 2026 · 02:30 IST',
-    validUntil: '09 Sep 2026 · 08:30 IST',
     headline: 'WATCH: Orographic Rainfall & Landslip Advisory',
     description: 'Continuous moderate-to-heavy rainfall maintaining elevated pore pressure across vulnerable tea estate slopes.',
     instructions: 'Monitor nullah discharge gauges. Keep night emergency shelter teams on standby.',
@@ -182,6 +185,11 @@ export default function AlertsView({ showToast, onNavigateTab }) {
   const [auditLog, setAuditLog] = useState(INITIAL_AUDIT);
   const [isDispatching, setIsDispatching] = useState(false);
   
+  const [liveWeather, setLiveWeather] = useState(null);
+  const [liveNowcast, setLiveNowcast] = useState(null);
+  const [weatherStatus, setWeatherStatus] = useState('LOADING');
+  const [istTime, setIstTime] = useState('');
+
   // Map Layer State
   const [layers, setLayers] = useState({
     threatArea: true,
@@ -193,23 +201,74 @@ export default function AlertsView({ showToast, onNavigateTab }) {
     setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setIstTime(formatISTTime(now) + ' IST');
+    };
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setWeatherStatus('LOADING');
+    const [lat, lng] = selectedIncident.center;
+    const locRaw = (selectedIncident.location || '').toLowerCase();
+    let locationId = 'chamoli';
+    if (locRaw.includes('mumbai')) locationId = 'mumbai';
+    else if (locRaw.includes('wayanad')) locationId = 'wayanad';
+    else if (locRaw.includes('chamoli')) locationId = 'chamoli';
+    else if (locRaw.includes('kangra') || locRaw.includes('dharamsala')) locationId = 'kangra';
+    else if (locRaw.includes('rudraprayag')) locationId = 'rudraprayag';
+    else if (locRaw.includes('pithoragarh')) locationId = 'pithoragarh';
+    else if (locRaw.includes('uttarkashi')) locationId = 'uttarkashi';
+
+    Promise.allSettled([
+      getRealtimeWeather(lat, lng, controller.signal),
+      predictNowcast({ lat, lng, leadTimeHours: 2, locationId }, controller.signal),
+    ]).then(([wRes, nRes]) => {
+      if (wRes.status === 'fulfilled' && (wRes.value?.status === 'success' || wRes.value?.weather)) {
+        setLiveWeather(wRes.value);
+        setWeatherStatus('LIVE');
+      } else {
+        setWeatherStatus('DEGRADED');
+      }
+      if (nRes.status === 'fulfilled' && nRes.value) {
+        setLiveNowcast(nRes.value);
+      }
+    }).catch(() => {});
+
+    return () => { controller.abort(); };
+  }, [selectedIncident.id]);
+
+  const weather = liveWeather?.weather || {};
+  const maxRisk = liveNowcast?.predictions?.flash_flood?.risk_score 
+    ?? liveNowcast?.predictions?.cloudburst?.risk_score 
+    ?? (liveNowcast?.predictions?.thunderstorm_probability ? liveNowcast.predictions.thunderstorm_probability / 100 : 0.72);
+
+  const dynamicConfidence = liveNowcast ? `${Math.round(maxRisk * 100)}%` : selectedIncident.confidence;
+  const dynamicMetric1 = weather.precipitation_mm != null ? `${weather.precipitation_mm.toFixed(1)} mm` : selectedIncident.metric1;
+  const dynamicMetric1Label = weather.precipitation_mm != null ? 'Live rain rate' : selectedIncident.metric1Label;
+  const dynamicMetric2 = weather.wind_speed_10m_kmh != null ? `${weather.wind_speed_10m_kmh.toFixed(1)} km/h` : selectedIncident.metric2;
+  const dynamicMetric2Label = weather.wind_speed_10m_kmh != null ? 'Surface Wind' : selectedIncident.metric2Label;
+
   const handleDispatchCurrent = async () => {
     setIsDispatching(true);
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          alertId: selectedIncident.id,
-          headline: selectedIncident.headline,
-          severity: selectedIncident.sev,
-          area: selectedIncident.area,
-          protocol: 'CAP-1.2',
-        }),
+      await broadcastAlert({
+        alertId: selectedIncident.id,
+        headline: selectedIncident.headline,
+        severity: selectedIncident.sev,
+        area: selectedIncident.area,
+        protocol: 'CAP-1.2',
       });
-    } catch {}
+    } catch (err) {
+      console.warn('[VAYUNET Alerts] Broadcast error:', err);
+    }
 
-    const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const nowStr = formatISTTime(new Date());
     const newEntries = [
       { time: nowStr, alertId: selectedIncident.id, dest: 'NDMA SACHET', status: 'Delivered (ACK 200)' },
       { time: nowStr, alertId: selectedIncident.id, dest: 'SDRF Control', status: 'Delivered (ACK 200)' },
@@ -280,9 +339,12 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             </div>
 
             <div className="tac-clean-live-pill">
-              <span>{selectedIncident.lastUpdated} IST</span>
-              <span className="tac-clean-live-dot" />
-              <span style={{ color: '#f87171', fontWeight: 700 }}>Live Alert</span>
+              <span className={weatherStatus === 'LIVE' ? 'tac-clean-live-dot' : 'tac-clean-degraded-dot'} />
+              <span style={{ color: weatherStatus === 'LIVE' ? '#38bdf8' : '#f59e0b', fontSize: '11px', fontWeight: 700 }}>
+                {weatherStatus === 'LIVE' ? 'Real-Time Feed' : 'Cached Feed'}
+              </span>
+              <span style={{ color: '#94a3b8' }}>·</span>
+              <span>{istTime || 'Live IST'}</span>
             </div>
           </div>
 
@@ -401,13 +463,51 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             {selectedIncident.description}
           </div>
 
+          {/* Real-Time Telemetry Bar */}
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.4)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '6px',
+            padding: '8px 10px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '6px',
+            fontSize: '11px',
+            marginBottom: '8px'
+          }}>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Surface Temp</div>
+              <div style={{ fontWeight: 700, color: '#ffffff' }}>
+                {weather.temperature_2m_c != null ? `${weather.temperature_2m_c.toFixed(1)} °C` : '--'}
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Humidity</div>
+              <div style={{ fontWeight: 700, color: '#38bdf8' }}>
+                {weather.relative_humidity_2m_pct != null ? `${weather.relative_humidity_2m_pct}%` : '--'}
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Pressure</div>
+              <div style={{ fontWeight: 700, color: '#cbd5e1' }}>
+                {weather.surface_pressure_hpa != null ? `${weather.surface_pressure_hpa.toFixed(1)} hPa` : '--'}
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Model Risk</div>
+              <div style={{ fontWeight: 700, color: maxRisk >= 0.7 ? '#ef4444' : maxRisk >= 0.4 ? '#f97316' : '#22c55e' }}>
+                {liveNowcast ? `${(maxRisk * 100).toFixed(0)}%` : dynamicConfidence}
+              </div>
+            </div>
+          </div>
+
           <div className="tac-clean-chips-grid">
             <div className="tac-clean-chip">
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric1Icon}</span>
-                <span className="tac-clean-chip-val">{selectedIncident.metric1}</span>
+                <span className="tac-clean-chip-val">{dynamicMetric1}</span>
               </div>
-              <span className="tac-clean-chip-label">{selectedIncident.metric1Label}</span>
+              <span className="tac-clean-chip-label">{dynamicMetric1Label}</span>
             </div>
 
             <div className="tac-clean-chip">
@@ -421,7 +521,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             <div className="tac-clean-chip">
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ color: '#38bdf8', fontSize: '13px' }}>📊</span>
-                <span className="tac-clean-chip-val">{selectedIncident.confidence}</span>
+                <span className="tac-clean-chip-val">{dynamicConfidence}</span>
               </div>
               <span className="tac-clean-chip-label">Model confidence</span>
             </div>
@@ -429,10 +529,27 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             <div className="tac-clean-chip">
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric2Icon}</span>
-                <span className="tac-clean-chip-val">{selectedIncident.metric2}</span>
+                <span className="tac-clean-chip-val">{dynamicMetric2}</span>
               </div>
-              <span className="tac-clean-chip-label">{selectedIncident.metric2Label}</span>
+              <span className="tac-clean-chip-label">{dynamicMetric2Label}</span>
             </div>
+          </div>
+
+          {/* Dynamic Validity Window */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '6px',
+            padding: '6px 10px',
+            fontSize: '11px',
+            color: '#cbd5e1',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '8px'
+          }}>
+            <span><strong>Valid:</strong> {formatISTDate(new Date())}</span>
+            <span style={{ color: '#64748b' }}>➔</span>
+            <span><strong>Until:</strong> {formatISTDate(new Date(), 4)}</span>
           </div>
 
           <div className="tac-clean-action-box">
@@ -443,6 +560,10 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             <div className="tac-clean-action-desc">
               {selectedIncident.instructions}
             </div>
+          </div>
+
+          <div style={{ fontSize: '10px', color: '#94a3b8', fontStyle: 'italic', marginBottom: '6px' }}>
+            * AI-generated risk assessment - not an official warning.
           </div>
 
           <button

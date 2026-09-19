@@ -56,11 +56,11 @@ class VayunetInferencePipeline:
                 ckpt = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
                 self.model.load_state_dict(ckpt["model_state_dict"])
                 self.is_trained = True
-                print(f"✅ [VAYUNET Inference] Successfully loaded checkpoint: {checkpoint_path}")
+                print(f"[OK] [VAYUNET Inference] Successfully loaded checkpoint: {checkpoint_path}")
             except Exception as e:
-                print(f"⚠️ [VAYUNET Inference] Warning loading checkpoint: {e}. Using initialized weights.")
+                print(f"[WARN] [VAYUNET Inference] Warning loading checkpoint: {e}. Using initialized weights.")
         else:
-            print("ℹ️ [VAYUNET Inference] Running with initialized weights (checkpoint pending).")
+            print("[INFO] [VAYUNET Inference] Running with initialized weights (checkpoint pending).")
 
         self.model.eval()
 

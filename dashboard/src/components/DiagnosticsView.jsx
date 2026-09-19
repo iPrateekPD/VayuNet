@@ -37,7 +37,7 @@ export default function DiagnosticsView({ currentData }) {
       <div className="diagnostics-sidebar">
         <div className="diagnostics-sidebar-header">
           <div className="diag-page-title">Atmospheric Diagnostics</div>
-          <div className="diag-page-sub">XAI Feature Attribution · Captum Integrated Gradients</div>
+          <div className="diag-page-sub">Atmospheric Precursors · Illustrative Factor Contribution</div>
         </div>
 
         {/* Hazard selector */}
@@ -110,8 +110,8 @@ export default function DiagnosticsView({ currentData }) {
         <div className="xai-attribution-section">
           <div className="xai-attr-header">
             <div>
-              <div className="xai-attr-title">Feature Attribution — {activeHazard}</div>
-              <div className="xai-attr-subtitle">% contribution to prediction confidence</div>
+              <div className="xai-attr-title">Factor Contribution (Illustrative) — {activeHazard}</div>
+              <div className="xai-attr-subtitle">Illustrative factor contribution to prediction risk score</div>
             </div>
             <span className="prob-val" style={{ fontFamily: 'var(--font-mono)', fontSize: 22 }}>
               {activeHazard === 'Cloudburst' ? (currentData?.predictions?.cloudburst ?? 82)

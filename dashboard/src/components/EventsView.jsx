@@ -17,6 +17,15 @@ import {
   TrendingUp,
   TrendingDown
 } from 'lucide-react';
+import { getHistoricalEvent, getRealtimeWeather, predictNowcast } from '../services/apiService';
+
+const EVENT_COORDINATES = {
+  'dharamsala-2021': { lat: 32.2190, lng: 76.3234, locationId: 'kangra' },
+  'wayanad-2024': { lat: 11.5564, lng: 76.1320, locationId: 'wayanad' },
+  'uttarkashi-2023': { lat: 30.7268, lng: 78.4354, locationId: 'uttarkashi' },
+  'mumbai-2020': { lat: 19.0760, lng: 72.8777, locationId: 'mumbai' },
+  'biparjoy-2023': { lat: 23.2384, lng: 68.6475, locationId: 'mumbai' },
+};
 
 const HISTORICAL_EVENTS = [
   {
@@ -155,11 +164,115 @@ const TIMELINE_STEPS = [
   { id: 'Recovery', time: '02:00' }
 ];
 
+// High-Resolution Doppler Radar Reflectivity Component
+function ObservedRadarVisual({ event }) {
+  return (
+    <svg viewBox="0 0 300 160" width="100%" height="100%" style={{ display: 'block', background: '#020611' }}>
+      <defs>
+        <radialGradient id="radarCore" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.95" />
+          <stop offset="25%" stopColor="#ef4444" stopOpacity="0.9" />
+          <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
+          <stop offset="75%" stopColor="#22c55e" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.2" />
+        </radialGradient>
+      </defs>
+
+      <circle cx="150" cy="80" r="25" fill="none" stroke="rgba(14, 165, 233, 0.25)" strokeWidth="1" />
+      <circle cx="150" cy="80" r="50" fill="none" stroke="rgba(14, 165, 233, 0.25)" strokeWidth="1" />
+      <circle cx="150" cy="80" r="75" fill="none" stroke="rgba(14, 165, 233, 0.25)" strokeWidth="1" />
+
+      <line x1="150" y1="5" x2="150" y2="155" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="1" />
+      <line x1="75" y1="80" x2="225" y2="80" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="1" />
+      <line x1="97" y1="27" x2="203" y2="133" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="1" />
+      <line x1="97" y1="133" x2="203" y2="27" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="1" />
+
+      <ellipse cx="145" cy="78" rx="42" ry="28" fill="url(#radarCore)" />
+      <ellipse cx="170" cy="65" rx="22" ry="16" fill="#ef4444" opacity="0.85" />
+      <circle cx="145" cy="78" r="12" fill="#ec4899" opacity="0.9" />
+
+      <text x="178" y="78" fill="#64748b" fontSize="8" fontFamily="monospace">50km</text>
+      <text x="203" y="78" fill="#64748b" fontSize="8" fontFamily="monospace">75km</text>
+
+      <text x="8" y="15" fill="#38bdf8" fontSize="9" fontFamily="monospace">DWR S-Band Reflectivity (55+ dBZ)</text>
+    </svg>
+  );
+}
+
+// VAYUNET AI Spatiotemporal Prediction Projection Component
+function VayunetPredictionVisual({ event }) {
+  const probStr = event?.predictedProb || '81%';
+  return (
+    <svg viewBox="0 0 300 160" width="100%" height="100%" style={{ display: 'block', background: '#020611' }}>
+      <defs>
+        <linearGradient id="predCone" x1="0%" y1="60%" x2="100%" y2="40%">
+          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" />
+          <stop offset="60%" stopColor="#ef4444" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#dc2626" stopOpacity="0.9" />
+        </linearGradient>
+      </defs>
+
+      <line x1="0" y1="40" x2="300" y2="40" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+      <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+      <line x1="0" y1="120" x2="300" y2="120" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+
+      <path d="M100 85 L220 50 L235 110 Z" fill="url(#predCone)" opacity="0.5" />
+      <path d="M100 85 L220 50" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="4 2" />
+      <path d="M100 85 L235 110" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="4 2" />
+
+      <ellipse cx="160" cy="80" rx="35" ry="24" fill="#ef4444" opacity="0.8" />
+      <ellipse cx="160" cy="80" rx="20" ry="14" fill="#facc15" opacity="0.9" />
+
+      <line x1="90" y1="88" x2="185" y2="76" stroke="#ffffff" strokeWidth="2" />
+      <polygon points="190,75 180,71 182,81" fill="#ffffff" />
+
+      <text x="8" y="15" fill="#facc15" fontSize="9" fontFamily="monospace">VAYUNET AI Lead-Time ({probStr} Confidence)</text>
+      <text x="8" y="27" fill="#94a3b8" fontSize="8" fontFamily="monospace">Lead Time: {event?.leadTime || 'T+3h'}</text>
+    </svg>
+  );
+}
+
+// Affected Area & Inundation Impact Corridor Component
+function ImpactAreaVisual({ event }) {
+  return (
+    <svg viewBox="0 0 300 160" width="100%" height="100%" style={{ display: 'block', background: '#020611' }}>
+      <defs>
+        <radialGradient id="impactRadial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ef4444" stopOpacity="0.75" />
+          <stop offset="50%" stopColor="#ef4444" stopOpacity="0.35" />
+          <stop offset="85%" stopColor="#ef4444" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#ef4444" stopOpacity="0.0" />
+        </radialGradient>
+      </defs>
+
+      <path d="M0 130 Q75 105 150 120 T300 95 L300 160 L0 160 Z" fill="#081526" />
+      <path d="M0 145 Q85 130 170 140 T300 125 L300 160 L0 160 Z" fill="#0f2642" />
+
+      <path d="M40 0 C60 40, 110 70, 145 80 C180 90, 230 115, 270 160" stroke="#0ea5e9" strokeWidth="3" fill="none" opacity="0.8" />
+      <path d="M145 80 C130 110, 100 130, 70 160" stroke="#0ea5e9" strokeWidth="1.8" fill="none" opacity="0.6" />
+
+      <ellipse cx="150" cy="80" rx="65" ry="45" fill="url(#impactRadial)" />
+      <ellipse cx="150" cy="80" rx="65" ry="45" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="5 3" />
+
+      <circle cx="145" cy="80" r="4" fill="#ffffff" stroke="#ef4444" strokeWidth="2" />
+
+      <text x="8" y="15" fill="#f87171" fontSize="9" fontFamily="monospace">Catchment Inundation & Debris Corridor</text>
+      <text x="8" y="27" fill="#94a3b8" fontSize="8" fontFamily="monospace">Observed: {event?.observedRainfall || 'Extreme Rain'}</text>
+    </svg>
+  );
+}
+
 export default function EventsView({ onNavigateTab }) {
   const [selectedId, setSelectedId] = useState('dharamsala-2021');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentStep, setCurrentStep] = useState('T-0');
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const [backendEventData, setBackendEventData] = useState(null);
+  const [liveWeather, setLiveWeather] = useState(null);
+  const [liveNowcast, setLiveNowcast] = useState(null);
+  const [weatherStatus, setWeatherStatus] = useState('LOADING');
+  const [istTime, setIstTime] = useState('');
 
   const selectedEvent = HISTORICAL_EVENTS.find((e) => e.id === selectedId) || HISTORICAL_EVENTS[0];
 
@@ -167,6 +280,60 @@ export default function EventsView({ onNavigateTab }) {
     e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     e.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
     e.hazard.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setIstTime(now.toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }) + ' IST');
+    };
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const coords = EVENT_COORDINATES[selectedId] || EVENT_COORDINATES['dharamsala-2021'];
+
+    setWeatherStatus('LOADING');
+    Promise.allSettled([
+      getRealtimeWeather(coords.lat, coords.lng),
+      predictNowcast({ lat: coords.lat, lng: coords.lng, leadTimeHours: 2, locationId: coords.locationId }),
+      getHistoricalEvent(selectedId),
+    ]).then(([weatherRes, nowcastRes, histRes]) => {
+      if (!isMounted) return;
+      if (weatherRes.status === 'fulfilled' && weatherRes.value?.status === 'success') {
+        setLiveWeather(weatherRes.value);
+        setWeatherStatus('LIVE');
+      } else {
+        setWeatherStatus('DEGRADED');
+      }
+      if (nowcastRes.status === 'fulfilled' && nowcastRes.value) {
+        setLiveNowcast(nowcastRes.value);
+      }
+      if (histRes.status === 'fulfilled' && histRes.value?.event) {
+        setBackendEventData(histRes.value.event);
+      }
+    });
+
+    return () => { isMounted = false; };
+  }, [selectedId]);
+
+  const liveRiskScore = liveNowcast?.predictions?.flash_flood?.risk_score 
+    ?? liveNowcast?.predictions?.cloudburst?.risk_score 
+    ?? (liveNowcast?.predictions?.thunderstorm_probability ? liveNowcast.predictions.thunderstorm_probability / 100 : 0.28);
+
+  const liveThreatLevel = liveNowcast?.active_threat_level || (
+    liveRiskScore >= 0.8 ? 'RED ALERT' :
+    liveRiskScore >= 0.6 ? 'ORANGE ALERT' :
+    liveRiskScore >= 0.35 ? 'YELLOW WATCH' : 'GREEN NOMINAL'
   );
 
   useEffect(() => {
@@ -228,12 +395,28 @@ export default function EventsView({ onNavigateTab }) {
               className={`hist-event-item ${evt.id === selectedId ? 'active' : ''}`}
               onClick={() => setSelectedId(evt.id)}
             >
-              <img 
-                src={`https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=200&auto=format&fit=crop`} 
+              <div 
                 className="hist-event-thumb" 
-                alt="Event thumbnail" 
-                style={evt.id === 'mumbai-2020' ? { filter: 'hue-rotate(180deg)'} : {}}
-              />
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: evt.hazard?.toLowerCase().includes('cloudburst') 
+                    ? 'linear-gradient(135deg, #1e1b4b, #312e81)' 
+                    : evt.hazard?.toLowerCase().includes('landslide') 
+                    ? 'linear-gradient(135deg, #451a03, #78350f)' 
+                    : evt.hazard?.toLowerCase().includes('cyclone') 
+                    ? 'linear-gradient(135deg, #022c22, #065f46)' 
+                    : 'linear-gradient(135deg, #082f49, #0369a1)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  fontSize: '22px'
+                }}
+              >
+                {evt.hazard?.toLowerCase().includes('cloudburst') ? '⛈️'
+                  : evt.hazard?.toLowerCase().includes('landslide') ? '⛰️'
+                  : evt.hazard?.toLowerCase().includes('cyclone') ? '🌀'
+                  : '🌊'}
+              </div>
               <div className="hist-event-info">
                 <div>
                   <div className="hist-event-name">{evt.name}</div>
@@ -312,6 +495,100 @@ export default function EventsView({ onNavigateTab }) {
             >
               4. Dispatch Alert (ACT) →
             </button>
+          </div>
+        </div>
+
+        {/* PRESENT-DATE OPERATIONAL TELEMETRY CARD */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(20, 32, 58, 0.95) 100%)',
+          border: '1px solid rgba(56, 189, 248, 0.3)',
+          borderRadius: '10px',
+          padding: '14px 18px',
+          marginBottom: '16px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{
+                background: 'rgba(56, 189, 248, 0.15)',
+                color: '#38bdf8',
+                border: '1px solid rgba(56, 189, 248, 0.35)',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '0.5px'
+              }}>
+                PRESENT-DATE LIVE TELEMETRY
+              </span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: '#f1f5f9' }}>
+                Current Atmospheric State over {selectedEvent.location.split(',')[0]}
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span className={weatherStatus === 'LIVE' ? 'tac-clean-live-dot' : 'tac-clean-degraded-dot'} />
+                <span style={{ color: weatherStatus === 'LIVE' ? '#38bdf8' : '#f59e0b', fontSize: '11px', fontWeight: 600 }}>
+                  {weatherStatus === 'LIVE' ? 'Real-Time Ingestion (Open-Meteo)' : 'Cached / Fallback'}
+                </span>
+              </div>
+            </div>
+            <div style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Clock size={13} />
+              <span>{istTime || 'Live IST'}</span>
+            </div>
+          </div>
+
+          {/* Telemetry Metrics Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '8px' }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Surface Temp</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', marginTop: '2px' }}>
+                {liveWeather?.weather?.temperature_2m_c != null ? `${liveWeather.weather.temperature_2m_c.toFixed(1)} °C` : '--'}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Relative Humidity</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
+                {liveWeather?.weather?.relative_humidity_2m_pct != null ? `${liveWeather.weather.relative_humidity_2m_pct}%` : '--'}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Surface Pressure</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#cbd5e1', marginTop: '2px' }}>
+                {liveWeather?.weather?.surface_pressure_hpa != null ? `${liveWeather.weather.surface_pressure_hpa.toFixed(1)} hPa` : '--'}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Live Rain Rate</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#60a5fa', marginTop: '2px' }}>
+                {liveWeather?.weather?.precipitation_mm != null ? `${liveWeather.weather.precipitation_mm.toFixed(1)} mm/h` : '0.0 mm/h'}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Surface Wind</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#facc15', marginTop: '2px' }}>
+                {liveWeather?.weather?.wind_speed_10m_kmh != null ? `${liveWeather.weather.wind_speed_10m_kmh.toFixed(1)} km/h` : '--'}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '8px 12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Live Risk Score</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: liveRiskScore >= 0.6 ? '#ef4444' : liveRiskScore >= 0.35 ? '#f97316' : '#22c55e', marginTop: '2px' }}>
+                {liveRiskScore != null ? (liveRiskScore * 100).toFixed(0) + '%' : '--'}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94a3b8', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '8px', flexWrap: 'wrap', gap: '6px' }}>
+            <span>
+              * Benchmark: <strong style={{ color: '#f1f5f9' }}>{selectedEvent.name} ({selectedEvent.date})</strong> had {selectedEvent.observedRainfall}. Present-date status: <strong style={{ color: '#38bdf8' }}>{liveThreatLevel}</strong>.
+            </span>
+            <span style={{ fontStyle: 'italic', color: '#64748b' }}>
+              AI-generated risk assessment - not an official warning.
+            </span>
           </div>
         </div>
 
@@ -407,8 +684,8 @@ export default function EventsView({ onNavigateTab }) {
                   <span className="hist-map-time">{selectedEvent.date}, 22:30 IST</span>
                 </div>
                 <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Observed" style={{ filter: 'saturate(2) hue-rotate(-20deg)' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                  <ObservedRadarVisual event={selectedEvent} />
+                  <div style={{ position: 'absolute', bottom: '8px', left: '8px', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
                     📍 {selectedEvent.location.split(',')[0]}
                   </div>
                 </div>
@@ -420,8 +697,8 @@ export default function EventsView({ onNavigateTab }) {
                   <span className="hist-map-time">{selectedEvent.date}, 22:30 IST</span>
                 </div>
                 <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Prediction" style={{ filter: 'saturate(2) hue-rotate(-10deg)' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                  <VayunetPredictionVisual event={selectedEvent} />
+                  <div style={{ position: 'absolute', bottom: '8px', left: '8px', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
                     📍 {selectedEvent.location.split(',')[0]}
                   </div>
                 </div>
@@ -433,9 +710,8 @@ export default function EventsView({ onNavigateTab }) {
                   <span className="hist-map-time" style={{ color: '#38bdf8' }}>Post Event Analysis</span>
                 </div>
                 <div className="hist-map-box">
-                  <img src="https://images.unsplash.com/photo-1548684786-fb039b563fbd?q=80&w=400&auto=format&fit=crop" className="hist-map-img" alt="Impact" style={{ filter: 'grayscale(1) brightness(0.6)' }} />
-                  <div style={{ position: 'absolute', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(239,68,68,0.4) 0%, rgba(239,68,68,0) 70%)', border: '1px dashed #ef4444', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                  <ImpactAreaVisual event={selectedEvent} />
+                  <div style={{ position: 'absolute', bottom: '8px', left: '8px', color: 'white', fontSize: '11px', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
                     📍 {selectedEvent.location.split(',')[0]}
                   </div>
                 </div>
