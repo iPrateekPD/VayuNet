@@ -392,6 +392,24 @@
   animation: vayuSpeakerPulse 0.9s infinite alternate;
 }
 
+.vayu-speaker-btn.bhashini-live {
+  background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+  border-color: #22d3ee;
+  color: #ffffff;
+  animation: bhashiniAudioGlow 1s infinite alternate;
+}
+
+@keyframes bhashiniAudioGlow {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 6px #06b6d4, 0 0 12px rgba(6, 182, 212, 0.4);
+  }
+  to {
+    transform: scale(1.18);
+    box-shadow: 0 0 16px #22d3ee, 0 0 24px rgba(34, 211, 238, 0.6);
+  }
+}
+
 @keyframes vayuSpeakerPulse {
   from {
     transform: scale(1);

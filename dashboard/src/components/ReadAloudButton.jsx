@@ -1,27 +1,33 @@
 import React from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
 
-export default function ReadAloudButton({ text, label = 'Read alert aloud', className = '' }) {
-  const { readAloud, isSpeaking, speakContent, stopSpeaking } = useAccessibility();
+export default function ReadAloudButton({ 
+  text, 
+  lang,
+  label = 'Read alert aloud with Bhashini voice', 
+  className = '',
+  forceShow = false 
+}) {
+  const { readAloud, isSpeaking, bhashiniActive, speakContent, stopSpeaking } = useAccessibility();
 
-  if (!readAloud || !text) return null;
+  if ((!readAloud && !forceShow) || !text) return null;
 
   const handleClick = (e) => {
     e.stopPropagation();
     if (isSpeaking) {
       stopSpeaking();
     } else {
-      speakContent(text);
+      speakContent(text, lang);
     }
   };
 
   return (
     <button
       type="button"
-      className={`vayu-speaker-btn ${isSpeaking ? 'speaking' : ''} ${className}`}
+      className={`vayu-speaker-btn ${isSpeaking ? 'speaking' : ''} ${bhashiniActive && isSpeaking ? 'bhashini-live' : ''} ${className}`}
       onClick={handleClick}
-      title={isSpeaking ? 'Stop reading' : label}
-      aria-label={isSpeaking ? 'Stop reading' : label}
+      title={isSpeaking ? 'Stop broadcast' : label}
+      aria-label={isSpeaking ? 'Stop broadcast' : label}
     >
       {isSpeaking ? '⏹' : '🔊'}
     </button>

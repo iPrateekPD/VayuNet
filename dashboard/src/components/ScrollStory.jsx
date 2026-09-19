@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ScrollStory.css';
@@ -12,7 +12,7 @@ const STORY_STATES = [
     label: 'OBSERVE',
     title: 'Satellite + Radar Intelligence',
     description: 'Fuse INSAT-3D/3DR observations, Doppler radar and environmental data to identify developing weather signals.',
-    image: '/satellite_insat.jpg',
+    image: '/1.png',
     overlayLabel: 'INSAT-3D/3DR',
     overlayValue: 'LIVE'
   },
@@ -22,7 +22,7 @@ const STORY_STATES = [
     label: 'UNDERSTAND',
     title: 'Atmospheric Intelligence',
     description: 'Analyze moisture, instability, cloud evolution and terrain interactions driving severe weather.',
-    image: '/imdaa_reanalysis.jpg',
+    image: '/2.png',
     overlayLabel: 'PRECIPITATION',
     overlayValue: '124 mm'
   },
@@ -32,7 +32,7 @@ const STORY_STATES = [
     label: 'NOWCAST',
     title: 'Hyper-Local Prediction',
     description: 'Generate actionable severe-weather forecasts with 2–6 hour lead time.',
-    image: '/workflow_predict.jpg',
+    image: '/3.png',
     overlayLabel: 'ETA',
     overlayValue: '1h 45m'
   },
@@ -42,7 +42,7 @@ const STORY_STATES = [
     label: 'ASSESS',
     title: 'Risk & Impact',
     description: 'Estimate hazard intensity, affected areas, arrival time and model confidence.',
-    image: '/impact_precision.jpg',
+    image: '/4.png',
     overlayLabel: 'MODEL CONFIDENCE',
     overlayValue: '82%'
   },
@@ -52,7 +52,7 @@ const STORY_STATES = [
     label: 'ACT',
     title: 'Public Warning',
     description: 'Turn validated weather intelligence into clear, timely and actionable warnings.',
-    image: '/workflow_dispatch.jpg',
+    image: '/5.png',
     overlayLabel: 'ACTION REQUIRED',
     overlayValue: 'DISPATCH'
   }
@@ -63,116 +63,137 @@ export default function ScrollStory() {
   const imagesRef = useRef([]);
   const textsRef = useRef([]);
   const dotsRef = useRef([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const tlRef = useRef(null);
 
   useLayoutEffect(() => {
     const totalStates = STORY_STATES.length;
-    
-    // Set initial states for images and texts
-    imagesRef.current.forEach((img, i) => {
-      if (i === 0) {
-        gsap.set(img, { xPercent: 0, opacity: 1, scale: 1, zIndex: 10 });
-      } else {
-        // Next images are positioned exactly off-screen to the left, fully opaque, slightly scaled down
-        gsap.set(img, { xPercent: -100, opacity: 1, scale: 0.985, zIndex: 10 + i });
-      }
-    });
-    
-    textsRef.current.forEach((txt, i) => {
-      if (i === 0) {
-        gsap.set(txt, { opacity: 1, y: 0 });
-      } else {
-        gsap.set(txt, { opacity: 0, y: 12 });
-      }
-    });
+    const getHeaderOffset = () => (window.innerWidth <= 768 ? 54 : 60);
 
-    // Create the ScrollTrigger Master Timeline
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: () => "+=" + (window.innerHeight * 5), // 5 states
-        pin: true,
-        scrub: 0.8, // 0.8 scrub provides natural smoothing without lagging
-        onUpdate: (self) => {
-          // Calculate active index based on scroll progress (0 to 1)
-          const p = self.progress;
-          // Split progress into chunks
-          let newIndex = Math.floor(p * totalStates);
-          if (newIndex >= totalStates) newIndex = totalStates - 1;
-          
-          setActiveIndex(prevIndex => prevIndex !== newIndex ? newIndex : prevIndex);
+    const ctx = gsap.context(() => {
+      // 1. Initialize Visual States
+      imagesRef.current.forEach((img, i) => {
+        if (!img) return;
+        if (i === 0) {
+          gsap.set(img, { opacity: 1, scale: 1, zIndex: 10 });
+        } else {
+          gsap.set(img, { opacity: 0, scale: 1.04, zIndex: 1 });
         }
+      });
+
+      // 2. Initialize Text States
+      textsRef.current.forEach((txt, i) => {
+        if (!txt) return;
+        if (i === 0) {
+          gsap.set(txt, { opacity: 1, y: 0 });
+        } else {
+          gsap.set(txt, { opacity: 0, y: 14 });
+        }
+      });
+
+      // Synchronize active dot to the current timeline step
+      const updateActiveDot = (step) => {
+        dotsRef.current.forEach((dot, idx) => {
+          if (!dot) return;
+          if (idx === step) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      };
+
+      // Create Master ScrollTrigger Timeline
+      // Total timeline duration is 4.0 (4 transitions between 5 states) + 0.4 end hold
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: () => `top ${getHeaderOffset()}px`,
+          end: () => `+=${window.innerHeight * 4}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.5,
+          onUpdate: () => {
+            const currentTime = tl.time();
+            // Transitions start at i + 0.50, midpoint is i + 0.75
+            const currentStep = Math.min(
+              totalStates - 1,
+              Math.max(0, Math.floor(currentTime + 0.25))
+            );
+            updateActiveDot(currentStep);
+          }
+        }
+      });
+
+      tlRef.current = tl;
+
+      // 3. Build step transitions
+      // Step duration = 1.0
+      // 0.0 - 0.50: Hold current step
+      // 0.50 - 0.95: Cinematic transition
+      // 0.95 - 1.0: Settle into next step
+      for (let i = 0; i < totalStates - 1; i++) {
+        const currentImg = imagesRef.current[i];
+        const nextImg = imagesRef.current[i + 1];
+        const currentTxt = textsRef.current[i];
+        const nextTxt = textsRef.current[i + 1];
+
+        const transitionStart = i + 0.50;
+        const transitionDuration = 0.45;
+        const textFadeOutDuration = 0.20;
+        const textFadeInDuration = 0.25;
+
+        // Image Transition: next image stacks on top, zooms smoothly from 1.04 to 1.0
+        tl.set(nextImg, { zIndex: 10 + i + 1 }, transitionStart);
+
+        tl.to(currentImg, {
+          opacity: 0,
+          scale: 1.02,
+          duration: transitionDuration * 0.85,
+          ease: 'power1.inOut'
+        }, transitionStart);
+
+        tl.fromTo(nextImg,
+          { opacity: 0, scale: 1.04 },
+          { opacity: 1, scale: 1.0, duration: transitionDuration, ease: 'power1.inOut' },
+          transitionStart
+        );
+
+        // Text Transition: current fades up & out, next enters from down & fades in
+        tl.to(currentTxt, {
+          opacity: 0,
+          y: -12,
+          duration: textFadeOutDuration,
+          ease: 'power1.in'
+        }, transitionStart);
+
+        tl.fromTo(nextTxt,
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: textFadeInDuration, ease: 'power1.out' },
+          transitionStart + textFadeOutDuration
+        );
+
+        // Timeline anchor
+        tl.set({}, {}, i + 1);
       }
-    });
 
-    // Build the timeline animations for each transition
-    // A single scroll segment has a conceptual duration of 1.
-    // 0.0 - 0.35: Hold
-    // 0.35 - 0.65: Transition
-    // 0.65 - 1.0: Hold
-    
-    for (let i = 0; i < totalStates - 1; i++) {
-      const currentImg = imagesRef.current[i];
-      const nextImg = imagesRef.current[i + 1];
-      const currentTxt = textsRef.current[i];
-      const nextTxt = textsRef.current[i + 1];
+      // Buffer at the end of the last step before unpinning
+      tl.to({}, { duration: 0.4 });
 
-      const startTime = i + 0.35;
-      const transitionDuration = 0.30;
-      
-      // Cinematic Physical Slide Transition
-      // Outgoing moves slightly left and back
-      tl.to(currentImg, { 
-        xPercent: -6, 
-        scale: 0.985, 
-        opacity: 0.8, 
-        duration: transitionDuration,
-        ease: "none"
-      }, startTime);
+    }, containerRef);
 
-      // Incoming enters completely from the left and scales up to 1
-      tl.to(nextImg, { 
-        xPercent: 0, 
-        scale: 1, 
-        opacity: 1, 
-        duration: transitionDuration,
-        ease: "none"
-      }, startTime);
-
-      // Text transition: 
-      // Image transition takes 0.30. 40% into transition = 0.30 * 0.40 = 0.12
-      // Text fades out starting at +0.12, taking 0.08 (ends at +0.20)
-      // Text fades in starting at +0.20, taking 0.10 (ends at +0.30)
-      const textFadeOutStart = startTime + 0.12;
-      const textFadeOutDuration = 0.08;
-      const textFadeInStart = textFadeOutStart + textFadeOutDuration;
-      const textFadeInDuration = transitionDuration - (0.12 + textFadeOutDuration); // 0.10
-
-      tl.to(currentTxt, { 
-        opacity: 0, 
-        y: -12, 
-        duration: textFadeOutDuration,
-        ease: "none"
-      }, textFadeOutStart);
-
-      tl.to(nextTxt, { 
-        opacity: 1, 
-        y: 0, 
-        duration: textFadeInDuration,
-        ease: "none"
-      }, textFadeInStart);
-      
-      // Ensure the timeline spans all the way to i + 1 even if the last animation ended at i + 0.65
-      // by inserting a dummy set if necessary, though GSAP automatically pads if we just let the loop continue.
-      tl.set({}, {}, i + 1);
-    }
-
-    return () => {
-      // Cleanup ScrollTrigger on unmount
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
+    return () => ctx.revert();
   }, []);
+
+  const handleDotClick = (targetIndex) => {
+    const tl = tlRef.current;
+    if (!tl || !tl.scrollTrigger) return;
+    const st = tl.scrollTrigger;
+    const totalStates = STORY_STATES.length;
+    // Map index 0..4 to scroll position
+    const targetScroll = st.start + (targetIndex / (totalStates - 1)) * (st.end - st.start);
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  };
 
   return (
     <section className="scroll-story-wrapper" ref={containerRef} id="how-it-works">
@@ -218,13 +239,15 @@ export default function ScrollStory() {
             ))}
           </div>
 
-          <div className="story-progress-indicator">
+          <div className="story-progress-indicator" role="tablist" aria-label="Operational Workflow Steps">
             {STORY_STATES.map((state, index) => (
               <React.Fragment key={`dot-${state.id}`}>
-                <div 
-                  className={`progress-dot ${activeIndex === index ? 'active' : ''}`} 
+                <button 
+                  type="button"
+                  className={`progress-dot ${index === 0 ? 'active' : ''}`} 
                   ref={el => dotsRef.current[index] = el}
-                  aria-label={`Step ${index + 1}`}
+                  onClick={() => handleDotClick(index)}
+                  aria-label={`Jump to Step ${state.number}: ${state.title}`}
                 />
                 {index < STORY_STATES.length - 1 && (
                   <div className="progress-line" />

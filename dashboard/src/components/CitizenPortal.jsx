@@ -6,6 +6,8 @@ import './CitizenPortal.css';
 import AccessibilityMenu from './AccessibilityMenu';
 import ReadAloudButton from './ReadAloudButton';
 import { INDIAN_LANGUAGES } from './HomePage';
+import { DotPattern } from "@/registry/magicui/dot-pattern";
+import { cn } from "@/lib/utils";
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
 const LOCATION_DATABASE = {
@@ -869,7 +871,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 </div>
                 <ReadAloudButton 
                   text={`Public Weather Warning. Location: ${loc.name}, ${loc.district}. Status: ${loc.riskLevel}. Hazard: ${loc.hazard}. ${loc.description}. Designated safe shelter: ${loc.safeShelter.name} at ${loc.safeShelter.address}.`}
-                  label="Read public weather alert aloud" 
+                  lang={language}
+                  label="Listen to public weather warning (Digital India Bhashini Voice)" 
+                  forceShow={true}
                 />
               </div>
 
@@ -1318,7 +1322,18 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
       </main>
 
       {/* 4. SMART REDEFINED SOVEREIGN FOOTER WITH GSAP ANIMATIONS */}
-      <footer className="cp-footer" ref={footerRef}>
+      <footer className="cp-footer relative overflow-hidden" ref={footerRef}>
+        {/* MagicUI Background Dot Pattern */}
+        <DotPattern
+          className={cn(
+            "pointer-events-none absolute inset-0 h-full w-full text-cyan-400/20",
+            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
+          )}
+          glow={true}
+          width={22}
+          height={22}
+          cr={1.2}
+        />
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry cp-footer-anim-item">
           <div className="cp-telemetry-inner">

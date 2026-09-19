@@ -33,8 +33,14 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Environment Variables & Secrets
+.env
+.env.*
+!.env.example
 .env.local
 .env.*.local
+dashboard/.env
+dashboard/.env.*
+!dashboard/.env.example
 dashboard/.env.local
 dashboard/.env.*.local
 

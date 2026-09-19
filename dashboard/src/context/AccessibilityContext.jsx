@@ -106,10 +106,14 @@ export function AccessibilityProvider({ children }) {
     showA11yToast('Accessibility settings reset to default.');
   }, [setTextSize, setHighContrast, setReduceMotion, setReadAloud, showA11yToast]);
 
-  // Read aloud speaker function using SpeechSynthesis
-  const speakContent = useCallback((text) => {
+  const currentAudioRef = useRef(null);
+  const [bhashiniActive, setBhashiniActive] = useState(false);
+
+  // Fallback browser speech synthesis
+  const fallbackBrowserSpeak = useCallback((text, targetLang) => {
     if (!('speechSynthesis' in window)) {
       showA11yToast('Voice speech synthesis is not supported on this browser.');
+      setIsSpeaking(false);
       return;
     }
 
@@ -118,13 +122,12 @@ export function AccessibilityProvider({ children }) {
       if (!text || !text.trim()) return;
 
       const utterance = new SpeechSynthesisUtterance(text.trim());
-      const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === language);
+      const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === (targetLang || language));
       const voiceLang = langConfig ? langConfig.voiceLang : 'en-IN';
       utterance.lang = voiceLang;
       utterance.rate = 0.95;
       utterance.pitch = 1.0;
 
-      // Try to find a matching voice if available
       const voices = window.speechSynthesis.getVoices();
       if (voices && voices.length > 0) {
         const matchingVoice = voices.find(v => v.lang && (v.lang === voiceLang || v.lang.startsWith(voiceLang.slice(0, 2))));
@@ -133,28 +136,81 @@ export function AccessibilityProvider({ children }) {
         }
       }
 
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+        setBhashiniActive(false);
+      };
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setBhashiniActive(false);
+      };
       utterance.onerror = (e) => {
         console.warn('SpeechSynthesis error:', e);
         setIsSpeaking(false);
-        showA11yToast('Speech synthesis encountered an audio error.');
+        setBhashiniActive(false);
       };
 
       window.speechSynthesis.speak(utterance);
     } catch (err) {
       console.warn('SpeechSynthesis invocation failed:', err);
       setIsSpeaking(false);
-      showA11yToast('Unable to start speech synthesis.');
+      setBhashiniActive(false);
     }
   }, [language, showA11yToast]);
 
+  // Stop any active speech (Bhashini audio or Browser Speech)
   const stopSpeaking = useCallback(() => {
+    if (currentAudioRef.current) {
+      try {
+        currentAudioRef.current.pause();
+        currentAudioRef.current.currentTime = 0;
+      } catch (_) {}
+      currentAudioRef.current = null;
+    }
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
-      setIsSpeaking(false);
     }
+    setIsSpeaking(false);
+    setBhashiniActive(false);
   }, []);
+
+  // Primary speak function: Tries Digital India Bhashini TTS first, falls back to Web Speech
+  const speakContent = useCallback((text, overrideLang) => {
+    stopSpeaking();
+    if (!text || !text.trim()) return;
+
+    const targetLang = (overrideLang || language || 'hi').toLowerCase().slice(0, 2);
+
+    try {
+      const streamUrl = `/api/bhashini/stream?text=${encodeURIComponent(text.trim())}&lang=${targetLang}&gender=female`;
+      const audio = new Audio(streamUrl);
+      currentAudioRef.current = audio;
+
+      audio.onplay = () => {
+        setIsSpeaking(true);
+        setBhashiniActive(true);
+      };
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+        setBhashiniActive(false);
+        currentAudioRef.current = null;
+      };
+
+      audio.onerror = () => {
+        // Backend not reachable or error, fallback to browser synthesis
+        currentAudioRef.current = null;
+        fallbackBrowserSpeak(text, targetLang);
+      };
+
+      audio.play().catch(() => {
+        currentAudioRef.current = null;
+        fallbackBrowserSpeak(text, targetLang);
+      });
+    } catch (_) {
+      fallbackBrowserSpeak(text, targetLang);
+    }
+  }, [language, stopSpeaking, fallbackBrowserSpeak]);
 
   // Initialize DOM attributes on first mount
   useEffect(() => {
@@ -184,6 +240,7 @@ export function AccessibilityProvider({ children }) {
         setReadAloud,
         resetAccessibility,
         isSpeaking,
+        bhashiniActive,
         speakContent,
         stopSpeaking,
         speechToast,

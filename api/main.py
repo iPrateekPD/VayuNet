@@ -2,10 +2,12 @@ import time
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+import base64
 import api.ai_dispatcher as ai_dispatcher
+import api.bhashini_service as bhashini_service
 
 # Ensure project root is on sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -391,3 +393,78 @@ def broadcast_alert(alert: BroadcastAlertRequest, background_tasks: BackgroundTa
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "message": f"EMERGENCY NOWCAST ALERT [{alert.severity}]: High probability of {alert.hazard_type} in {alert.location_name}. Evacuate low-lying drainage corridors within {alert.lead_time_hours} hours."
     }
+
+# =====================================================================
+# BHASHINI (Digital India / MeitY) Multilingual & Voice Endpoints
+# =====================================================================
+
+class BhashiniTranslateRequest(BaseModel):
+    text: str = Field(..., example="Severe thunderstorm warning in Dharamsala.")
+    source_language: str = Field("en", example="en")
+    target_language: str = Field("hi", example="hi")
+
+class BhashiniTTSRequest(BaseModel):
+    text: str = Field(..., example="धर्मशाला में भारी बारिश की संभावना है।")
+    language: str = Field("hi", example="hi")
+    gender: str = Field("female", example="female")
+
+class BhashiniPipelineRequest(BaseModel):
+    text: str = Field(..., example="Flash flood warning. Move to higher ground.")
+    source_language: str = Field("en", example="en")
+    target_language: str = Field("hi", example="hi")
+    gender: str = Field("female", example="female")
+
+@app.get("/api/bhashini/languages")
+def bhashini_languages():
+    """Returns the list of 22 supported scheduled Indian languages."""
+    return {
+        "status": "SUCCESS",
+        "supported_languages": bhashini_service.SUPPORTED_BHASHINI_LANGUAGES
+    }
+
+@app.post("/api/bhashini/translate")
+def bhashini_translate(req: BhashiniTranslateRequest):
+    """Dynamic translation using Digital India Bhashini NMT."""
+    res = bhashini_service.translate_text(
+        text=req.text,
+        source_lang=req.source_language,
+        target_lang=req.target_language
+    )
+    return {"status": "SUCCESS", "data": res}
+
+@app.post("/api/bhashini/tts")
+def bhashini_tts(req: BhashiniTTSRequest):
+    """Regional voice synthesis using Digital India Bhashini TTS."""
+    res = bhashini_service.synthesize_speech(
+        text=req.text,
+        language=req.language,
+        gender=req.gender
+    )
+    return {"status": "SUCCESS", "data": res}
+
+@app.get("/api/bhashini/stream")
+def bhashini_audio_stream(text: str, lang: str = "hi", gender: str = "female"):
+    """
+    Direct binary audio stream (audio/wav).
+    Can be used directly in <audio src="/api/bhashini/stream?..." /> elements!
+    """
+    res = bhashini_service.synthesize_speech(text=text, language=lang, gender=gender)
+    audio_b64 = res.get("audio_base64", "")
+    if not audio_b64:
+        raise HTTPException(status_code=400, detail=res.get("error", "Unable to synthesize audio"))
+    audio_bytes = base64.b64decode(audio_b64)
+    return Response(content=audio_bytes, media_type="audio/wav")
+
+@app.post("/api/bhashini/pipeline")
+def bhashini_pipeline(req: BhashiniPipelineRequest):
+    """
+    Chained Pipeline: Translates English text to Regional Language AND synthesizes voice audio in one shot.
+    """
+    res = bhashini_service.translate_and_synthesize(
+        text=req.text,
+        source_lang=req.source_language,
+        target_lang=req.target_language,
+        gender=req.gender
+    )
+    return {"status": "SUCCESS", "data": res}
+
