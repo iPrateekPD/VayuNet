@@ -3,6 +3,39 @@ import { createPortal } from 'react-dom';
 import { useAccessibility } from '../context/AccessibilityContext';
 import './AccessibilityMenu.css';
 
+const A11Y_LABELS = {
+  EN: {
+    btn: 'Accessibility',
+    title: 'Accessibility Options',
+    language: 'Language',
+    largeText: 'Large Text',
+    smallText: 'Small Text',
+    resetText: 'Reset Text',
+    highContrast: 'High Contrast',
+    reduceMotion: 'Reduce Motion',
+    readAloud: 'Read Aloud (Voice)',
+    resetAll: 'Reset All',
+    defaultSettings: 'Default settings (0 active)',
+    clearAll: 'Clear all',
+    optionsEnabled: 'option(s) enabled'
+  },
+  HI: {
+    btn: 'सुलभता',
+    title: 'सुलभता विकल्प',
+    language: 'भाषा',
+    largeText: 'बड़ा अक्षर',
+    smallText: 'छोटा अक्षर',
+    resetText: 'सामान्य अक्षर',
+    highContrast: 'उच्च कंट्रास्ट',
+    reduceMotion: 'गतिशीलता घटाएं',
+    readAloud: 'बोलकर सुनें (भाषिणी)',
+    resetAll: 'सभी रीसेट करें',
+    defaultSettings: 'डिफ़ॉल्ट सेटिंग्स (0 सक्रिय)',
+    clearAll: 'हटाएं',
+    optionsEnabled: 'विकल्प सक्रिय'
+  }
+};
+
 export default function AccessibilityMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [desktopPos, setDesktopPos] = useState(null);
@@ -23,6 +56,9 @@ export default function AccessibilityMenu() {
     resetAccessibility,
     supportedLanguages
   } = useAccessibility();
+
+  const langKey = (language || 'en').toUpperCase();
+  const a11yText = A11Y_LABELS[langKey] || A11Y_LABELS.EN;
 
   // Position calculation for desktop popup
   const updatePosition = () => {
@@ -134,7 +170,7 @@ export default function AccessibilityMenu() {
         <div className="vayu-a11y-card-header">
           <div className="vayu-a11y-card-title">
             <span className="vayu-a11y-header-glyph">♿</span>
-            <span>Accessibility Options</span>
+            <span>{a11yText.title}</span>
           </div>
           <button
             type="button"
@@ -150,7 +186,7 @@ export default function AccessibilityMenu() {
         <div className="vayu-a11y-lang-strip">
           <div className="vayu-a11y-lang-label">
             <span>🌐</span>
-            <span>Language</span>
+            <span>{a11yText.language}</span>
           </div>
           <select
             className="vayu-a11y-lang-select-clean"
@@ -179,7 +215,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">A+</span>
               {textSize === 'large' && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">Large Text</span>
+            <span className="vayu-card-btn-text">{a11yText.largeText}</span>
           </button>
 
           {/* 2. Small Text */}
@@ -193,7 +229,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">A−</span>
               {textSize === 'small' && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">Small Text</span>
+            <span className="vayu-card-btn-text">{a11yText.smallText}</span>
           </button>
 
           {/* 3. Reset Text */}
@@ -207,7 +243,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">↺</span>
               {textSize === 'normal' && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">Reset Text</span>
+            <span className="vayu-card-btn-text">{a11yText.resetText}</span>
           </button>
 
           {/* 4. High Contrast */}
@@ -221,7 +257,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">👁</span>
               {highContrast && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">High Contrast</span>
+            <span className="vayu-card-btn-text">{a11yText.highContrast}</span>
           </button>
 
           {/* 5. Reduce Motion */}
@@ -235,7 +271,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">◐</span>
               {reduceMotion && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">Reduce Motion</span>
+            <span className="vayu-card-btn-text">{a11yText.reduceMotion}</span>
           </button>
 
           {/* 6. Read Aloud */}
@@ -249,7 +285,7 @@ export default function AccessibilityMenu() {
               <span className="vayu-squircle-icon">🔊</span>
               {readAloud && <span className="vayu-active-check">✓</span>}
             </div>
-            <span className="vayu-card-btn-text">Read Aloud</span>
+            <span className="vayu-card-btn-text">{a11yText.readAloud}</span>
           </button>
 
           {/* 7. Reset All Options */}
@@ -261,14 +297,14 @@ export default function AccessibilityMenu() {
             <div className="vayu-a11y-squircle">
               <span className="vayu-squircle-icon">↺</span>
             </div>
-            <span className="vayu-card-btn-text">Reset All</span>
+            <span className="vayu-card-btn-text">{a11yText.resetAll}</span>
           </button>
         </div>
 
         {/* Footer Bar matching reference image */}
         <div className="vayu-a11y-card-footer">
           <span className="vayu-a11y-count-text">
-            {activeCount === 0 ? 'Default settings (0 active)' : `${activeCount} option${activeCount === 1 ? '' : 's'} enabled`}
+            {activeCount === 0 ? a11yText.defaultSettings : `${activeCount} ${a11yText.optionsEnabled}`}
           </span>
           {activeCount > 0 && (
             <button 
@@ -276,7 +312,7 @@ export default function AccessibilityMenu() {
               className="vayu-a11y-footer-reset-link"
               onClick={resetAccessibility}
             >
-              Clear all
+              {a11yText.clearAll}
             </button>
           )}
         </div>
@@ -297,7 +333,7 @@ export default function AccessibilityMenu() {
         aria-expanded={isOpen}
       >
         <span className="vayu-a11y-icon" aria-hidden="true">♿</span>
-        <span className="vayu-a11y-label">Accessibility</span>
+        <span className="vayu-a11y-label">{a11yText.btn}</span>
         <span className="vayu-a11y-arrow" aria-hidden="true">▾</span>
       </button>
 

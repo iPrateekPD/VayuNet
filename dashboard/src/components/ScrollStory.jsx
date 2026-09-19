@@ -1,64 +1,123 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useAccessibility } from '../context/AccessibilityContext';
 import './ScrollStory.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const STORY_STATES = [
-  {
-    id: 'observe',
-    number: '01',
-    label: 'OBSERVE',
-    title: 'Satellite + Radar Intelligence',
-    description: 'Fuse INSAT-3D/3DR observations, Doppler radar and environmental data to identify developing weather signals.',
-    image: '/1.png',
-    overlayLabel: 'INSAT-3D/3DR',
-    overlayValue: 'LIVE'
-  },
-  {
-    id: 'understand',
-    number: '02',
-    label: 'UNDERSTAND',
-    title: 'Atmospheric Intelligence',
-    description: 'Analyze moisture, instability, cloud evolution and terrain interactions driving severe weather.',
-    image: '/2.png',
-    overlayLabel: 'PRECIPITATION',
-    overlayValue: '124 mm'
-  },
-  {
-    id: 'nowcast',
-    number: '03',
-    label: 'NOWCAST',
-    title: 'Hyper-Local Prediction',
-    description: 'Generate actionable severe-weather forecasts with 2–6 hour lead time.',
-    image: '/3.png',
-    overlayLabel: 'ETA',
-    overlayValue: '1h 45m'
-  },
-  {
-    id: 'assess',
-    number: '04',
-    label: 'ASSESS',
-    title: 'Risk & Impact',
-    description: 'Estimate hazard intensity, affected areas, arrival time and model confidence.',
-    image: '/4.png',
-    overlayLabel: 'MODEL CONFIDENCE',
-    overlayValue: '82%'
-  },
-  {
-    id: 'act',
-    number: '05',
-    label: 'ACT',
-    title: 'Public Warning',
-    description: 'Turn validated weather intelligence into clear, timely and actionable warnings.',
-    image: '/5.png',
-    overlayLabel: 'ACTION REQUIRED',
-    overlayValue: 'DISPATCH'
-  }
-];
+const STORY_TRANSLATIONS = {
+  EN: [
+    {
+      id: 'observe',
+      number: '01',
+      label: 'OBSERVE',
+      title: 'Satellite + Radar Intelligence',
+      description: 'Fuse INSAT-3D/3DR observations, Doppler radar and environmental data to identify developing weather signals.',
+      image: '/1.png',
+      overlayLabel: 'INSAT-3D/3DR',
+      overlayValue: 'LIVE'
+    },
+    {
+      id: 'understand',
+      number: '02',
+      label: 'UNDERSTAND',
+      title: 'Atmospheric Intelligence',
+      description: 'Analyze moisture, instability, cloud evolution and terrain interactions driving severe weather.',
+      image: '/2.png',
+      overlayLabel: 'PRECIPITATION',
+      overlayValue: '124 mm'
+    },
+    {
+      id: 'nowcast',
+      number: '03',
+      label: 'NOWCAST',
+      title: 'Hyper-Local Prediction',
+      description: 'Generate actionable severe-weather forecasts with 2–6 hour lead time.',
+      image: '/3.png',
+      overlayLabel: 'ETA',
+      overlayValue: '1h 45m'
+    },
+    {
+      id: 'assess',
+      number: '04',
+      label: 'ASSESS',
+      title: 'Risk & Impact',
+      description: 'Estimate hazard intensity, affected areas, arrival time and model confidence.',
+      image: '/4.png',
+      overlayLabel: 'MODEL CONFIDENCE',
+      overlayValue: '82%'
+    },
+    {
+      id: 'act',
+      number: '05',
+      label: 'ACT',
+      title: 'Public Warning',
+      description: 'Turn validated weather intelligence into clear, timely and actionable warnings.',
+      image: '/5.png',
+      overlayLabel: 'ACTION REQUIRED',
+      overlayValue: 'DISPATCH'
+    }
+  ],
+  HI: [
+    {
+      id: 'observe',
+      number: '01',
+      label: 'अवलोकन',
+      title: 'उपग्रह एवं रडार बुद्धिमत्ता',
+      description: 'विकासशील मौसम संकेतों की पहचान के लिए इनसैट-3डी/3डीआर, डॉप्लर रडार और पर्यावरणीय डेटा का समन्वय।',
+      image: '/1.png',
+      overlayLabel: 'इनसैट-3डी/3डीआर',
+      overlayValue: 'लाइव'
+    },
+    {
+      id: 'understand',
+      number: '02',
+      label: 'विश्लेषण',
+      title: 'वायुमंडलीय बुद्धिमत्ता',
+      description: 'गंभीर मौसम को प्रेरित करने वाली नमी, संवहनीय अस्थिरता, बादलों के विकास और भू-भाग की अंतःक्रिया का विश्लेषण।',
+      image: '/2.png',
+      overlayLabel: 'वर्षा अनुमान',
+      overlayValue: '124 मिमी'
+    },
+    {
+      id: 'nowcast',
+      number: '03',
+      label: 'नाउकास्ट',
+      title: 'अति-स्थानीय पूर्वानुमान',
+      description: '2 से 6 घंटे के पूर्व-चेतावनी बफर के साथ त्वरित और सटीक गंभीर-मौसम पूर्वानुमान उत्पन्न करना।',
+      image: '/3.png',
+      overlayLabel: 'अनुमानित आगमन',
+      overlayValue: '1घं 45मि'
+    },
+    {
+      id: 'assess',
+      number: '04',
+      label: 'आकलन',
+      title: 'जोखिम एवं प्रभाव',
+      description: 'आपदा की तीव्रता, प्रभावित होने वाले क्षेत्रों, आगमन समय और मॉडल विश्वसनीयता का संपूर्ण आकलन।',
+      image: '/4.png',
+      overlayLabel: 'मॉडल विश्वसनीयता',
+      overlayValue: '82%'
+    },
+    {
+      id: 'act',
+      number: '05',
+      label: 'कार्रवाई',
+      title: 'सार्वजनिक चेतावनी',
+      description: 'सत्यापित मौसम बुद्धिमत्ता को स्पष्ट, समयबद्ध, बहुभाषी और जीवन-रक्षक चेतावनियों में परिवर्तित करना।',
+      image: '/5.png',
+      overlayLabel: 'कार्रवाई आवश्यक',
+      overlayValue: 'अलर्ट प्रेषण'
+    }
+  ]
+};
 
 export default function ScrollStory() {
+  const { language } = useAccessibility();
+  const langKey = (language || 'en').toUpperCase();
+  const storyStates = STORY_TRANSLATIONS[langKey] || STORY_TRANSLATIONS.EN;
+
   const containerRef = useRef(null);
   const imagesRef = useRef([]);
   const textsRef = useRef([]);
@@ -66,7 +125,7 @@ export default function ScrollStory() {
   const tlRef = useRef(null);
 
   useLayoutEffect(() => {
-    const totalStates = STORY_STATES.length;
+    const totalStates = storyStates.length;
     const getHeaderOffset = () => (window.innerWidth <= 768 ? 54 : 60);
 
     const ctx = gsap.context(() => {
@@ -183,13 +242,13 @@ export default function ScrollStory() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [langKey]);
 
   const handleDotClick = (targetIndex) => {
     const tl = tlRef.current;
     if (!tl || !tl.scrollTrigger) return;
     const st = tl.scrollTrigger;
-    const totalStates = STORY_STATES.length;
+    const totalStates = storyStates.length;
     // Map index 0..4 to scroll position
     const targetScroll = st.start + (targetIndex / (totalStates - 1)) * (st.end - st.start);
     window.scrollTo({ top: targetScroll, behavior: 'smooth' });
@@ -202,9 +261,9 @@ export default function ScrollStory() {
         {/* LEFT VISUAL SIDE */}
         <div className="story-visual-side">
           <div className="story-visual-container">
-            {STORY_STATES.map((state, index) => (
+            {storyStates.map((state, index) => (
               <div 
-                key={`img-${state.id}`} 
+                key={`img-${langKey}-${state.id}`} 
                 className="story-image-layer"
                 ref={el => imagesRef.current[index] = el}
               >
@@ -225,9 +284,9 @@ export default function ScrollStory() {
         {/* RIGHT CONTENT SIDE */}
         <div className="story-content-side">
           <div className="story-text-container">
-            {STORY_STATES.map((state, index) => (
+            {storyStates.map((state, index) => (
               <div 
-                key={`txt-${state.id}`} 
+                key={`txt-${langKey}-${state.id}`} 
                 className="story-text-layer"
                 ref={el => textsRef.current[index] = el}
               >
@@ -240,8 +299,8 @@ export default function ScrollStory() {
           </div>
 
           <div className="story-progress-indicator" role="tablist" aria-label="Operational Workflow Steps">
-            {STORY_STATES.map((state, index) => (
-              <React.Fragment key={`dot-${state.id}`}>
+            {storyStates.map((state, index) => (
+              <React.Fragment key={`dot-${langKey}-${state.id}`}>
                 <button 
                   type="button"
                   className={`progress-dot ${index === 0 ? 'active' : ''}`} 
@@ -249,7 +308,7 @@ export default function ScrollStory() {
                   onClick={() => handleDotClick(index)}
                   aria-label={`Jump to Step ${state.number}: ${state.title}`}
                 />
-                {index < STORY_STATES.length - 1 && (
+                {index < storyStates.length - 1 && (
                   <div className="progress-line" />
                 )}
               </React.Fragment>

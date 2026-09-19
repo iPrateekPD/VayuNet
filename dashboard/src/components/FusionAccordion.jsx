@@ -1,64 +1,143 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
+import { useAccessibility } from '../context/AccessibilityContext';
 
-const SOVEREIGN_STREAMS = [
-  {
-    id: 'insat',
-    num: '01',
-    agency: 'MOSDAC / ISRO',
-    title: 'INSAT-3D / 3DR',
-    category: 'SATELLITE OBSERVATIONS',
-    quickStat: 'Cadence: 15 – 30 min · 4 km WGS84',
-    desc: 'Geostationary multi-spectral radiances delivering rapid Cloud Top Temperature (CTT) cooling rates, Water Vapor (6.7 µm) moisture pooling, and Thermal Infrared brightness temperatures.',
-    img: '/satellite_insat.jpg',
-    chipTag: 'GEOSTATIONARY 4 KM',
-    specs: [
-      { label: 'Temporal Cadence', value: '15 – 30 min' },
-      { label: 'Primary Channels', value: 'WV 6.7 µm · TIR 10.8 µm' },
-      { label: 'Resolution', value: '4 km (Sub-satellite)' },
-    ],
-    accentTint: 'rgba(56, 189, 248, 0.03)',
-    accentBorder: 'rgba(56, 189, 248, 0.45)',
+const FUSION_TRANSLATIONS = {
+  EN: {
+    eyebrow: 'CORE CAPABILITIES',
+    titlePart1: 'Multi-source.',
+    titlePart2: 'One intelligence layer.',
+    desc: 'VAYUNET ingests three sovereign observation streams, harmonizing disparate cadences and projections onto a unified 4 km WGS84 spatiotemporal grid.',
+    exploreAll: 'EXPLORE ALL',
+    exploreStream: 'Explore Stream →',
+    streams: [
+      {
+        id: 'insat',
+        num: '01',
+        agency: 'MOSDAC / ISRO',
+        title: 'INSAT-3D / 3DR',
+        category: 'SATELLITE OBSERVATIONS',
+        quickStat: 'Cadence: 15 – 30 min · 4 km WGS84',
+        desc: 'Geostationary multi-spectral radiances delivering rapid Cloud Top Temperature (CTT) cooling rates, Water Vapor (6.7 µm) moisture pooling, and Thermal Infrared brightness temperatures.',
+        img: '/satellite_insat.jpg',
+        chipTag: 'GEOSTATIONARY 4 KM',
+        specs: [
+          { label: 'Temporal Cadence', value: '15 – 30 min' },
+          { label: 'Primary Channels', value: 'WV 6.7 µm · TIR 10.8 µm' },
+          { label: 'Resolution', value: '4 km (Sub-satellite)' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.45)',
+      },
+      {
+        id: 'imdaa',
+        num: '02',
+        agency: 'NCMRWF',
+        title: 'IMDAA',
+        category: 'ATMOSPHERIC REANALYSIS',
+        quickStat: 'Assimilation: Hourly Regional Cycle',
+        desc: 'High-resolution regional reanalysis providing foundational thermodynamic soundings: Convective Available Potential Energy (CAPE), Convective Inhibition (CIN), and 0–6 km deep-layer vertical wind shear.',
+        img: '/imdaa_reanalysis.jpg',
+        chipTag: 'REANALYSIS 12 KM',
+        specs: [
+          { label: 'Assimilation', value: 'Hourly Regional Cycle' },
+          { label: 'Key Variables', value: 'CAPE · CIN · Shear · Moisture' },
+          { label: 'Coverage', value: 'Pan-India & Indian Ocean' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.42)',
+      },
+      {
+        id: 'cartodem',
+        num: '03',
+        agency: 'ISRO / BHUVAN',
+        title: 'CartoDEM',
+        category: 'TERRAIN INTELLIGENCE',
+        quickStat: 'Native Grid: 30 m Hydro-enforced',
+        desc: 'Sub-meter accurate 30 m Digital Elevation Model enabling hydrological basin demarcation, slope steepness computation, aspect analysis, and D8 kinematic wave overland flow routing.',
+        img: '/cartodem_elevation.jpg',
+        chipTag: 'HYDRO-ENFORCED 30 M',
+        specs: [
+          { label: 'Native Grid', value: '30 m Hydro-enforced' },
+          { label: 'Hydro Model', value: 'D8 Flow Accumulation' },
+          { label: 'Basin Matrix', value: 'Pan-India River Basins' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.42)',
+      },
+    ]
   },
-  {
-    id: 'imdaa',
-    num: '02',
-    agency: 'NCMRWF',
-    title: 'IMDAA',
-    category: 'ATMOSPHERIC REANALYSIS',
-    quickStat: 'Assimilation: Hourly Regional Cycle',
-    desc: 'High-resolution regional reanalysis providing foundational thermodynamic soundings: Convective Available Potential Energy (CAPE), Convective Inhibition (CIN), and 0–6 km deep-layer vertical wind shear.',
-    img: '/imdaa_reanalysis.jpg',
-    chipTag: 'REANALYSIS 12 KM',
-    specs: [
-      { label: 'Assimilation', value: 'Hourly Regional Cycle' },
-      { label: 'Key Variables', value: 'CAPE · CIN · Shear · Moisture' },
-      { label: 'Coverage', value: 'Pan-India & Indian Ocean' },
-    ],
-    accentTint: 'rgba(56, 189, 248, 0.03)',
-    accentBorder: 'rgba(56, 189, 248, 0.42)',
-  },
-  {
-    id: 'cartodem',
-    num: '03',
-    agency: 'ISRO / BHUVAN',
-    title: 'CartoDEM',
-    category: 'TERRAIN INTELLIGENCE',
-    quickStat: 'Native Grid: 30 m Hydro-enforced',
-    desc: 'Sub-meter accurate 30 m Digital Elevation Model enabling hydrological basin demarcation, slope steepness computation, aspect analysis, and D8 kinematic wave overland flow routing.',
-    img: '/cartodem_elevation.jpg',
-    chipTag: 'HYDRO-ENFORCED 30 M',
-    specs: [
-      { label: 'Native Grid', value: '30 m Hydro-enforced' },
-      { label: 'Hydro Model', value: 'D8 Flow Accumulation' },
-      { label: 'Basin Matrix', value: 'Pan-India River Basins' },
-    ],
-    accentTint: 'rgba(56, 189, 248, 0.03)',
-    accentBorder: 'rgba(56, 189, 248, 0.42)',
-  },
-];
+  HI: {
+    eyebrow: 'मुख्य क्षमताएँ',
+    titlePart1: 'बहु-स्रोत डेटा।',
+    titlePart2: 'एक एकीकृत बुद्धिमत्ता परत।',
+    desc: 'वायुनेट तीन संप्रभु प्रेक्षण डेटा धाराओं को एकीकृत करता है, और विभिन्न आवृत्तियों एवं अनुमानों को 4 किमी ग्रिड पर संयोजित करता है।',
+    exploreAll: 'सभी देखें',
+    exploreStream: 'डेटा स्ट्रीम देखें →',
+    streams: [
+      {
+        id: 'insat',
+        num: '01',
+        agency: 'मोसडैक / इसरो',
+        title: 'इनसैट-3डी / 3डीआर',
+        category: 'उपग्रह प्रेक्षण',
+        quickStat: 'आवृत्ति: 15 – 30 मिनट · 4 किमी WGS84',
+        desc: 'भू-स्थिर मल्टी-स्पेक्ट्रल रेडिएंस जो क्लाउड टॉप तापमान में तीव्र गिरावट, 6.7 µm जलवाष्प नमी संचय और थर्मल इन्फ्रारेड ब्राइटनेस तापमान प्रदान करते हैं।',
+        img: '/satellite_insat.jpg',
+        chipTag: 'भू-स्थिर 4 किमी',
+        specs: [
+          { label: 'समय अंतराल', value: '15 – 30 मिनट' },
+          { label: 'प्रमुख चैनल', value: 'जलवाष्प 6.7 µm · टीआईआर 10.8 µm' },
+          { label: 'रिज़ॉल्यूशन', value: '4 किमी (उप-उपग्रह)' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.45)',
+      },
+      {
+        id: 'imdaa',
+        num: '02',
+        agency: 'एनसीएमआरडब्ल्यूएफ',
+        title: 'आईएमडीएए',
+        category: 'वायुमंडलीय पुनर्वैश्लेषण',
+        quickStat: 'समावेशन: प्रति घंटा क्षेत्रीय चक्र',
+        desc: 'उच्च-रिज़ॉल्यूशन क्षेत्रीय पुनर्वैश्लेषण जो थर्मोडायनामिक साउंडिंग प्रदान करता है: संवहनीय अस्थिरता (CAPE), संवहनीय अवरोध (CIN), और ऊर्ध्वाधर पवन अपरूपण।',
+        img: '/imdaa_reanalysis.jpg',
+        chipTag: 'पुनर्वैश्लेषण 12 किमी',
+        specs: [
+          { label: 'समावेशन चक्र', value: 'प्रति घंटा क्षेत्रीय चक्र' },
+          { label: 'मुख्य पैरामीटर', value: 'CAPE · CIN · पवन कतरनी · नमी' },
+          { label: 'कवरेज', value: 'अखिल भारतीय एवं हिंद महासागर' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.42)',
+      },
+      {
+        id: 'cartodem',
+        num: '03',
+        agency: 'इसरो / भुवन',
+        title: 'कार्टोडेम',
+        category: 'भू-भाग बुद्धिमत्ता',
+        quickStat: 'मूल ग्रिड: 30 मीटर हाइड्रोलॉजिकल',
+        desc: 'सटीक 30 मीटर डिजिटल एलिवेशन मॉडल जो जलवैज्ञानिक बेसिन सीमांकन, ढलान गणना और जल प्रवाह विश्लेषण को सक्षम बनाता है।',
+        img: '/cartodem_elevation.jpg',
+        chipTag: 'हाइड्रोलॉजिकल 30 मीटर',
+        specs: [
+          { label: 'मूल ग्रिड', value: '30 मीटर हाइड्रो-संवर्धित' },
+          { label: 'हाइड्रो मॉडल', value: 'डी8 प्रवाह संचय' },
+          { label: 'बेसिन मैट्रिक्स', value: 'अखिल भारतीय नदी बेसिन' },
+        ],
+        accentTint: 'rgba(56, 189, 248, 0.03)',
+        accentBorder: 'rgba(56, 189, 248, 0.42)',
+      },
+    ]
+  }
+};
 
 export default function FusionAccordion({ onEnterPortal }) {
+  const { language } = useAccessibility();
+  const langKey = (language || 'en').toUpperCase();
+  const t = FUSION_TRANSLATIONS[langKey] || FUSION_TRANSLATIONS.EN;
+
   const containerRef = useRef(null);
   const cardRefs = useRef([]);
   const descRefs = useRef([]);
@@ -401,14 +480,13 @@ export default function FusionAccordion({ onEnterPortal }) {
       {/* Top Header Row */}
       <div className="fusion-header-wrap">
         <div className="fusion-header-left">
-          <div className="section-eyebrow">CORE CAPABILITIES</div>
+          <div className="section-eyebrow">{t.eyebrow}</div>
           <h2 className="fusion-title">
-            Multi-source.<br />
-            <span className="fusion-title-blue">One intelligence layer.</span>
+            {t.titlePart1}<br />
+            <span className="fusion-title-blue">{t.titlePart2}</span>
           </h2>
           <p className="fusion-desc">
-            VAYUNET ingests three sovereign observation streams, harmonizing disparate
-            cadences and projections onto a unified 4 km WGS84 spatiotemporal grid.
+            {t.desc}
           </p>
         </div>
 
@@ -419,7 +497,7 @@ export default function FusionAccordion({ onEnterPortal }) {
             onClick={() => onEnterPortal?.('data-sources')}
             aria-label="Explore all sovereign observation streams"
           >
-            <span className="explore-btn-text">EXPLORE ALL</span>
+            <span className="explore-btn-text">{t.exploreAll}</span>
             <span className="explore-btn-circle">
               <svg
                 width="14"
@@ -448,7 +526,7 @@ export default function FusionAccordion({ onEnterPortal }) {
         role="region"
         aria-label="Sovereign observation streams horizontal accordion"
       >
-        {SOVEREIGN_STREAMS.map((stream, idx) => {
+        {t.streams.map((stream, idx) => {
           const isMobileActive = !!mobileOpenCards[idx];
           const isExpanded = desktopHoveredIdx === idx;
           const isContracted = desktopHoveredIdx !== null && desktopHoveredIdx !== idx;
@@ -551,7 +629,7 @@ export default function FusionAccordion({ onEnterPortal }) {
                       ref={(el) => (ctaLabelRefs.current[idx] = el)}
                       className="fusion-cta-label"
                     >
-                      <span>Explore Stream →</span>
+                      <span>{t.exploreStream}</span>
                     </div>
                   </div>
                 </div>

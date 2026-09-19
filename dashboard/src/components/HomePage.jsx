@@ -12,6 +12,8 @@ import {
 import AccessibilityMenu from './AccessibilityMenu';
 import ReadAloudButton from './ReadAloudButton';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { DotPattern } from "@/registry/magicui/dot-pattern";
+import { cn } from "@/lib/utils";
 import './CitizenPortal.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -68,6 +70,92 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       ticker3Tag: 'SEVERE THUNDERSTORM',
       ticker3Loc: 'Western Ghats & Konkan',
       ticker3Desc: 'High lightning density and squall gusts > 85 km/h.',
+      tickerMobileText: 'Heavy rainfall over Uttarakhand',
+      ndmaHelpline: 'NDMA Helpline',
+
+      // Hero Section
+      heroHeadline1: 'Detect severe weather',
+      heroHeadline2: 'before it becomes',
+      heroHeadline3: 'a disaster.',
+      heroLeadText: 'VAYUNET combines satellite observations, atmospheric reanalysis and terrain intelligence to forecast severe thunderstorms, cloudbursts and flash floods at hyper-local scale — 2 to 6 hours before impact.',
+      viewPublicWarnings: 'View Public Warnings ↗',
+      missionBadge: 'Sovereign Earth Observation · AI Convective Intelligence',
+      poweredByNationalData: 'POWERED BY NATIONAL DATA',
+      live: 'Live',
+      recenterMap: 'Recenter Map to India',
+      zoomIn: 'Zoom In',
+      zoomOut: 'Zoom Out',
+
+      // Map Layers & Controls
+      layers: 'Layers',
+      selectWeatherLayer: 'Select Weather Layer',
+      precipitation: 'Precipitation',
+      cloud_tops: 'Cloud Tops',
+      lightning: 'Lightning',
+      wind: 'Wind',
+      terrain: 'Terrain',
+
+      // Legends
+      legendPrecip: 'IMD Doppler Composite (dBZ / mm/hr)',
+      legendCloudTops: 'INSAT-3DR Cloud Top Temp (°C)',
+      legendWind: '850 hPa Wind Velocity (knots)',
+      legendLightning: 'Flash Rate (strikes / 15 min)',
+
+      // Scrubber
+      forecastLeadTime: 'Forecast Lead Time',
+      viewLiveMap: 'View Live Map',
+      pauseForecast: 'Pause forecast',
+      playForecast: 'Play 6h forecast cycle',
+
+      // Telemetry Strip
+      telemetryTitle: 'VAYUNET OPERATIONAL TELEMETRY',
+      telemetryNominal: 'All Ingest Pipelines Nominal',
+      telemetryInsat: '🛰️ INSAT-3DR Multispectral:',
+      online100: 'ONLINE (100%)',
+      telemetryImdaa: '🌪️ IMDAA 4km Reanalysis:',
+      coupled: 'COUPLED',
+      telemetryLatency: '⚡ Inference Latency:',
+      telemetryCap: '📡 ITU-T X.1303 CAP 1.2:',
+      activeStatus: 'ACTIVE',
+
+      // Footer Col 1
+      footerSubtitle: 'National Severe Weather Nowcasting Engine',
+      footerDesc: 'An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.',
+      moes: 'Ministry of Earth Sciences',
+      goi: 'Government of India',
+
+      // Footer Col 2
+      footerCol2Title: 'Public Warning Services',
+      footerRadar: 'Active District Warning Radar',
+      footerShelter: 'Nearest Safe Shelter Locator',
+      footerProtocols: 'Flash Flood Safety Protocols',
+      footerEvac: 'Cloudburst Evacuation Guidelines',
+      footerCap: 'CAP 1.2 Common Alerting Feed',
+
+      // Footer Col 3
+      footerCol3Title: 'Emergency Hotlines (24x7)',
+      hotline112Title: 'National Emergency',
+      hotline112Sub: 'Police, Fire & Medical',
+      hotline108Title: 'Disaster Ambulance',
+      hotline108Sub: 'Emergency Medical Response',
+      hotline1078Title: 'NDMA Disaster Line',
+      hotline1078Sub: 'National Control Center',
+
+      // Footer Col 4
+      footerCol4Title: 'Institutional Governance',
+      instMoes: 'Ministry of Earth Sciences (MoES) ↗',
+      instImd: 'India Meteorological Department (IMD) ↗',
+      instNcmrwf: 'NCMRWF Weather Computing ↗',
+      instNdma: 'National Disaster Management Authority ↗',
+      instIsro: 'ISRO / MOSDAC Satellite Data ↗',
+
+      // Footer Legal
+      legalCopyright: '© 2026 VAYUNET · Ministry of Earth Sciences, Government of India. All rights reserved.',
+      legalCompliance: 'Compliant with ITU-T X.1303 CAP 1.2 Protocol · WCAG 2.1 Level AA',
+      legalPrivacy: 'Privacy Policy',
+      legalTerms: 'Terms of Use',
+      legalPortal: 'Operations Portal',
+      legalWarnings: 'Public Warnings',
     },
     HI: {
       home: 'मुख्य पृष्ठ',
@@ -88,6 +176,92 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       ticker3Tag: 'गंभीर तड़ित-झंझावात',
       ticker3Loc: 'पश्चिमी घाट एवं कोंकण',
       ticker3Desc: 'उच्च आकाशीय बिजली घनत्व तथा 85 किमी/घंटा से अधिक हवा की गति।',
+      tickerMobileText: 'उत्तराखंड में भारी वर्षा का अलर्ट',
+      ndmaHelpline: 'एनडीएमए हेल्पलाइन',
+
+      // Hero Section
+      heroHeadline1: 'गंभीर मौसम का पता लगाएं,',
+      heroHeadline2: 'इससे पहले कि वह',
+      heroHeadline3: 'आपदा बन जाए।',
+      heroLeadText: 'वायुनेट उपग्रह अवलोकनों, वायुमंडलीय पुनर्विश्लेषण और भू-भाग बुद्धिमत्ता को संयोजित कर अति-स्थानीय स्तर पर तीव्र आंधी-तूफान, बादल फटने और अचानक बाढ़ का प्रभाव से 2 से 6 घंटे पूर्व सटीक पूर्वानुमान प्रदान करता है।',
+      viewPublicWarnings: 'सार्वजनिक चेतावनियाँ देखें ↗',
+      missionBadge: 'संप्रभु पृथ्वी अवलोकन · एआई संवहनीय बुद्धिमत्ता',
+      poweredByNationalData: 'राष्ट्रीय डेटा द्वारा संचालित',
+      live: 'लाइव',
+      recenterMap: 'भारत पर रीसेट करें',
+      zoomIn: 'ज़ूम इन',
+      zoomOut: 'ज़ूम आउट',
+
+      // Map Layers & Controls
+      layers: 'मौसम परतें',
+      selectWeatherLayer: 'मौसम परत चुनें',
+      precipitation: 'वर्षा (Precipitation)',
+      cloud_tops: 'बादल शीर्ष (Cloud Tops)',
+      lightning: 'आकाशीय बिजली (Lightning)',
+      wind: 'पवन गति (Wind)',
+      terrain: 'भू-भाग (Terrain)',
+
+      // Legends
+      legendPrecip: 'आईएमडी डॉपलर कंपोजिट (dBZ / मिमी/घंटा)',
+      legendCloudTops: 'इनसैट-3डीआर मेघ शीर्ष तापमान (°C)',
+      legendWind: '850 hPa पवन वेग (नॉट्स)',
+      legendLightning: 'तड़ित दर (स्ट्राइक / 15 मिनट)',
+
+      // Scrubber
+      forecastLeadTime: 'पूर्वानुमान लीड टाइम',
+      viewLiveMap: 'लाइव मानचित्र देखें',
+      pauseForecast: 'पूर्वानुमान रोकें',
+      playForecast: '6 घंटे का पूर्वानुमान चक्र चलाएं',
+
+      // Telemetry Strip
+      telemetryTitle: 'वायुनेट परिचालन टेलीमेट्री',
+      telemetryNominal: 'सभी इनपुट पाइपलाइनें सामान्य',
+      telemetryInsat: '🛰️ इनसैट-3डीआर मल्टीस्पेक्ट्रल:',
+      online100: 'ऑनलाइन (100%)',
+      telemetryImdaa: '🌪️ आईएमडीएए 4किमी पुनर्विश्लेषण:',
+      coupled: 'संबद्ध',
+      telemetryLatency: '⚡ अनुमान विलंबता:',
+      telemetryCap: '📡 ITU-T X.1303 सीएपी 1.2:',
+      activeStatus: 'सक्रिय',
+
+      // Footer Col 1
+      footerSubtitle: 'राष्ट्रीय गंभीर मौसम नाउकास्टिंग इंजन',
+      footerDesc: 'पृथ्वी विज्ञान मंत्रालय (MoES), भारत सरकार के तत्वावधान में विकसित एक वायुमंडलीय कृत्रिम बुद्धिमत्ता प्लेटफॉर्म। बादल फटने, गंभीर तड़ित-झंझावात और अचानक बाढ़ के विरुद्ध 2-6 घंटे का जीवन-रक्षक अग्रिम समय प्रदान करता है।',
+      moes: 'पृथ्वी विज्ञान मंत्रालय',
+      goi: 'भारत सरकार',
+
+      // Footer Col 2
+      footerCol2Title: 'सार्वजनिक चेतावनी सेवाएँ',
+      footerRadar: 'सक्रिय जिला चेतावनी रडार',
+      footerShelter: 'निकटतम सुरक्षित आश्रय खोजक',
+      footerProtocols: 'अचानक बाढ़ सुरक्षा दिशानिर्देश',
+      footerEvac: 'बादल फटने पर निकासी नियमावली',
+      footerCap: 'सीएपी 1.2 कॉमन अलर्टिंग फीड',
+
+      // Footer Col 3
+      footerCol3Title: 'आपातकालीन हेल्पलाइन (24x7)',
+      hotline112Title: 'राष्ट्रीय आपातकाल',
+      hotline112Sub: 'पुलिस, अग्निशमन एवं चिकित्सा',
+      hotline108Title: 'आपदा एम्बुलेंस',
+      hotline108Sub: 'आपातकालीन चिकित्सा सेवा',
+      hotline1078Title: 'एनडीएमए आपदा लाइन',
+      hotline1078Sub: 'राष्ट्रीय नियंत्रण केंद्र',
+
+      // Footer Col 4
+      footerCol4Title: 'संस्थागत शासन एवं सहभागिता',
+      instMoes: 'पृथ्वी विज्ञान मंत्रालय (MoES) ↗',
+      instImd: 'भारत मौसम विज्ञान विभाग (IMD) ↗',
+      instNcmrwf: 'एनसीएमआरडब्ल्यूएफ मौसम संगणना ↗',
+      instNdma: 'राष्ट्रीय आपदा प्रबंधन प्राधिकरण ↗',
+      instIsro: 'इसरो / मॉसडैक उपग्रह डेटा ↗',
+
+      // Footer Legal
+      legalCopyright: '© 2026 वायुनेट · पृथ्वी विज्ञान मंत्रालय, भारत सरकार। सर्वाधिकार सुरक्षित।',
+      legalCompliance: 'ITU-T X.1303 CAP 1.2 प्रोटोकॉल एवं WCAG 2.1 लेवल AA अनुपालक',
+      legalPrivacy: 'गोपनीयता नीति',
+      legalTerms: 'उपयोग की शर्तें',
+      legalPortal: 'ऑपरेशंस पोर्टल',
+      legalWarnings: 'सार्वजनिक चेतावनियाँ',
     }
   };
 
@@ -263,37 +437,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           scrollTrigger: {
             trigger: '.fusion-accordion-container',
             start: 'top 82%',
-          },
-        }
-      );
-
-      // 3. Section 02: Operational Workflow
-      gsap.fromTo(
-        '.workflow-header-wrap',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          scrollTrigger: {
-            trigger: '#how-it-works',
-            start: 'top 82%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.decision-step-v3',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          stagger: 0.12,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.workflow-steps-horizontal',
-            start: 'top 80%',
           },
         }
       );
@@ -549,14 +692,14 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
         {/* Dedicated Mobile Clean Alert Row (matches reference) */}
         <div className="ticker-mobile-preview" onClick={onOpenPublicWarnings}>
-          <span className="ticker-mobile-text">Heavy rainfall over Uttarakhand</span>
+          <span className="ticker-mobile-text">{t.tickerMobileText}</span>
           <span className="ticker-mobile-arrow">›</span>
         </div>
 
         <div className="ticker-helpline-wrap">
           <a href="tel:1078" className="ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
             <span className="helpline-icon">🚨</span>
-            <span>NDMA Helpline: <strong>1078</strong></span>
+            <span>{t.ndmaHelpline}: <strong>1078</strong></span>
           </a>
         </div>
       </div>
@@ -598,23 +741,21 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           {/* ===== LEFT COLUMN: Mission Briefing ===== */}
           <div className="hero-left-content">
             <h1 className="hero-headline">
-              Detect severe weather<br />
-              <span className="hero-headline-accent">before it becomes</span><br />
-              <span className="hero-headline-accent">a disaster.</span>
+              {t.heroHeadline1}<br />
+              <span className="hero-headline-accent">{t.heroHeadline2}</span><br />
+              <span className="hero-headline-accent">{t.heroHeadline3}</span>
             </h1>
 
             <p className="hero-lead-text">
-              VAYUNET combines satellite observations, atmospheric reanalysis and
-              terrain intelligence to forecast severe thunderstorms, cloudbursts
-              and flash floods at hyper-local scale — 2 to 6 hours before impact.
+              {t.heroLeadText}
             </p>
 
             <div className="hero-cta-group">
               <button className="btn-hero-portal" onClick={onEnterPortal} id="hero-enter-portal-btn">
-                Enter Operations Portal →
+                {t.enterPortal}
               </button>
               <button className="btn-hero-warnings" onClick={onOpenPublicWarnings} id="hero-view-warnings-btn">
-                View Public Warnings ↗
+                {t.viewPublicWarnings}
               </button>
             </div>
 
@@ -630,8 +771,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
                 type="button"
                 className="mobile-map-recenter-fab"
                 onClick={handleResetView}
-                title="Recenter Map to India"
-                aria-label="Recenter Map"
+                title={t.recenterMap}
+                aria-label={t.recenterMap}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="7" />
@@ -646,12 +787,12 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             {/* Primary Action Info Pill (Desktop Only) */}
             <div className="hero-mission-badge">
               <span className="mission-badge-dot" />
-              <span>Sovereign Earth Observation · AI Convective Intelligence</span>
+              <span>{t.missionBadge}</span>
             </div>
 
             {/* National Data Provenance Bar */}
             <div className="hero-national-data-provenance">
-              <div className="national-data-label">POWERED BY NATIONAL DATA</div>
+              <div className="national-data-label">{t.poweredByNationalData}</div>
               <div className="national-data-sources-row">
                 <div className="national-data-item">
                   <div className="national-data-icon-box">
@@ -711,7 +852,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             <span className="hero-status-divider" />
             <span className="hero-live-pill">
               <span className="live-dot" />
-              Live
+              {t.live}
             </span>
           </div>
 
@@ -725,13 +866,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               <polyline points="2 17 12 22 22 17" />
               <polyline points="2 12 12 17 22 12" />
             </svg>
-            <span>Layers: {activeLayerMeta.label}</span>
+            <span>{t.layers}: {t[activeLayer] || activeLayerMeta.label}</span>
           </button>
 
           {/* Desktop Floating Layer Selector Menu Card */}
           <div className={`map-layer-panel ${mobileLayerSheetOpen ? 'mobile-sheet-open' : ''}`}>
             <div className="mobile-sheet-header">
-              <span>Select Weather Layer</span>
+              <span>{t.selectWeatherLayer}</span>
               <button
                 className="mobile-sheet-close"
                 onClick={() => setMobileLayerSheetOpen(false)}
@@ -743,7 +884,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             {[
               {
                 id: 'precipitation',
-                label: 'Precipitation',
+                label: t.precipitation,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
@@ -752,7 +893,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               },
               {
                 id: 'cloud_tops',
-                label: 'Cloud Tops',
+                label: t.cloud_tops,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
@@ -761,7 +902,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               },
               {
                 id: 'lightning',
-                label: 'Lightning',
+                label: t.lightning,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -770,7 +911,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               },
               {
                 id: 'wind',
-                label: 'Wind',
+                label: t.wind,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.7 7.7a2.5 2.5 0 1 1-1.8 4.3H2" />
@@ -781,7 +922,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               },
               {
                 id: 'terrain',
-                label: 'Terrain',
+                label: t.terrain,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
@@ -812,8 +953,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             <button
               className="zoom-ctrl-btn"
               onClick={handleZoomIn}
-              title="Zoom In"
-              aria-label="Zoom in"
+              title={t.zoomIn}
+              aria-label={t.zoomIn}
             >
               +
             </button>
@@ -821,8 +962,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             <button
               className="zoom-ctrl-btn"
               onClick={handleZoomOut}
-              title="Zoom Out"
-              aria-label="Zoom out"
+              title={t.zoomOut}
+              aria-label={t.zoomOut}
             >
               −
             </button>
@@ -830,8 +971,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             <button
               className="zoom-ctrl-btn"
               onClick={handleResetView}
-              title="Reset View to India"
-              aria-label="Recenter map"
+              title={t.recenterMap}
+              aria-label={t.recenterMap}
             >
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="7" />
@@ -848,7 +989,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           <div className="hero-map-bottom-group">
             {activeLayer === 'precipitation' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">IMD Doppler Composite (dBZ / mm/hr)</div>
+                <div className="precip-legend-title">{t.legendPrecip}</div>
                 <div className="precip-legend-spectrum-bar" />
                 <div className="precip-legend-scale-labels">
                   <span>15</span>
@@ -862,7 +1003,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             )}
             {activeLayer === 'cloud_tops' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">INSAT-3DR Cloud Top Temp (°C)</div>
+                <div className="precip-legend-title">{t.legendCloudTops}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #6366f1 0%, #312e81 30%, #818cf8 60%, #c084fc 85%, #ec4899 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>-20°</span>
@@ -876,7 +1017,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             )}
             {activeLayer === 'wind' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">850 hPa Wind Velocity (knots)</div>
+                <div className="precip-legend-title">{t.legendWind}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 35%, #22d3ee 70%, #38bdf8 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>10</span>
@@ -890,7 +1031,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
             )}
             {activeLayer === 'lightning' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">Flash Rate (strikes / 15 min)</div>
+                <div className="precip-legend-title">{t.legendLightning}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #fef08a 0%, #facc15 35%, #f59e0b 70%, #dc2626 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>5</span>
@@ -915,8 +1056,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
                     }
                     setIsPlaying(v => !v);
                   }}
-                  title={isPlaying ? 'Pause forecast' : 'Play 6h forecast cycle'}
-                  aria-label={isPlaying ? 'Pause forecast' : 'Play 6h forecast cycle'}
+                  title={isPlaying ? t.pauseForecast : t.playForecast}
+                  aria-label={isPlaying ? t.pauseForecast : t.playForecast}
                 >
                   {isPlaying ? (
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
@@ -929,7 +1070,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
                     </svg>
                   )}
                 </button>
-                <span className="compact-scrubber-title">Forecast Lead Time</span>
+                <span className="compact-scrubber-title">{t.forecastLeadTime}</span>
                 <span className="compact-scrubber-time">{FORECAST_TIME_STEPS[scrubberIdx].validTime}</span>
               </div>
 
@@ -955,9 +1096,9 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
               <button
                 className="btn-view-live-map"
                 onClick={onEnterPortal}
-                title="Open Full Operational Weather Map"
+                title={t.viewLiveMap}
               >
-                <span>View Live Map</span>
+                <span>{t.viewLiveMap}</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
@@ -987,22 +1128,33 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
       {/* ============================================================
           3. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)
           ============================================================ */}
-      <footer className="cp-footer">
+      <footer className="cp-footer relative overflow-hidden">
+        {/* MagicUI Background Dot Pattern */}
+        <DotPattern
+          className={cn(
+            "pointer-events-none absolute inset-0 h-full w-full text-cyan-400/20",
+            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
+          )}
+          glow={true}
+          width={22}
+          height={22}
+          cr={1.2}
+        />
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry">
           <div className="cp-telemetry-inner">
             <div className="cp-telemetry-status">
               <span className="cp-footer-telemetry-dot"></span>
-              <span><strong>VAYUNET OPERATIONAL TELEMETRY:</strong> All Ingest Pipelines Nominal</span>
+              <span><strong>{t.telemetryTitle}:</strong> {t.telemetryNominal}</span>
             </div>
             <div className="cp-telemetry-metrics">
-              <span>🛰️ INSAT-3DR Multispectral: <strong>ONLINE (100%)</strong></span>
+              <span>{t.telemetryInsat} <strong>{t.online100}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>🌪️ IMDAA 4km Reanalysis: <strong>COUPLED</strong></span>
+              <span>{t.telemetryImdaa} <strong>{t.coupled}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>⚡ Inference Latency: <strong>&lt; 120 ms</strong></span>
+              <span>{t.telemetryLatency} <strong>&lt; 120 ms</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>📡 ITU-T X.1303 CAP 1.2: <strong>ACTIVE</strong></span>
+              <span>{t.telemetryCap} <strong>{t.activeStatus}</strong></span>
             </div>
           </div>
         </div>
@@ -1018,56 +1170,56 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
                 </div>
                 <div>
                   <h2>VAYUNET</h2>
-                  <p>National Severe Weather Nowcasting Engine</p>
+                  <p>{t.footerSubtitle}</p>
                 </div>
               </div>
               <p className="cp-footer-desc">
-                An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.
+                {t.footerDesc}
               </p>
               <div className="cp-footer-emblem-badge">
                 <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
-                  Ministry of Earth Sciences
-                  <span style={{ color: '#94a3b8' }}>Government of India</span>
+                  {t.moes}
+                  <span style={{ color: '#94a3b8' }}>{t.goi}</span>
                 </div>
               </div>
             </div>
 
             {/* Col 2: Public Warning Services */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Public Warning Services</h3>
+              <h3 className="cp-footer-heading">{t.footerCol2Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Active District Warning Radar</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Nearest Safe Shelter Locator</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Flash Flood Safety Protocols</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Cloudburst Evacuation Guidelines</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>CAP 1.2 Common Alerting Feed</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerRadar}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerShelter}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerProtocols}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerEvac}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerCap}</button></li>
               </ul>
             </div>
 
             {/* Col 3: 24x7 Emergency Hotlines */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Emergency Hotlines (24x7)</h3>
+              <h3 className="cp-footer-heading">{t.footerCol3Title}</h3>
               <div className="cp-footer-hotlines">
                 <a href="tel:112" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">112</div>
                   <div className="cp-hotline-desc">
-                    <strong>National Emergency</strong>
-                    <span>Police, Fire & Medical</span>
+                    <strong>{t.hotline112Title}</strong>
+                    <span>{t.hotline112Sub}</span>
                   </div>
                 </a>
                 <a href="tel:108" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">108</div>
                   <div className="cp-hotline-desc">
-                    <strong>Disaster Ambulance</strong>
-                    <span>Emergency Medical Response</span>
+                    <strong>{t.hotline108Title}</strong>
+                    <span>{t.hotline108Sub}</span>
                   </div>
                 </a>
                 <a href="tel:1078" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">1078</div>
                   <div className="cp-hotline-desc">
-                    <strong>NDMA Disaster Line</strong>
-                    <span>National Control Center</span>
+                    <strong>{t.hotline1078Title}</strong>
+                    <span>{t.hotline1078Sub}</span>
                   </div>
                 </a>
               </div>
@@ -1075,13 +1227,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
 
             {/* Col 4: Sovereign Institutional Partners */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Institutional Governance</h3>
+              <h3 className="cp-footer-heading">{t.footerCol4Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">Ministry of Earth Sciences (MoES) ↗</a></li>
-                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">India Meteorological Department (IMD) ↗</a></li>
-                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">NCMRWF Weather Computing ↗</a></li>
-                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">National Disaster Management Authority ↗</a></li>
-                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">ISRO / MOSDAC Satellite Data ↗</a></li>
+                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">{t.instMoes}</a></li>
+                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">{t.instImd}</a></li>
+                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">{t.instNcmrwf}</a></li>
+                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">{t.instNdma}</a></li>
+                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">{t.instIsro}</a></li>
               </ul>
             </div>
           </div>
@@ -1091,14 +1243,14 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
         <div className="cp-footer-bottom">
           <div className="cp-footer-bottom-inner">
             <div className="cp-footer-legal">
-              <span>© 2026 VAYUNET · Ministry of Earth Sciences, Government of India. All rights reserved.</span>
-              <span>Compliant with ITU-T X.1303 CAP 1.2 Protocol · WCAG 2.1 Level AA</span>
+              <span>{t.legalCopyright}</span>
+              <span>{t.legalCompliance}</span>
             </div>
             <div className="cp-footer-bottom-links">
-              <span onClick={onOpenPublicWarnings}>Privacy Policy</span>
-              <span onClick={onOpenPublicWarnings}>Terms of Use</span>
-              <span onClick={onEnterPortal}>Operations Portal</span>
-              <span onClick={onOpenPublicWarnings}>Public Warnings</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalPrivacy}</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalTerms}</span>
+              <span onClick={onEnterPortal}>{t.legalPortal}</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalWarnings}</span>
             </div>
           </div>
         </div>
