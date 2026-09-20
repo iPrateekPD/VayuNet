@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'reac
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import ReadAloudButton from './ReadAloudButton';
-import PredictionPanel from './PredictionPanel';
+import AIRiskAssessmentPanel from './AIRiskAssessmentPanel';
 import './TacticalNowcast.css';
 
 // Fix Leaflet marker icons in React
@@ -1216,122 +1216,10 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
 
         {/* ================= RIGHT COLUMN: HIGHEST THREAT CARD + OPERATIONAL ACTIONS ================= */}
         <div className="tac-clean-col-right">
-          <div className="tac-clean-threat-card">
-            <div className="tac-clean-threat-head">
-              <div className="tac-clean-flame-tag">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.2">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
-                <span>{selectedIncident.badge}</span>
-                <ReadAloudButton 
-                  text={`${selectedIncident.badge}: ${selectedIncident.hazard}. ${currentStepData.riskLevel} at ${selectedIncident.name}. Estimated arrival: ${currentStepData.arrival}. ${selectedIncident.narrative}`} 
-                  label="Read threat details aloud"
-                />
-              </div>
-              <div className="tac-clean-forecast-pill">Forecast: +{currentStepData.eta}</div>
-            </div>
-
-            {/* Warning Title with Left Alert Icon */}
-            <div className="tac-clean-warn-title-group">
-              <div className="tac-clean-warn-title-row">
-                <div className="tac-clean-warn-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.2">
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
-                  </svg>
-                </div>
-                <div className="tac-clean-warn-text-col">
-                  <div className="tac-clean-warn-main">{selectedIncident.hazard}</div>
-                  <div className="tac-clean-warn-main">{currentStepData.riskLevel}</div>
-                </div>
-              </div>
-              <div className="tac-clean-warn-loc">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span>{selectedIncident.name}</span>
-              </div>
-            </div>
-
-            {/* Narrative */}
-            <div className="tac-clean-narrative">
-              {selectedIncident.narrative}
-            </div>
-
-            {/* 4 Metric Chips (2x2 Grid) */}
-            <div className="tac-clean-chips-grid">
-              <div className="tac-clean-chip">
-                <div className="tac-clean-chip-top">
-                  <span className="tac-clean-chip-icon">🌧️</span>
-                  <span className="tac-clean-chip-val">{currentStepData.rainfall}</span>
-                </div>
-                <span className="tac-clean-chip-label">Est. rainfall ({selectedStep})</span>
-              </div>
-
-              <div className="tac-clean-chip">
-                <div className="tac-clean-chip-top">
-                  <span className="tac-clean-chip-icon">🕒</span>
-                  <span className="tac-clean-chip-val">{currentStepData.arrival}</span>
-                </div>
-                <span className="tac-clean-chip-label">Estimated arrival</span>
-              </div>
-
-              <div className="tac-clean-chip">
-                <div className="tac-clean-chip-top">
-                  <span className="tac-clean-chip-icon">📊</span>
-                  <span className="tac-clean-chip-val">{currentStepData.confidence}</span>
-                </div>
-                <span className="tac-clean-chip-label">Model confidence</span>
-              </div>
-
-              <div className="tac-clean-chip">
-                <div className="tac-clean-chip-top">
-                  <span className="tac-clean-chip-icon">🗺️</span>
-                  <span className="tac-clean-chip-val">{currentStepData.area}</span>
-                </div>
-                <span className="tac-clean-chip-label">Affected area</span>
-              </div>
-            </div>
-
-            {/* Recommended Action */}
-            <div className="tac-clean-action-box">
-              <div className="tac-clean-action-head">
-                <span style={{ fontSize: '13px' }}>⚠️</span>
-                <span>Recommended Action</span>
-                <ReadAloudButton 
-                  text="Recommended Action: Move away from riverbeds and low-lying areas. Be prepared for possible evacuation. Follow local authority instructions."
-                  label="Read recommended actions aloud"
-                />
-              </div>
-              <ul className="tac-clean-action-list">
-                <li>Move away from riverbeds and low-lying areas.</li>
-                <li>Be prepared for possible evacuation.</li>
-                <li>Follow local authority instructions.</li>
-              </ul>
-            </div>
-
-            {/* AI Deep Learning Inference Panel */}
-            <div style={{ padding: '0 16px 16px', opacity: isPredicting ? 0.6 : 1, transition: 'opacity 0.3s ease' }}>
-               <PredictionPanel predictions={aiPredictions} severity={aiSeverity} />
-            </div>
-          </div>
+          <AIRiskAssessmentPanel predictions={aiPredictions} severity={aiSeverity} />
 
           {/* Operational Action Buttons (placed below the threat card, aligning with bottom cards) */}
           <div className="tac-clean-actions-group">
-            <button
-              type="button"
-              className="tac-clean-investigate-btn"
-              onClick={() => onNavigateTab && onNavigateTab('analysis')}
-              title="Examine CTT, IWV, CAPE and atmospheric drivers in Analysis view"
-            >
-              <span style={{ fontSize: '14px' }}>📊</span>
-              <span>Investigate Drivers (Why?) →</span>
-            </button>
-
             <button
               type="button"
               className="tac-clean-dispatch-btn"

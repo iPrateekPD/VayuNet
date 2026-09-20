@@ -1,0 +1,312 @@
+/* AIRiskAssessmentPanel.css */
+
+.aira-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #0f1423; /* Dark background matching the screenshot */
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f8fafc;
+  max-width: 400px; /* Optional constraint based on layout */
+}
+
+/* Header Row */
+.aira-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.aira-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aira-icon-green {
+  color: #38bdf8;
+  fill: #38bdf8;
+  opacity: 0.8;
+}
+
+.aira-brand-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  font-weight: 700;
+  color: #22c55e;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+}
+
+.aira-model-pill {
+  background-color: #2e1a24; /* Dark reddish tint */
+  color: #fca5a5;
+  font-family: monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #4c1d2e;
+  text-align: right;
+  line-height: 1.2;
+}
+
+/* Threat Title Section */
+.aira-threat-card {
+  display: flex;
+  gap: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
+  border-radius: 6px;
+}
+
+.aira-threat-icon-col {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.aira-icon-large-green {
+  color: #22c55e;
+  width: 32px;
+  height: 32px;
+}
+
+.aira-threat-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aira-threat-title {
+  margin: 0;
+  font-size: 14px;
+  color: #f87171;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.aira-threat-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.aira-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-top: 4px;
+}
+
+/* Benchmark Banner */
+.aira-benchmark-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.aira-benchmark-icon {
+  color: #94a3b8;
+}
+
+.aira-benchmark-text strong {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Narrative */
+.aira-narrative {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #cbd5e1;
+  padding: 4px 0;
+}
+
+.aira-narrative strong {
+  color: #f8fafc;
+}
+
+/* Metrics Grid */
+.aira-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.aira-metric-box {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aira-metric-val {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: monospace;
+}
+
+.aira-metric-val span span {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  font-family: -apple-system, sans-serif;
+}
+
+.aira-metric-label {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Action Box */
+.aira-action-box {
+  background-color: #292524;
+  border: 1px solid #44403c;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aira-action-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fbbf24;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.aira-action-text {
+  font-size: 11px;
+  color: #d6d3d1;
+  line-height: 1.4;
+}
+
+/* Investigate Button */
+.aira-investigate-btn {
+  background-color: #0f172a;
+  border: 1px solid #1e40af;
+  color: #60a5fa;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aira-investigate-btn:hover {
+  background-color: #1e3a8a;
+  color: #bfdbfe;
+}
+
+/* Real-Time Weather */
+.aira-weather-box {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.aira-weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 8px;
+}
+
+.aira-wh-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  letter-spacing: 0.05em;
+}
+
+.aira-wh-live {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.aira-weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: x;
+  column-gap: 16px;
+  row-gap: 8px;
+}
+
+.aira-w-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.aira-w-label {
+  color: #64748b;
+}
+
+.aira-w-val {
+  color: #cbd5e1;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.aira-w-val-blue {
+  color: #38bdf8;
+}
+
+.aira-w-val-orange {
+  color: #fbbf24;
+}
+
+.aira-weather-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #64748b;
+  padding-top: 4px;
+}
