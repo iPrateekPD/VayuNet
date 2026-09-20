@@ -37,7 +37,128 @@ const ScienceIcon = () => (
 );
 
 export default function AIRiskAssessmentPanel({ predictions, severity }) {
-  // Use mock data to match screenshot perfectly for now.
+  if (!predictions) {
+    return (
+      <div className="aira-container">
+        <div className="aira-narrative" style={{ textAlign: 'center', padding: '40px 20px' }}>
+          Loading AI Inference...
+        </div>
+      </div>
+    );
+  }
+
+  const isAvailable = predictions.prediction_status === 'SUCCESS';
+
+  if (!isAvailable) {
+    return (
+      <div className="aira-container" style={{ opacity: 0.85 }}>
+        {/* Top Header Row */}
+        <div className="aira-header-row">
+          <div className="aira-brand">
+            <ShieldIcon />
+            <div className="aira-brand-text">
+              <span style={{ color: '#94a3b8' }}>VAYUNET AI RISK</span>
+              <span style={{ color: '#94a3b8' }}>ASSESSMENT</span>
+            </div>
+          </div>
+          <div className="aira-model-pill" style={{ color: '#fca5a5', borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
+            STATUS: UNAVAILABLE
+          </div>
+        </div>
+
+        {/* Threat Title & Location */}
+        <div className="aira-threat-card" style={{ backgroundColor: 'rgba(15, 23, 42, 0.4)', border: '1px dashed #334155' }}>
+          <div className="aira-threat-icon-col">
+            <ShieldCheckIcon style={{ color: '#94a3b8' }} />
+          </div>
+          <div className="aira-threat-text-col">
+            <h2 className="aira-threat-title" style={{ color: '#94a3b8' }}>MODEL INFERENCE UNAVAILABLE</h2>
+            <h3 className="aira-threat-subtitle" style={{ color: '#64748b' }}>{predictions.reason || "Missing satellite tensor channels"}</h3>
+            <div className="aira-location">
+              <MapPinIcon />
+              <span>{predictions.target?.location_name || 'Unknown'}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Narrative */}
+        <div className="aira-narrative" style={{ color: '#94a3b8', fontSize: '11px', fontStyle: 'italic' }}>
+          Real-time weather data retrieved successfully. However, the VAYUNET-MTL-v2.0 
+          model requires complete 12-channel inputs including Geostationary INSAT IR/WV 
+          streams. We strictly enforce an anti-fabrication policy and do not mock predictions.
+        </div>
+        
+        {/* Real-time Weather Box */}
+        <div className="aira-weather-box">
+          <div className="aira-weather-header">
+            <div className="aira-wh-left">
+              <CloudRainIcon />
+              <span>REAL-TIME WEATHER (OPEN-METEO)</span>
+            </div>
+            <div className="aira-wh-live" style={{ color: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', borderColor: 'rgba(56, 189, 248, 0.2)' }}>LIVE</div>
+          </div>
+          <div className="aira-weather-grid">
+            <div className="aira-w-row">
+              <span className="aira-w-label">Temperature</span>
+              <span className="aira-w-val">{predictions.atmospheric_precursors?.temperature_2m_c ?? '--'} °C</span>
+            </div>
+            <div className="aira-w-row">
+              <span className="aira-w-label">Pressure</span>
+              <span className="aira-w-val">{predictions.atmospheric_precursors?.surface_pressure_hpa ?? '--'} hPa</span>
+            </div>
+            
+            <div className="aira-w-row">
+              <span className="aira-w-label">Rain</span>
+              <span className="aira-w-val aira-w-val-blue">{predictions.atmospheric_precursors?.rain_mm_h ?? '--'} mm/h</span>
+            </div>
+            <div className="aira-w-row">
+              <span className="aira-w-label">CAPE</span>
+              <span className="aira-w-val aira-w-val-orange">{predictions.atmospheric_precursors?.cape_j_kg ?? '--'} J/kg</span>
+            </div>
+            
+            <div className="aira-w-row">
+              <span className="aira-w-label">CIN</span>
+              <span className="aira-w-val">{predictions.atmospheric_precursors?.cin_j_kg ?? '--'} J/kg</span>
+            </div>
+            <div className="aira-w-row">
+              <span className="aira-w-label">IWV</span>
+              <span className="aira-w-val aira-w-val-blue">{predictions.atmospheric_precursors?.iwv_kg_m2 ?? '--'} kg/m²</span>
+            </div>
+          </div>
+          
+          <div className="aira-weather-footer">
+            <span>Fetched: Just now</span>
+            <span>Source: Open-Meteo API</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // SUCCESS STATE
+  const p = predictions.predictions || {};
+  const ap = predictions.atmospheric_precursors || {};
+  const loc = predictions.target?.location_name || 'Unknown';
+  
+  let threatTitle = "NOMINAL / SAFE";
+  let titleColor = "#22c55e";
+  let subtitleColor = "#86efac";
+  let score = Math.max(p.thunderstorm_probability || 0, p.cloudburst_probability || 0, p.flash_flood_probability || 0);
+
+  if (p.composite_threat_level === "RED") {
+    threatTitle = "EXTREME THREAT";
+    titleColor = "#ef4444";
+    subtitleColor = "#fca5a5";
+  } else if (p.composite_threat_level === "ORANGE") {
+    threatTitle = "SEVERE RISK";
+    titleColor = "#f97316";
+    subtitleColor = "#fdba74";
+  } else if (p.composite_threat_level === "YELLOW") {
+    threatTitle = "ELEVATED RISK";
+    titleColor = "#fbbf24";
+    subtitleColor = "#fde047";
+  }
+
   return (
     <div className="aira-container">
       {/* Top Header Row */}
@@ -50,7 +171,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           </div>
         </div>
         <div className="aira-model-pill">
-          Model: VAYUNET-MTL-v2.0 •<br/>28.3 ms
+          Model: VAYUNET-MTL-v2.0 •<br/>LIVE
         </div>
       </div>
 
@@ -60,11 +181,11 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           <ShieldCheckIcon />
         </div>
         <div className="aira-threat-text-col">
-          <h2 className="aira-threat-title">DEEP GORGE FLASH FLOOD</h2>
-          <h3 className="aira-threat-subtitle">NOMINAL / SAFE (Risk Score: 0.18)</h3>
+          <h2 className="aira-threat-title" style={{ color: titleColor }}>{threatTitle}</h2>
+          <h3 className="aira-threat-subtitle" style={{ color: subtitleColor }}>Risk Score: {score.toFixed(2)}</h3>
           <div className="aira-location">
             <MapPinIcon />
-            <span>Chamoli (Alaknanda Basin), Uttarakhand</span>
+            <span>{loc}</span>
           </div>
         </div>
       </div>
@@ -75,17 +196,16 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           <BankIcon />
         </div>
         <div className="aira-benchmark-text">
-          Benchmark: <strong>Chamoli 2021 Alaknanda Surge</strong> • Precursor<br/>Proximity: <strong>14.1%</strong>
+          Target Lead Time: <strong>{predictions.lead_time || '+2h'}</strong> • Model Inf: <strong>SUCCESS</strong>
         </div>
       </div>
 
       {/* Narrative */}
       <div className="aira-narrative">
-        Current weather in Chamoli is nominal (23.3°C, rain 0.0 mm/h).
-        Atmospheric precursors (CAPE: 0 J/kg, IWV: 18.5 mm) are at 
-        <strong> 14.1% </strong> of the disaster trigger threshold established by 
-        Chamoli 2021 Alaknanda Surge (disaster trigger: IWV &gt; 48.0 mm, CAPE &gt; 
-        1900 J/kg). Disaster risk is currently NOMINAL.
+        Current conditions in {loc} indicate a CAPE of <strong>{ap.cape_j_kg} J/kg</strong> and IWV of 
+        <strong> {ap.iwv_kg_m2} kg/m²</strong>. The multi-task deep learning model predicts a 
+        <strong> {(p.flash_flood_probability * 100).toFixed(1)}% </strong> probability of Flash Flood and 
+        <strong> {(p.cloudburst_probability * 100).toFixed(1)}% </strong> probability of Cloudburst.
       </div>
 
       {/* Metrics Grid */}
@@ -93,30 +213,30 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <DropletIcon />
-            <span>18.5 <span>mm</span></span>
+            <span>{ap.iwv_kg_m2 ?? '--'} <span>kg/m²</span></span>
           </div>
           <div className="aira-metric-label">Precursor IWV</div>
         </div>
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <ZapIcon />
-            <span>2100 <span>J/kg</span></span>
+            <span>{ap.cape_j_kg ?? '--'} <span>J/kg</span></span>
           </div>
           <div className="aira-metric-label">Convective CAPE</div>
         </div>
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <ActivityIcon />
-            <span>0.18</span>
+            <span>{score.toFixed(2)}</span>
           </div>
           <div className="aira-metric-label">Model risk score</div>
         </div>
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <ClockIcon />
-            <span>28.3 <span>ms</span></span>
+            <span>{(p.thunderstorm_probability * 100).toFixed(0)} <span>%</span></span>
           </div>
-          <div className="aira-metric-label">Neural latency</div>
+          <div className="aira-metric-label">T-Storm Prob</div>
         </div>
       </div>
 
@@ -124,18 +244,13 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
       <div className="aira-action-box">
         <div className="aira-action-header">
           <AlertIcon />
-          <span>Recommended Action</span>
+          <span>Threat Probabilities</span>
         </div>
-        <div className="aira-action-text">
-          Maintain routine automated radar surveillance and automated<br/>AWS monitoring.
+        <div className="aira-action-text" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>Flash Flood: {(p.flash_flood_probability * 100).toFixed(1)}%</span>
+          <span>Cloudburst: {(p.cloudburst_probability * 100).toFixed(1)}%</span>
         </div>
       </div>
-
-      {/* Investigate Drivers Button */}
-      <button className="aira-investigate-btn">
-        <ScienceIcon />
-        <span>Investigate Drivers (Why?) &rarr;</span>
-      </button>
 
       {/* Real-time Weather Box */}
       <div className="aira-weather-box">
@@ -149,38 +264,29 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         <div className="aira-weather-grid">
           <div className="aira-w-row">
             <span className="aira-w-label">Temperature</span>
-            <span className="aira-w-val">23.3 °C</span>
+            <span className="aira-w-val">{ap.temperature_2m_c ?? '--'} °C</span>
           </div>
-          <div className="aira-w-row">
-            <span className="aira-w-label">Humidity</span>
-            <span className="aira-w-val">--</span>
-          </div>
-          
           <div className="aira-w-row">
             <span className="aira-w-label">Pressure</span>
-            <span className="aira-w-val">857.2 hPa</span>
-          </div>
-          <div className="aira-w-row">
-            <span className="aira-w-label">Rain</span>
-            <span className="aira-w-val aira-w-val-blue">0.0 mm</span>
+            <span className="aira-w-val">{ap.surface_pressure_hpa ?? '--'} hPa</span>
           </div>
           
           <div className="aira-w-row">
-            <span className="aira-w-label">Wind</span>
-            <span className="aira-w-val">--</span>
+            <span className="aira-w-label">Rain</span>
+            <span className="aira-w-val aira-w-val-blue">{ap.rain_mm_h ?? '--'} mm/h</span>
           </div>
           <div className="aira-w-row">
             <span className="aira-w-label">CAPE</span>
-            <span className="aira-w-val aira-w-val-orange">0 J/kg</span>
+            <span className="aira-w-val aira-w-val-orange">{ap.cape_j_kg ?? '--'} J/kg</span>
           </div>
           
           <div className="aira-w-row">
             <span className="aira-w-label">CIN</span>
-            <span className="aira-w-val">126 J/kg</span>
+            <span className="aira-w-val">{ap.cin_j_kg ?? '--'} J/kg</span>
           </div>
           <div className="aira-w-row">
             <span className="aira-w-label">IWV</span>
-            <span className="aira-w-val aira-w-val-blue">18.5 kg/m²</span>
+            <span className="aira-w-val aira-w-val-blue">{ap.iwv_kg_m2 ?? '--'} kg/m²</span>
           </div>
         </div>
         

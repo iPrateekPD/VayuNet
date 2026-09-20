@@ -3107,6 +3107,7 @@
 
   .tac-operational-body {
     flex-direction: column;
+    overflow-y: auto;
   }
 
   .tac-main-dashboard {
