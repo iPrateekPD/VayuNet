@@ -204,8 +204,8 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
       <div className="aira-narrative">
         Current conditions in {loc} indicate a CAPE of <strong>{ap.cape_j_kg} J/kg</strong> and IWV of 
         <strong> {ap.total_column_water_vapour_kg_m2} kg/m²</strong>. The multi-task deep learning model predicts a 
-        <strong> {(p.flash_flood_probability * 100).toFixed(1)}% </strong> probability of Flash Flood and 
-        <strong> {(p.cloudburst_probability * 100).toFixed(1)}% </strong> probability of Cloudburst.
+        <strong> {p.flash_flood_probability}% </strong> probability of Flash Flood and 
+        <strong> {p.cloudburst_probability}% </strong> probability of Cloudburst.
       </div>
 
       {/* Metrics Grid */}
@@ -234,7 +234,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <ClockIcon />
-            <span>{(p.thunderstorm_probability * 100).toFixed(0)} <span>%</span></span>
+            <span>{p.thunderstorm_probability} <span>%</span></span>
           </div>
           <div className="aira-metric-label">T-Storm Prob</div>
         </div>
@@ -247,8 +247,8 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           <span>Threat Probabilities</span>
         </div>
         <div className="aira-action-text" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Flash Flood: {(p.flash_flood_probability * 100).toFixed(1)}%</span>
-          <span>Cloudburst: {(p.cloudburst_probability * 100).toFixed(1)}%</span>
+          <span>Flash Flood: {p.flash_flood_probability}%</span>
+          <span>Cloudburst: {p.cloudburst_probability}%</span>
         </div>
       </div>
 
@@ -273,7 +273,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           
           <div className="aira-w-row">
             <span className="aira-w-label">Rain</span>
-            <span className="aira-w-val aira-w-val-blue">{ap.rain_mm_h ?? '--'} mm/h</span>
+            <span className="aira-w-val aira-w-val-blue">{ap.precipitation_mm ?? ap.rain_mm ?? '--'} mm/h</span>
           </div>
           <div className="aira-w-row">
             <span className="aira-w-label">CAPE</span>
@@ -286,7 +286,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           </div>
           <div className="aira-w-row">
             <span className="aira-w-label">IWV</span>
-            <span className="aira-w-val aira-w-val-blue">{ap.iwv_kg_m2 ?? '--'} kg/m²</span>
+            <span className="aira-w-val aira-w-val-blue">{ap.total_column_water_vapour_kg_m2 ?? '--'} kg/m²</span>
           </div>
         </div>
         
