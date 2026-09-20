@@ -1,0 +1,361 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+export const SUPPORTED_LANGUAGES = [
+  { code: 'en', label: 'English', native: 'English', voiceLang: 'en-IN' },
+  { code: 'hi', label: 'Hindi', native: 'हिन्दी', voiceLang: 'hi-IN' },
+  { code: 'bn', label: 'Bengali', native: 'বাংলা', voiceLang: 'bn-IN' },
+  { code: 'ta', label: 'Tamil', native: 'தமிழ்', voiceLang: 'ta-IN' },
+  { code: 'te', label: 'Telugu', native: 'తెలుగు', voiceLang: 'te-IN' },
+  { code: 'mr', label: 'Marathi', native: 'मराठी', voiceLang: 'mr-IN' },
+  { code: 'gu', label: 'Gujarati', native: 'ગુજરાતી', voiceLang: 'gu-IN' },
+  { code: 'kn', label: 'Kannada', native: 'ಕನ್ನಡ', voiceLang: 'kn-IN' },
+  { code: 'ml', label: 'Malayalam', native: 'മലയാളം', voiceLang: 'ml-IN' },
+  { code: 'pa', label: 'Punjabi', native: 'ਪੰਜਾਬੀ', voiceLang: 'pa-IN' },
+  { code: 'or', label: 'Odia', native: 'ଓଡ଼ିଆ', voiceLang: 'or-IN' },
+  { code: 'as', label: 'Assamese', native: 'অসমীয়া', voiceLang: 'as-IN' },
+];
+
+const resources = {
+  en: {
+    translation: {
+      a11yTitle: 'Accessibility',
+      a11ySubtitle: 'Accessibility & Language',
+      language: 'Language',
+      textSize: 'Text Size',
+      readAloud: 'Read Aloud',
+      highContrast: 'High Contrast',
+      reduceMotion: 'Reduce Motion',
+      resetSettings: 'Reset Accessibility Settings',
+      home: 'Home',
+      hazards: 'Hazards',
+      dataSources: 'Data Sources',
+      howItWorks: 'How it Works',
+      impact: 'Impact',
+      publicWarnings: 'Public Warnings ↗',
+      enterPortal: 'Enter Operations Portal →',
+      brandSubtitle: 'Weather Intelligence for a Safer India',
+      tickerTitle: 'LIVE WEATHER ALERT',
+      highestThreat: 'Highest Threat',
+      recommendedAction: 'Recommended Action',
+      flashFloodWarning: 'Flash Flood Warning',
+      cloudburstWatch: 'Cloudburst Watch',
+      severeThunderstorm: 'Severe Thunderstorm',
+      speechUnavailable: 'Voice speech synthesis is not supported on this device/browser.'
+    }
+  },
+  hi: {
+    translation: {
+      a11yTitle: 'सुलभता',
+      a11ySubtitle: 'सुलभता एवं भाषा',
+      language: 'भाषा',
+      textSize: 'अक्षर आकार',
+      readAloud: 'बोलकर पढ़ें',
+      highContrast: 'उच्च कंट्रास्ट',
+      reduceMotion: 'गतिशीलता कम करें',
+      resetSettings: 'सुलभता सेटिंग्स रीसेट करें',
+      home: 'मुख्य पृष्ठ',
+      hazards: 'आपदाएं',
+      dataSources: 'डेटा स्रोत',
+      howItWorks: 'कार्यप्रणाली',
+      impact: 'प्रभाव',
+      publicWarnings: 'सार्वजनिक चेतावनियाँ ↗',
+      enterPortal: 'ऑपरेशंस पोर्टल →',
+      brandSubtitle: 'सुरक्षित भारत के लिए मौसम बुद्धिमत्ता',
+      tickerTitle: 'लाइव मौसम चेतावनी',
+      highestThreat: 'उच्चतम जोखिम',
+      recommendedAction: 'अनुशंसित कार्यवाही',
+      flashFloodWarning: 'अचानक बाढ़ की चेतावनी',
+      cloudburstWatch: 'बादल फटने की निगरानी',
+      severeThunderstorm: 'गंभीर तड़ित-झंझावात',
+      speechUnavailable: 'इस ब्राउज़र पर वॉइस स्पीच उपलब्ध नहीं है।'
+    }
+  },
+  bn: {
+    translation: {
+      a11yTitle: 'অ্যাক্সেসযোগ্যতা',
+      a11ySubtitle: 'অ্যাক্সেসযোগ্যতা ও ভাষা',
+      language: 'ভাষা',
+      textSize: 'টেক্সটের আকার',
+      readAloud: 'পড়ে শোনান',
+      highContrast: 'উচ্চ বৈসাদৃশ্য',
+      reduceMotion: 'মোশন হ্রাস করুন',
+      resetSettings: 'অ্যাক্সেসযোগ্যতা সেটিংস পুনরায় সেট করুন',
+      home: 'হোম',
+      hazards: 'বিপদ',
+      dataSources: 'তথ্য উৎস',
+      howItWorks: 'কীভাবে কাজ করে',
+      impact: 'প্রভাব',
+      publicWarnings: 'জনসাধারণের সতর্কতা ↗',
+      enterPortal: 'অপারেশনাল পোর্টাল →',
+      brandSubtitle: 'নিরাপদ ভারতের জন্য আবহাওয়া বুদ্ধিমত্তা',
+      tickerTitle: 'সরাসরি আবহাওয়া সতর্কতা',
+      highestThreat: 'সর্বোচ্চ হুমকি',
+      recommendedAction: 'প্রস্তাবিত পদক্ষেপ',
+      flashFloodWarning: 'হঠাৎ বন্যার সতর্কতা',
+      cloudburstWatch: 'মেঘভাঙা বৃষ্টির নজরদারি',
+      severeThunderstorm: 'তীব্র বজ্রঝড়',
+      speechUnavailable: 'ভয়েস স্পিচ এই ডিভাইসে সমর্থিত নয়।'
+    }
+  },
+  ta: {
+    translation: {
+      a11yTitle: 'அணுகல்தன்மை',
+      a11ySubtitle: 'அணுகல்தன்மை & மொழி',
+      language: 'மொழி',
+      textSize: 'எழுத்து அளவு',
+      readAloud: 'வாசித்து காட்டு',
+      highContrast: 'உயர் மாறுபாடு',
+      reduceMotion: 'அசைவை குறைக்கவும்',
+      resetSettings: 'அணுகல்தன்மை அமைப்புகளை மீட்டமை',
+      home: 'முகப்பு',
+      hazards: 'அபாயங்கள்',
+      dataSources: 'தரவு மூலங்கள்',
+      howItWorks: 'எவ்வாறு செயல்படுகிறது',
+      impact: 'தாக்கம்',
+      publicWarnings: 'பொது எச்சரிக்கைகள் ↗',
+      enterPortal: 'செயல்பாட்டு தளம் →',
+      brandSubtitle: 'பாதுகாப்பான இந்தியாவிற்கான வானிலை நுண்ணறிவு',
+      tickerTitle: 'நேரலை வானிலை எச்சரிக்கை',
+      highestThreat: 'அதிகபட்ச அச்சுறுத்தல்',
+      recommendedAction: 'பரிந்துரைக்கப்பட்ட நடவடிக்கை',
+      flashFloodWarning: 'திடீர் வெள்ள எச்சரிக்கை',
+      cloudburstWatch: 'மேகவெடிப்பு கண்காணிப்பு',
+      severeThunderstorm: 'கடும் இடிமின்னல் புயல்',
+      speechUnavailable: 'குரல் வாசிப்பு இந்த சாதனத்தில் ஆதரிக்கப்படவில்லை.'
+    }
+  },
+  te: {
+    translation: {
+      a11yTitle: 'ప్రాప్యత',
+      a11ySubtitle: 'ప్రాప్యత & భాష',
+      language: 'భాష',
+      textSize: 'అక్షర పరిమాణం',
+      readAloud: 'బిగ్గరగా చదవండి',
+      highContrast: 'హై కాంట్రాస్ట్',
+      reduceMotion: 'కదలికను తగ్గించండి',
+      resetSettings: 'ప్రాప్యత సెట్టింగ్‌లను రీసెట్ చేయండి',
+      home: 'హోమ్',
+      hazards: 'ప్రమాదాలు',
+      dataSources: 'డేటా వనరులు',
+      howItWorks: 'ఎలా పనిచేస్తుంది',
+      impact: 'ప్రభావం',
+      publicWarnings: 'ప్రజా హెచ్చరికలు ↗',
+      enterPortal: 'కార్యాచరణ పోర్టల్ →',
+      brandSubtitle: 'సురక్షిత భారతదేశం కోసం వాతావరణ సమాచారం',
+      tickerTitle: 'లైవ్ వాతావరణ హెచ్చరిక',
+      highestThreat: 'అత్యధిక ముప్పు',
+      recommendedAction: 'సిఫార్సు చేసిన చర్య',
+      flashFloodWarning: 'ఆకస్మిక వరద హెచ్చరిక',
+      cloudburstWatch: 'క్లౌడ్‌బర్స్ట్ నిఘా',
+      severeThunderstorm: 'తీవ్రమైన ఉరుములతో కూడిన తుఫాను',
+      speechUnavailable: 'వాయిస్ ప్రసంగం అందుబాటులో లేదు.'
+    }
+  },
+  mr: {
+    translation: {
+      a11yTitle: 'सुलभता',
+      a11ySubtitle: 'सुलभता आणि भाषा',
+      language: 'भाषा',
+      textSize: 'अक्षर आकार',
+      readAloud: 'मोठ्याने वाचा',
+      highContrast: 'उच्च कॉन्ट्रास्ट',
+      reduceMotion: 'मोशन कमी करा',
+      resetSettings: 'सुलभता सेटिंग्ज रीसेट करा',
+      home: 'मुख्य पान',
+      hazards: 'धोके',
+      dataSources: 'डेटा स्रोत',
+      howItWorks: 'कसे कार्य करते',
+      impact: 'प्रभाव',
+      publicWarnings: 'सार्वजनिक इशारे ↗',
+      enterPortal: 'ऑपरेशन्स पोर्टल →',
+      brandSubtitle: 'सुरक्षित भारतासाठी हवामान बुद्धिमत्ता',
+      tickerTitle: 'थेट हवामान इशारा',
+      highestThreat: 'सर्वोच्च धोका',
+      recommendedAction: 'शिफारस केलेली कृती',
+      flashFloodWarning: 'अचानक पूर इशारा',
+      cloudburstWatch: 'ढगफुटी निरीक्षण',
+      severeThunderstorm: 'तीव्र वादळ',
+      speechUnavailable: 'आवाज वाचन या डिव्हाइसवर उपलब्ध नाही.'
+    }
+  },
+  gu: {
+    translation: {
+      a11yTitle: 'સુલભતા',
+      a11ySubtitle: 'સુલભતા અને ભાષા',
+      language: 'ભાષા',
+      textSize: 'ટેક્સ્ટનું કદ',
+      readAloud: 'મોટેથી વાંચો',
+      highContrast: 'હાઈ કોન્ટ્રાસ્ટ',
+      reduceMotion: 'મોશન ઓછું કરો',
+      resetSettings: 'સુલભતા સેટિંગ્સ રીસેટ કરો',
+      home: 'હોમ',
+      hazards: 'જોખમો',
+      dataSources: 'ડેટા સ્ત્રોત',
+      howItWorks: 'કેવી રીતે કાર્ય કરે છે',
+      impact: 'અસર',
+      publicWarnings: 'જાહેર ચેતવણીઓ ↗',
+      enterPortal: 'ઓપરેશન્સ પોર્ટલ →',
+      brandSubtitle: 'સુરક્ષિત ભારત માટે હવામાન બુદ્ધિ',
+      tickerTitle: 'લાઈવ હવામાન ચેતવણી',
+      highestThreat: 'સૌથી મોટો ખતરો',
+      recommendedAction: 'ભલામણ કરેલ પગલાં',
+      flashFloodWarning: 'અચાનક પૂરની ચેતવણી',
+      cloudburstWatch: 'વાદળ ફાટવાની ચેતવણી',
+      severeThunderstorm: 'તીવ્ર વાવાઝોડું',
+      speechUnavailable: 'આ ઉપકરણ પર અવાજ ઉપલબ્ધ નથી.'
+    }
+  },
+  kn: {
+    translation: {
+      a11yTitle: 'ಪ್ರವೇಶಿಸುವಿಕೆ',
+      a11ySubtitle: 'ಪ್ರವೇಶಿಸುವಿಕೆ ಮತ್ತು ಭಾಷೆ',
+      language: 'ಭಾಷೆ',
+      textSize: 'ಪಠ್ಯದ ಗಾತ್ರ',
+      readAloud: 'ಗಟ್ಟಿಯಾಗಿ ಓದಿ',
+      highContrast: 'ಹೆಚ್ಚಿನ ಕಾಂಟ್ರಾಸ್ಟ್',
+      reduceMotion: 'ಚಲನೆಯನ್ನು ಕಡಿಮೆ ಮಾಡಿ',
+      resetSettings: 'ಪ್ರವೇಶಿಸುವಿಕೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಿ',
+      home: 'ಮುಖಪುಟ',
+      hazards: 'ಅಪಾಯಗಳು',
+      dataSources: 'ಡೇಟಾ ಮೂಲಗಳು',
+      howItWorks: 'ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ',
+      impact: 'ಪರಿಣಾಮ',
+      publicWarnings: 'ಸಾರ್ವಜನಿಕ ಎಚ್ಚರಿಕೆಗಳು ↗',
+      enterPortal: 'ಕಾರ್ಯಾಚರಣೆ ಪೋರ್ಟಲ್ →',
+      brandSubtitle: 'ಸುರಕ್ಷಿತ ಭಾರತಕ್ಕಾಗಿ ಹವಾಮಾನ ಗುಪ್ತಚರ',
+      tickerTitle: 'ಲೈವ್ ಹವಾಮಾನ ಎಚ್ಚರಿಕೆ',
+      highestThreat: 'ಅತ್ಯುನ್ನತ ಬೆದರಿಕೆ',
+      recommendedAction: 'ಶಿಫಾರಸು ಮಾಡಿದ ಕ್ರಮ',
+      flashFloodWarning: 'ಹಠಾತ್ ಪ್ರವಾಹದ ಎಚ್ಚರಿಕೆ',
+      cloudburstWatch: 'ಮೇಘಸ್ಫೋಟ ವೀಕ್ಷಣೆ',
+      severeThunderstorm: 'ತೀವ್ರ ಗುಡುಗು ಸಹಿತ ಬಿರುಗಾಳಿ',
+      speechUnavailable: 'ಧ್ವನಿ ಓದುವಿಕೆ ಈ ಸಾಧನದಲ್ಲಿ ಲಭ್ಯವಿಲ್ಲ.'
+    }
+  },
+  ml: {
+    translation: {
+      a11yTitle: 'പ്രാപ്യത',
+      a11ySubtitle: 'പ്രാപ്യതയും ഭാഷയും',
+      language: 'ഭാഷ',
+      textSize: 'അക്ഷര വലുപ്പം',
+      readAloud: 'ഉറക്കെ വായിക്കുക',
+      highContrast: 'ഉയർന്ന കോൺട്രാസ്റ്റ്',
+      reduceMotion: 'ചലനം കുറയ്ക്കുക',
+      resetSettings: 'പ്രാപ്യതാ ക്രമീകരണങ്ങൾ പുനഃസജ്ജമാക്കുക',
+      home: 'ഹോം',
+      hazards: 'അപകടങ്ങൾ',
+      dataSources: 'ഡാറ്റ ഉറവിടങ്ങൾ',
+      howItWorks: 'എങ്ങനെ പ്രവർത്തിക്കുന്നു',
+      impact: 'പ്രത്യാഘാതം',
+      publicWarnings: 'പൊതു മുന്നറിയിപ്പുകൾ ↗',
+      enterPortal: 'ഓപ്പറേഷൻസ് പോർട്ടൽ →',
+      brandSubtitle: 'സുരക്ഷിത ഇന്ത്യയ്ക്കായി കാലാവസ്ഥാ വിവരങ്ങൾ',
+      tickerTitle: 'തത്സമയ കാലാവസ്ഥാ മുന്നറിയിപ്പ്',
+      highestThreat: 'ഏറ്റവും ഉയർന്ന ഭീഷണി',
+      recommendedAction: 'ശുപാർശ ചെയ്യുന്ന നടപടി',
+      flashFloodWarning: 'മിന്നൽ പ്രളയ മുന്നറിയിപ്പ്',
+      cloudburstWatch: 'മേഘവിസ്ഫോടന ജാഗ്രത',
+      severeThunderstorm: 'ശക്തമായ ഇടിമിന്നൽ ചുഴലിക്കാറ്റ്',
+      speechUnavailable: 'ശബ്ദ വായന ഈ ഉപകരണത്തിൽ ലഭ്യമല്ല.'
+    }
+  },
+  pa: {
+    translation: {
+      a11yTitle: 'ਪਹੁੰਚਯੋਗਤਾ',
+      a11ySubtitle: 'ਪਹੁੰਚਯੋਗਤਾ ਅਤੇ ਭਾਸ਼ਾ',
+      language: 'ਭਾਸ਼ਾ',
+      textSize: 'ਅੱਖਰਾਂ ਦਾ ਆਕਾਰ',
+      readAloud: 'ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਪੜ੍ਹੋ',
+      highContrast: 'ਉੱਚ ਕੰਟਰਾਸਟ',
+      reduceMotion: 'ਮੋਸ਼ਨ ਘਟਾਓ',
+      resetSettings: 'ਪਹੁੰਚਯੋਗਤਾ ਸੈਟਿੰਗਾਂ ਰੀਸੈਟ ਕਰੋ',
+      home: 'ਮੁੱਖ ਪੰਨਾ',
+      hazards: 'ਖ਼ਤਰੇ',
+      dataSources: 'ਡਾਟਾ ਸਰੋਤ',
+      howItWorks: 'ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ',
+      impact: 'ਪ੍ਰਭਾਵ',
+      publicWarnings: 'ਜਨਤਕ ਚੇਤਾਵਨੀਆਂ ↗',
+      enterPortal: 'ਓਪਰੇਸ਼ਨ ਪੋਰਟਲ →',
+      brandSubtitle: 'ਸੁਰੱਖਿਅਤ ਭਾਰਤ ਲਈ ਮੌਸਮ ਖੁਫੀਆ ਜਾਣਕਾਰੀ',
+      tickerTitle: 'ਲਾਈਵ ਮੌਸਮ ਚੇਤਾਵਨੀ',
+      highestThreat: 'ਸਭ ਤੋਂ ਵੱਡਾ ਖ਼ਤਰਾ',
+      recommendedAction: 'ਸਿਫ਼ਾਰਸ਼ ਕੀਤੀ ਗਈ ਕਾਰਵਾਈ',
+      flashFloodWarning: 'ਅਚਾਨਕ ਹੜ੍ਹ ਦੀ ਚੇਤਾਵਨੀ',
+      cloudburstWatch: 'ਬੱਦਲ ਫਟਣ ਦੀ ਚੇਤਾਵਨੀ',
+      severeThunderstorm: 'ਗੰਭੀਰ ਤੂਫ਼ਾਨ',
+      speechUnavailable: 'ਇਸ ਡਿਵਾਈਸ ਤੇ ਅਵਾਜ਼ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।'
+    }
+  },
+  or: {
+    translation: {
+      a11yTitle: 'ସୁଗମ୍ୟତା',
+      a11ySubtitle: 'ସୁଗମ୍ୟତା ଏବଂ ଭାଷା',
+      language: 'ଭାଷା',
+      textSize: 'ଅକ୍ଷର ଆକାର',
+      readAloud: 'ଉଚ୍ଚ ସ୍ୱରରେ ପଢନ୍ତୁ',
+      highContrast: 'ଉଚ୍ଚ କଣ୍ଟ୍ରାଷ୍ଟ',
+      reduceMotion: 'ମୋସନ କମ୍ କରନ୍ତୁ',
+      resetSettings: 'ସୁଗମ୍ୟତା ସେଟିଙ୍ଗ୍ସ ରିସେଟ୍ କରନ୍ତୁ',
+      home: 'ମୂଳ ପୃଷ୍ଠା',
+      hazards: 'ବିପଦ',
+      dataSources: 'ତଥ୍ୟ ଉତ୍ସ',
+      howItWorks: 'ଏହା କିପରି କାର୍ଯ୍ୟ କରେ',
+      impact: 'ପ୍ରଭାବ',
+      publicWarnings: 'ଜନସାଧାରଣ ଚେତାବନୀ ↗',
+      enterPortal: 'ଅପରେସନ୍ସ ପୋର୍ଟାଲ୍ →',
+      brandSubtitle: 'ସୁରକ୍ଷିତ ଭାରତ ପାଇଁ ପାଣିପାଗ ସୂଚନା',
+      tickerTitle: 'ଲାଇଭ୍ ପାଣିପାଗ ଚେତାବନୀ',
+      highestThreat: 'ସର୍ବୋଚ୍ଚ ବିପଦ',
+      recommendedAction: 'ସୁପାରିଶ କରାଯାଇଥିବା କାର୍ଯ୍ୟାନୁଷ୍ଠାନ',
+      flashFloodWarning: 'ଆକସ୍ମିକ ବନ୍ୟା ଚେତାବନୀ',
+      cloudburstWatch: 'ମେଘଫଟା ବର୍ଷା ନଜର',
+      severeThunderstorm: 'ତୀବ୍ର ବଜ୍ରପାତ ଝଡ଼',
+      speechUnavailable: 'ଏହି ଡିଭାଇସରେ ଭଏସ୍ ସ୍ପିଚ୍ ଉପଲବ୍ଧ ନାହିଁ।'
+    }
+  },
+  as: {
+    translation: {
+      a11yTitle: 'প্ৰৱেশযোগ্যতা',
+      a11ySubtitle: 'প্ৰৱেশযোগ্যতা আৰু ভাষা',
+      language: 'ভাষা',
+      textSize: 'আখৰৰ আকাৰ',
+      readAloud: 'পঢ়ি শুনাওক',
+      highContrast: 'উচ্চ বৈসাদৃশ্য',
+      reduceMotion: 'গতি হ্ৰাস কৰক',
+      resetSettings: 'প্ৰৱেশযোগ্যতা ছেটিংছ ৰিছেট কৰক',
+      home: 'গৃহ পৃষ্ঠ',
+      hazards: 'বিপদসমূহ',
+      dataSources: 'তথ্যৰ উৎস',
+      howItWorks: 'ই কেনেদৰে কাম কৰে',
+      impact: 'প্ৰভাৱ',
+      publicWarnings: 'ৰাজহুৱা সতৰ্কবাণী ↗',
+      enterPortal: 'কাৰ্যকৰী পৰ্টেল →',
+      brandSubtitle: 'সুৰক্ষিত ভাৰতৰ বাবে বতৰৰ বুদ্ধিমত্তা',
+      tickerTitle: 'সরাসৰি বতৰৰ সতৰ্কবাণী',
+      highestThreat: 'সৰ্বোচ্চ ভাবুকি',
+      recommendedAction: 'পৰামৰ্শ দিয়া কাৰ্য',
+      flashFloodWarning: 'হঠাৎ বানপানীৰ সতৰ্কবাণী',
+      cloudburstWatch: 'মেঘভঙা বৰষুণৰ নিৰীক্ষণ',
+      severeThunderstorm: 'তীব্ৰ বজ্ৰপাত ধুমুহা',
+      speechUnavailable: 'এই ডিভাইচত ভয়েচ উপলব্ধ নহয়।'
+    }
+  }
+};
+
+const savedLang = (typeof window !== 'undefined' && localStorage.getItem('vayunet_language')) || 'en';
+// normalize if uppercase like 'EN' -> 'en'
+const initialLang = savedLang.toLowerCase();
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: initialLang,
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;

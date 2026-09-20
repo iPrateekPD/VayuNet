@@ -57,13 +57,31 @@ Thumbs.db
 # Model Checkpoints & Large Data (Preserve Directory Structure with .gitkeep)
 checkpoints/*
 !checkpoints/.gitkeep
-data/raw/*
-!data/raw/.gitkeep
-data/interim/*
-!data/interim/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
+backend/data/raw/*
+!backend/data/raw/.gitkeep
+backend/data/interim/*
+!backend/data/interim/.gitkeep
+backend/data/processed/*
+!backend/data/processed/.gitkeep
 
 # Temporary Artifacts
 *.tmp
 *.log
+
+# Datasets & Large Files
+datasets/
+*.csv
+*.tsv
+*.nc
+*.tif
+*.tiff
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.safetensors
+*.pkl
+*.db
+*.sqlite
+*.npy
+*.npz

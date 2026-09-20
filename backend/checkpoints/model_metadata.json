@@ -1,0 +1,128 @@
+{
+  "model_version": "VAYUNET-MTL-v2.0",
+  "benchmark_period": "August 2018 Wayanad / Kerala Convective Deluge",
+  "target_img_size": 32,
+  "spatial_resolution_km": 3.5,
+  "channels": [
+    {
+      "index": 0,
+      "name": "insat_wv_6.7",
+      "unit": "K",
+      "min": 180.0,
+      "max": 319.8931884765625
+    },
+    {
+      "index": 1,
+      "name": "insat_tir1_10.8",
+      "unit": "K",
+      "min": 180.0,
+      "max": 319.98077392578125
+    },
+    {
+      "index": 2,
+      "name": "ctt_drop_rate_c_hr",
+      "unit": "degC/hr",
+      "min": -25.0,
+      "max": 5.0
+    },
+    {
+      "index": 3,
+      "name": "cape_j_kg",
+      "unit": "J/kg",
+      "min": 0.0,
+      "max": 1296.078857421875
+    },
+    {
+      "index": 4,
+      "name": "cin_j_kg",
+      "unit": "J/kg",
+      "min": -219.40333557128906,
+      "max": 0.0
+    },
+    {
+      "index": 5,
+      "name": "lcl_m",
+      "unit": "m",
+      "min": 200.0,
+      "max": 1717.166748046875
+    },
+    {
+      "index": 6,
+      "name": "shear_0_6km_kt",
+      "unit": "kt",
+      "min": 35.0,
+      "max": 36.0
+    },
+    {
+      "index": 7,
+      "name": "iwv_mm",
+      "unit": "mm",
+      "min": 43.64873504638672,
+      "max": 62.72686004638672
+    },
+    {
+      "index": 8,
+      "name": "moisture_flux_850",
+      "unit": "g/kg/s",
+      "min": 0.014999999664723873,
+      "max": 1.0149999996647239
+    },
+    {
+      "index": 9,
+      "name": "elevation_m",
+      "unit": "m",
+      "min": 0.0,
+      "max": 1310.4029541015625
+    },
+    {
+      "index": 10,
+      "name": "slope_deg",
+      "unit": "deg",
+      "min": 0.0,
+      "max": 8.463739395141602
+    },
+    {
+      "index": 11,
+      "name": "flow_accumulation_log",
+      "unit": "log(1+A)",
+      "min": 0.0,
+      "max": 4.109448432922363
+    }
+  ],
+  "benchmark_metrics": {
+    "thunderstorm": {
+      "csi": 0.9767,
+      "pod": 1.0,
+      "far": 0.0233,
+      "f1": 0.9882,
+      "accuracy": 0.9814,
+      "hits": 55057,
+      "misses": 0,
+      "false_alarms": 1315,
+      "correct_negatives": 14284
+    },
+    "cloudburst": {
+      "csi": 0.0,
+      "pod": 0.0,
+      "far": 0.0,
+      "f1": 0.0,
+      "accuracy": 1.0,
+      "hits": 0,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_negatives": 70656
+    },
+    "flash_flood": {
+      "csi": 1.0,
+      "pod": 1.0,
+      "far": 0.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "hits": 10902,
+      "misses": 0,
+      "false_alarms": 0,
+      "correct_negatives": 59754
+    },
+    "mean_inference_latency_ms": 7.79
+  }
+}

@@ -1,0 +1,589 @@
+/* =========================================================
+   EventsView.css — Streamlined Historical Disaster Validation Console
+   Aligned with Nowcast, Analysis, and Alerts layout standards
+   ========================================================= */
+
+.hist-root {
+  background: #040914;
+  flex: 1;
+  padding: 14px 20px 40px 20px;
+  display: flex;
+  gap: 14px;
+  box-sizing: border-box;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  color: #f8fafc;
+  max-width: 1560px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .hist-root {
+    flex-direction: column;
+  }
+}
+
+.hist-card {
+  background: #091223;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* 1. Left Sidebar: Event Archive Selector */
+.hist-sidebar {
+  width: 290px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .hist-sidebar {
+    width: 100%;
+  }
+}
+
+.hist-sidebar-header {
+  padding: 2px 4px;
+}
+
+.hist-sidebar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 2px;
+}
+
+.hist-sidebar-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.hist-search-wrap {
+  display: flex;
+  align-items: center;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 7px 10px;
+  gap: 8px;
+}
+
+.hist-search-input {
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+}
+
+.hist-event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: calc(100vh - 230px);
+  padding-right: 2px;
+}
+
+.hist-event-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #091223;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hist-event-item:hover {
+  background: #0d1a33;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.hist-event-item.active {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.hist-event-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hist-event-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hist-event-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hist-event-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: #94a3b8;
+}
+
+.hist-event-hazard {
+  color: #cbd5e1;
+}
+
+.hist-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.hist-badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.hist-badge-partial {
+  background: rgba(234, 179, 8, 0.15);
+  color: #fde047;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+/* 2. Main Event View */
+.hist-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Event Header */
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #091223;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 18px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hist-header-left {
+  flex: 1;
+  min-width: 260px;
+}
+
+.hist-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hist-main-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.hist-badge-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.hist-main-subtitle {
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+  line-height: 1.4;
+}
+
+.hist-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hist-meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(4, 18, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.hist-meta-icon {
+  color: #38bdf8;
+}
+
+/* 4 Stats Cards */
+.hist-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .hist-stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.hist-stat-card {
+  background: #091223;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hist-stat-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hist-stat-icon-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+.hist-stat-icon-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+.hist-stat-icon-cyan { background: rgba(6, 182, 212, 0.12); color: #06b6d4; }
+.hist-stat-icon-green { background: rgba(34, 197, 94, 0.12); color: #22c55e; }
+
+.hist-stat-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.hist-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hist-stat-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+  margin-top: 1px;
+}
+
+.hist-stat-sub {
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* Middle Layout: Replay Panel + Right Summary */
+.hist-middle-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 14px;
+}
+
+@media (max-width: 1024px) {
+  .hist-middle-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hist-replay-panel {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hist-replay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hist-replay-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hist-replay-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.hist-replay-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hist-btn-play {
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.hist-btn-play:hover {
+  background: rgba(14, 165, 233, 0.28);
+  color: #ffffff;
+}
+
+/* Timeline */
+.hist-timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 10px 4px;
+}
+
+.hist-timeline-line {
+  position: absolute;
+  top: 24px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.hist-timeline-progress {
+  position: absolute;
+  top: 24px;
+  left: 20px;
+  height: 2px;
+  background: #38bdf8;
+  z-index: 2;
+  transition: width 0.3s ease;
+}
+
+.hist-timeline-step {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hist-timeline-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.hist-timeline-time {
+  font-size: 8px;
+  color: #64748b;
+  font-family: var(--font-mono, monospace);
+  margin-bottom: 5px;
+}
+
+.hist-timeline-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #091223;
+  border: 2px solid #64748b;
+  transition: all 0.2s;
+}
+
+.hist-timeline-step.active .hist-timeline-dot {
+  border-color: #38bdf8;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.hist-timeline-step.active .hist-timeline-label {
+  color: #38bdf8;
+}
+
+/* 3 Crisp Vector Comparison Maps */
+.hist-map-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .hist-map-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hist-map-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hist-map-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hist-map-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hist-map-time {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.hist-vector-box {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #040914;
+}
+
+/* Right Panel */
+.hist-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hist-info-card {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hist-info-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.hist-perf-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hist-perf-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hist-perf-key {
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.hist-perf-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+}
+
+.hist-perf-change {
+  font-size: 10px;
+  font-weight: 700;
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.hist-perf-change.negative {
+  color: #38bdf8;
+}
+
+.hist-perf-baseline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.hist-perf-baseline-icon {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.hist-perf-baseline-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #86efac;
+}
+
+.hist-perf-baseline-stats {
+  font-size: 9.5px;
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+  margin-top: 1px;
+}

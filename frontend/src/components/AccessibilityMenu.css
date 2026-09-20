@@ -1,0 +1,662 @@
+/* ==========================================================================
+   VAYUNET ACCESSIBILITY & LANGUAGE MENU STYLES
+   Structured exactly like reference design with VAYUNET Dark Navy & Cyan Theme
+   ========================================================================== */
+
+/* Header Button Wrapper */
+.vayu-a11y-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ♿ Accessibility ▾ Header Control */
+.vayu-a11y-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(7, 24, 34, 0.85);
+  border: 1px solid rgba(98, 192, 191, 0.22);
+  border-radius: 8px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.vayu-a11y-btn:hover {
+  border-color: rgba(98, 192, 191, 0.55);
+  background: rgba(10, 32, 44, 0.95);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(98, 192, 191, 0.22);
+}
+
+.vayu-a11y-btn.active {
+  border-color: #06b6d4;
+  background: rgba(8, 36, 52, 0.98);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+}
+
+.vayu-a11y-icon {
+  font-size: 13px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  color: #38bdf8;
+}
+
+.vayu-a11y-label {
+  letter-spacing: 0.2px;
+}
+
+.vayu-a11y-arrow {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.vayu-a11y-btn.active .vayu-a11y-arrow {
+  transform: rotate(180deg);
+  color: #38bdf8;
+}
+
+/* Subtle Transparent Overlay with Light Background Blur */
+.vayu-a11y-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 8, 20, 0.58);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 999998;
+  animation: vayuA11yFadeIn 0.22s ease-out forwards;
+}
+
+@keyframes vayuA11yFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile handle bar indicator */
+.vayu-a11y-sheet-handle {
+  display: none;
+}
+
+/* Compact Accessibility Panel (Desktop) */
+.vayu-a11y-panel {
+  position: fixed;
+  top: 70px;
+  right: 24px;
+  width: 340px;
+  background: rgba(11, 20, 42, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 25px rgba(6, 182, 212, 0.15);
+  z-index: 999999;
+  color: #f1f5f9;
+  font-family: inherit;
+  animation: vayuA11ySlideDown 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+  backdrop-filter: none;
+}
+
+@keyframes vayuA11ySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Panel Header Bar (matching reference image top banner) */
+.vayu-a11y-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(16, 29, 58, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vayu-a11y-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.15px;
+}
+
+.vayu-a11y-header-glyph {
+  color: #38bdf8;
+  font-size: 16px;
+}
+
+.vayu-a11y-close-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.18s ease;
+}
+
+.vayu-a11y-close-icon:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  transform: rotate(90deg);
+}
+
+/* 🌐 Language Selector Strip */
+.vayu-a11y-lang-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(14, 24, 48, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vayu-a11y-lang-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.vayu-a11y-lang-label span:first-child {
+  color: #38bdf8;
+}
+
+.vayu-a11y-lang-select-clean {
+  background: rgba(8, 15, 30, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 7px;
+  padding: 5px 24px 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f8fafc;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  max-width: 170px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vayu-a11y-lang-select-clean:hover,
+.vayu-a11y-lang-select-clean:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* 3-Column Squircle Action Cards Grid (Exact layout from reference) */
+.vayu-a11y-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 10px;
+  padding: 18px 16px;
+  align-items: start;
+}
+
+.vayu-a11y-card-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: transform 0.18s ease;
+}
+
+.vayu-a11y-card-btn:hover {
+  transform: translateY(-2px);
+}
+
+.vayu-a11y-card-btn:active {
+  transform: scale(0.96);
+}
+
+/* Squircle Icon Box */
+.vayu-a11y-squircle {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(16, 28, 54, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.vayu-a11y-card-btn:hover .vayu-a11y-squircle {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(22, 38, 72, 0.95);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* Active / Enabled Squircle State (Cyan/Teal Glow with Corner Checkmark) */
+.vayu-a11y-card-btn.active .vayu-a11y-squircle {
+  border: 2px solid #00e5ff;
+  background: rgba(0, 229, 255, 0.14);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.38), inset 0 0 10px rgba(0, 229, 255, 0.12);
+}
+
+.vayu-squircle-icon {
+  font-size: 20px;
+  font-weight: 700;
+  color: #38bdf8;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.vayu-a11y-card-btn.active .vayu-squircle-icon {
+  color: #00e5ff;
+}
+
+/* Active Checkmark Badge in Top Right Corner (matching reference image) */
+.vayu-active-check {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 11px;
+  font-weight: 900;
+  color: #00e5ff;
+  line-height: 1;
+}
+
+/* Card Button Text Label */
+.vayu-card-btn-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.25;
+  transition: color 0.18s ease;
+}
+
+.vayu-a11y-card-btn:hover .vayu-card-btn-text,
+.vayu-a11y-card-btn.active .vayu-card-btn-text {
+  color: #f8fafc;
+}
+
+/* Reset All option spans centered in grid */
+.vayu-reset-span-btn {
+  grid-column: 2 / 3;
+}
+
+/* Panel Footer Bar (matching reference image "1 option enabled") */
+.vayu-a11y-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 18px;
+  background: rgba(8, 14, 28, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vayu-a11y-count-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.vayu-a11y-footer-reset-link {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.18s ease;
+}
+
+.vayu-a11y-footer-reset-link:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+/* ==========================================================================
+   SPEAKER READ ALOUD BUTTON
+   ========================================================================== */
+.vayu-speaker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(2, 132, 199, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  transition: all 0.18s ease;
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.vayu-speaker-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.vayu-speaker-btn.speaking {
+  background: #e11d48;
+  border-color: #f43f5e;
+  color: #ffffff;
+  animation: vayuSpeakerPulse 0.9s infinite alternate;
+}
+
+.vayu-speaker-btn.bhashini-live {
+  background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+  border-color: #22d3ee;
+  color: #ffffff;
+  animation: bhashiniAudioGlow 1s infinite alternate;
+}
+
+@keyframes bhashiniAudioGlow {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 6px #06b6d4, 0 0 12px rgba(6, 182, 212, 0.4);
+  }
+  to {
+    transform: scale(1.18);
+    box-shadow: 0 0 16px #22d3ee, 0 0 24px rgba(34, 211, 238, 0.6);
+  }
+}
+
+@keyframes vayuSpeakerPulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 4px #e11d48;
+  }
+  to {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px #f43f5e;
+  }
+}
+
+/* Non-blocking A11y Toast Banner */
+.vayu-a11y-toast-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(11, 20, 42, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #f1f5f9;
+  padding: 9px 18px;
+  border-radius: 30px;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 99999;
+  animation: vayuA11yToastPop 0.25s ease forwards;
+}
+
+@keyframes vayuA11yToastPop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.vayu-a11y-toast-icon {
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   GLOBAL ACCESSIBILITY TRANSFORMATIONS (CONTROLLED SCALING & HIGH CONTRAST)
+   ========================================================================== */
+
+/* 1. Text Size Scaling */
+:root[data-vayunet-text-size="small"] {
+  font-size: 14.5px;
+}
+
+:root[data-vayunet-text-size="normal"] {
+  font-size: 16px;
+}
+
+:root[data-vayunet-text-size="large"] {
+  font-size: 17.5px;
+}
+
+:root[data-vayunet-text-size="small"] .hero-headline,
+:root[data-vayunet-text-size="small"] .tac-clean-topbar-title {
+  font-size: 92%;
+}
+
+:root[data-vayunet-text-size="large"] .hero-headline,
+:root[data-vayunet-text-size="large"] .tac-clean-topbar-title {
+  font-size: 108%;
+}
+
+/* 2. High Contrast Theme (Preserves dark navy/cyan visual identity) */
+:root[data-vayunet-contrast="high"] {
+  --border-subtle: rgba(56, 189, 248, 0.45);
+}
+
+:root[data-vayunet-contrast="high"] body {
+  background-color: #030712 !important;
+  color: #ffffff !important;
+}
+
+:root[data-vayunet-contrast="high"] .vayu-header,
+:root[data-vayunet-contrast="high"] .tac-clean-map-topbar,
+:root[data-vayunet-contrast="high"] .tac-clean-map-card,
+:root[data-vayunet-contrast="high"] .cp-hazard-warning-card,
+:root[data-vayunet-contrast="high"] .tac-clean-action-box,
+:root[data-vayunet-contrast="high"] .card,
+:root[data-vayunet-contrast="high"] .emergency-alert-ticker {
+  background-color: #060e1d !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+}
+
+:root[data-vayunet-contrast="high"] button {
+  border-color: rgba(56, 189, 248, 0.7) !important;
+}
+
+:root[data-vayunet-contrast="high"] p,
+:root[data-vayunet-contrast="high"] span,
+:root[data-vayunet-contrast="high"] .ticker-item {
+  color: #f8fafc !important;
+}
+
+/* 3. Reduce Motion Mode */
+:root[data-vayunet-motion="reduced"] *,
+:root[data-vayunet-motion="reduced"] *::before,
+:root[data-vayunet-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Weather & Radar Loops explicitly exempt to preserve real-time weather progression */
+:root[data-vayunet-motion="reduced"] .radar-loop,
+:root[data-vayunet-motion="reduced"] .tac-forecast-progression {
+  animation-duration: inherit !important;
+  animation-iteration-count: infinite !important;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM-SHEET PRESENTATION
+   ========================================================================== */
+@media (max-width: 768px) {
+  .vayu-a11y-wrap {
+    flex-shrink: 0;
+  }
+
+  .vayu-a11y-btn {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+    border-radius: 6px !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .vayu-a11y-icon {
+    font-size: 12px !important;
+  }
+
+  .vayu-a11y-label {
+    display: inline-block !important;
+    font-size: 11px !important;
+    letter-spacing: 0 !important;
+  }
+
+  .vayu-a11y-arrow {
+    font-size: 9px !important;
+    margin-left: 1px !important;
+  }
+
+  .vayu-a11y-sheet-handle {
+    display: none !important;
+  }
+
+  .vayu-a11y-panel {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    bottom: auto !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: min(calc(100% - 28px), 360px) !important;
+    max-width: 360px !important;
+    max-height: calc(100dvh - 36px) !important;
+    max-height: calc(100vh - 36px) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 18px !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 35px rgba(6, 182, 212, 0.25) !important;
+    z-index: 999999 !important;
+    animation: vayuA11yCenterPop 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  @keyframes vayuA11yCenterPop {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -46%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .vayu-a11y-overlay {
+    z-index: 999998 !important;
+  }
+
+  .vayu-a11y-card-header {
+    padding: 11px 14px !important;
+  }
+
+  .vayu-a11y-card-title {
+    font-size: 13.5px !important;
+  }
+
+  .vayu-a11y-lang-strip {
+    padding: 8px 14px !important;
+  }
+
+  .vayu-a11y-lang-label {
+    font-size: 11.5px !important;
+  }
+
+  .vayu-a11y-lang-select-clean {
+    max-width: 140px !important;
+    font-size: 11.5px !important;
+    padding: 4px 20px 4px 8px !important;
+  }
+
+  .vayu-a11y-squircle {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 13px !important;
+  }
+
+  .vayu-a11y-grid {
+    gap: 11px 6px !important;
+    padding: 12px 10px !important;
+  }
+
+  .vayu-squircle-icon {
+    font-size: 17.5px !important;
+  }
+
+  .vayu-card-btn-text {
+    font-size: 10.5px !important;
+    margin-top: 4px !important;
+    line-height: 1.15 !important;
+  }
+
+  .vayu-a11y-card-footer {
+    padding: 9px 14px !important;
+  }
+
+  .vayu-a11y-count-text {
+    font-size: 11px !important;
+  }
+
+  .vayu-a11y-footer-reset-link {
+    font-size: 11px !important;
+  }
+}
