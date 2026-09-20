@@ -7454,35 +7454,24 @@ html {
 
   .fusion-mobile-chevron.is-open {
     transform: rotate(180deg);
-    background: rgba(98, 192, 191, 0.22);
-    color: #c7edfc;
-  }
-
-  /* --- STRICT DOWNWARD UNFOLDING FOR EXPANDABLE DRAWER --- */
-  /* Collapsed by default: 0 height, 0 margin/padding, no upward transforms */
+    background: rgba(98, 19  /* --- ALWAYS FULLY EXPANDED ON MOBILE --- */
   .fusion-card-desc-wrap {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    margin: 0 !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    margin: 10px 0 8px 0 !important;
     padding: 0 !important;
     transform: none !important;
-    transform-origin: top left !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin 0.3s ease !important;
+    pointer-events: auto !important;
   }
 
   .fusion-card-specs-wrap {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-top: none !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    margin: 6px 0 0 0 !important;
+    padding: 10px 0 0 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     transform: none !important;
-    transform-origin: top left !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease !important;
+    pointer-events: auto !important;
   }
 
   .fusion-card-media-col {
@@ -7490,63 +7479,25 @@ html {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
-    max-height: 0 !important;
-    margin: 0 !important;
-    opacity: 0 !important;
+    max-height: none !important;
+    margin: 12px 0 0 0 !important;
+    opacity: 1 !important;
     transform: none !important;
-    transform-origin: top left !important;
-    overflow: hidden !important;
     border-radius: 12px !important;
-    pointer-events: none !important;
-    transition: max-height 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s ease, margin 0.32s ease !important;
+    pointer-events: auto !important;
   }
 
   .fusion-card-bottom {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    transform: none !important;
-    transform-origin: top left !important;
-    transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.3s ease !important;
-  }
-
-  /* When Card is Active: items smoothly open strictly DOWNWARDS */
-  .fusion-accordion-card.is-mobile-active .fusion-card-desc-wrap {
-    max-height: 140px !important;
+    max-height: none !important;
     opacity: 1 !important;
-    margin-top: 10px !important;
-    margin-bottom: 8px !important;
-    pointer-events: auto !important;
-  }
-
-  .fusion-accordion-card.is-mobile-active .fusion-card-specs-wrap {
-    max-height: 160px !important;
-    opacity: 1 !important;
-    margin-top: 6px !important;
-    padding-top: 10px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-    pointer-events: auto !important;
-  }
-
-  .fusion-accordion-card.is-mobile-active .fusion-card-media-col {
-    max-height: 185px !important;
-    height: 185px !important;
     margin: 12px 0 0 0 !important;
-    opacity: 1 !important;
     pointer-events: auto !important;
+    transform: none !important;
   }
 
-  .fusion-accordion-card.is-mobile-active .fusion-card-bottom {
-    max-height: 40px !important;
-    opacity: 1 !important;
-    margin-top: 12px !important;
-    margin-bottom: 0 !important;
-    pointer-events: auto !important;
-  }
-
-  .fusion-accordion-card.is-mobile-active .fusion-cta-label {
+  .fusion-cta-label {
+    color: #62c0bf !important;
+  }abel {
     color: #62c0bf !important;
     opacity: 1 !important;
   }
