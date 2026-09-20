@@ -13,7 +13,7 @@ import { fetchLiveHeaderAlerts } from '../services/liveWeatherService';
 import AccessibilityMenu from './AccessibilityMenu';
 import ReadAloudButton from './ReadAloudButton';
 import { useAccessibility } from '../context/AccessibilityContext';
-import { DotPattern } from "@/registry/magicui/dot-pattern";
+
 import { cn } from "@/lib/utils";
 import { getNavTranslation } from '../translations';
 import './CitizenPortal.css';
@@ -975,17 +975,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
           3. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)
           ============================================================ */}
       <footer className="cp-footer relative overflow-hidden">
-        {/* MagicUI Background Dot Pattern */}
-        <DotPattern
-          className={cn(
-            "pointer-events-none absolute inset-0 h-full w-full text-cyan-400/20",
-            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
-          )}
-          glow={true}
-          width={22}
-          height={22}
-          cr={1.2}
-        />
+
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry">
           <div className="cp-telemetry-inner">

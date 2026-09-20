@@ -251,21 +251,22 @@
 /* MOBILE RESPONSIVE (PHONES) */
 @media (max-width: 768px) {
   .scroll-story-wrapper {
-    height: calc(100vh - 54px);
-    min-height: calc(100vh - 54px);
+    height: calc(100dvh - 54px);
+    min-height: calc(100dvh - 54px);
   }
 
   .scroll-story-container {
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 0;
+    padding: 24px 16px;
+    gap: 20px;
   }
 
   .story-visual-side {
     flex: 0 0 auto;
     width: 100%;
-    padding: 8px 16px 4px 16px;
+    padding: 0;
     display: flex;
     justify-content: center;
   }
@@ -274,16 +275,16 @@
     width: 100%;
     max-width: 390px;
     height: 240px;
-    max-height: 36vh;
+    max-height: 40vh;
     border-radius: 16px;
     border: 1px solid rgba(56, 189, 248, 0.35);
   }
 
   .story-content-side {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     width: 100%;
     max-width: 390px;
-    padding: 8px 16px 16px 16px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -292,7 +293,7 @@
   }
   
   .story-text-container {
-    height: 190px; /* Ample room: longest description will never overlap dots */
+    height: 190px;
     min-height: 190px;
     max-width: 350px;
     width: 100%;

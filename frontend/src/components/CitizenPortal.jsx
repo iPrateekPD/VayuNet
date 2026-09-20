@@ -8,7 +8,7 @@ import ReadAloudButton from './ReadAloudButton';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { INDIAN_LANGUAGES } from './HomePage';
 import { getNavTranslation } from '../translations';
-import { DotPattern } from "@/registry/magicui/dot-pattern";
+
 import { cn } from "@/lib/utils";
 import { fetchLiveDistrictWarning, fetchLiveObservation } from '../services/liveWeatherService';
 
@@ -1085,17 +1085,27 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     <span>⚠️</span> Current Active Warning Zones in India:
                   </div>
                   <div className="cp-active-zones-list">
-                    {Object.keys(LOCATION_DATABASE).slice(0, 6).map(k => {
-                      const item = liveDistricts[k] || LOCATION_DATABASE[k];
-                      const isExtreme = item.isAffected && item.riskLevel?.includes('EXTREME');
-                      const isHigh = item.isAffected && !isExtreme;
-                      const icon = isExtreme ? '🔴' : isHigh ? '🟠' : '🟢';
-                      return (
-                        <button key={k} className="cp-zone-chip" onClick={() => setSelectedId(k)}>
-                          {icon} {item.name} {item.liveObservation ? `(${item.liveObservation.temp}°C, ${item.liveObservation.rain} mm/h)` : ''}
-                        </button>
-                      );
-                    })}
+                    {(() => {
+                      const activeZones = Object.keys(LOCATION_DATABASE).filter(k => {
+                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
+                        return item.isAffected;
+                      });
+
+                      if (activeZones.length === 0) {
+                        return <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>None</span>;
+                      }
+
+                      return activeZones.slice(0, 6).map(k => {
+                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
+                        const isExtreme = item.riskLevel?.includes('EXTREME');
+                        const icon = isExtreme ? '🔴' : '🟠';
+                        return (
+                          <button key={k} className="cp-zone-chip" onClick={() => setSelectedId(k)}>
+                            {icon} {item.name} {item.liveObservation ? `(${item.liveObservation.temp}°C, ${item.liveObservation.rain} mm/h)` : ''}
+                          </button>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               )}
@@ -1440,17 +1450,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
       {/* 4. SMART REDEFINED SOVEREIGN FOOTER WITH GSAP ANIMATIONS */}
       <footer className="cp-footer relative overflow-hidden" ref={footerRef}>
-        {/* MagicUI Background Dot Pattern */}
-        <DotPattern
-          className={cn(
-            "pointer-events-none absolute inset-0 h-full w-full text-cyan-400/20",
-            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
-          )}
-          glow={true}
-          width={22}
-          height={22}
-          cr={1.2}
-        />
+
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry cp-footer-anim-item">
           <div className="cp-telemetry-inner">
