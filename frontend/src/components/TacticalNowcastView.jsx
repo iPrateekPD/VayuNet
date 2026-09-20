@@ -318,6 +318,20 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
   const [isPredicting, setIsPredicting] = useState(false);
   const [aiSeverity, setAiSeverity] = useState('gray');
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const liveDateFormatted = currentTime.toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric'
+  });
+  const liveTimeFormatted = currentTime.toLocaleTimeString('en-US', {
+    hour: '2-digit', minute: '2-digit', hour12: true
+  }) + ' IST';
+
   // Persist bookmarks
   useEffect(() => {
     try {
@@ -536,8 +550,8 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
 
                   {/* Live Timestamp Badge */}
                   <div className="tac-clean-live-pill">
-                    <span className="tac-live-date-text">08 Sep 2026, </span>
-                    <span className="tac-live-time-text">11:52 PM IST</span>
+                    <span className="tac-live-date-text">{liveDateFormatted}, </span>
+                    <span className="tac-live-time-text">{liveTimeFormatted}</span>
                     <span className="tac-clean-live-dot" />
                     <span style={{ color: '#f87171', fontWeight: 700 }}>Live</span>
                   </div>
