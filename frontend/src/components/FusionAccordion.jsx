@@ -1009,71 +1009,18 @@ export default function FusionAccordion({ onEnterPortal }) {
     });
   }, []);
 
-  // Mobile automatic scroll-driven downward expansion:
-  // As user scrolls down in phone mode (< 768px), each card detects when its top enters the focus
-  // zone and smoothly unfolds DOWNWARDS. Cards above remain open during downward scroll so the
-  // content never jumps or moves upward. When scrolling back up, cards below the screen fold back up.
+  // Disabled scroll-driven folding on mobile as per user request to keep cards always open
   useEffect(() => {
-    let ticking = false;
-
-    const handleMobileScroll = () => {
-      if (typeof window === 'undefined' || window.innerWidth >= 768) return;
-      if (!containerRef.current) return;
-
-      const windowH = window.innerHeight;
-      // Reveal threshold: when the card top is within the lower 30% of screen as user scrolls down
-      const revealThreshold = windowH * 0.72;
-
-      setMobileOpenCards((prev) => {
-        const next = { ...prev };
-        let changed = false;
-
-        cardRefs.current.forEach((card, i) => {
-          if (!card) return;
-          const rect = card.getBoundingClientRect();
-
-          // When scrolling down: card reaches reveal threshold -> smoothly unfold downwards
-          // Preceding cards remain open so the document height above the viewport never shrinks (zero upward jerk)
-          if (rect.top <= revealThreshold && rect.bottom > 40) {
-            if (!next[i]) {
-              next[i] = true;
-              changed = true;
-            }
-          }
-          // When scrolling back UP: card moves completely below viewport -> fold closed
-          // Since this card is below the screen, folding it causes zero shift to anything visible
-          else if (rect.top > windowH * 0.94) {
-            if (next[i]) {
-              next[i] = false;
-              changed = true;
-            }
-          }
-        });
-
-        return changed ? next : prev;
+    if (typeof window === 'undefined' || window.innerWidth >= 768) return;
+    
+    // Force all cards open on mount for mobile
+    setMobileOpenCards((prev) => {
+      const next = { ...prev };
+      [0, 1, 2, 3].forEach(i => {
+        next[i] = true;
       });
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleMobileScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-
-    // Initial check on load
-    handleMobileScroll();
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
+      return next;
+    });
   }, []);
 
   // Cleanup on unmount
@@ -1097,21 +1044,9 @@ export default function FusionAccordion({ onEnterPortal }) {
     };
   }, []);
 
-  // Mobile accordion manual toggle
-  const toggleMobileCard = (idx) => {
-    setMobileOpenCards((prev) => ({
-      ...prev,
-      [idx]: !prev[idx],
-    }));
-  };
-
   const handleCardClick = (idx) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      toggleMobileCard(idx);
-    } else {
-      if (onEnterPortal) {
-        onEnterPortal('data-sources');
-      }
+    if (onEnterPortal) {
+      onEnterPortal('data-sources');
     }
   };
 
