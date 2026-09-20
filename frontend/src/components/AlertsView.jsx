@@ -223,7 +223,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
     setIsAILoading(true);
     setAiResult(null);
     try {
-      const response = await fetch('/api/alerts/ai-dispatch', {
+      const response = await fetch('https://vayunet-api.onrender.com/api/alerts/ai-dispatch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -257,7 +257,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
   const handleDispatchCurrent = async () => {
     setIsDispatching(true);
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

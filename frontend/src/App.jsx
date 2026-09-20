@@ -196,7 +196,7 @@ function App() {
 
   // Check backend health on mount
   useEffect(() => {
-    fetch('http://localhost:8000/api/health')
+    fetch('https://vayunet-api.onrender.com/api/health')
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(() => setBackendStatus('online'))
       .catch(() => setBackendStatus('offline'));
@@ -434,7 +434,7 @@ function App() {
             showToast={showToast}
             onDispatchAlert={async () => {
               try {
-                await fetch('http://localhost:8000/api/alerts/broadcast', {
+                await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({

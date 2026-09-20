@@ -355,7 +355,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     const fetchPrediction = async () => {
       setIsPredicting(true);
       try {
-        const response = await fetch('http://localhost:8000/api/nowcast/predict', {
+        const response = await fetch('https://vayunet-api.onrender.com/api/nowcast/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

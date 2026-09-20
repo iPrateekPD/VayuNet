@@ -81,7 +81,7 @@ export default function AlertHubView({ showToast }) {
     setIsAILoading(true);
     setAiResult(null);
     try {
-      const response = await fetch('/api/alerts/ai-dispatch', {
+      const response = await fetch('https://vayunet-api.onrender.com/api/alerts/ai-dispatch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -103,7 +103,7 @@ export default function AlertHubView({ showToast }) {
 
   const dispatch = async (id) => {
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ alertId: id, protocol: 'CAP-1.2' }),
@@ -115,7 +115,7 @@ export default function AlertHubView({ showToast }) {
 
   const broadcastNew = async () => {
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...capForm, protocol: 'CAP-1.2', source: 'VAYUNET-OPS' }),

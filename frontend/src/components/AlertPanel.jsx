@@ -5,7 +5,7 @@ export default function AlertPanel({ alerts, showToast, severity }) {
 
   const handleDispatch = async () => {
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
