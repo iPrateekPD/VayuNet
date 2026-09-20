@@ -13,6 +13,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.config.locations import OPERATIONAL_LOCATIONS
+from src.inference.live_weather import fetch_open_meteo_weather
+from src.inference.feature_adapter import VayunetFeatureAdapter
+
+# Initialize the feature adapter
+adapter = VayunetFeatureAdapter()
+
 # Load PyTorch Deep Learning Inference Engine
 ai_engine = None
 try:
@@ -38,154 +45,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Pre-defined Monitored Locations with ground-truth coordinates and risk parameters
-MONITORED_LOCATIONS = {
-    "dharamsala": {
-        "id": "dharamsala",
-        "name": "Dharamsala (Kangra Basin)",
-        "state": "Himachal Pradesh",
-        "lat": 32.2190,
-        "lng": 76.3234,
-        "elevation_m": 1457,
-        "terrain_type": "Steep Orographic Valley",
-        "primary_threat": "Cloudburst & Flash Flood",
-        "current_status": "RED ALERT",
-        "hazard_probabilities": {
-            "thunderstorm": 94,
-            "cloudburst": 88,
-            "flash_flood": 92
-        },
-        "atmospheric_precursors": {
-            "iwv_mm": 62.4,              # Integrated Water Vapor (>58 mm threshold)
-            "cape_j_kg": 3120,            # Convective Available Potential Energy (>2500 J/kg)
-            "cin_j_kg": -12,              # Convective Inhibition (eroding towards 0)
-            "ctt_drop_rate_c_hr": -16.4,  # Cloud Top Temp Drop Rate (< -10°C/hr indicates explosive updraft)
-            "wind_shear_0_6km_kt": 38,   # Deep layer shear (supports organized severe convection)
-            "dem_slope_deg": 34.2,        # Steep topography triggering flash flood runoff
-            "drainage_basin": "Bhagsunag Stream Sub-catchment"
-        },
-        "xai_factor_contributions": {
-            "ctt_drop_rate": 38,
-            "dem_slope_funneling": 28,
-            "cape_instability": 20,
-            "iwv_moisture_flux": 14
-        },
-        "lead_time_forecasts": {
-            "2h": {"thunderstorm": 94, "cloudburst": 88, "flash_flood": 92, "alert_level": "RED"},
-            "4h": {"thunderstorm": 85, "cloudburst": 72, "flash_flood": 89, "alert_level": "ORANGE"},
-            "6h": {"thunderstorm": 60, "cloudburst": 45, "flash_flood": 74, "alert_level": "YELLOW"}
-        }
-    },
-    "uttarkashi": {
-        "id": "uttarkashi",
-        "name": "Uttarkashi (Bhagirathi Valley)",
-        "state": "Uttarakhand",
-        "lat": 30.7268,
-        "lng": 78.4354,
-        "elevation_m": 1158,
-        "terrain_type": "Deep Himalayan Canyon",
-        "primary_threat": "Debris Flow & Cloudburst Surge",
-        "current_status": "ORANGE ALERT",
-        "hazard_probabilities": {
-            "thunderstorm": 78,
-            "cloudburst": 71,
-            "flash_flood": 84
-        },
-        "atmospheric_precursors": {
-            "iwv_mm": 54.8,
-            "cape_j_kg": 2450,
-            "cin_j_kg": -24,
-            "ctt_drop_rate_c_hr": -11.2,
-            "wind_shear_0_6km_kt": 32,
-            "dem_slope_deg": 39.8,
-            "drainage_basin": "Upper Bhagirathi Catchment"
-        },
-        "xai_factor_contributions": {
-            "dem_slope_funneling": 36,
-            "ctt_drop_rate": 28,
-            "cape_instability": 22,
-            "iwv_moisture_flux": 14
-        },
-        "lead_time_forecasts": {
-            "2h": {"thunderstorm": 78, "cloudburst": 71, "flash_flood": 84, "alert_level": "ORANGE"},
-            "4h": {"thunderstorm": 88, "cloudburst": 82, "flash_flood": 90, "alert_level": "RED"},
-            "6h": {"thunderstorm": 70, "cloudburst": 55, "flash_flood": 78, "alert_level": "ORANGE"}
-        }
-    },
-    "mumbai": {
-        "id": "mumbai",
-        "name": "Mumbai Metropolitan Region",
-        "state": "Maharashtra",
-        "lat": 19.0760,
-        "lng": 72.8777,
-        "elevation_m": 14,
-        "terrain_type": "Coastal Urban Delta",
-        "primary_threat": "Urban Inundation & Severe Squall",
-        "current_status": "ORANGE ALERT",
-        "hazard_probabilities": {
-            "thunderstorm": 86,
-            "cloudburst": 52,
-            "flash_flood": 88
-        },
-        "atmospheric_precursors": {
-            "iwv_mm": 68.1,
-            "cape_j_kg": 2890,
-            "cin_j_kg": -15,
-            "ctt_drop_rate_c_hr": -9.8,
-            "wind_shear_0_6km_kt": 24,
-            "dem_slope_deg": 4.1,
-            "drainage_basin": "Mithi River Low-lying Estuary"
-        },
-        "xai_factor_contributions": {
-            "iwv_moisture_flux": 42,
-            "cape_instability": 28,
-            "ctt_drop_rate": 18,
-            "dem_slope_funneling": 12
-        },
-        "lead_time_forecasts": {
-            "2h": {"thunderstorm": 86, "cloudburst": 52, "flash_flood": 88, "alert_level": "ORANGE"},
-            "4h": {"thunderstorm": 91, "cloudburst": 61, "flash_flood": 95, "alert_level": "RED"},
-            "6h": {"thunderstorm": 65, "cloudburst": 30, "flash_flood": 72, "alert_level": "YELLOW"}
-        }
-    },
-    "wayanad": {
-        "id": "wayanad",
-        "name": "Wayanad (Meppadi Ridge)",
-        "state": "Kerala",
-        "lat": 11.5564,
-        "lng": 76.1320,
-        "elevation_m": 880,
-        "terrain_type": "Western Ghats Escarpment",
-        "primary_threat": "Orographic Torrential Rain & Landslide",
-        "current_status": "RED ALERT",
-        "hazard_probabilities": {
-            "thunderstorm": 74,
-            "cloudburst": 82,
-            "flash_flood": 96
-        },
-        "atmospheric_precursors": {
-            "iwv_mm": 65.3,
-            "cape_j_kg": 2100,
-            "cin_j_kg": -8,
-            "ctt_drop_rate_c_hr": -14.1,
-            "wind_shear_0_6km_kt": 30,
-            "dem_slope_deg": 42.5,
-            "drainage_basin": "Chaliyar River Headwaters"
-        },
-        "xai_factor_contributions": {
-            "dem_slope_funneling": 41,
-            "iwv_moisture_flux": 29,
-            "ctt_drop_rate": 20,
-            "cape_instability": 10
-        },
-        "lead_time_forecasts": {
-            "2h": {"thunderstorm": 74, "cloudburst": 82, "flash_flood": 96, "alert_level": "RED"},
-            "4h": {"thunderstorm": 70, "cloudburst": 78, "flash_flood": 94, "alert_level": "RED"},
-            "6h": {"thunderstorm": 50, "cloudburst": 45, "flash_flood": 80, "alert_level": "ORANGE"}
-        }
-    }
-}
 
 # Historical replay events for video demonstration
 HISTORICAL_EVENTS = {
@@ -239,7 +98,7 @@ def get_health():
             "model_version": "VAYUNET-MTL-v2.0",
             "device": str(getattr(ai_engine, "device", "cpu")) if ai_engine else "none"
         },
-        "active_hazard_zones": len(MONITORED_LOCATIONS),
+        "active_hazard_zones": len(OPERATIONAL_LOCATIONS),
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
 
@@ -253,20 +112,20 @@ def list_locations():
                 "state": v["state"],
                 "lat": v["lat"],
                 "lng": v["lng"],
-                "current_status": v["current_status"],
-                "primary_threat": v["primary_threat"]
+                "current_status": "NORMAL",
+                "primary_threat": "None"
             }
-            for v in MONITORED_LOCATIONS.values()
+            for v in OPERATIONAL_LOCATIONS.values()
         ]
     }
 
 @app.get("/api/hazards/live")
 def get_live_hazards(location_id: str | None = None):
     if location_id:
-        if location_id not in MONITORED_LOCATIONS:
+        if location_id not in OPERATIONAL_LOCATIONS:
             raise HTTPException(status_code=404, detail=f"Location '{location_id}' not found")
-        return {"data": MONITORED_LOCATIONS[location_id]}
-    return {"data": MONITORED_LOCATIONS}
+        return {"data": OPERATIONAL_LOCATIONS[location_id]}
+    return {"data": OPERATIONAL_LOCATIONS}
 
 @app.get("/api/hazards/historical/{event_id}")
 def get_historical_event(event_id: str):
@@ -278,29 +137,51 @@ def get_historical_event(event_id: str):
     return {"event": HISTORICAL_EVENTS[event_id]}
 
 @app.post("/api/nowcast/predict")
-def predict_nowcast(req: NowcastRequest):
+async def predict_nowcast(req: NowcastRequest):
     # Match preset if available or compute distance match
     matched_loc = None
-    if req.location_id and req.location_id in MONITORED_LOCATIONS:
-        matched_loc = MONITORED_LOCATIONS[req.location_id]
+    if req.location_id and req.location_id in OPERATIONAL_LOCATIONS:
+        matched_loc = OPERATIONAL_LOCATIONS[req.location_id]
     else:
         min_dist = float("inf")
-        for loc in MONITORED_LOCATIONS.values():
+        for loc in OPERATIONAL_LOCATIONS.values():
             dist = ((loc["lat"] - req.lat) ** 2 + (loc["lng"] - req.lng) ** 2) ** 0.5
             if dist < min_dist:
                 min_dist = dist
                 matched_loc = loc
 
     lead_key = f"{req.lead_time_hours}h"
-    precursors = matched_loc["atmospheric_precursors"] if matched_loc else {
-        "iwv_mm": 55.0, "cape_j_kg": 2600.0, "cin_j_kg": -15.0,
-        "ctt_drop_rate_c_hr": -12.0, "wind_shear_0_6km_kt": 32.0, "dem_slope_deg": 30.0
-    }
+
+    # Fetch live weather from Open-Meteo
+    live_data = await fetch_open_meteo_weather(req.lat, req.lng)
+    
+    # Build genuine ML tensor
+    try:
+        tensor = adapter.build_inference_tensor(live_data)
+        is_valid = True
+        reason = ""
+    except Exception as e:
+        is_valid = False
+        reason = str(e)
+        tensor = None
+    
+    if not is_valid:
+        # Strict fallback
+        return {
+            "prediction_status": "UNAVAILABLE",
+            "reason": reason,
+            "target": {
+                "lat": req.lat,
+                "lng": req.lng,
+                "location_name": matched_loc["name"] if matched_loc else "Custom Spatial Coordinate"
+            },
+            "atmospheric_precursors": live_data.get("weather", {}),
+            "live_data_status": live_data.get("status", "unknown")
+        }
 
     # Execute real PyTorch Deep Learning Model inference if loaded
     if ai_engine is not None:
         try:
-            tensor = build_spatiotemporal_tensor_from_precursors(precursors)
             ai_result = ai_engine.predict_tensor(tensor)
             
             # Scale probability according to lead time degradation
@@ -313,6 +194,7 @@ def predict_nowcast(req: NowcastRequest):
             threat_level = "RED" if max_p >= 80 else ("ORANGE" if max_p >= 60 else ("YELLOW" if max_p >= 35 else "GREEN"))
 
             return {
+                "prediction_status": "SUCCESS",
                 "target": {
                     "lat": req.lat,
                     "lng": req.lng,
@@ -325,7 +207,7 @@ def predict_nowcast(req: NowcastRequest):
                     "flash_flood_probability": ff_p,
                     "composite_threat_level": threat_level
                 },
-                "atmospheric_precursors": precursors,
+                "atmospheric_precursors": live_data.get("weather", {}),
                 "xai_factor_contributions": ai_result["xai_attribution"],
                 "scientific_verdict": ai_result["scientific_verdict"],
                 "model_architecture": "Multi-Modal Spatiotemporal Transformer (MTL)",
@@ -334,27 +216,17 @@ def predict_nowcast(req: NowcastRequest):
             }
         except Exception as err:
             print(f"⚠️ Error running live PyTorch inference: {err}. Falling back.")
+            return {
+                "prediction_status": "ERROR",
+                "reason": f"Model inference error: {str(err)}",
+                "atmospheric_precursors": live_data.get("weather", {})
+            }
 
-    # Fallback to calibrated deterministic physics matrix
-    forecast = matched_loc["lead_time_forecasts"].get(lead_key, matched_loc["lead_time_forecasts"]["2h"])
+    # Should only reach here if model couldn't load but data was somehow valid
     return {
-        "target": {
-            "lat": req.lat,
-            "lng": req.lng,
-            "location_name": matched_loc["name"] if matched_loc else "Custom Spatial Coordinate"
-        },
-        "lead_time": lead_key,
-        "predictions": {
-            "thunderstorm_probability": forecast["thunderstorm"],
-            "cloudburst_probability": forecast["cloudburst"],
-            "flash_flood_probability": forecast["flash_flood"],
-            "composite_threat_level": forecast["alert_level"]
-        },
-        "atmospheric_precursors": matched_loc["atmospheric_precursors"],
-        "xai_factor_contributions": matched_loc["xai_factor_contributions"],
-        "model_architecture": "Multi-Modal Spatiotemporal Transformer (MTL)",
-        "inference_latency_ms": 142.5,
-        "engine_mode": "Phase 1: Deterministic Atmospheric Matrix (Demo Mode)"
+        "prediction_status": "ERROR",
+        "reason": "AI Engine is not loaded.",
+        "atmospheric_precursors": live_data.get("weather", {})
     }
 
 class AIDispatchRequest(BaseModel):

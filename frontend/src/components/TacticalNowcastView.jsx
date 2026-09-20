@@ -369,7 +369,7 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
     const fetchPrediction = async () => {
       setIsPredicting(true);
       try {
-        const response = await fetch('https://vayunet-api.onrender.com/api/nowcast/predict', {
+        const response = await fetch('/api/nowcast/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -381,11 +381,11 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
         });
         if (response.ok) {
           const data = await response.json();
-          if (data.predictions) {
-            setAiPredictions(data.predictions);
-            if (data.predictions.composite_threat_level) {
-              setAiSeverity(data.predictions.composite_threat_level.toLowerCase());
-            }
+          setAiPredictions(data);
+          if (data.predictions && data.predictions.composite_threat_level) {
+            setAiSeverity(data.predictions.composite_threat_level.toLowerCase());
+          } else {
+            setAiSeverity('gray');
           }
         }
       } catch (e) {
