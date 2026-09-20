@@ -810,3 +810,21 @@ html, body {
     transform: rotate(-5deg) scale(0.9);
   }
 }
+
+/* Hide Google Translate UI */
+body {
+  top: 0 !important;
+}
+.skiptranslate {
+  display: none !important;
+}
+.goog-te-banner-frame {
+  display: none !important;
+}
+#goog-gt-tt {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}

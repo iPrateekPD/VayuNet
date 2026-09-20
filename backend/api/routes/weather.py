@@ -55,3 +55,23 @@ async def get_realtime_weather_by_coords(
         return {k: v for k, v in data.items() if not k.startswith("_")}
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Failed to retrieve weather for coordinates: {e}")
+
+@router.get("/api/weather/openweathermap")
+async def get_openweathermap_weather(city: str = Query(..., description="City name to fetch weather for")):
+    """
+    Secure proxy for OpenWeatherMap to hide the API key from the frontend.
+    """
+    import httpx
+    api_key = "d792ffabff5c6bab54f5af128e386bb9"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, timeout=10.0)
+            if response.status_code == 200:
+                data = response.json()
+                return data
+            else:
+                raise HTTPException(status_code=response.status_code, detail=f"OpenWeatherMap error: {response.text}")
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=502, detail=f"Failed to reach OpenWeatherMap: {e}")

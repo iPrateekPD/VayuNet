@@ -57,6 +57,18 @@ app.include_router(events.router)
 app.include_router(system.router)
 
 # =====================================================================
+# Root endpoint
+# =====================================================================
+
+@app.get("/")
+def root():
+    return {
+        "status": "online", 
+        "message": "VayuNet API is running. Visit /docs for documentation.",
+        "documentation_url": "/docs"
+    }
+
+# =====================================================================
 # BHASHINI (Digital India / MeitY) Multilingual & Voice Endpoints
 # =====================================================================
 

@@ -86,25 +86,13 @@ function App() {
   const [toast, setToast] = useState(null);
   const [portalLanguage, setPortalLanguage] = useState('EN');
 
-  // Tactical Sector & Location State (Manual & Automated)
-  const TACTICAL_LOCATIONS = [
-    { id: 'chamoli', name: 'Chamoli, Uttarakhand', badge: 'Cloudburst & Flash Flood', center: [30.4, 79.3], zoom: 9 },
-    { id: 'mumbai', name: 'Mumbai MMR, Maharashtra', badge: 'Coastal Convection', center: [19.076, 72.877], zoom: 10 },
-    { id: 'wayanad', name: 'Wayanad, Kerala', badge: 'Slope Runoff', center: [11.685, 76.132], zoom: 10 },
-    { id: 'odisha', name: 'Coastal Odisha', badge: 'Squall Line', center: [20.951, 85.098], zoom: 8 },
-    { id: 'meghalaya', name: 'Meghalaya Plateau', badge: 'Orographic Core', center: [25.578, 91.893], zoom: 9 },
-    { id: 'india', name: 'National Surveillance (All India)', badge: 'Overview', center: [21.8, 78.9], zoom: 5 },
-  ];
-
-  const [selectedLocation, setSelectedLocation] = useState('chamoli');
-  const [mapCenter, setMapCenter] = useState(EVENT_META.center);
-  const [mapZoom, setMapZoom] = useState(EVENT_META.zoom);
-  const [inspectedPoint, setInspectedPoint] = useState(null);
+  // Global Selected Location State (Shared across all Operations Tabs)
+  const [globalSelectedLocation, setGlobalSelectedLocation] = useState('Chamoli, Uttarakhand');
 
   const handleSelectLocation = (locId) => {
     const loc = TACTICAL_LOCATIONS.find(l => l.id === locId);
     if (loc) {
-      setSelectedLocation(loc.id);
+      setGlobalSelectedLocation(loc.name);
       setMapCenter(loc.center);
       setMapZoom(loc.zoom);
       showToast(`Tactical sector switched to ${loc.name}`);
@@ -113,7 +101,7 @@ function App() {
 
   const handleAutoTrack = () => {
     const target = TACTICAL_LOCATIONS[0];
-    setSelectedLocation(target.id);
+    setGlobalSelectedLocation(target.name);
     setMapCenter(target.center);
     setMapZoom(target.zoom);
     showToast(`Radar Auto-Track: Locked onto ${target.name} (Active Alert Core)`);
@@ -432,6 +420,8 @@ function App() {
           <TacticalNowcastView
             onNavigateTab={handleTabSwitch}
             showToast={showToast}
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
             onDispatchAlert={async () => {
               try {
                 await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
@@ -457,17 +447,23 @@ function App() {
           <AnalysisView 
             currentData={currentData} 
             onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
           />
         )}
         {portalTab === 'events' && (
           <EventsView 
             onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
           />
         )}
         {portalTab === 'alerts' && (
           <AlertsView 
             showToast={showToast} 
             onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
           />
         )}
       </main>

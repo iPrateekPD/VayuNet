@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getLocations, getLocationNowcast } from '../services/apiService';
-import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Polygon, Polyline, Marker, useMap, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import ReadAloudButton from './ReadAloudButton';
@@ -242,7 +242,9 @@ const TIMESTEP_DATA = {
   },
 };
 
-export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavigateTab }) {
+export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavigateTab, globalSelectedLocation, setGlobalSelectedLocation }) {
+  const selectedSector = globalSelectedLocation || 'Chamoli, Uttarakhand';
+  const setSelectedSector = setGlobalSelectedLocation || (() => {});
   const [sectorCoords, setSectorCoords] = useState({ 'Chamoli, Uttarakhand': [30.41, 79.32] });
   const [sectorOptions, setSectorOptions] = useState(['Chamoli, Uttarakhand']);
   const [sectorIdMap, setSectorIdMap] = useState({ 'Chamoli, Uttarakhand': 'chamoli' });
@@ -271,7 +273,6 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
   const [selectedStep, setSelectedStep] = useState('+2h');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSectorOpen, setIsSectorOpen] = useState(false);
-  const [selectedSector, setSelectedSector] = useState('Chamoli, Uttarakhand');
   const [activePanel, setActivePanel] = useState(null); // 'layers' | 'incidents' | 'bookmarks' | 'telemetry' | null
   const [basemap, setBasemap] = useState('satellite'); // 'satellite' | 'terrain' | 'hybrid'
   const [selectedIncident, setSelectedIncident] = useState(INCIDENTS_DATA[0]);
@@ -1000,6 +1001,60 @@ export default function TacticalNowcastView({ onDispatchAlert, showToast, onNavi
                   `, [160, 48], [6, 18])}
                 />
               )}
+
+              {/* Hardcoded Risk Area Animation for Kerala (Wayanad) Demo */}
+              {selectedSector === 'Wayanad, Kerala' && (() => {
+                const center = sectorCoords['Wayanad, Kerala'];
+                if (!center) return null;
+                const scale = currentStepData.scale;
+                
+                const getScaledPolygon = (offsets) => offsets.map(([dLat, dLon]) => [
+                  center[0] + dLat * scale,
+                  center[1] + dLon * scale
+                ]);
+
+                // Base offsets (roughly corresponding to scale=1)
+                const wayanadBlueAdvisory = [
+                  [0.08, -0.06], [0.10, 0.04], [0.05, 0.11], [-0.02, 0.12],
+                  [-0.08, 0.07], [-0.11, -0.01], [-0.07, -0.09], [0.01, -0.11]
+                ];
+              
+                const wayanadYellowModerate = [
+                  [0.05, -0.04], [0.07, 0.03], [0.03, 0.08], [-0.01, 0.09],
+                  [-0.06, 0.05], [-0.08, 0.0], [-0.05, -0.06], [0.01, -0.08]
+                ];
+              
+                const wayanadOrangeHigh = [
+                  [0.03, -0.02], [0.04, 0.02], [0.02, 0.05], [-0.01, 0.05],
+                  [-0.04, 0.03], [-0.05, 0.0], [-0.03, -0.04], [0.0, -0.05]
+                ];
+              
+                const wayanadRedSevere = [
+                  [0.015, -0.01], [0.02, 0.01], [0.01, 0.025], [-0.01, 0.025],
+                  [-0.02, 0.015], [-0.025, 0.0], [-0.015, -0.02], [0.0, -0.025]
+                ];
+
+                return (
+                  <>
+                    <Polygon
+                      positions={getScaledPolygon(wayanadBlueAdvisory)}
+                      pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 1, dashArray: '4 4' }}
+                    />
+                    <Polygon
+                      positions={getScaledPolygon(wayanadYellowModerate)}
+                      pathOptions={{ color: '#eab308', fillColor: '#eab308', fillOpacity: 0.28, weight: 1.5 }}
+                    />
+                    <Polygon
+                      positions={getScaledPolygon(wayanadOrangeHigh)}
+                      pathOptions={{ color: '#f97316', fillColor: '#f97316', fillOpacity: 0.45, weight: 2 }}
+                    />
+                    <Polygon
+                      positions={getScaledPolygon(wayanadRedSevere)}
+                      pathOptions={{ color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.65, weight: 2.5 }}
+                    />
+                  </>
+                );
+              })()}
             </MapContainer>
 
             {/* FLOATING PRECIPITATION INTENSITY LEGEND */}

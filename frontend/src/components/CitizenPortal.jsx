@@ -377,15 +377,19 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
       riskClass = 'risk-extreme';
       riskColor = '#dc2626';
       timeframe = 'Immediate (1 – 3 hours)';
-      hazard = nearestThreat?.hazard || 'Convective Torrent & Localized Inundation';
-      description = `Severe radar reflectivity cell active near your coordinates. Upstream water runoff and high convective potential. Remain vigilant.`;
+      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Convective Torrent & Localized Inundation';
+      description = isNearThreat 
+        ? `Severe radar reflectivity cell active near your coordinates (~${Math.round(minThreatDist)} km). Upstream water runoff and high convective potential. Remain vigilant.`
+        : `Torrential downpour detected (${precipitation} mm/h). Upstream water runoff and high convective potential. Move to high ground immediately.`;
     } else {
       riskLevel = 'HIGH RISK';
       riskClass = 'risk-high';
       riskColor = '#ea580c';
       timeframe = 'Within 2 – 4 hours';
-      hazard = nearestThreat?.hazard || 'Squall & Heavy Rain Warning';
-      description = `Convective rain bands developing in your proximity (~${Math.round(minThreatDist)} km from active corridor). Avoid water-logged lowlands.`;
+      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Squall & Heavy Rain Warning';
+      description = isNearThreat
+        ? `Convective rain bands developing in your proximity (~${Math.round(minThreatDist)} km from active corridor). Avoid water-logged lowlands.`
+        : `Active severe weather detected (${precipitation} mm/h). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
     }
   }
 
@@ -460,8 +464,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 
-  const allLocations = { ...LOCATION_DATABASE, ...liveDistricts, ...customLocations };
-  const loc = allLocations[selectedId] || liveDistricts[selectedId] || LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.gunupur;
+  const allLocations = { ...LOCATION_DATABASE, ...customLocations, ...liveDistricts };
+  const loc = allLocations[selectedId] || LOCATION_DATABASE.gunupur;
 
   // 1. Initial live synchronization for all monitoring districts across India
   useEffect(() => {

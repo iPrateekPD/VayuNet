@@ -1,7 +1,6 @@
 /**
  * VAYUNET Live Sovereign Weather Service
- * Integrates https://weather.indianapi.in (IMD India Endpoints)
- * API Key: sk-live-eI4hnX2tO3XO1RZO861kXt75QoGJ4kbbTQk21RiQ
+ * Integrates OpenWeatherMap via secure backend proxy
  * 
  * Provides real-time live telemetry for:
  * 1. Home Page Header Live News Bar (live rainfall & thunderstorm alert tracking)
@@ -9,11 +8,10 @@
  * 3. Public Warning Page (live district observations, risk evaluation, and emergency nowcasts)
  */
 
-export const INDIAN_WEATHER_API_CONFIG = {
-  BASE_URL: 'https://weather.indianapi.in',
-  API_KEY: import.meta.env.VITE_INDIAN_WEATHER_API_KEY || 'sk-live-eI4hnX2tO3XO1RZO861kXt75QoGJ4kbbTQk21RiQ',
+export const OPENWEATHER_API_CONFIG = {
+  BASE_URL: 'https://api.openweathermap.org/data/2.5/weather',
+  // API key is now securely handled by the backend proxy.
   HEADERS: {
-    'x-api-key': import.meta.env.VITE_INDIAN_WEATHER_API_KEY || 'sk-live-eI4hnX2tO3XO1RZO861kXt75QoGJ4kbbTQk21RiQ',
     'Accept': 'application/json',
   },
 };
@@ -74,33 +72,48 @@ export async function fetchLiveObservation(lat, lon, cityName = '') {
 
   let liveData = null;
 
-  // 1. Primary Attempt: Query https://weather.indianapi.in with provided API key
+  // 1. Primary Attempt: Query OpenWeatherMap via our secure backend proxy
   if (cityName) {
     try {
-      const indianApiUrl = `${INDIAN_WEATHER_API_CONFIG.BASE_URL}/india/weather?city=${encodeURIComponent(cityName)}`;
-      const res = await fetch(indianApiUrl, {
+      const backendProxyUrl = `http://localhost:8000/api/weather/openweathermap?city=${encodeURIComponent(cityName)}`;
+      const res = await fetch(backendProxyUrl, {
         method: 'GET',
-        headers: INDIAN_WEATHER_API_CONFIG.HEADERS,
+        headers: { 'Accept': 'application/json' },
       });
       if (res.ok) {
         const json = await res.json();
-        if (json && (json.current || json.weather || json.temperature)) {
-          const temp = json.temperature?.current ?? json.current?.temp ?? json.weather?.current?.temp;
-          const rain = json.weather?.current?.rainfall ?? json.current?.rainfall ?? 0;
-          const humidity = json.weather?.current?.humidity ?? json.current?.humidity ?? 70;
-          const wind = json.weather?.current?.wind ?? '12 km/h';
-          const status = json.weather?.current?.description ?? json.current?.weather ?? 'Live IMD Observed';
+        if (json && json.main) {
+          const temp = json.main.temp;
+          const rain = json.rain ? (json.rain['1h'] || 0) : 0;
+          const humidity = json.main.humidity;
+          const pressure = json.main.pressure;
+          const windSpeed = (json.wind?.speed || 0) * 3.6; // Convert m/s to km/h
+          const windDir = degreesToCardinal(json.wind?.deg || 0);
+          const status = (json.weather && json.weather.length > 0) ? json.weather[0].description : 'Live Observed';
+          let weatherCode = 1;
+          if (json.weather && json.weather.length > 0) {
+            const owmCode = json.weather[0].id;
+            // Map OWM codes (e.g. 501) to WMO codes roughly (e.g. 61 for rain, 95 for thunder)
+            if (owmCode >= 200 && owmCode < 300) weatherCode = 95; // Thunderstorm
+            else if (owmCode >= 300 && owmCode < 400) weatherCode = 51; // Drizzle
+            else if (owmCode >= 500 && owmCode < 600) weatherCode = rain >= 10 ? 65 : 61; // Rain
+            else if (owmCode >= 600 && owmCode < 700) weatherCode = 71; // Snow
+            else if (owmCode >= 700 && owmCode < 800) weatherCode = 45; // Fog/Atmosphere
+            else if (owmCode === 800) weatherCode = 1; // Clear
+            else if (owmCode > 800) weatherCode = 3; // Clouds
+          }
+
           if (temp != null) {
             liveData = {
               temp: Math.round(Number(temp)),
               rain: Math.round(Number(rain) * 10) / 10,
               humidity: Math.round(Number(humidity)),
-              pressure: 1008,
-              windSpeed: 14,
-              windDir: 'SW',
-              status: status,
-              weatherCode: rain > 10 ? 82 : (rain > 0 ? 61 : 1),
-              source: 'weather.indianapi.in (IMD Station)',
+              pressure: pressure,
+              windSpeed: Math.round(windSpeed),
+              windDir: windDir,
+              status: status.charAt(0).toUpperCase() + status.slice(1), // capitalize
+              weatherCode: weatherCode,
+              source: 'OpenWeatherMap Live',
               isLive: true,
             };
           }
@@ -359,24 +372,31 @@ export async function fetchLiveDistrictWarning(districtKey, baseLocationData) {
     let hazard = 'No Active Severe Warnings';
     let description = `Atmospheric stability indices nominal at your location (${obs.temp}°C, Humidity: ${obs.humidity}%, Wind: ${obs.windDir} ${obs.windSpeed} km/h). No flood or cloudburst alert detected.`;
 
-    if (isHeavy || isThunder) {
+    if (obs.rain >= 25) {
       isAffected = true;
-      if (obs.rain >= 25 || isThunder) {
-        riskLevel = 'EXTREME RISK';
-        riskClass = 'risk-extreme';
-        riskColor = '#dc2626';
-        timeframe = 'Immediate (1 – 3 hours)';
-        hazard = isThunder ? 'Severe Thunderstorm + Flash Flood' : 'Torrential Deluge & Cloudburst Alert';
-        description = `Live precipitation rate is ${obs.rain} mm/h with active convective updrafts (${obs.temp}°C, Wind: ${obs.windDir} ${obs.windSpeed} km/h). Rapid water accumulation expected. Move to high ground immediately.`;
-      } else {
-        riskLevel = 'HIGH RISK';
-        riskClass = 'risk-high';
-        riskColor = '#ea580c';
-        timeframe = 'Within 2 – 4 hours';
-        hazard = 'Intense Precipitation & Squall Line';
-        description = `Active rain bands detected (${obs.rain} mm/h, Barometer: ${obs.pressure} hPa). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
-      }
-    } else if (isModerate) {
+      riskLevel = 'EXTREME RISK';
+      riskClass = 'risk-extreme';
+      riskColor = '#dc2626';
+      timeframe = 'Immediate (1 – 3 hours)';
+      hazard = isThunder ? 'Severe Thunderstorm + Flash Flood' : 'Torrential Deluge & Cloudburst Alert';
+      description = `Live precipitation rate is ${obs.rain} mm/h with active convective updrafts (${obs.temp}°C, Wind: ${obs.windDir} ${obs.windSpeed} km/h). Rapid water accumulation expected. Move to high ground immediately.`;
+    } else if (obs.rain >= 15 || (isThunder && obs.rain >= 10)) {
+      isAffected = true;
+      riskLevel = 'HIGH RISK';
+      riskClass = 'risk-high';
+      riskColor = '#ea580c';
+      timeframe = 'Within 2 – 4 hours';
+      hazard = isThunder ? 'Severe Thunderstorm + Flood Watch' : 'Intense Precipitation & Squall Line';
+      description = `Active severe weather detected (${obs.rain} mm/h, Barometer: ${obs.pressure} hPa). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
+    } else if (isThunder) {
+      isAffected = true;
+      riskLevel = 'MODERATE WATCH';
+      riskClass = 'risk-high';
+      riskColor = '#ca8a04';
+      timeframe = 'Next 3 – 6 hours';
+      hazard = 'Thunderstorm Warning';
+      description = `Thunderstorm activity detected (${obs.status}, ${obs.temp}°C). Rainfall is currently light (${obs.rain} mm/h). Stay indoors and avoid open areas.`;
+    } else if (isModerate || isHeavy) {
       isAffected = true;
       riskLevel = 'MODERATE WATCH';
       riskClass = 'risk-high';

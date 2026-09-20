@@ -52,6 +52,15 @@ export function AccessibilityProvider({ children }) {
     localStorage.setItem('vayunet_language', normalized);
     i18n.changeLanguage(normalized);
     document.documentElement.lang = normalized;
+
+    // Trigger Google Translate for the whole website
+    setTimeout(() => {
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = normalized;
+        select.dispatchEvent(new Event('change'));
+      }
+    }, 100);
   }, []);
 
   // Update text size

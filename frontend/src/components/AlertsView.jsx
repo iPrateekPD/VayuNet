@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -176,9 +176,23 @@ const INITIAL_AUDIT = [
   { time: '10:45 PM', alertId: 'CAP-2039', dest: 'Uttarkashi EOC', status: 'Delivered (ACK 200)' },
 ];
 
-export default function AlertsView({ showToast, onNavigateTab }) {
+export default function AlertsView({ showToast, onNavigateTab, globalSelectedLocation, setGlobalSelectedLocation }) {
   const [incidents, setIncidents] = useState(INITIAL_INCIDENTS);
   const [selectedIncident, setSelectedIncident] = useState(INITIAL_INCIDENTS[0]);
+
+  // Synchronize when global location changes
+  useEffect(() => {
+    if (globalSelectedLocation) {
+      const match = INITIAL_INCIDENTS.find(inc => inc.location === globalSelectedLocation);
+      if (match) setSelectedIncident(match);
+    }
+  }, [globalSelectedLocation]);
+
+  const handleSelectIncident = (inc) => {
+    setSelectedIncident(inc);
+    if (setGlobalSelectedLocation) setGlobalSelectedLocation(inc.location);
+  };
+
   const [auditLog, setAuditLog] = useState(INITIAL_AUDIT);
   const [isDispatching, setIsDispatching] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
@@ -384,8 +398,11 @@ export default function AlertsView({ showToast, onNavigateTab }) {
 
         {/* ALERT DETAILS CARD (RIGHT) */}
         <div className="tac-clean-threat-card" style={{ 
-          background: selectedIncident.sev === 'HIGH' ? 'linear-gradient(180deg, rgba(153, 27, 27, 0.35) 0%, rgba(69, 10, 10, 0.2) 100%)' : 'linear-gradient(180deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.2) 100%)',
-          borderColor: selectedIncident.sev === 'HIGH' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(56, 189, 248, 0.4)'
+          background: selectedIncident.sev === 'HIGH' ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.7) 100%)' : 'linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.7) 100%)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+          borderColor: selectedIncident.sev === 'HIGH' ? 'rgba(239, 68, 68, 0.5)' : 'rgba(56, 189, 248, 0.5)'
         }}>
           <div className="tac-clean-threat-head">
             <div className="tac-clean-flame-tag" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>
@@ -412,8 +429,8 @@ export default function AlertsView({ showToast, onNavigateTab }) {
               )}
             </div>
             <div>
-              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>{selectedIncident.hazard.toUpperCase()}</div>
-              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>{selectedIncident.sev} RISK</div>
+              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#fca5a5' : '#7dd3fc', textShadow: selectedIncident.sev === 'HIGH' ? '0 0 12px rgba(239, 68, 68, 0.6)' : '0 0 12px rgba(56, 189, 248, 0.6)', fontWeight: 800 }}>{selectedIncident.hazard.toUpperCase()}</div>
+              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8', fontSize: '16px' }}>{selectedIncident.sev} RISK</div>
               <div className="tac-clean-warn-loc">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -424,50 +441,50 @@ export default function AlertsView({ showToast, onNavigateTab }) {
             </div>
           </div>
 
-          <div className="tac-clean-narrative">
+          <div className="tac-clean-narrative" style={{ color: '#e2e8f0', lineHeight: 1.6, fontSize: '13px' }}>
             {selectedIncident.description}
           </div>
 
           <div className="tac-clean-chips-grid">
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric1Icon}</span>
-                <span className="tac-clean-chip-val">{selectedIncident.metric1}</span>
+            <div className="tac-clean-chip" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <span style={{ color: '#38bdf8', fontSize: '14px' }}>{selectedIncident.metric1Icon}</span>
+                <span className="tac-clean-chip-val" style={{ fontWeight: 700, color: '#fff', fontSize: '15px' }}>{selectedIncident.metric1}</span>
               </div>
-              <span className="tac-clean-chip-label">{selectedIncident.metric1Label}</span>
+              <span className="tac-clean-chip-label" style={{ color: '#94a3b8', fontSize: '11px' }}>{selectedIncident.metric1Label}</span>
             </div>
 
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>🕒</span>
-                <span className="tac-clean-chip-val">{selectedIncident.eta}</span>
+            <div className="tac-clean-chip" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <span style={{ color: '#38bdf8', fontSize: '14px' }}>🕒</span>
+                <span className="tac-clean-chip-val" style={{ fontWeight: 700, color: '#fff', fontSize: '15px' }}>{selectedIncident.eta}</span>
               </div>
-              <span className="tac-clean-chip-label">Estimated arrival</span>
+              <span className="tac-clean-chip-label" style={{ color: '#94a3b8', fontSize: '11px' }}>Estimated arrival</span>
             </div>
 
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>📊</span>
-                <span className="tac-clean-chip-val">{selectedIncident.confidence}</span>
+            <div className="tac-clean-chip" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <span style={{ color: '#38bdf8', fontSize: '14px' }}>📊</span>
+                <span className="tac-clean-chip-val" style={{ fontWeight: 700, color: '#fff', fontSize: '15px' }}>{selectedIncident.confidence}</span>
               </div>
-              <span className="tac-clean-chip-label">Model confidence</span>
+              <span className="tac-clean-chip-label" style={{ color: '#94a3b8', fontSize: '11px' }}>Model confidence</span>
             </div>
 
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric2Icon}</span>
-                <span className="tac-clean-chip-val">{selectedIncident.metric2}</span>
+            <div className="tac-clean-chip" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '8px', padding: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <span style={{ color: '#38bdf8', fontSize: '14px' }}>{selectedIncident.metric2Icon}</span>
+                <span className="tac-clean-chip-val" style={{ fontWeight: 700, color: '#fff', fontSize: '15px' }}>{selectedIncident.metric2}</span>
               </div>
-              <span className="tac-clean-chip-label">{selectedIncident.metric2Label}</span>
+              <span className="tac-clean-chip-label" style={{ color: '#94a3b8', fontSize: '11px' }}>{selectedIncident.metric2Label}</span>
             </div>
           </div>
 
-          <div className="tac-clean-action-box">
-            <div className="tac-clean-action-head">
+          <div className="tac-clean-action-box" style={{ background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.05) 100%)', borderLeft: '4px solid #ef4444', padding: '12px', borderRadius: '4px', margin: '8px 0' }}>
+            <div className="tac-clean-action-head" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fca5a5', fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>
               <span>⚠️</span>
-              <span>Mandatory Action Required</span>
+              <span>MANDATORY ACTION REQUIRED</span>
             </div>
-            <div className="tac-clean-action-desc">
+            <div className="tac-clean-action-desc" style={{ color: '#e2e8f0', fontSize: '12.5px', lineHeight: 1.5 }}>
               {selectedIncident.instructions}
             </div>
           </div>
@@ -477,7 +494,19 @@ export default function AlertsView({ showToast, onNavigateTab }) {
               className="btn-ai-dispatch"
               onClick={dispatchAIAlert}
               disabled={isAILoading || isDispatching}
-              style={{ padding: '12px' }}
+              style={{ 
+                padding: '12px',
+                background: 'linear-gradient(90deg, rgba(6, 182, 212, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)',
+                border: '1px solid rgba(34, 211, 238, 0.5)',
+                color: '#67e8f9',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: (isAILoading || isDispatching) ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 12px rgba(6, 182, 212, 0.15)'
+              }}
+              onMouseOver={(e) => { if (!isAILoading && !isDispatching) e.currentTarget.style.boxShadow = '0 0 16px rgba(6, 182, 212, 0.4)'; e.currentTarget.style.background = 'linear-gradient(90deg, rgba(6, 182, 212, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%)'; }}
+              onMouseOut={(e) => { if (!isAILoading && !isDispatching) e.currentTarget.style.boxShadow = '0 4px 12px rgba(6, 182, 212, 0.15)'; e.currentTarget.style.background = 'linear-gradient(90deg, rgba(6, 182, 212, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)'; }}
             >
               {isAILoading ? 'AI Analyzing...' : '✨ Generate AI Multi-Lingual Alert'}
             </button>
@@ -529,9 +558,18 @@ export default function AlertsView({ showToast, onNavigateTab }) {
               type="button"
               className="tac-clean-dispatch-btn"
               style={{ 
-                background: isDispatching ? '#475569' : selectedIncident.sev === 'HIGH' ? '#dc2626' : '#2563eb',
+                background: isDispatching ? '#475569' : selectedIncident.sev === 'HIGH' ? 'linear-gradient(90deg, #dc2626 0%, #b91c1c 100%)' : 'linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)',
                 cursor: isDispatching ? 'not-allowed' : 'pointer',
                 border: 'none',
+                padding: '14px',
+                borderRadius: '8px',
+                color: '#fff',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: selectedIncident.sev === 'HIGH' && !isDispatching ? '0 4px 16px rgba(220, 38, 38, 0.4)' : 'none'
               }}
               onClick={() => {
                 handleDispatchCurrent();
@@ -540,7 +578,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
               disabled={isDispatching}
             >
               <span style={{ fontSize: '15px' }}>((●))</span>
-              <span>{isDispatching ? 'Transmitting CAP 1.2...' : 'Dispatch CAP Alert →'}</span>
+              <span>{isDispatching ? 'Transmitting CAP 1.2...' : 'DISPATCH CAP ALERT'}</span>
             </button>
           </div>
         </div>
@@ -565,7 +603,7 @@ export default function AlertsView({ showToast, onNavigateTab }) {
                   padding: '6px 8px',
                   borderRadius: '6px'
                 }}
-                onClick={() => setSelectedIncident(inc)}
+                onClick={() => handleSelectIncident(inc)}
               >
                 <span className="tac-clean-threat-name" style={{ minWidth: '120px' }}>
                   <span style={{ color: inc.sev === 'HIGH' ? '#ef4444' : inc.sev === 'MODERATE' ? '#f97316' : '#eab308' }}>

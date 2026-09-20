@@ -69,13 +69,16 @@ function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
 const SECTOR_OPTIONS = [
   'Chamoli, Uttarakhand',
   'Kangra, Himachal Pradesh',
+  'Wayanad, Kerala',
+  'Mumbai MMR, Maharashtra',
   'Rudraprayag, Uttarakhand',
   'Pithoragarh, Uttarakhand',
   'Uttarkashi, Uttarakhand',
 ];
 
-export default function AnalysisView({ onNavigateTab }) {
-  const [selectedSector, setSelectedSector] = useState('Chamoli, Uttarakhand');
+export default function AnalysisView({ onNavigateTab, globalSelectedLocation, setGlobalSelectedLocation }) {
+  const selectedSector = globalSelectedLocation || 'Chamoli, Uttarakhand';
+  const setSelectedSector = setGlobalSelectedLocation || (() => {});
   const [isSectorOpen, setIsSectorOpen] = useState(false);
   const [activeLayer, setActiveLayer] = useState('satellite'); // 'satellite' | 'radar'
 

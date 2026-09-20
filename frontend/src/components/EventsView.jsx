@@ -156,11 +156,28 @@ const TIMELINE_STEPS = [
   { id: 'Recovery', time: '02:00' }
 ];
 
-export default function EventsView({ onNavigateTab }) {
+export default function EventsView({ globalSelectedLocation, setGlobalSelectedLocation }) {
   const [selectedId, setSelectedId] = useState('dharamsala-2021');
+
+  // Synchronize when global location changes
+  useEffect(() => {
+    if (globalSelectedLocation) {
+      const match = HISTORICAL_EVENTS.find(e => e.location === globalSelectedLocation);
+      if (match) setSelectedId(match.id);
+    }
+  }, [globalSelectedLocation]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [currentStep, setCurrentStep] = useState('T-0');
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleSelectEvent = (id) => {
+    setSelectedId(id);
+    const ev = HISTORICAL_EVENTS.find(e => e.id === id);
+    if (ev && setGlobalSelectedLocation) {
+      setGlobalSelectedLocation(ev.location);
+    }
+  };
 
   const selectedEvent = HISTORICAL_EVENTS.find((e) => e.id === selectedId) || HISTORICAL_EVENTS[0];
 
@@ -215,7 +232,7 @@ export default function EventsView({ onNavigateTab }) {
             <div 
               key={evt.id} 
               className={`hist-event-item ${evt.id === selectedId ? 'active' : ''}`}
-              onClick={() => setSelectedId(evt.id)}
+              onClick={() => handleSelectEvent(evt.id)}
             >
               <div className="hist-event-icon-box">
                 {getHazardIcon(evt.hazard)}
