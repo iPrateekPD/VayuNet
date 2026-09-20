@@ -203,7 +203,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
       {/* Narrative */}
       <div className="aira-narrative">
         Current conditions in {loc} indicate a CAPE of <strong>{ap.cape_j_kg} J/kg</strong> and IWV of 
-        <strong> {ap.iwv_kg_m2} kg/m²</strong>. The multi-task deep learning model predicts a 
+        <strong> {ap.total_column_water_vapour_kg_m2} kg/m²</strong>. The multi-task deep learning model predicts a 
         <strong> {(p.flash_flood_probability * 100).toFixed(1)}% </strong> probability of Flash Flood and 
         <strong> {(p.cloudburst_probability * 100).toFixed(1)}% </strong> probability of Cloudburst.
       </div>
@@ -213,7 +213,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         <div className="aira-metric-box">
           <div className="aira-metric-val">
             <DropletIcon />
-            <span>{ap.iwv_kg_m2 ?? '--'} <span>kg/m²</span></span>
+            <span>{ap.total_column_water_vapour_kg_m2 ?? '--'} <span>kg/m²</span></span>
           </div>
           <div className="aira-metric-label">Precursor IWV</div>
         </div>
