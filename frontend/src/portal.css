@@ -7454,7 +7454,11 @@ html {
 
   .fusion-mobile-chevron.is-open {
     transform: rotate(180deg);
-    background: rgba(98, 19  /* --- ALWAYS FULLY EXPANDED ON MOBILE --- */
+    background: rgba(98, 192, 191, 0.22);
+    color: #c7edfc;
+  }
+
+  /* --- ALWAYS FULLY EXPANDED ON MOBILE --- */
   .fusion-card-desc-wrap {
     max-height: none !important;
     opacity: 1 !important;
