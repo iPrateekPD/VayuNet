@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import React, { useState, useRef, useEffect } from 'react';
+import { Marker, Circle } from 'react-leaflet';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { getRealtimeWeather, predictNowcast, broadcastAlert } from '../services/apiService';
+import OperationalMap from './OperationalMap';
+import { AlertTriangle, CheckCircle, ShieldAlert, Clock, MapPin, Activity, FileText, Globe, Send, Shield, Zap } from 'lucide-react';
 
-// Reuse the exact same CSS
-import './TacticalNowcast.css';
+import './AlertsView.css';
+import { MOCK_ALERTS, GATEWAY_STATUS } from '../data/alertsMockData';
+import { alertsApi } from '../services/api/alerts';
 
 // Fix Leaflet marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -15,88 +16,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-function formatISTDate(date, addHours = 0) {
-  const d = new Date(date.getTime() + addHours * 3600 * 1000);
-  const day = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
-  const time = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' });
-  return `${day} · ${time} IST`;
-}
 
-function formatISTTime(date) {
-  return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-}
-
-// Map recentering controller
-function MapController({ center, zoom }) {
-  const map = useMap();
-  React.useEffect(() => {
-    if (center) {
-      map.flyTo(center, zoom, { duration: 1.2 });
-    }
-  }, [center, zoom, map]);
-  return null;
-}
-
-// Map custom zoom buttons
-function MapZoomButtons() {
-  const map = useMap();
-  return (
-    <div style={{
-      position: 'absolute',
-      bottom: '18px',
-      left: '18px',
-      zIndex: 1000,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '5px'
-    }}>
-      <button
-        type="button"
-        onClick={() => map.zoomIn()}
-        title="Zoom In"
-        style={{
-          width: '32px',
-          height: '32px',
-          background: 'rgba(7, 14, 27, 0.92)',
-          border: '1px solid rgba(255, 255, 255, 0.22)',
-          borderRadius: '6px',
-          color: '#ffffff',
-          fontSize: '18px',
-          fontWeight: '700',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.6)'
-        }}
-      >
-        +
-      </button>
-      <button
-        type="button"
-        onClick={() => map.zoomOut()}
-        title="Zoom Out"
-        style={{
-          width: '32px',
-          height: '32px',
-          background: 'rgba(7, 14, 27, 0.92)',
-          border: '1px solid rgba(255, 255, 255, 0.22)',
-          borderRadius: '6px',
-          color: '#ffffff',
-          fontSize: '18px',
-          fontWeight: '700',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.6)'
-        }}
-      >
-        −
-      </button>
-    </div>
-  );
-}
 
 function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   return L.divIcon({
@@ -107,561 +27,503 @@ function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   });
 }
 
-const INITIAL_INCIDENTS = [
-  {
-    id: 'CAP-2041',
-    sev: 'HIGH',
-    sevBadge: 'high',
-    location: 'Chamoli, Uttarakhand',
-    center: [30.41, 79.32],
-    zoom: 9,
-    hazard: 'Flash Flood + Cloudburst',
-    eta: '1h 45m',
-    status: 'ACTIVE',
-    area: 'Alaknanda River Catchment (Joshimath, Pipalkoti, Helang)',
-    confidence: '82%',
-    headline: 'CRITICAL: Severe Flash Flood Warning for Alaknanda Valley',
-    description: 'Convective cloudburst signature detected upstream with peak precipitation rate of 124 mm. Sudden surge in river levels anticipated in downstream gorges.',
-    instructions: 'Evacuate all low-lying riverbeds, temporary settlements, and ghats immediately. Restrict pedestrian transit across suspension bridges.',
-    metric1: '124 mm', metric1Label: 'Est. rainfall (next 2h)', metric1Icon: '💧',
-    metric2: '412 km²', metric2Label: 'Affected area', metric2Icon: '🗺️',
-  },
-  {
-    id: 'CAP-2040',
-    sev: 'MODERATE',
-    sevBadge: 'mod',
-    location: 'Greater Mumbai, Maharashtra',
-    center: [19.076, 72.877],
-    zoom: 10,
-    hazard: 'Severe Thunderstorm & Squall',
-    eta: '3h 00m',
-    status: 'MONITORING',
-    area: 'Mumbai Suburban & Coastal Thane Corridor',
-    confidence: '71%',
-    headline: 'ADVISORY: Severe Thunderstorm & Urban Waterlogging Risk',
-    description: 'Organized convective line moving eastward from Arabian Sea. Gusty surface winds exceeding 65 km/h with localized street flooding.',
-    instructions: 'Commuters advised to avoid subway underpasses and shoreline promenades. Pre-position dewatering mobile pump units.',
-    metric1: '65 km/h', metric1Label: 'Max Gust Speed', metric1Icon: '💨',
-    metric2: '210 km²', metric2Label: 'Affected area', metric2Icon: '🗺️',
-  },
-  {
-    id: 'CAP-2039',
-    sev: 'WATCH',
-    sevBadge: 'watch',
-    location: 'Wayanad, Kerala',
-    center: [11.685, 76.132],
-    zoom: 10,
-    hazard: 'Slope Runoff & Saturated Soil',
-    eta: '4h 15m',
-    status: 'ADVISORY',
-    area: 'Vythiri, Meppadi, and Chooralmala Slopes',
-    confidence: '68%',
-    headline: 'WATCH: Orographic Rainfall & Landslip Advisory',
-    description: 'Continuous moderate-to-heavy rainfall maintaining elevated pore pressure across vulnerable tea estate slopes.',
-    instructions: 'Monitor nullah discharge gauges. Keep night emergency shelter teams on standby.',
-    metric1: '85 mm', metric1Label: 'Est. rainfall (next 4h)', metric1Icon: '💧',
-    metric2: '54 km²', metric2Label: 'High Risk Zones', metric2Icon: '🗺️',
-  },
-];
+export default function AlertsView({ showToast, globalSelectedLocation, setGlobalSelectedLocation }) {
+  const [alerts, setAlerts] = useState(MOCK_ALERTS);
+  const [selectedAlertId, setSelectedAlertId] = useState(MOCK_ALERTS[0].id);
+  const [connectionStatus, setConnectionStatus] = useState('live');
 
-const DESTINATIONS = [
-  { name: 'NDMA / SACHET Gateway', role: 'XML v1.2 Feed', status: 'Connected', badge: 'connected' },
-  { name: 'State SDRF Control', role: 'Wireless IP Network', status: 'Connected', badge: 'connected' },
-  { name: 'District DEOC', role: 'District Magistrate', status: 'Connected', badge: 'connected' },
-  { name: 'Police First Responders', role: 'SMS Broadcast', status: 'Connected', badge: 'connected' },
-  { name: 'Citizen Warning Portal', role: 'Mobile Push', status: 'Connected', badge: 'connected' },
-];
-
-const INITIAL_AUDIT = [
-  { time: '11:52 PM', alertId: 'CAP-2041', dest: 'NDMA SACHET', status: 'Delivered (ACK 200)' },
-  { time: '11:52 PM', alertId: 'CAP-2041', dest: 'SDRF Control', status: 'Delivered (ACK 200)' },
-  { time: '11:30 PM', alertId: 'CAP-2040', dest: 'Mumbai DEOC', status: 'Delivered (ACK 200)' },
-  { time: '10:45 PM', alertId: 'CAP-2039', dest: 'Uttarkashi EOC', status: 'Delivered (ACK 200)' },
-];
-
-export default function AlertsView({ showToast, onNavigateTab }) {
-  const [incidents, setIncidents] = useState(INITIAL_INCIDENTS);
-  const [selectedIncident, setSelectedIncident] = useState(INITIAL_INCIDENTS[0]);
-  const [auditLog, setAuditLog] = useState(INITIAL_AUDIT);
-  const [isDispatching, setIsDispatching] = useState(false);
-  
-  const [liveWeather, setLiveWeather] = useState(null);
-  const [liveNowcast, setLiveNowcast] = useState(null);
-  const [weatherStatus, setWeatherStatus] = useState('LOADING');
-  const [istTime, setIstTime] = useState('');
-
-  // Map Layer State
-  const [layers, setLayers] = useState({
-    threatArea: true,
-    terrain: true,
-    cities: true,
-  });
-
-  const handleToggleLayer = (key) => {
-    setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
+  // Sync with globalSelectedLocation if passed from Events View
   useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      setIstTime(formatISTTime(now) + ' IST');
+    if (globalSelectedLocation) {
+      const match = alerts.find(a => a.eventId === globalSelectedLocation || a.location.includes(globalSelectedLocation));
+      if (match) {
+        setSelectedAlertId(match.id);
+      }
+    }
+  }, [globalSelectedLocation, alerts]);
+
+  // Fetch API data
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      setConnectionStatus('syncing');
+      try {
+        const response = await alertsApi.getActiveAlerts();
+        if (response.data && Array.isArray(response.data)) {
+          setAlerts(response.data);
+          // if we have no selected ID or if the selected ID is no longer in the list, set to the first one
+          if (!response.data.find(a => a.id === selectedAlertId) && response.data.length > 0) {
+              setSelectedAlertId(response.data[0].id);
+          }
+        }
+        setConnectionStatus(response.status === 'fallback' ? 'fallback' : 'live');
+      } catch (error) {
+        setConnectionStatus('fallback');
+      }
     };
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
+    fetchAlerts();
   }, []);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    setWeatherStatus('LOADING');
-    const [lat, lng] = selectedIncident.center;
-    const locRaw = (selectedIncident.location || '').toLowerCase();
-    let locationId = 'chamoli';
-    if (locRaw.includes('mumbai')) locationId = 'mumbai';
-    else if (locRaw.includes('wayanad')) locationId = 'wayanad';
-    else if (locRaw.includes('chamoli')) locationId = 'chamoli';
-    else if (locRaw.includes('kangra') || locRaw.includes('dharamsala')) locationId = 'kangra';
-    else if (locRaw.includes('rudraprayag')) locationId = 'rudraprayag';
-    else if (locRaw.includes('pithoragarh')) locationId = 'pithoragarh';
-    else if (locRaw.includes('uttarkashi')) locationId = 'uttarkashi';
+  const selectedAlert = alerts.find(a => a.id === selectedAlertId) || alerts[0];
 
-    Promise.allSettled([
-      getRealtimeWeather(lat, lng, controller.signal),
-      predictNowcast({ lat, lng, leadTimeHours: 2, locationId }, controller.signal),
-    ]).then(([wRes, nRes]) => {
-      if (wRes.status === 'fulfilled' && (wRes.value?.status === 'success' || wRes.value?.weather)) {
-        setLiveWeather(wRes.value);
-        setWeatherStatus('LIVE');
-      } else {
-        setWeatherStatus('DEGRADED');
-      }
-      if (nRes.status === 'fulfilled' && nRes.value) {
-        setLiveNowcast(nRes.value);
-      }
-    }).catch(() => {});
+  // Derived metrics
+  const activeCount = alerts.filter(a => a.status === 'ACTIVE').length;
+  const draftCount = alerts.filter(a => a.status === 'DRAFT').length;
+  const pendingCount = alerts.filter(a => a.status === 'PENDING_REVIEW').length;
+  const dispatchedCount = alerts.filter(a => ['DISPATCHED', 'ACTIVE'].includes(a.status)).length;
+  const expiredCount = alerts.filter(a => a.status === 'EXPIRED').length;
 
-    return () => { controller.abort(); };
-  }, [selectedIncident.id]);
+  // AI Generation State
+  const [isAILoading, setIsAILoading] = useState(false);
+  const [showAIPreview, setShowAIPreview] = useState(false);
+  const [activeLang, setActiveLang] = useState('en');
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
-  const weather = liveWeather?.weather || {};
-  const maxRisk = liveNowcast?.predictions?.flash_flood?.risk_score 
-    ?? liveNowcast?.predictions?.cloudburst?.risk_score 
-    ?? (liveNowcast?.predictions?.thunderstorm_probability ? liveNowcast.predictions.thunderstorm_probability / 100 : 0.72);
-
-  const dynamicConfidence = liveNowcast ? `${Math.round(maxRisk * 100)}%` : selectedIncident.confidence;
-  const dynamicMetric1 = weather.precipitation_mm != null ? `${weather.precipitation_mm.toFixed(1)} mm` : selectedIncident.metric1;
-  const dynamicMetric1Label = weather.precipitation_mm != null ? 'Live rain rate' : selectedIncident.metric1Label;
-  const dynamicMetric2 = weather.wind_speed_10m_kmh != null ? `${weather.wind_speed_10m_kmh.toFixed(1)} km/h` : selectedIncident.metric2;
-  const dynamicMetric2Label = weather.wind_speed_10m_kmh != null ? 'Surface Wind' : selectedIncident.metric2Label;
-
-  const handleDispatchCurrent = async () => {
-    setIsDispatching(true);
-    try {
-      await broadcastAlert({
-        alertId: selectedIncident.id,
-        headline: selectedIncident.headline,
-        severity: selectedIncident.sev,
-        area: selectedIncident.area,
-        protocol: 'CAP-1.2',
-      });
-    } catch (err) {
-      console.warn('[VAYUNET Alerts] Broadcast error:', err);
-    }
-
-    const nowStr = formatISTTime(new Date());
-    const newEntries = [
-      { time: nowStr, alertId: selectedIncident.id, dest: 'NDMA SACHET', status: 'Delivered (ACK 200)' },
-      { time: nowStr, alertId: selectedIncident.id, dest: 'SDRF Control', status: 'Delivered (ACK 200)' },
-      { time: nowStr, alertId: selectedIncident.id, dest: 'Public Warning Portal', status: 'Broadcasted (Live)' },
-    ];
-    setAuditLog((prev) => [...newEntries, ...prev]);
-    setIncidents((prev) =>
-      prev.map((inc) => (inc.id === selectedIncident.id ? { ...inc, status: 'DISPATCHED' } : inc))
-    );
-    setIsDispatching(false);
-
-    if (showToast) {
-      showToast(`CAP-1.2 alert [${selectedIncident.id}] successfully dispatched to all emergency gateways.`);
-    }
+  const handleCreateAlert = () => {
+    const newDraft = {
+      id: `CAP-${Math.floor(2000 + Math.random() * 900)}`,
+      eventId: 'VN-2026-0922-NEW',
+      hazard: 'Flash Flood',
+      severity: 'HIGH',
+      status: 'DRAFT',
+      location: 'New Affected Area',
+      affectedArea: '0 km²',
+      issuedAt: 'N/A',
+      validFrom: 'TBD',
+      validUntil: 'TBD',
+      eta: 'TBD',
+      rainfall: '0 mm',
+      confidence: '0%',
+      coordinates: [20.5937, 78.9629], // Central India
+      zoom: 5,
+      title: 'NEW ALERT DRAFT',
+      description: 'Enter description here.',
+      instructions: 'Enter mandatory action.',
+      alertBasis: [],
+      targetAudience: [],
+      dispatchChannels: [],
+      deliveryStatus: { sent: 0, delivered: 0, failed: 0, pending: 0 },
+      publicMessage: { en: '', hi: '', or: '' },
+      auditTrail: [
+        { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: 'Draft Created', operator: 'OP-04', status: 'SUCCESS' }
+      ]
+    };
+    setAlerts([newDraft, ...alerts]);
+    setSelectedAlertId(newDraft.id);
+    if (showToast) showToast('New Alert Draft Created.');
   };
 
+  const updateAlertStatus = (id, newStatus, actionDesc) => {
+    setAlerts(prev => prev.map(a => {
+      if (a.id === id) {
+        const newAudit = [
+          ...a.auditTrail,
+          { time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: actionDesc, operator: 'OP-04', status: 'SUCCESS' }
+        ];
+        return { ...a, status: newStatus, auditTrail: newAudit };
+      }
+      return a;
+    }));
+  };
+
+  const handleDispatch = () => {
+    updateAlertStatus(selectedAlert.id, 'ACTIVE', 'CAP dispatched');
+    if (showToast) showToast(`CAP Alert ${selectedAlert.id} Dispatched to channels.`);
+  };
+
+  const generateAILanguages = () => {
+    setIsAILoading(true);
+    setTimeout(() => {
+      setIsAILoading(false);
+      setShowAIPreview(true);
+      setActiveLang('hi');
+      if (showToast) showToast('Multilingual previews generated successfully.');
+    }, 1200);
+  };
+
+  const isHighSeverity = selectedAlert.severity === 'HIGH';
+  const badgeClass = isHighSeverity ? 'high' : 'mod';
+  const badgeColor = isHighSeverity ? '#ef4444' : '#38bdf8';
+
   return (
-    <div className="tac-clean-nowcast-root" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {/* Action Stage Header Banner */}
-      <div className="tac-alerts-stage-bar">
-        <div className="tac-asb-left">
-          <span className="tac-asb-pill">STAGE 4 · ACT</span>
-          <span className="tac-asb-title">Emergency Incident Dispatch &amp; ITU-T X.1303 (CAP 1.2) Multi-Agency Broadcast</span>
-        </div>
-        <div className="tac-asb-right">
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('nowcast')}
-            title="Return to Nowcast"
-          >
-            ← 1. Live Nowcast
-          </button>
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('analysis')}
-            title="Review scientific analysis"
-          >
-            ← 2. Why? (Analysis)
-          </button>
-          <button
-            type="button"
-            className="tac-asb-btn"
-            onClick={() => onNavigateTab && onNavigateTab('events')}
-            title="Review historical validation"
-          >
-            ← 3. Proof (Events)
-          </button>
-        </div>
+    <div className="tac-alert-root">
+      {/* PAGE TITLE */}
+      <div style={{ padding: '24px 24px 0 24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 800, color: '#f8fafc', letterSpacing: '0.5px', display: 'flex', alignItems: 'center' }}>
+          ALERTS
+          {connectionStatus === 'syncing' && <span style={{ fontSize: '12px', marginLeft: '12px', color: '#eab308', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 400, letterSpacing: '0px' }}><span className="ana-spinner" style={{ width: '10px', height: '10px', border: '2px solid rgba(234, 179, 8, 0.3)', borderTopColor: '#eab308', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></span> Syncing...</span>}
+          {connectionStatus === 'fallback' && <span style={{ fontSize: '12px', marginLeft: '12px', color: '#ef4444', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 400, letterSpacing: '0px' }}><span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }}></span> Offline</span>}
+        </h1>
+        <div style={{ fontSize: '13px', color: '#94a3b8' }}>Warning generation, approval & dispatch center</div>
       </div>
 
-      {/* ================= TOP ROW: MAP + ALERT DETAILS CARD ================= */}
-      <div className="tac-clean-top-row">
+      {/* OVERVIEW METRICS ROW */}
+      <div className="tac-alert-overview">
+        <div className="tac-alert-metrics-group">
+          <div className="tac-alert-metric-item">
+            <span className="tac-alert-metric-label">Active Alerts</span>
+            <span className="tac-alert-metric-val active">{activeCount.toString().padStart(2, '0')}</span>
+          </div>
+          <div className="tac-alert-metric-item">
+            <span className="tac-alert-metric-label">Draft Alerts</span>
+            <span className="tac-alert-metric-val draft">{draftCount.toString().padStart(2, '0')}</span>
+          </div>
+          <div className="tac-alert-metric-item">
+            <span className="tac-alert-metric-label">Pending Review</span>
+            <span className="tac-alert-metric-val pending">{pendingCount.toString().padStart(2, '0')}</span>
+          </div>
+          <div className="tac-alert-metric-item">
+            <span className="tac-alert-metric-label">Dispatched (24H)</span>
+            <span className="tac-alert-metric-val dispatched">{dispatchedCount.toString().padStart(2, '0')}</span>
+          </div>
+          <div className="tac-alert-metric-item">
+            <span className="tac-alert-metric-label">Expiring Soon</span>
+            <span className="tac-alert-metric-val">{expiredCount.toString().padStart(2, '0')}</span>
+          </div>
+        </div>
+        <button className="tac-alert-create-btn" onClick={handleCreateAlert}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          CREATE ALERT
+        </button>
+      </div>
+
+      <div className="tac-alert-workspace">
         
-        {/* MAP CONTAINER (LEFT) */}
-        <div className="tac-clean-map-card">
-          <div className="tac-clean-map-topbar">
-            {/* Threat Name Dropdown styling */}
-            <div className="tac-clean-sector-wrap">
-              <button type="button" className="tac-clean-sector-btn" style={{ cursor: 'default' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <span>{selectedIncident.id} — {selectedIncident.location}</span>
-              </button>
+        {/* LEFT COLUMN: ALERT DETAILS & BASIS */}
+        <div className="tac-alert-col-left">
+          
+          <div className="tac-alert-card">
+            <div className="tac-alert-card-header">
+              <span>ALERT STATUS WORKFLOW</span>
+              <span style={{ color: badgeColor }}>{selectedAlert.id}</span>
+            </div>
+            
+            <div className="tac-alert-status-tree">
+              <div className={`tac-alert-status-step ${['DRAFT', 'PENDING_REVIEW', 'APPROVED', 'ACTIVE', 'DISPATCHED', 'EXPIRED'].includes(selectedAlert.status) ? 'completed' : ''}`}>
+                <FileText size={16} /> DRAFT
+              </div>
+              <div className="tac-alert-status-arrow">→</div>
+              <div className={`tac-alert-status-step ${['PENDING_REVIEW', 'APPROVED', 'ACTIVE', 'DISPATCHED', 'EXPIRED'].includes(selectedAlert.status) ? 'completed' : ''} ${selectedAlert.status === 'PENDING_REVIEW' ? 'active' : ''}`}>
+                <Shield size={16} /> PENDING REVIEW
+              </div>
+              <div className="tac-alert-status-arrow">→</div>
+              <div className={`tac-alert-status-step ${['APPROVED', 'ACTIVE', 'DISPATCHED', 'EXPIRED'].includes(selectedAlert.status) ? 'completed' : ''}`}>
+                <CheckCircle size={16} /> APPROVED
+              </div>
+              <div className="tac-alert-status-arrow">→</div>
+              <div className={`tac-alert-status-step ${['ACTIVE', 'DISPATCHED', 'EXPIRED'].includes(selectedAlert.status) ? 'completed' : ''}`}>
+                <Send size={16} /> DISPATCHED
+              </div>
             </div>
 
-            <div className="tac-clean-live-pill">
-              <span className={weatherStatus === 'LIVE' ? 'tac-clean-live-dot' : 'tac-clean-degraded-dot'} />
-              <span style={{ color: weatherStatus === 'LIVE' ? '#38bdf8' : '#f59e0b', fontSize: '11px', fontWeight: 700 }}>
-                {weatherStatus === 'LIVE' ? 'Real-Time Feed' : 'Cached Feed'}
-              </span>
-              <span style={{ color: '#94a3b8' }}>·</span>
-              <span>{istTime || 'Live IST'}</span>
+            {selectedAlert.status === 'ACTIVE' && (
+              <div style={{ marginTop: '12px', fontSize: '12px', fontWeight: 700, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                CURRENT STATUS: <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 6px #38bdf8' }}></span> ACTIVE
+              </div>
+            )}
+            {selectedAlert.status === 'EXPIRED' && (
+              <div style={{ marginTop: '12px', fontSize: '12px', fontWeight: 700, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                CURRENT STATUS: ✓ EXPIRED
+              </div>
+            )}
+
+            <div className="tac-alert-headline">{selectedAlert.title}</div>
+            <div className="tac-alert-desc">{selectedAlert.description}</div>
+
+            <div className="tac-alert-badges">
+              <div className={`tac-alert-badge ${badgeClass}`}>
+                {isHighSeverity ? '🔴' : '⚠️'} {selectedAlert.hazard.toUpperCase()}
+              </div>
+              <div className="tac-alert-badge">
+                <MapPin size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                {selectedAlert.location}
+              </div>
+              <div className="tac-alert-badge" style={{ borderColor: '#64748b', color: '#94a3b8' }}>
+                <Clock size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                ETA: {selectedAlert.eta}
+              </div>
+            </div>
+
+            <div className="tac-alert-metrics-grid">
+              <div className="tac-alert-metric-box">
+                <div className="tac-alert-metric-box-val">{selectedAlert.rainfall || '124 mm'}</div>
+                <div className="tac-alert-metric-box-label">Rainfall</div>
+              </div>
+              <div className="tac-alert-metric-box">
+                <div className="tac-alert-metric-box-val">{selectedAlert.confidence || '82%'}</div>
+                <div className="tac-alert-metric-box-label">Confidence</div>
+              </div>
+              <div className="tac-alert-metric-box">
+                <div className="tac-alert-metric-box-val">1h 45m</div>
+                <div className="tac-alert-metric-box-label">Lead Time</div>
+              </div>
+              <div className="tac-alert-metric-box">
+                <div className="tac-alert-metric-box-val">{selectedAlert.affectedArea || '412 km²'}</div>
+                <div className="tac-alert-metric-box-label">Affected Area</div>
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(239, 68, 68, 0.1)', borderLeft: '4px solid #ef4444', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
+              <div style={{ color: '#fca5a5', fontWeight: 700, fontSize: '12px', marginBottom: '4px' }}>MANDATORY ACTION</div>
+              <div style={{ color: '#f1f5f9', fontSize: '13px' }}>{selectedAlert.instructions}</div>
+            </div>
+
+          </div>
+
+          <div className="tac-alert-card">
+            <div className="tac-alert-card-header">
+              <span>ALERT BASIS & SOURCE</span>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button className="tac-alert-btn-secondary" style={{ padding: '4px 8px', fontSize: '11px', borderRadius: '4px' }}>View Analysis →</button>
+                <button className="tac-alert-btn-secondary" style={{ padding: '4px 8px', fontSize: '11px', borderRadius: '4px' }}>View Event {selectedAlert.eventId} →</button>
+              </div>
+            </div>
+            
+            <div style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '4px' }}>SOURCE EVENT</div>
+              <div style={{ fontSize: '13px', color: '#38bdf8', fontWeight: 700 }}>{selectedAlert.eventId}</div>
+            </div>
+
+            <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '8px' }}>AI PREDICTION</div>
+            <ul className="tac-alert-list">
+              {selectedAlert.alertBasis.map((basis, idx) => (
+                <li key={idx} className="tac-alert-list-item">
+                  <CheckCircle size={14} />
+                  <span>{basis}</span>
+                </li>
+              ))}
+              {selectedAlert.alertBasis.length === 0 && (
+                <li className="tac-alert-list-item" style={{ color: '#64748b' }}>No AI analysis recorded for this draft yet.</li>
+              )}
+            </ul>
+          </div>
+
+          <div className="tac-alert-card" style={{ flexDirection: 'row', gap: '24px' }}>
+            <div style={{ flex: 1 }}>
+              <div className="tac-alert-card-header">TARGET AUDIENCE</div>
+              <div className="tac-alert-check-list">
+                {['General Public', 'Emergency Responders', 'District Administration', 'Local Authorities', 'Vulnerable Communities'].map(aud => (
+                  <label key={aud} className="tac-alert-check-item">
+                    <input type="checkbox" defaultChecked={selectedAlert.targetAudience.includes(aud)} />
+                    {aud}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="tac-alert-card-header">DISPATCH CHANNELS</div>
+              <div className="tac-alert-check-list">
+                {['Public Warning Portal', 'Web Dashboard', 'SMS', 'Push Notification', 'NDMA / SACHET', 'State Control', 'District DEOC'].map(ch => (
+                  <label key={ch} className="tac-alert-check-item">
+                    <input type="checkbox" defaultChecked={selectedAlert.dispatchChannels.includes(ch)} />
+                    {ch}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="tac-clean-left-toolbar">
-            <button
-              type="button"
-              className={`tac-clean-tool-btn ${layers.threatArea ? 'active' : ''}`}
-              onClick={() => handleToggleLayer('threatArea')}
-              title="Toggle Threat Area"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className={`tac-clean-tool-btn ${layers.terrain ? 'active' : ''}`}
-              onClick={() => handleToggleLayer('terrain')}
-              title="Toggle Terrain"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M3 20h18L12 4z" />
-              </svg>
-            </button>
-          </div>
-
-          <MapContainer
-            center={selectedIncident.center}
-            zoom={selectedIncident.zoom}
-            scrollWheelZoom={false}
-            className="tac-clean-leaflet-container"
-            zoomControl={false}
-          >
-            <MapController center={selectedIncident.center} zoom={selectedIncident.zoom} />
-            <MapZoomButtons />
-
-            {/* Base Satellite Imagery */}
-            <TileLayer
-              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-              attribution="Esri World Imagery"
-              maxZoom={18}
-            />
-
-            {/* Geography labels */}
-            {layers.cities && (
-              <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
-                subdomains="abcd"
-                opacity={0.7}
-              />
-            )}
-
-            {/* Threat Area Pulsing Marker */}
-            {layers.threatArea && (
-              <Marker
-                position={selectedIncident.center}
-                icon={createHtmlIcon(`
-                  <div style="position: relative; display: flex; align-items: center;">
-                    <div style="width: 14px; height: 14px; border-radius: 50%; background: ${selectedIncident.sevBadge === 'high' ? '#ef4444' : selectedIncident.sevBadge === 'mod' ? '#f97316' : '#eab308'}; box-shadow: 0 0 10px #ffffff, 0 0 30px ${selectedIncident.sevBadge === 'high' ? '#ef4444' : selectedIncident.sevBadge === 'mod' ? '#f97316' : '#eab308'}; position: absolute; left: 0; top: 10px; z-index: 10; animation: tacPulse 2s infinite;"></div>
-                    <div style="margin-left: 22px; background: rgba(8, 14, 25, 0.94); border: 1px solid ${selectedIncident.sevBadge === 'high' ? 'rgba(239, 68, 68, 0.6)' : 'rgba(255, 255, 255, 0.2)'}; border-radius: 6px; padding: 6px 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.85); min-width: 96px;">
-                      <div style="font-size: 11px; font-weight: 700; color: #ffffff;">${selectedIncident.hazard}</div>
-                      <div style="font-size: 10px; font-weight: 700; color: ${selectedIncident.sevBadge === 'high' ? '#ef4444' : selectedIncident.sevBadge === 'mod' ? '#f97316' : '#eab308'};">${selectedIncident.sev} RISK</div>
-                    </div>
-                  </div>
-                `, [200, 48], [7, 17])}
-              />
-            )}
-          </MapContainer>
         </div>
 
-        {/* ALERT DETAILS CARD (RIGHT) */}
-        <div className="tac-clean-threat-card" style={{ 
-          background: selectedIncident.sev === 'HIGH' ? 'linear-gradient(180deg, rgba(153, 27, 27, 0.35) 0%, rgba(69, 10, 10, 0.2) 100%)' : 'linear-gradient(180deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.2) 100%)',
-          borderColor: selectedIncident.sev === 'HIGH' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(56, 189, 248, 0.4)'
-        }}>
-          <div className="tac-clean-threat-head">
-            <div className="tac-clean-flame-tag" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>
-              <span style={{ fontSize: '14px' }}>{selectedIncident.sev === 'HIGH' ? '🚨' : '⚠️'}</span>
-              <span>{selectedIncident.status === 'ACTIVE' ? 'ACTIVE ALERT' : 'MONITORING'}</span>
+        {/* RIGHT COLUMN: MAP & PREVIEW */}
+        <div className="tac-alert-col-right">
+          
+          <div className="tac-alert-card">
+            <div className="tac-alert-card-header">ALERT AREA MAP</div>
+            <div className="tac-alert-map-wrap">
+              <OperationalMap
+                mode="alerts"
+                eventData={{ coords: selectedAlert.coordinates }}
+              >
+                <Marker
+                  position={selectedAlert.coordinates}
+                  icon={createHtmlIcon(`
+                    <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+                      <div style="width: 16px; height: 16px; border-radius: 50%; background: ${badgeColor}; box-shadow: 0 0 10px #ffffff, 0 0 30px ${badgeColor}; animation: tacPulse 2s infinite;"></div>
+                    </div>
+                  `, [20, 20], [10, 10])}
+                />
+                <Circle 
+                  center={selectedAlert.coordinates} 
+                  radius={12000} 
+                  pathOptions={{ color: badgeColor, fillColor: badgeColor, fillOpacity: 0.2, weight: 1 }} 
+                />
+              </OperationalMap>
             </div>
-            <div className="tac-clean-forecast-pill">CAP 1.2 Ready</div>
-          </div>
-
-          <div className="tac-clean-warn-title-group">
-            <div className="tac-clean-warn-icon">
-              {selectedIncident.sev === 'HIGH' ? (
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
-              ) : (
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="12"></line>
-                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
+            
+            <div className="tac-alert-card-header" style={{ marginTop: '16px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>PUBLIC ALERT PREVIEW</span>
+              {showAIPreview && (
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <button className={`tac-alert-lang-tab ${activeLang === 'en' ? 'active' : ''}`} onClick={() => setActiveLang('en')}>English</button>
+                  <button className={`tac-alert-lang-tab ${activeLang === 'hi' ? 'active' : ''}`} onClick={() => setActiveLang('hi')}>हिन्दी</button>
+                  <button className={`tac-alert-lang-tab ${activeLang === 'or' ? 'active' : ''}`} onClick={() => setActiveLang('or')}>ଓଡ଼ିଆ</button>
+                </div>
               )}
             </div>
-            <div>
-              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>{selectedIncident.hazard.toUpperCase()}</div>
-              <div className="tac-clean-warn-main" style={{ color: selectedIncident.sev === 'HIGH' ? '#ef4444' : '#38bdf8' }}>{selectedIncident.sev} RISK</div>
-              <div className="tac-clean-warn-loc">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span>{selectedIncident.location}</span>
-              </div>
+            
+            <div className="tac-alert-preview-box">
+              {activeLang === 'en' && (selectedAlert.publicMessage?.en || 'No public message generated yet.')}
+              {activeLang === 'hi' && (selectedAlert.publicMessage?.hi || 'अनुवाद उपलब्ध नहीं है।')}
+              {activeLang === 'or' && (selectedAlert.publicMessage?.or || 'ଅନୁବାଦ ଉପଲବ୍ଧ ନାହିଁ |')}
+            </div>
+
+            <button 
+              className="tac-alert-btn-secondary" 
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px' }}
+              onClick={generateAILanguages}
+              disabled={isAILoading}
+            >
+              <Globe size={16} />
+              {isAILoading ? 'Translating...' : 'Generate AI Multi-Lingual Alert'}
+            </button>
+            
+            {/* WORKFLOW ACTIONS */}
+            <div className="tac-alert-actions" style={{ marginTop: '24px' }}>
+              {selectedAlert.status === 'DRAFT' && (
+                <>
+                  <button className="tac-alert-btn tac-alert-btn-secondary">Edit Alert</button>
+                  <button className="tac-alert-btn tac-alert-btn-primary" onClick={() => updateAlertStatus(selectedAlert.id, 'PENDING_REVIEW', 'Submitted for review')}>Submit for Review</button>
+                </>
+              )}
+              {selectedAlert.status === 'PENDING_REVIEW' && (
+                <>
+                  <button className="tac-alert-btn tac-alert-btn-secondary" onClick={() => updateAlertStatus(selectedAlert.id, 'DRAFT', 'Returned to draft')}>Return to Draft</button>
+                  <button className="tac-alert-btn tac-alert-btn-primary" onClick={() => updateAlertStatus(selectedAlert.id, 'APPROVED', 'Approved Alert')}>Approve Alert</button>
+                </>
+              )}
+              {selectedAlert.status === 'APPROVED' && (
+                <>
+                  <button className="tac-alert-btn tac-alert-btn-secondary">Update</button>
+                  <button className="tac-alert-btn tac-alert-btn-secondary">Extend</button>
+                  <button className="tac-alert-btn tac-alert-btn-danger" onClick={handleDispatch} style={{ background: '#0ea5e9', borderColor: '#0ea5e9', color: '#fff' }}>
+                    <Send size={16} style={{ display: 'inline', marginRight: '6px' }} /> 
+                    Dispatch CAP Alert
+                  </button>
+                </>
+              )}
+              {['ACTIVE', 'DISPATCHED'].includes(selectedAlert.status) && (
+                <>
+                  <button className="tac-alert-btn tac-alert-btn-primary" style={{ flex: 2 }}>Update Alert</button>
+                  <button className="tac-alert-btn tac-alert-btn-secondary" style={{ flex: 1 }}>Extend Validity</button>
+                  <button className="tac-alert-btn tac-alert-btn-danger" style={{ flex: 1 }} onClick={() => setShowCancelModal(true)}>Cancel Alert</button>
+                </>
+              )}
+              {selectedAlert.status === 'EXPIRED' && (
+                <>
+                  <button className="tac-alert-btn tac-alert-btn-secondary">View Archive</button>
+                </>
+              )}
+            </div>
+
+          </div>
+
+          {/* AUDIT TRAIL */}
+          <div className="tac-alert-card">
+            <div className="tac-alert-card-header">LIFECYCLE AUDIT TRAIL</div>
+            <div className="tac-alert-table-wrap">
+              <table className="tac-alert-table">
+                <tbody>
+                  {selectedAlert.auditTrail.slice().reverse().map((audit, i) => (
+                    <tr key={i}>
+                      <td style={{ width: '80px', fontFamily: 'monospace' }}>{audit.time}</td>
+                      <td style={{ fontWeight: 600, color: '#f8fafc' }}>{audit.action}</td>
+                      <td style={{ color: '#38bdf8' }}>{audit.operator}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div className="tac-clean-narrative">
-            {selectedIncident.description}
-          </div>
-
-          {/* Real-Time Telemetry Bar */}
-          <div style={{
-            background: 'rgba(0, 0, 0, 0.4)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '6px',
-            padding: '8px 10px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '6px',
-            fontSize: '11px',
-            marginBottom: '8px'
-          }}>
-            <div>
-              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Surface Temp</div>
-              <div style={{ fontWeight: 700, color: '#ffffff' }}>
-                {weather.temperature_2m_c != null ? `${weather.temperature_2m_c.toFixed(1)} °C` : '--'}
-              </div>
-            </div>
-            <div>
-              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Humidity</div>
-              <div style={{ fontWeight: 700, color: '#38bdf8' }}>
-                {weather.relative_humidity_2m_pct != null ? `${weather.relative_humidity_2m_pct}%` : '--'}
-              </div>
-            </div>
-            <div>
-              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Pressure</div>
-              <div style={{ fontWeight: 700, color: '#cbd5e1' }}>
-                {weather.surface_pressure_hpa != null ? `${weather.surface_pressure_hpa.toFixed(1)} hPa` : '--'}
-              </div>
-            </div>
-            <div>
-              <div style={{ color: '#94a3b8', fontSize: '9px', textTransform: 'uppercase' }}>Model Risk</div>
-              <div style={{ fontWeight: 700, color: maxRisk >= 0.7 ? '#ef4444' : maxRisk >= 0.4 ? '#f97316' : '#22c55e' }}>
-                {liveNowcast ? `${(maxRisk * 100).toFixed(0)}%` : dynamicConfidence}
-              </div>
-            </div>
-          </div>
-
-          <div className="tac-clean-chips-grid">
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric1Icon}</span>
-                <span className="tac-clean-chip-val">{dynamicMetric1}</span>
-              </div>
-              <span className="tac-clean-chip-label">{dynamicMetric1Label}</span>
-            </div>
-
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>🕒</span>
-                <span className="tac-clean-chip-val">{selectedIncident.eta}</span>
-              </div>
-              <span className="tac-clean-chip-label">Estimated arrival</span>
-            </div>
-
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>📊</span>
-                <span className="tac-clean-chip-val">{dynamicConfidence}</span>
-              </div>
-              <span className="tac-clean-chip-label">Model confidence</span>
-            </div>
-
-            <div className="tac-clean-chip">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#38bdf8', fontSize: '13px' }}>{selectedIncident.metric2Icon}</span>
-                <span className="tac-clean-chip-val">{dynamicMetric2}</span>
-              </div>
-              <span className="tac-clean-chip-label">{dynamicMetric2Label}</span>
-            </div>
-          </div>
-
-          {/* Dynamic Validity Window */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: '6px',
-            padding: '6px 10px',
-            fontSize: '11px',
-            color: '#cbd5e1',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '8px'
-          }}>
-            <span><strong>Valid:</strong> {formatISTDate(new Date())}</span>
-            <span style={{ color: '#64748b' }}>➔</span>
-            <span><strong>Until:</strong> {formatISTDate(new Date(), 4)}</span>
-          </div>
-
-          <div className="tac-clean-action-box">
-            <div className="tac-clean-action-head">
-              <span>⚠️</span>
-              <span>Mandatory Action Required</span>
-            </div>
-            <div className="tac-clean-action-desc">
-              {selectedIncident.instructions}
-            </div>
-          </div>
-
-          <div style={{ fontSize: '10px', color: '#94a3b8', fontStyle: 'italic', marginBottom: '6px' }}>
-            * AI-generated risk assessment - not an official warning.
-          </div>
-
-          <button
-            type="button"
-            className="tac-clean-dispatch-btn"
-            style={{ 
-              background: isDispatching ? '#475569' : selectedIncident.sev === 'HIGH' ? '#dc2626' : '#2563eb',
-              cursor: isDispatching ? 'not-allowed' : 'pointer',
-              border: 'none',
-              marginTop: 'auto'
-            }}
-            onClick={handleDispatchCurrent}
-            disabled={isDispatching}
-          >
-            <span style={{ fontSize: '15px' }}>((●))</span>
-            <span>{isDispatching ? 'Transmitting CAP 1.2...' : 'Dispatch CAP Alert →'}</span>
-          </button>
         </div>
+
       </div>
 
-      {/* ================= BOTTOM ROW: 3 CARDS ================= */}
-      <div className="tac-clean-bottom-row">
-        
-        {/* Card 1: Active Alerts List */}
-        <div className="tac-clean-card" style={{ flex: 1.2 }}>
-          <div className="tac-clean-card-title-row">
-            <span className="tac-clean-card-title">Active Severe Weather Incidents ({incidents.length})</span>
+      {/* BOTTOM ALERT HISTORY TABLE */}
+      <div className="tac-alert-table-section">
+        <div className="tac-alert-card" style={{ marginBottom: '32px' }}>
+          <div className="tac-alert-card-header">ALERT HISTORY & ACTIVE LIST</div>
+          <div className="tac-alert-table-wrap">
+            <table className="tac-alert-table-main">
+              <thead>
+                <tr>
+                  <th style={{ width: '12%' }}>ALERT ID</th>
+                  <th style={{ width: '14%' }}>HAZARD</th>
+                  <th style={{ width: '22%' }}>LOCATION</th>
+                  <th style={{ width: '12%' }}>SEVERITY</th>
+                  <th style={{ width: '18%' }}>ISSUED TIME</th>
+                  <th style={{ width: '12%' }}>STATUS</th>
+                  <th style={{ width: '10%' }}>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                {alerts.map(a => (
+                  <tr key={a.id} style={{ cursor: 'pointer', background: a.id === selectedAlertId ? 'rgba(255,255,255,0.05)' : 'transparent' }} onClick={() => setSelectedAlertId(a.id)}>
+                    <td style={{ color: a.severity === 'HIGH' ? '#ef4444' : '#38bdf8', fontWeight: 700 }}>{a.id}</td>
+                    <td>{a.hazard}</td>
+                    <td>{a.location}</td>
+                    <td>
+                      <span className={`tac-alert-badge-small ${a.severity === 'HIGH' ? 'high' : 'mod'}`}>
+                        {a.severity}
+                      </span>
+                    </td>
+                    <td>{a.issuedAt}</td>
+                    <td>
+                      <span className={`tac-alert-badge-small ${a.status.toLowerCase()}`}>
+                        {a.status.replace('_', ' ')}
+                      </span>
+                    </td>
+                    <td>
+                      <span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 600 }}>VIEW ↗</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="tac-clean-threats-list" style={{ overflowY: 'auto', maxHeight: '140px' }}>
-            {incidents.map((inc) => (
-              <div 
-                key={inc.id} 
-                className="tac-clean-threat-row" 
-                style={{ 
-                  cursor: 'pointer', 
-                  background: selectedIncident.id === inc.id ? 'rgba(255,255,255,0.08)' : 'transparent',
-                  padding: '6px 8px',
-                  borderRadius: '6px'
+        </div>
+      </div>
+      
+      {/* CANCEL CONFIRMATION MODAL */}
+      {showCancelModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+          <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '24px', width: '400px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
+            <h3 style={{ margin: '0 0 16px 0', color: '#ef4444', fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertTriangle size={20} /> CANCEL ALERT?
+            </h3>
+            <div style={{ color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>
+              You are about to cancel:
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '6px', marginBottom: '24px' }}>
+              <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: '14px' }}>{selectedAlert.id}</div>
+              <div style={{ color: '#94a3b8', fontSize: '13px' }}>{selectedAlert.hazard} — {selectedAlert.location}</div>
+            </div>
+            <div style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '24px' }}>
+              This will stop the alert from remaining active across all dispatched channels.
+            </div>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button className="tac-alert-btn-secondary" style={{ padding: '8px 16px', borderRadius: '6px' }} onClick={() => setShowCancelModal(false)}>
+                Keep Alert Active
+              </button>
+              <button 
+                className="tac-alert-btn-danger" 
+                style={{ padding: '8px 16px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.5)', color: '#fca5a5' }}
+                onClick={() => {
+                  updateAlertStatus(selectedAlert.id, 'EXPIRED', 'Alert cancelled by Operator');
+                  setShowCancelModal(false);
+                  if (showToast) showToast('Alert successfully cancelled.');
                 }}
-                onClick={() => setSelectedIncident(inc)}
               >
-                <span className="tac-clean-threat-name" style={{ minWidth: '120px' }}>
-                  <span style={{ color: inc.sev === 'HIGH' ? '#ef4444' : inc.sev === 'MODERATE' ? '#f97316' : '#eab308' }}>
-                    {inc.sev === 'HIGH' ? '🔴' : inc.sev === 'MODERATE' ? '🟠' : '🟡'}
-                  </span>
-                  <span>{inc.location.split(',')[0]}</span>
-                </span>
-                <span style={{ fontSize: '11px', color: '#cbd5e1', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {inc.hazard}
-                </span>
-                <span className="tac-clean-threat-eta">{inc.eta}</span>
-              </div>
-            ))}
+                Cancel Alert
+              </button>
+            </div>
           </div>
         </div>
+      )}
 
-        {/* Card 2: Gateway Dispatch Audit Trail */}
-        <div className="tac-clean-card" style={{ flex: 1.2 }}>
-          <div className="tac-clean-card-title-row">
-            <span className="tac-clean-card-title">Gateway Dispatch Audit Trail</span>
-          </div>
-          <div className="tac-clean-threats-list" style={{ overflowY: 'auto', maxHeight: '140px' }}>
-            {auditLog.map((log, idx) => (
-              <div key={idx} className="tac-clean-threat-row" style={{ padding: '6px 0' }}>
-                <span className="tac-clean-threat-time" style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace', minWidth: '60px' }}>
-                  {log.time}
-                </span>
-                <span style={{ fontSize: '11px', color: '#ffffff', fontWeight: 600, minWidth: '70px' }}>
-                  {log.alertId}
-                </span>
-                <span style={{ fontSize: '11px', color: '#38bdf8', flex: 1 }}>
-                  {log.dest}
-                </span>
-                <span style={{ fontSize: '10px', color: '#86efac' }}>
-                  {log.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Card 3: Connected Emergency Destinations */}
-        <div className="tac-clean-card" style={{ flex: 0.8 }}>
-          <div className="tac-clean-card-title">Emergency Destinations</div>
-          <div className="tac-clean-freshness-list" style={{ overflowY: 'auto', maxHeight: '140px' }}>
-            {DESTINATIONS.map((dest, i) => (
-              <div key={i} className="tac-clean-freshness-row" style={{ padding: '4px 0' }}>
-                <div className="tac-clean-feed-left">
-                  <span className="tac-clean-green-dot" />
-                  <span style={{ fontSize: '11px', color: '#cbd5e1' }}>{dest.name}</span>
-                </div>
-                <span className="tac-clean-feed-time" style={{ color: '#86efac' }}>Connected</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-      </div>
     </div>
   );
 }

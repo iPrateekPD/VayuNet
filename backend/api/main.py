@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from api.routes import alerts, events, locations, nowcast, system, weather
+from api.routes import alerts, events, locations, nowcast, system, weather, risk_routes, map_layers
 
 from src.config.locations import OPERATIONAL_LOCATIONS
 from src.inference.live_weather import fetch_open_meteo_weather
@@ -27,11 +27,13 @@ ai_engine = None
 try:
     from src.features.tensor_builder import build_spatiotemporal_tensor_from_precursors
     from src.inference.pipeline import VayunetInferencePipeline
-    ckpt_path = str(PROJECT_ROOT.parent / "checkpoints" / "vayunet_mtl_best.pt")
+    ckpt_path = str(PROJECT_ROOT / "checkpoints" / "vayunet_mtl_best.pt")
+    if not Path(ckpt_path).exists():
+        ckpt_path = str(PROJECT_ROOT.parent / "checkpoints" / "vayunet_mtl_best.pt")
     ai_engine = VayunetInferencePipeline(checkpoint_path=ckpt_path)
-    print("✅ [VAYUNET API] PyTorch Deep Learning Inference Engine loaded successfully.")
+    print(f"[VAYUNET API] PyTorch Deep Learning Inference Engine loaded successfully (trained={ai_engine.is_trained}).")
 except Exception as e:
-    print(f"ℹ️ [VAYUNET API] PyTorch model engine running in fallback mode: {e}")
+    print(f"[VAYUNET API] PyTorch model engine running in fallback mode: {e}")
 
 app = FastAPI(
     title="VAYUNET Operational API",
@@ -55,6 +57,8 @@ app.include_router(nowcast.router)
 app.include_router(alerts.router)
 app.include_router(events.router)
 app.include_router(system.router)
+app.include_router(risk_routes.router)
+app.include_router(map_layers.router)
 
 # =====================================================================
 # Root endpoint
@@ -73,19 +77,29 @@ def root():
 # =====================================================================
 
 class BhashiniTranslateRequest(BaseModel):
+    # pyrefly: ignore [unexpected-keyword]
     text: str = Field(..., example="Severe thunderstorm warning in Dharamsala.")
+    # pyrefly: ignore [unexpected-keyword]
     source_language: str = Field("en", example="en")
+    # pyrefly: ignore [unexpected-keyword]
     target_language: str = Field("hi", example="hi")
 
 class BhashiniTTSRequest(BaseModel):
+    # pyrefly: ignore [unexpected-keyword]
     text: str = Field(..., example="धर्मशाला में भारी बारिश की संभावना है।")
+    # pyrefly: ignore [unexpected-keyword]
     language: str = Field("hi", example="hi")
+    # pyrefly: ignore [unexpected-keyword]
     gender: str = Field("female", example="female")
 
 class BhashiniPipelineRequest(BaseModel):
+    # pyrefly: ignore [unexpected-keyword]
     text: str = Field(..., example="Flash flood warning. Move to higher ground.")
+    # pyrefly: ignore [unexpected-keyword]
     source_language: str = Field("en", example="en")
+    # pyrefly: ignore [unexpected-keyword]
     target_language: str = Field("hi", example="hi")
+    # pyrefly: ignore [unexpected-keyword]
     gender: str = Field("female", example="female")
 
 @app.get("/api/bhashini/languages")

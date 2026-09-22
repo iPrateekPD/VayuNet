@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-09-21T18:03:22.851962",
+  "hazards": {
+    "thunderstorm": {
+      "csi": {
+        "v2": 0.9767,
+        "v3": 0.937,
+        "change": "-0.0397"
+      },
+      "pod": {
+        "v2": 1.0,
+        "v3": 1.0,
+        "change": "+0.0000"
+      },
+      "far": {
+        "v2": 0.0233,
+        "v3": 0.063,
+        "change": "+0.0397"
+      },
+      "f1": {
+        "v2": 0.9882,
+        "v3": 0.9675,
+        "change": "-0.0207"
+      }
+    },
+    "cloudburst": {
+      "csi": {
+        "v2": "NOT_MEANINGFUL",
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "pod": {
+        "v2": "NOT_MEANINGFUL",
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "far": {
+        "v2": "NOT_MEANINGFUL",
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "f1": {
+        "v2": "NOT_MEANINGFUL",
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      }
+    },
+    "flash_flood": {
+      "csi": {
+        "v2": 1.0,
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "pod": {
+        "v2": 1.0,
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "far": {
+        "v2": 0.0,
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      },
+      "f1": {
+        "v2": 1.0,
+        "v3": "NOT_MEANINGFUL",
+        "change": "N/A"
+      }
+    }
+  }
+}

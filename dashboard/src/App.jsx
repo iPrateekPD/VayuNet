@@ -16,24 +16,19 @@ import AnalysisView from './components/AnalysisView';
 import EventsView from './components/EventsView';
 import AlertsView from './components/AlertsView';
 import SystemDrawer from './components/SystemDrawer';
-import DayNightToggle from './components/DayNightToggle';
+import InstitutionalFooter from './components/InstitutionalFooter';
+import AccessibilityMenu from './components/AccessibilityMenu';
+import AIAutoAlertBanner from './components/AIAutoAlertBanner';
 import './components/OperationsPortal.css';
 
 function App() {
-  // Theme state: 'dark' | 'light'
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('vayunet-theme') || 'dark';
-  });
-
+  // Enforce Sovereign Dark Mode permanently across all browsers and devices
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('vayunet-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+    localStorage.setItem('vayunet-theme', 'dark');
+  }, []);
 
   const getViewFromLocation = () => {
     const hash = window.location.hash.toLowerCase();
@@ -64,6 +59,13 @@ function App() {
 
   // Authenticated Portal Tab: 'nowcast' | 'analysis' | 'events' | 'alerts'
   const [portalTab, setPortalTab] = useState(getTabFromLocation);
+
+  // Ensure every page view and tab switch opens strictly from top of the page (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, [view, portalTab]);
   const [isSystemDrawerOpen, setIsSystemDrawerOpen] = useState(() => {
     const h = window.location.hash.toLowerCase();
     return h.includes('system') || h.includes('telemetry');
@@ -84,26 +86,15 @@ function App() {
   const [backendStatus, setBackendStatus] = useState('checking');
   const [toast, setToast] = useState(null);
   const [portalLanguage, setPortalLanguage] = useState('EN');
+  const [showGlobalAlert, setShowGlobalAlert] = useState(false);
 
-  // Tactical Sector & Location State (Manual & Automated)
-  const TACTICAL_LOCATIONS = [
-    { id: 'chamoli', name: 'Chamoli, Uttarakhand', badge: 'Cloudburst & Flash Flood', center: [30.4, 79.3], zoom: 9 },
-    { id: 'mumbai', name: 'Mumbai MMR, Maharashtra', badge: 'Coastal Convection', center: [19.076, 72.877], zoom: 10 },
-    { id: 'wayanad', name: 'Wayanad, Kerala', badge: 'Slope Runoff', center: [11.685, 76.132], zoom: 10 },
-    { id: 'odisha', name: 'Coastal Odisha', badge: 'Squall Line', center: [20.951, 85.098], zoom: 8 },
-    { id: 'meghalaya', name: 'Meghalaya Plateau', badge: 'Orographic Core', center: [25.578, 91.893], zoom: 9 },
-    { id: 'india', name: 'National Surveillance (All India)', badge: 'Overview', center: [21.8, 78.9], zoom: 5 },
-  ];
-
-  const [selectedLocation, setSelectedLocation] = useState('chamoli');
-  const [mapCenter, setMapCenter] = useState(EVENT_META.center);
-  const [mapZoom, setMapZoom] = useState(EVENT_META.zoom);
-  const [inspectedPoint, setInspectedPoint] = useState(null);
+  // Global Selected Location State (Shared across all Operations Tabs)
+  const [globalSelectedLocation, setGlobalSelectedLocation] = useState('Chamoli, Uttarakhand');
 
   const handleSelectLocation = (locId) => {
     const loc = TACTICAL_LOCATIONS.find(l => l.id === locId);
     if (loc) {
-      setSelectedLocation(loc.id);
+      setGlobalSelectedLocation(loc.name);
       setMapCenter(loc.center);
       setMapZoom(loc.zoom);
       showToast(`Tactical sector switched to ${loc.name}`);
@@ -112,7 +103,7 @@ function App() {
 
   const handleAutoTrack = () => {
     const target = TACTICAL_LOCATIONS[0];
-    setSelectedLocation(target.id);
+    setGlobalSelectedLocation(target.name);
     setMapCenter(target.center);
     setMapZoom(target.zoom);
     showToast(`Radar Auto-Track: Locked onto ${target.name} (Active Alert Core)`);
@@ -139,6 +130,10 @@ function App() {
     const handleUrlChange = () => {
       const v = getViewFromLocation();
       setView(v);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+
       if (v === 'portal') {
         const t = getTabFromLocation();
         setPortalTab(t);
@@ -157,8 +152,23 @@ function App() {
     };
   }, []);
 
+  // Keyboard shortcut to trigger AI Alert
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.shiftKey && e.key.toLowerCase() === 'a') {
+        setShowGlobalAlert(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const navigateTo = (newView) => {
     setView(newView);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+
     if (newView === 'home') window.location.hash = '#/';
     else if (newView === 'login') window.location.hash = '#/login';
     else if (newView === 'citizen') window.location.hash = '#/warnings';
@@ -167,6 +177,9 @@ function App() {
 
   const handleTabSwitch = (newTab) => {
     setPortalTab(newTab);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
     window.location.hash = `#/operations/${newTab}`;
   };
 
@@ -184,7 +197,7 @@ function App() {
 
   // Check backend health on mount
   useEffect(() => {
-    fetch('http://localhost:8000/api/health')
+    fetch('https://vayunet-api.onrender.com/api/health')
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(() => setBackendStatus('online'))
       .catch(() => setBackendStatus('offline'));
@@ -218,8 +231,6 @@ function App() {
         <HomePage 
           onEnterPortal={() => navigateTo('login')}
           onOpenPublicWarnings={() => navigateTo('citizen')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -232,9 +243,7 @@ function App() {
       <>
         <CitizenPortal 
           onBackHome={() => navigateTo('home')}
-          onEnterPortal={() => navigateTo('login')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
+          onEnterPortal={() => navigateTo('portal')}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -253,8 +262,6 @@ function App() {
             showToast(`Welcome, ${userData.role} (${userData.user}). Operations portal unlocked.`);
           }}
           onBackHome={() => navigateTo('home')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
         {toast && <div className="toast">✅ {toast}</div>}
       </>
@@ -270,9 +277,20 @@ function App() {
   // 4. AUTHENTICATED OPERATIONAL LAYER
   return (
     <div className="app">
+      {showGlobalAlert && (
+        <AIAutoAlertBanner 
+          onClose={() => setShowGlobalAlert(false)} 
+          onViewInNowcast={() => {
+            setShowGlobalAlert(false);
+            setGlobalSelectedLocation('Chamoli, Uttarakhand');
+            handleTabSwitch('nowcast');
+          }} 
+        />
+      )}
+      
       {/* OPERATIONS PORTAL HEADER (EXACT SAME CLASSES, SIZES, SHAPES & COLORS AS HOMEPAGE) */}
-      <nav className="home-nav nav-scrolled" style={{ position: 'relative', top: 0, zIndex: 1000, width: '100%', borderBottom: '1px solid rgba(56, 189, 248, 0.16)' }}>
-        <div className="home-nav-inner" style={{ maxWidth: '100%', padding: '0 20px' }}>
+      <nav className="home-nav nav-scrolled ops-portal-nav" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 99999 }}>
+        <div className="home-nav-inner" style={{ maxWidth: '100%' }}>
           {/* Brand Left */}
           <div className="home-brand" onClick={() => navigateTo('home')} title="Return to VAYUNET Home">
             <div className="home-logo">
@@ -307,33 +325,8 @@ function App() {
 
           {/* Right Side Things: Button shape, size, color keep same */}
           <div className="home-nav-actions">
-            {/* Day / Night Theme Toggle */}
-            <DayNightToggle isDark={theme === 'dark'} onToggle={toggleTheme} />
-
-            {/* Language Selector */}
-            <div className="home-lang-wrap">
-              <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              <select 
-                className="home-lang-select" 
-                value={portalLanguage} 
-                onChange={(e) => {
-                  setPortalLanguage(e.target.value);
-                  const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                  showToast(`Language switched to ${sel?.label || e.target.value}`);
-                }}
-                aria-label="Select Language"
-              >
-                {INDIAN_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* ♿ Unified Accessibility & Language Control */}
+            <AccessibilityMenu />
 
             {/* System Status (exact btn-secondary-nav shape, size, color) */}
             <button
@@ -424,87 +417,93 @@ function App() {
         </div>
       </nav>
 
-      {/* 4-STAGE OPERATIONAL PIPELINE (SEE ➔ UNDERSTAND ➔ PROVE ➔ ACT) */}
-      <div className="ops-pipeline-strip">
-        <div className="ops-pipeline-inner">
-          <div className="ops-pipeline-badge">
-            <span className="ops-pipeline-pulse"></span>
-            <span>DECISION PIPELINE</span>
-          </div>
-          <div className="ops-pipeline-steps">
-            {[
-              { key: 'nowcast',  num: '1', verb: 'SEE', title: 'NOWCAST', desc: 'Live Awareness' },
-              { key: 'analysis', num: '2', verb: 'UNDERSTAND', title: 'ANALYSIS', desc: 'Physical Drivers & XAI' },
-              { key: 'events',   num: '3', verb: 'PROVE', title: 'EVENTS', desc: 'Historical Validation' },
-              { key: 'alerts',   num: '4', verb: 'ACT', title: 'ALERTS', desc: 'Emergency Dispatch' },
-            ].map((st, i) => (
-              <React.Fragment key={st.key}>
-                {i > 0 && <span className="ops-pipeline-sep">→</span>}
-                <button
-                  type="button"
-                  className={`ops-pipeline-chip ${portalTab === st.key ? 'active' : ''}`}
-                  onClick={() => handleTabSwitch(st.key)}
-                  title={`Stage ${st.num}: ${st.verb} (${st.desc})`}
-                >
-                  <span className="ops-chip-num">{st.num}. {st.verb}</span>
-                  <span className="ops-chip-title">{st.title}</span>
-                  <span className="ops-chip-desc">{st.desc}</span>
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
+      {/* MOBILE OPERATIONAL TOGGLES (Exclusively displayed below header in phone view) */}
+      <div className="ops-mobile-nav-bar">
+        <div className="ops-mobile-capsule">
+          {[
+            { key: 'nowcast',  label: 'NOWCAST' },
+            { key: 'analysis', label: 'ANALYSIS' },
+            { key: 'events',   label: 'EVENTS' },
+            { key: 'alerts',   label: 'ALERTS' },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              className={`nav-link-item ${portalTab === key ? 'active' : ''}`}
+              onClick={() => handleTabSwitch(key)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* RENDER ACTIVE OPERATIONS VIEW */}
-      {portalTab === 'nowcast' && (
-        <TacticalNowcastView
-          onNavigateTab={handleTabSwitch}
-          showToast={showToast}
-          onDispatchAlert={async () => {
-            try {
-              await fetch('http://localhost:8000/api/alerts/broadcast', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  event: 'CLOUDBURST + FLASH FLOOD',
-                  severity: 'HIGH RISK',
-                  area: 'Chamoli, Uttarakhand',
-                  validTime: '2h',
-                  protocol: 'CAP-1.2'
-                }),
-              });
-              showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
-            } catch {
-              showToast('Demo dispatch — CAP payload queued for Chamoli (High Risk Flash Flood)');
-            }
-          }}
-        />
-      )}
+      {/* RENDER ACTIVE OPERATIONS VIEW (Offset by 60px for fixed header) */}
+      <main className="ops-portal-body">
+        {portalTab === 'nowcast' && (
+          <TacticalNowcastView
+            onNavigateTab={handleTabSwitch}
+            showToast={showToast}
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
+            onDispatchAlert={async () => {
+              try {
+                await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    event: 'CLOUDBURST + FLASH FLOOD',
+                    severity: 'HIGH RISK',
+                    area: 'Chamoli, Uttarakhand',
+                    validTime: '2h',
+                    protocol: 'CAP-1.2'
+                  }),
+                });
+                showToast('CAP Alert dispatched to NDMA SACHET gateway for Chamoli Sector');
+              } catch {
+                showToast('Demo dispatch — CAP payload queued for Chamoli (High Risk Flash Flood)');
+              }
+            }}
+          />
+        )}
 
-      {portalTab === 'analysis' && (
-        <AnalysisView 
-          currentData={currentData} 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
-      {portalTab === 'events' && (
-        <EventsView 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
-      {portalTab === 'alerts' && (
-        <AlertsView 
-          showToast={showToast} 
-          onNavigateTab={handleTabSwitch} 
-        />
-      )}
+        {portalTab === 'analysis' && (
+          <AnalysisView 
+            currentData={currentData} 
+            onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
+          />
+        )}
+        {portalTab === 'events' && (
+          <EventsView 
+            onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
+          />
+        )}
+        {portalTab === 'alerts' && (
+          <AlertsView 
+            showToast={showToast} 
+            onNavigateTab={handleTabSwitch} 
+            globalSelectedLocation={globalSelectedLocation}
+            setGlobalSelectedLocation={setGlobalSelectedLocation}
+          />
+        )}
+      </main>
+
+      {/* SHARED FULL-WIDTH INSTITUTIONAL FOOTER CONSISTENT ACROSS ALL 4 OPERATIONAL PAGES */}
+      <InstitutionalFooter />
 
       {/* SYSTEM STATUS & TELEMETRY UTILITY DRAWER */}
       <SystemDrawer
         isOpen={isSystemDrawerOpen}
         onClose={() => setIsSystemDrawerOpen(false)}
         backendOnline={backendStatus === 'online'}
+        onTriggerAIAlert={() => {
+          setIsSystemDrawerOpen(false);
+          setShowGlobalAlert(true);
+        }}
       />
 
       {/* TOAST NOTIFICATION */}

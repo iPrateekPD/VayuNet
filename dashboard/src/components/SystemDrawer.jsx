@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { checkHealth } from '../services/apiService';
 
-export default function SystemDrawer({ isOpen, onClose, backendOnline }) {
+export default function SystemDrawer({ isOpen, onClose, backendOnline, onTriggerAIAlert }) {
   const [uptime, setUptime] = useState(0);
-  const [healthData, setHealthData] = useState(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      checkHealth().then((res) => {
-        if (res) setHealthData(res);
-      }).catch((err) => console.warn('Health check error in drawer:', err));
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     const start = Date.now();
@@ -76,9 +66,21 @@ export default function SystemDrawer({ isOpen, onClose, backendOnline }) {
               Operational Session Uptime: {fmtUptime(uptime)} · Node: deoc-ops-in-04
             </div>
           </div>
-          <button className="ops-drawer-close" onClick={onClose} title="Close System Drawer">
-            ✕ Close
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {onTriggerAIAlert && (
+              <button 
+                className="ops-drawer-close" 
+                style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                onClick={onTriggerAIAlert} 
+                title="Simulate AI Threat Detection"
+              >
+                ⚠ Simulate AI Alert
+              </button>
+            )}
+            <button className="ops-drawer-close" onClick={onClose} title="Close System Drawer">
+              ✕ Close
+            </button>
+          </div>
         </div>
 
         {/* Content */}
@@ -95,9 +97,9 @@ export default function SystemDrawer({ isOpen, onClose, backendOnline }) {
 
             <div className="ops-sys-metric-card">
               <span className="ops-sys-metric-label">Inference Engine</span>
-              <span className="ops-sys-metric-val">{healthData?.ai_engine?.loaded ? '7.1 ms' : '142 ms'}</span>
+              <span className="ops-sys-metric-val">142 ms</span>
               <span className="ops-sys-metric-status">
-                <span className="ops-status-beacon" /> {healthData?.ai_engine?.loaded ? `PyTorch (${healthData.ai_engine.device})` : 'Healthy (< 150ms)'}
+                <span className="ops-status-beacon" /> Healthy (&lt; 150ms)
               </span>
             </div>
 

@@ -1,0 +1,104 @@
+{
+  "model_version": "VAYUNET-MTL-v2.0",
+  "evaluated_at": "2026-09-21T18:02:59.881629",
+  "split": "test",
+  "threshold": 0.5,
+  "checkpoint": "D:\\PROJECTS\\VayuNet-main\\backend\\checkpoints\\vayunet_mtl_v3_best.pt",
+  "device": "cpu",
+  "n_samples": 37,
+  "n_parameters": 1302019,
+  "n_parameters_M": 1.302,
+  "mean_inference_latency_ms": 62.53,
+  "class_balance": {
+    "thunderstorm": {
+      "positive_pixels": 19727,
+      "negative_pixels": 18161,
+      "positive_pct": 52.067
+    },
+    "cloudburst": {
+      "positive_pixels": 0,
+      "negative_pixels": 37888,
+      "positive_pct": 0.0
+    },
+    "flash_flood": {
+      "positive_pixels": 0,
+      "negative_pixels": 37888,
+      "positive_pct": 0.0
+    }
+  },
+  "metrics": {
+    "thunderstorm": {
+      "hazard": "thunderstorm",
+      "total_pixels": 37888,
+      "positive_pixels": 19727,
+      "negative_pixels": 18161,
+      "evaluation_valid": true,
+      "hits": 19727,
+      "misses": 0,
+      "false_alarms": 1327,
+      "correct_negatives": 16834,
+      "csi": 0.937,
+      "pod": 1.0,
+      "far": 0.063,
+      "precision": 0.937,
+      "recall": 1.0,
+      "f1": 0.9675,
+      "accuracy": 0.965,
+      "brier_score": 0.079221,
+      "roc_auc": 0.9892,
+      "pr_auc": 0.9886
+    },
+    "cloudburst": {
+      "hazard": "cloudburst",
+      "total_pixels": 37888,
+      "positive_pixels": 0,
+      "negative_pixels": 37888,
+      "evaluation_valid": false,
+      "note": "Zero positive samples in test set. All metrics marked NOT_MEANINGFUL.",
+      "csi": "NOT_MEANINGFUL",
+      "pod": "NOT_MEANINGFUL",
+      "far": "NOT_MEANINGFUL",
+      "f1": "NOT_MEANINGFUL",
+      "precision": "NOT_MEANINGFUL",
+      "recall": "NOT_MEANINGFUL",
+      "accuracy": 1.0,
+      "false_alarms": 0,
+      "missed_events": "NOT_MEANINGFUL",
+      "hits": 0,
+      "brier_score": 0.026475494727492332,
+      "roc_auc": "NOT_MEANINGFUL",
+      "pr_auc": "NOT_MEANINGFUL"
+    },
+    "flash_flood": {
+      "hazard": "flash_flood",
+      "total_pixels": 37888,
+      "positive_pixels": 0,
+      "negative_pixels": 37888,
+      "evaluation_valid": false,
+      "note": "Zero positive samples in test set. All metrics marked NOT_MEANINGFUL.",
+      "csi": "NOT_MEANINGFUL",
+      "pod": "NOT_MEANINGFUL",
+      "far": "NOT_MEANINGFUL",
+      "f1": "NOT_MEANINGFUL",
+      "precision": "NOT_MEANINGFUL",
+      "recall": "NOT_MEANINGFUL",
+      "accuracy": 1.0,
+      "false_alarms": 0,
+      "missed_events": "NOT_MEANINGFUL",
+      "hits": 0,
+      "brier_score": 0.012367005459964275,
+      "roc_auc": "NOT_MEANINGFUL",
+      "pr_auc": "NOT_MEANINGFUL"
+    }
+  },
+  "known_issues": {
+    "cloudburst": "Zero positive pixels in test set. All cloudburst metrics are NOT_MEANINGFUL.",
+    "flash_flood": "Flash flood mask is STATIC across all test samples (158 px per sample identical). CSI=1.0 is artifact of static label, not genuine detection capability.",
+    "thunderstorm": "Metric may be inflated \u2014 thunderstorm label uses TIR input as label criterion (potential circularity)."
+  },
+  "data_integrity_failures": [
+    "cloudburst: 0 positive pixels in test set",
+    "flash_flood: identical label mask across all 69 test samples (static terrain label)",
+    "Ch2 (CTT rate), Ch6 (shear), Ch8 (moisture flux): broadcast constants in input tensor"
+  ]
+}

@@ -1,0 +1,299 @@
+/* AIRiskAssessmentPanel.css (Redesigned as Dense Map-Side Threat Summary) */
+
+.aira-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #060d19; /* Match root background */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f8fafc;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.aira-container::-webkit-scrollbar {
+  width: 4px;
+}
+.aira-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+/* Base Sectioning */
+.aira-section {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aira-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* 1. System Status & Threat Card */
+.aira-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.aira-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aira-icon-green {
+  color: #38bdf8;
+}
+
+.aira-brand-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-weight: 700;
+  color: #38bdf8;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+}
+
+.aira-model-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-weight: 700;
+}
+
+.aira-threat-card {
+  display: flex;
+  gap: 12px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.aira-threat-icon-col {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+
+.aira-threat-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aira-threat-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.aira-threat-subtitle {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.aira-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-top: 4px;
+}
+
+.aira-threat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  background: rgba(2, 6, 23, 0.4);
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.aira-threat-detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.aira-td-label {
+  color: #64748b;
+}
+
+.aira-td-val {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+/* 2. Active Threats List */
+.aira-incidents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aira-inc-row {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aira-inc-row:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: #1e293b;
+}
+
+.aira-inc-row.active {
+  border-color: #38bdf8;
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.aira-inc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.aira-inc-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aira-inc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.aira-inc-hazard {
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.aira-inc-pct {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #94a3b8;
+}
+
+.aira-inc-bot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.aira-inc-loc {
+  color: #cbd5e1;
+}
+
+/* 3. Real-Time Weather Grid */
+.aira-live-badge {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  margin-left: auto;
+}
+
+.aira-weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+  row-gap: 8px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.aira-w-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.aira-w-label {
+  color: #64748b;
+}
+
+.aira-w-val {
+  color: #cbd5e1;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.aira-w-val-blue { color: #38bdf8; }
+.aira-w-val-orange { color: #fbbf24; }
+
+/* 4. Data Freshness List */
+.aira-freshness-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aira-fresh-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10.5px;
+  padding: 6px 8px;
+  background: rgba(2, 6, 23, 0.4);
+  border-radius: 4px;
+}
+
+.aira-fresh-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aira-fresh-dot {
+  width: 5px;
+  height: 5px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.aira-fresh-name {
+  color: #cbd5e1;
+}
+
+.aira-fresh-time {
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+}

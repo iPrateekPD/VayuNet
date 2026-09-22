@@ -3,12 +3,19 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroMap from './HeroMap';
 import FusionAccordion from './FusionAccordion';
-import DayNightToggle from './DayNightToggle';
+import ScrollStory from './ScrollStory';
 import VayunetSplashIntro from './VayunetSplashIntro';
 import {
   WEATHER_LAYERS,
   FORECAST_TIME_STEPS,
 } from '../services/weatherService';
+import { fetchLiveHeaderAlerts } from '../services/liveWeatherService';
+import AccessibilityMenu from './AccessibilityMenu';
+import ReadAloudButton from './ReadAloudButton';
+import { useAccessibility } from '../context/AccessibilityContext';
+
+import { cn } from "@/lib/utils";
+import { getNavTranslation } from '../translations';
 import './CitizenPortal.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -28,17 +35,17 @@ export const INDIAN_LANGUAGES = [
   { code: 'AS', label: 'অসমীয়া — Assamese' },
 ];
 
-export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 'dark', onToggleTheme }) {
+export default function HomePage({ onEnterPortal, onOpenPublicWarnings }) {
+  const { language } = useAccessibility();
   const [showSplash, setShowSplash] = useState(true);
   const [telemetryTime, setTelemetryTime] = useState('');
   const [displayDate, setDisplayDate] = useState('');
   const [activeLayer, setActiveLayer] = useState('precipitation');
   const [scrubberIdx, setScrubberIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileLayerSheetOpen, setMobileLayerSheetOpen] = useState(false);
+  const [liveAlerts, setLiveAlerts] = useState([]);
   const [activeSection, setActiveSection] = useState('hero-section');
-  const [language, setLanguage] = useState('EN');
   const [toastMsg, setToastMsg] = useState(null);
 
   const showToast = (msg) => {
@@ -46,50 +53,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  const navLabels = {
-    EN: {
-      home: 'Home',
-      hazards: 'Hazards',
-      dataSources: 'Data Sources',
-      howItWorks: 'How it Works',
-      impact: 'Impact',
-      publicWarnings: 'Public Warnings ↗',
-      enterPortal: 'Enter Operations Portal →',
-      brandSubtitle: 'Weather Intelligence for a Safer India',
-      tickerTitle: 'LIVE WEATHER ALERT',
-      ticker1Tag: 'FLASH FLOOD WARNING',
-      ticker1Loc: 'Wayanad, Kerala (ETA 1–3h)',
-      ticker1Desc: 'Extreme localized rainfall (>110 mm/hr) over high orographic relief.',
-      ticker2Tag: 'CLOUDBURST WATCH',
-      ticker2Loc: 'Chamoli & Rudraprayag, Uttarakhand',
-      ticker2Desc: 'Convective instability CAPE > 2,100 J/kg, moisture entrapment.',
-      ticker3Tag: 'SEVERE THUNDERSTORM',
-      ticker3Loc: 'Western Ghats & Konkan',
-      ticker3Desc: 'High lightning density and squall gusts > 85 km/h.',
-    },
-    HI: {
-      home: 'मुख्य पृष्ठ',
-      hazards: 'आपदाएँ',
-      dataSources: 'डेटा स्रोत',
-      howItWorks: 'कार्यप्रणाली',
-      impact: 'प्रभाव',
-      publicWarnings: 'सार्वजनिक चेतावनियाँ ↗',
-      enterPortal: 'ऑपरेशंस पोर्टल →',
-      brandSubtitle: 'सुरक्षित भारत के लिए मौसम बुद्धिमत्ता',
-      tickerTitle: 'लाइव मौसम चेतावनी',
-      ticker1Tag: 'अचानक बाढ़ चेतावनी',
-      ticker1Loc: 'वायनाड, केरल (अनुमानित 1-3 घंटे)',
-      ticker1Desc: 'तीव्र स्थानीय वर्षा (>110 मिमी/घंटा) अत्यधिक जोखिम वाले पर्वतीय ढलानों पर।',
-      ticker2Tag: 'बादल फटने की निगरानी',
-      ticker2Loc: 'चमोली एवं रुद्रप्रयाग, उत्तराखंड',
-      ticker2Desc: 'संवहनीय अस्थिरता CAPE > 2,100 J/kg, नमी संचय।',
-      ticker3Tag: 'गंभीर तड़ित-झंझावात',
-      ticker3Loc: 'पश्चिमी घाट एवं कोंकण',
-      ticker3Desc: 'उच्च आकाशीय बिजली घनत्व तथा 85 किमी/घंटा से अधिक हवा की गति।',
-    }
-  };
-
-  const t = navLabels[language] || navLabels.EN;
+  const langKey = (language || 'en').toUpperCase();
+  const t = getNavTranslation(language);
 
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   const introCompleteRef = useRef(false);
@@ -134,6 +99,27 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
     return () => clearInterval(timer);
   }, []);
 
+  // Live Emergency Alert Ticker from weather.indianapi.in & IMD Network
+  useEffect(() => {
+    let isMounted = true;
+    const loadAlerts = async () => {
+      try {
+        const alerts = await fetchLiveHeaderAlerts();
+        if (isMounted && alerts && alerts.length > 0) {
+          setLiveAlerts(alerts);
+        }
+      } catch (err) {
+        console.warn('[VAYUNET Live] Live alert sync error:', err);
+      }
+    };
+    loadAlerts();
+    const alertInterval = setInterval(loadAlerts, 45000);
+    return () => {
+      isMounted = false;
+      clearInterval(alertInterval);
+    };
+  }, []);
+
   // Time scrubber auto-play
   useEffect(() => {
     if (!isPlaying) return;
@@ -160,7 +146,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
       }
 
       // 1. Initial State: Hide all other elements before map zooms into position on Earth
-      gsap.set(['.emergency-alert-ticker', '.home-nav'], { opacity: 0, y: -25 });
+      gsap.set(['.home-nav', '.emergency-alert-ticker'], { opacity: 0, y: -25 });
       gsap.set('.hero-text-readability-overlay', { opacity: 0 });
       gsap.set('.hero-headline', { opacity: 0, y: 25 });
       gsap.set('.hero-lead-text', { opacity: 0, y: 20 });
@@ -206,7 +192,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           ease: 'power2.out',
         }, '-=0.35')
         // 3. Primary navigation & alert ticker drop in from top
-        .to(['.emergency-alert-ticker', '.home-nav'], {
+        .to(['.home-nav', '.emergency-alert-ticker'], {
           opacity: 1,
           y: 0,
           duration: 0.45,
@@ -260,37 +246,6 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           scrollTrigger: {
             trigger: '.fusion-accordion-container',
             start: 'top 82%',
-          },
-        }
-      );
-
-      // 3. Section 02: Operational Workflow
-      gsap.fromTo(
-        '.workflow-header-wrap',
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          scrollTrigger: {
-            trigger: '#how-it-works',
-            start: 'top 82%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.decision-step-v3',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          stagger: 0.12,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.workflow-steps-horizontal',
-            start: 'top 80%',
           },
         }
       );
@@ -390,6 +345,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
   // Track whether user has scrolled past ticker to stick nav at top: 0
   const [isNavScrolled, setIsNavScrolled] = useState(false);
 
+  // Always start HomePage from top (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, []);
+
   // Track active section for navigation highlights and slide dots
   useEffect(() => {
     const sectionIds = ['hero-section', 'data-fusion', 'how-it-works'];
@@ -457,8 +419,15 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                 className={`nav-link-item ${activeSection === link.id ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  const targetY = link.id === 'hero-section' ? 0 : Math.max(0, (document.getElementById(link.id)?.offsetTop || 0) - 52);
-                  window.scrollTo({ top: targetY, behavior: 'smooth' });
+                  if (link.id === 'hero-section') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    const el = document.getElementById(link.id);
+                    if (el) {
+                      const targetY = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - 52);
+                      window.scrollTo({ top: targetY, behavior: 'smooth' });
+                    }
+                  }
                 }}
               >
                 {link.label}
@@ -468,33 +437,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
 
           {/* Right Header Actions */}
           <div className="home-nav-actions">
-            {/* Day / Night Theme Toggle */}
-            <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-
-            {/* Language Option Dropdown */}
-            <div className="home-lang-wrap">
-              <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              <select 
-                className="home-lang-select" 
-                value={language} 
-                onChange={(e) => {
-                  setLanguage(e.target.value);
-                  const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                  showToast(e.target.value === 'HI' ? 'भाषा बदलकर हिंदी (हिंदी) की गई' : `Language selected: ${sel?.label || e.target.value}`);
-                }}
-                aria-label="Select Language"
-              >
-                {INDIAN_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* ♿ Unified Accessibility & Language Control (replaces English dropdown) */}
+            <AccessibilityMenu />
 
             {/* Public Warnings Radar Button */}
             <button className="btn-secondary-nav" onClick={onOpenPublicWarnings} id="nav-public-warnings-btn">
@@ -507,82 +451,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               <span>{t.enterPortal}</span>
             </button>
           </div>
-
-          {/* Mobile Hamburger Button */}
-          <button
-            className="mobile-hamburger-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Navigation Menu"
-          >
-            {mobileMenuOpen ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="mobile-nav-drawer">
-            <div className="mobile-nav-links">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
-                <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-              </div>
-              <div className="mobile-nav-lang-row">
-                <span>{language === 'HI' ? 'भाषा चुनें (Select Language):' : 'Select Language:'}</span>
-                <select 
-                  className="home-lang-select" 
-                  value={language} 
-                  onChange={(e) => {
-                    setLanguage(e.target.value);
-                    const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                    showToast(e.target.value === 'HI' ? 'भाषा बदलकर हिंदी (हिंदी) की गई' : `Language selected: ${sel?.label || e.target.value}`);
-                  }}
-                >
-                  {INDIAN_LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mobile-nav-divider" />
-              <a href="#hero-section" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{t.home}</a>
-              <a href="#data-fusion" onClick={() => { setMobileMenuOpen(false); document.getElementById('data-fusion')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.dataSources}</a>
-              <a href="#how-it-works" onClick={() => { setMobileMenuOpen(false); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}>{t.howItWorks}</a>
-              <div className="mobile-nav-divider" />
-              <button
-                className="btn-secondary-nav mobile-nav-btn"
-                onClick={() => { setMobileMenuOpen(false); onOpenPublicWarnings(); }}
-              >
-                <span className="nav-btn-pulse-dot"></span>
-                <span>{t.publicWarnings}</span>
-              </button>
-              <button
-                className="btn-primary-nav mobile-nav-btn"
-                onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
-                id="mobile-drawer-operator-access-btn"
-              >
-                <span>🛡️ Operator Access / Portal Login →</span>
-              </button>
-              <div className="mobile-gov-footer">
-                <div>Ministry of Earth Sciences, Government of India</div>
-                <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
-                  "Science in service of people."
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* ============================================================
@@ -591,54 +460,92 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
       <div className="emergency-alert-ticker" role="alert">
         <div className="ticker-badge">
           <span className="ticker-pulse-beacon" />
-          <span className="ticker-badge-text">{t.tickerTitle}</span>
+          <span className="ticker-badge-text">{t.tickerTitle || 'LIVE DISASTER NOWCAST'}</span>
+          <ReadAloudButton
+            text={
+              liveAlerts.length > 0
+                ? `${liveAlerts[0].tag}: ${liveAlerts[0].loc}. ${liveAlerts[0].desc}`
+                : `${t.ticker1Tag}: ${t.ticker1Loc}. ${t.ticker1Desc}`
+            }
+            label="Read live weather alert aloud"
+          />
         </div>
         <div className="ticker-track">
           {/* Content duplicated for seamless infinite marquee loop */}
           <div className="ticker-content">
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item red-alert">
-              <span className="alert-tag">{t.ticker1Tag}</span>
-              <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item orange-alert">
-              <span className="alert-tag">{t.ticker2Tag}</span>
-              <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
-            </span>
-            <span className="ticker-dot">•</span>
-            <span className="ticker-item yellow-alert">
-              <span className="alert-tag">{t.ticker3Tag}</span>
-              <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
-            </span>
-            <span className="ticker-dot">•</span>
+            {liveAlerts.length > 0 ? (
+              <>
+                {liveAlerts.map((alert, idx) => (
+                  <React.Fragment key={`live-a-${idx}`}>
+                    <span className={`ticker-item ${alert.alertClass || 'red-alert'}`}>
+                      <span className="alert-tag">{alert.tag}</span>
+                      <strong>{alert.loc}</strong> — {alert.desc}
+                    </span>
+                    <span className="ticker-dot">•</span>
+                  </React.Fragment>
+                ))}
+                {/* Duplicated for seamless infinite loop */}
+                {liveAlerts.map((alert, idx) => (
+                  <React.Fragment key={`live-b-${idx}`}>
+                    <span className={`ticker-item ${alert.alertClass || 'red-alert'}`}>
+                      <span className="alert-tag">{alert.tag}</span>
+                      <strong>{alert.loc}</strong> — {alert.desc}
+                    </span>
+                    <span className="ticker-dot">•</span>
+                  </React.Fragment>
+                ))}
+              </>
+            ) : (
+              <>
+                <span className="ticker-item red-alert">
+                  <span className="alert-tag">{t.ticker1Tag}</span>
+                  <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item orange-alert">
+                  <span className="alert-tag">{t.ticker2Tag}</span>
+                  <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item yellow-alert">
+                  <span className="alert-tag">{t.ticker3Tag}</span>
+                  <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item red-alert">
+                  <span className="alert-tag">{t.ticker1Tag}</span>
+                  <strong>{t.ticker1Loc}</strong> — {t.ticker1Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item orange-alert">
+                  <span className="alert-tag">{t.ticker2Tag}</span>
+                  <strong>{t.ticker2Loc}</strong> — {t.ticker2Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+                <span className="ticker-item yellow-alert">
+                  <span className="alert-tag">{t.ticker3Tag}</span>
+                  <strong>{t.ticker3Loc}</strong> — {t.ticker3Desc}
+                </span>
+                <span className="ticker-dot">•</span>
+              </>
+            )}
           </div>
         </div>
 
         {/* Dedicated Mobile Clean Alert Row (matches reference) */}
         <div className="ticker-mobile-preview" onClick={onOpenPublicWarnings}>
-          <span className="ticker-mobile-text">Heavy rainfall over Uttarakhand</span>
+          <span className="ticker-mobile-text">
+            {liveAlerts.length > 0
+              ? `🔴 ${liveAlerts[0].tag}: ${liveAlerts[0].loc} — ${liveAlerts[0].desc}`
+              : t.tickerMobileText}
+          </span>
           <span className="ticker-mobile-arrow">›</span>
         </div>
 
         <div className="ticker-helpline-wrap">
           <a href="tel:1078" className="ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
             <span className="helpline-icon">🚨</span>
-            <span>NDMA Helpline: <strong>1078</strong></span>
+            <span>{t.ndmaHelpline}: <strong>1078</strong></span>
           </a>
         </div>
       </div>
@@ -680,23 +587,21 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           {/* ===== LEFT COLUMN: Mission Briefing ===== */}
           <div className="hero-left-content">
             <h1 className="hero-headline">
-              Detect severe weather<br />
-              <span className="hero-headline-accent">before it becomes</span><br />
-              <span className="hero-headline-accent">a disaster.</span>
+              {t.heroHeadline1}<br />
+              <span className="hero-headline-accent">{t.heroHeadline2}</span><br />
+              <span className="hero-headline-accent">{t.heroHeadline3}</span>
             </h1>
 
             <p className="hero-lead-text">
-              VAYUNET combines satellite observations, atmospheric reanalysis and
-              terrain intelligence to forecast severe thunderstorms, cloudbursts
-              and flash floods at hyper-local scale — 2 to 6 hours before impact.
+              {t.heroLeadText}
             </p>
 
             <div className="hero-cta-group">
               <button className="btn-hero-portal" onClick={onEnterPortal} id="hero-enter-portal-btn">
-                Enter Operations Portal →
+                {t.enterPortal}
               </button>
               <button className="btn-hero-warnings" onClick={onOpenPublicWarnings} id="hero-view-warnings-btn">
-                View Public Warnings ↗
+                {t.viewPublicWarnings}
               </button>
             </div>
 
@@ -712,8 +617,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                 type="button"
                 className="mobile-map-recenter-fab"
                 onClick={handleResetView}
-                title="Recenter Map to India"
-                aria-label="Recenter Map"
+                title={t.recenterMap}
+                aria-label={t.recenterMap}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="7" />
@@ -728,12 +633,12 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             {/* Primary Action Info Pill (Desktop Only) */}
             <div className="hero-mission-badge">
               <span className="mission-badge-dot" />
-              <span>Sovereign Earth Observation · AI Convective Intelligence</span>
+              <span>{t.missionBadge}</span>
             </div>
 
             {/* National Data Provenance Bar */}
             <div className="hero-national-data-provenance">
-              <div className="national-data-label">POWERED BY NATIONAL DATA</div>
+              <div className="national-data-label">{t.poweredByNationalData}</div>
               <div className="national-data-sources-row">
                 <div className="national-data-item">
                   <div className="national-data-icon-box">
@@ -793,7 +698,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             <span className="hero-status-divider" />
             <span className="hero-live-pill">
               <span className="live-dot" />
-              Live
+              {t.live}
             </span>
           </div>
 
@@ -807,13 +712,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               <polyline points="2 17 12 22 22 17" />
               <polyline points="2 12 12 17 22 12" />
             </svg>
-            <span>Layers: {activeLayerMeta.label}</span>
+            <span>{t.layers}: {t[activeLayer] || activeLayerMeta.label}</span>
           </button>
 
           {/* Desktop Floating Layer Selector Menu Card */}
           <div className={`map-layer-panel ${mobileLayerSheetOpen ? 'mobile-sheet-open' : ''}`}>
             <div className="mobile-sheet-header">
-              <span>Select Weather Layer</span>
+              <span>{t.selectWeatherLayer}</span>
               <button
                 className="mobile-sheet-close"
                 onClick={() => setMobileLayerSheetOpen(false)}
@@ -825,7 +730,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             {[
               {
                 id: 'precipitation',
-                label: 'Precipitation',
+                label: t.precipitation,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
@@ -834,7 +739,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               },
               {
                 id: 'cloud_tops',
-                label: 'Cloud Tops',
+                label: t.cloud_tops,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
@@ -843,7 +748,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               },
               {
                 id: 'lightning',
-                label: 'Lightning',
+                label: t.lightning,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -852,7 +757,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               },
               {
                 id: 'wind',
-                label: 'Wind',
+                label: t.wind,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.7 7.7a2.5 2.5 0 1 1-1.8 4.3H2" />
@@ -863,7 +768,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               },
               {
                 id: 'terrain',
-                label: 'Terrain',
+                label: t.terrain,
                 icon: (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
@@ -894,8 +799,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             <button
               className="zoom-ctrl-btn"
               onClick={handleZoomIn}
-              title="Zoom In"
-              aria-label="Zoom in"
+              title={t.zoomIn}
+              aria-label={t.zoomIn}
             >
               +
             </button>
@@ -903,8 +808,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             <button
               className="zoom-ctrl-btn"
               onClick={handleZoomOut}
-              title="Zoom Out"
-              aria-label="Zoom out"
+              title={t.zoomOut}
+              aria-label={t.zoomOut}
             >
               −
             </button>
@@ -912,8 +817,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             <button
               className="zoom-ctrl-btn"
               onClick={handleResetView}
-              title="Reset View to India"
-              aria-label="Recenter map"
+              title={t.recenterMap}
+              aria-label={t.recenterMap}
             >
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="7" />
@@ -930,7 +835,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
           <div className="hero-map-bottom-group">
             {activeLayer === 'precipitation' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">IMD Doppler Composite (dBZ / mm/hr)</div>
+                <div className="precip-legend-title">{t.legendPrecip}</div>
                 <div className="precip-legend-spectrum-bar" />
                 <div className="precip-legend-scale-labels">
                   <span>15</span>
@@ -944,7 +849,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             )}
             {activeLayer === 'cloud_tops' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">INSAT-3DR Cloud Top Temp (°C)</div>
+                <div className="precip-legend-title">{t.legendCloudTops}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #6366f1 0%, #312e81 30%, #818cf8 60%, #c084fc 85%, #ec4899 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>-20°</span>
@@ -958,7 +863,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             )}
             {activeLayer === 'wind' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">850 hPa Wind Velocity (knots)</div>
+                <div className="precip-legend-title">{t.legendWind}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 35%, #22d3ee 70%, #38bdf8 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>10</span>
@@ -972,7 +877,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
             )}
             {activeLayer === 'lightning' && (
               <div className="map-precip-legend-v3">
-                <div className="precip-legend-title">Flash Rate (strikes / 15 min)</div>
+                <div className="precip-legend-title">{t.legendLightning}</div>
                 <div className="precip-legend-spectrum-bar" style={{ background: 'linear-gradient(90deg, #fef08a 0%, #facc15 35%, #f59e0b 70%, #dc2626 100%)' }} />
                 <div className="precip-legend-scale-labels">
                   <span>5</span>
@@ -997,8 +902,8 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                     }
                     setIsPlaying(v => !v);
                   }}
-                  title={isPlaying ? 'Pause forecast' : 'Play 6h forecast cycle'}
-                  aria-label={isPlaying ? 'Pause forecast' : 'Play 6h forecast cycle'}
+                  title={isPlaying ? t.pauseForecast : t.playForecast}
+                  aria-label={isPlaying ? t.pauseForecast : t.playForecast}
                 >
                   {isPlaying ? (
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
@@ -1011,7 +916,7 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                     </svg>
                   )}
                 </button>
-                <span className="compact-scrubber-title">Forecast Lead Time</span>
+                <span className="compact-scrubber-title">{t.forecastLeadTime}</span>
                 <span className="compact-scrubber-time">{FORECAST_TIME_STEPS[scrubberIdx].validTime}</span>
               </div>
 
@@ -1037,9 +942,9 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
               <button
                 className="btn-view-live-map"
                 onClick={onEnterPortal}
-                title="Open Full Operational Weather Map"
+                title={t.viewLiveMap}
               >
-                <span>View Live Map</span>
+                <span>{t.viewLiveMap}</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
@@ -1060,140 +965,32 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
       <FusionAccordion onEnterPortal={onEnterPortal} />
 
       {/* ============================================================
-          7. OPERATIONAL WORKFLOW
+          7. OPERATIONAL WORKFLOW (Scroll Story)
           ============================================================ */}
-      <section id="how-it-works" className="section-workflow">
-        <div className="workflow-header-wrap">
-          <div className="workflow-header-left">
-            <div className="section-eyebrow">OPERATIONAL WORKFLOW</div>
-            <h2 className="workflow-title">
-              From data to <span className="workflow-title-blue">decisions.</span>
-            </h2>
-            <p className="workflow-desc">
-              An automated end-to-end pipeline linking sovereign observation streams
-              with physics-grounded AI nowcasting and standardized emergency dispatch.
-            </p>
-          </div>
-          <div className="workflow-header-right">
-            <div className="workflow-breadcrumbs">OBSERVE → PREDICT → EXPLAIN → DISPATCH</div>
-            <div className="workflow-breadcrumbs-sub">FASTER WARNINGS. SAFER COMMUNITIES.</div>
-          </div>
-        </div>
-
-        <div className="workflow-steps-horizontal">
-          {/* Step 01 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
-                <span>01 OBSERVE</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/satellite_insat.jpg" alt="01 Observe" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Satellite, Reanalysis &amp; Terrain Data</h4>
-            <p className="step-v3-desc">
-              Continuous ingestion of INSAT-3D/3DR radiances, IMDAA atmospheric baselines,
-              and CartoDEM topography harmonized into a 12-channel tensor.
-            </p>
-            <div className="step-highlight-pill">12-Channel Synchronized Tensor</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 02 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                <span>02 PREDICT</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_predict.jpg" alt="02 Predict" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Multi-Hazard Nowcasting (2–6 h)</h4>
-            <p className="step-v3-desc">
-              Cross-attention transformer computes joint probability grids for thunderstorms,
-              cloudburst cores, and flash flood paths at 4 km resolution in &lt; 150 ms.
-            </p>
-            <div className="step-highlight-pill">Joint 4 km Probability Grids (&lt; 150 ms)</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 03 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span>03 EXPLAIN</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_explain.jpg" alt="03 Explain" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">Physical Drivers &amp; XAI Insights</h4>
-            <p className="step-v3-desc">
-              Captum Integrated Gradients decompose every alert polygon into verifiable
-              physical contributions (IWV, CAPE, CTT rate, slope) eliminating black-box doubt.
-            </p>
-            <div className="step-highlight-pill">Captum Feature Attribution Weights</div>
-          </div>
-
-          <div className="workflow-step-arrow">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-          </div>
-
-          {/* Step 04 */}
-          <div className="decision-step-v3">
-            <div className="step-v3-header">
-              <div className="step-pill alert-beacon-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                <span>04 DISPATCH</span>
-              </div>
-            </div>
-            <div className="step-img-box">
-              <img src="/workflow_dispatch.jpg" alt="04 Dispatch" className="step-img" />
-              <div className="step-img-overlay" />
-            </div>
-            <h4 className="step-v3-title">CAP Alerts &amp; Emergency Response</h4>
-            <p className="step-v3-desc">
-              Automated ITU-T X.1303 / CAP 1.2 standardized warning payloads transmitted
-              directly to NDMA SACHET, SDRF Battalion EOCs, and community sirens.
-            </p>
-            <div className="step-highlight-pill">Automated CAP 1.2 / SACHET Broadcast</div>
-          </div>
-        </div>
-      </section>
+      <div style={{ display: 'block', width: '100%', flexShrink: 0 }}>
+        <ScrollStory />
+      </div>
 
       {/* ============================================================
           3. SMART SOVEREIGN 4-COLUMN FOOTER (Warning Page Footer)
           ============================================================ */}
-      <footer className="cp-footer">
+      <footer className="cp-footer relative overflow-hidden">
+
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry">
           <div className="cp-telemetry-inner">
             <div className="cp-telemetry-status">
               <span className="cp-footer-telemetry-dot"></span>
-              <span><strong>VAYUNET OPERATIONAL TELEMETRY:</strong> All Ingest Pipelines Nominal</span>
+              <span><strong>{t.telemetryTitle}:</strong> {t.telemetryNominal}</span>
             </div>
             <div className="cp-telemetry-metrics">
-              <span>🛰️ INSAT-3DR Multispectral: <strong>ONLINE (100%)</strong></span>
+              <span>{t.telemetryInsat} <strong>{t.online100}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>🌪️ IMDAA 4km Reanalysis: <strong>COUPLED</strong></span>
+              <span>{t.telemetryImdaa} <strong>{t.coupled}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>⚡ Inference Latency: <strong>&lt; 120 ms</strong></span>
+              <span>{t.telemetryLatency} <strong>&lt; 120 ms</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>📡 ITU-T X.1303 CAP 1.2: <strong>ACTIVE</strong></span>
+              <span>{t.telemetryCap} <strong>{t.activeStatus}</strong></span>
             </div>
           </div>
         </div>
@@ -1209,56 +1006,56 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
                 </div>
                 <div>
                   <h2>VAYUNET</h2>
-                  <p>National Severe Weather Nowcasting Engine</p>
+                  <p>{t.footerSubtitle}</p>
                 </div>
               </div>
               <p className="cp-footer-desc">
-                An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.
+                {t.footerDesc}
               </p>
               <div className="cp-footer-emblem-badge">
                 <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
-                  Ministry of Earth Sciences
-                  <span style={{ color: '#94a3b8' }}>Government of India</span>
+                  {t.moes}
+                  <span style={{ color: '#94a3b8' }}>{t.goi}</span>
                 </div>
               </div>
             </div>
 
             {/* Col 2: Public Warning Services */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Public Warning Services</h3>
+              <h3 className="cp-footer-heading">{t.footerCol2Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Active District Warning Radar</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Nearest Safe Shelter Locator</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Flash Flood Safety Protocols</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>Cloudburst Evacuation Guidelines</button></li>
-                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>CAP 1.2 Common Alerting Feed</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerRadar}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerShelter}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerProtocols}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerEvac}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={onOpenPublicWarnings}>{t.footerCap}</button></li>
               </ul>
             </div>
 
             {/* Col 3: 24x7 Emergency Hotlines */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Emergency Hotlines (24x7)</h3>
+              <h3 className="cp-footer-heading">{t.footerCol3Title}</h3>
               <div className="cp-footer-hotlines">
                 <a href="tel:112" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">112</div>
                   <div className="cp-hotline-desc">
-                    <strong>National Emergency</strong>
-                    <span>Police, Fire & Medical</span>
+                    <strong>{t.hotline112Title}</strong>
+                    <span>{t.hotline112Sub}</span>
                   </div>
                 </a>
                 <a href="tel:108" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">108</div>
                   <div className="cp-hotline-desc">
-                    <strong>Disaster Ambulance</strong>
-                    <span>Emergency Medical Response</span>
+                    <strong>{t.hotline108Title}</strong>
+                    <span>{t.hotline108Sub}</span>
                   </div>
                 </a>
                 <a href="tel:1078" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">1078</div>
                   <div className="cp-hotline-desc">
-                    <strong>NDMA Disaster Line</strong>
-                    <span>National Control Center</span>
+                    <strong>{t.hotline1078Title}</strong>
+                    <span>{t.hotline1078Sub}</span>
                   </div>
                 </a>
               </div>
@@ -1266,13 +1063,13 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
 
             {/* Col 4: Sovereign Institutional Partners */}
             <div className="cp-footer-col">
-              <h3 className="cp-footer-heading">Institutional Governance</h3>
+              <h3 className="cp-footer-heading">{t.footerCol4Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">Ministry of Earth Sciences (MoES) ↗</a></li>
-                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">India Meteorological Department (IMD) ↗</a></li>
-                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">NCMRWF Weather Computing ↗</a></li>
-                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">National Disaster Management Authority ↗</a></li>
-                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">ISRO / MOSDAC Satellite Data ↗</a></li>
+                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">{t.instMoes}</a></li>
+                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">{t.instImd}</a></li>
+                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">{t.instNcmrwf}</a></li>
+                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">{t.instNdma}</a></li>
+                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">{t.instIsro}</a></li>
               </ul>
             </div>
           </div>
@@ -1282,14 +1079,14 @@ export default function HomePage({ onEnterPortal, onOpenPublicWarnings, theme = 
         <div className="cp-footer-bottom">
           <div className="cp-footer-bottom-inner">
             <div className="cp-footer-legal">
-              <span>© 2026 VAYUNET · Ministry of Earth Sciences, Government of India. All rights reserved.</span>
-              <span>Compliant with ITU-T X.1303 CAP 1.2 Protocol · WCAG 2.1 Level AA</span>
+              <span>{t.legalCopyright}</span>
+              <span>{t.legalCompliance}</span>
             </div>
             <div className="cp-footer-bottom-links">
-              <span onClick={onOpenPublicWarnings}>Privacy Policy</span>
-              <span onClick={onOpenPublicWarnings}>Terms of Use</span>
-              <span onClick={onEnterPortal}>Operations Portal</span>
-              <span onClick={onOpenPublicWarnings}>Public Warnings</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalPrivacy}</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalTerms}</span>
+              <span onClick={onEnterPortal}>{t.legalPortal}</span>
+              <span onClick={onOpenPublicWarnings}>{t.legalWarnings}</span>
             </div>
           </div>
         </div>

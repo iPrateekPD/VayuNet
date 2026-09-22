@@ -7,95 +7,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-:root {
-  /* ============================================================
-     Light mode — public/citizen portal (from vayunet-palette (1).css)
-     ============================================================ */
-  --bg:               #F8FAFC;
-  --surface:          #FFFFFF;
-  --surface-elevated: #F1F5F9;
-  --border:           #E2E8F0;
-  --border-mid:       #CBD5E1;
-  --border-bright:    #94A3B8;
-
-  --primary:          #1976D2;
-  --primary-deep:     #0D47A1;
-  --secondary:        #2E7D32;
-  --accent:           #29B6F6;
-  --accent-teal:      #2E7D32;
-  --accent-mint:      #29B6F6;
-  --accent-gradient:  linear-gradient(135deg, #1976D2 0%, #29B6F6 100%);
-  --accent-dim:       rgba(25, 118, 210, 0.10);
-
-  --text-primary:     #0F172A;
-  --text-secondary:   #475569;
-  --text-muted:       #64748B;
-  --text-faint:       #94A3B8;
-
-  --severe:           #DC2626;
-  --warning:          #F59E0B;
-  --watch:            #CA8A04;
-  --safe:             #16A34A;
-
-  /* Aliases for global compatibility */
-  --bg-primary:       var(--bg);
-  --bg-secondary:     var(--surface-elevated);
-  --bg-surface:       var(--surface);
-  --bg-card:          var(--surface);
-  --bg-card-hover:    var(--surface-elevated);
-  --bg-inset:         #EEF2F6;
-
-  /* Meteorological Hazard colors */
-  --hazard-thunder:   #f59e0b;
-  --hazard-burst:     #1976D2;
-  --hazard-flood:     #0284c7;
-
-  /* Severity metrics */
-  --sev-low:          var(--safe);
-  --sev-moderate:     var(--watch);
-  --sev-high:         var(--warning);
-  --sev-severe:       var(--severe);
-  --sev-extreme:      #7c3aed;
-
-  /* Live / Status indicators */
-  --live-red:         #DC2626;
-  --online-green:     #16A34A;
-
-  /* Typography */
-  --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
-
-  /* Radii */
-  --r-xs: 2px;
-  --r-sm: 4px;
-  --r-md: 6px;
-  --r-lg: 8px;
-  --r-xl: 10px;
-
-  /* Legacy aliases */
-  --thunderstorm:   var(--hazard-thunder);
-  --cloudburst:     var(--hazard-burst);
-  --flood:          var(--hazard-flood);
-  --risk-low:       var(--sev-low);
-  --risk-moderate:  var(--sev-moderate);
-  --risk-high:      var(--sev-high);
-  --risk-severe:    var(--sev-severe);
-  --risk-extreme:   var(--sev-extreme);
-  --accent-blue:    var(--primary);
-  --accent-cyan:    var(--accent);
-  --radius-sm:      var(--r-sm);
-  --radius-md:      var(--r-md);
-  --radius-lg:      var(--r-lg);
-  --shadow-card:    0 2px 12px rgba(15, 23, 42, 0.08);
-  --glow-blue:      0 0 16px rgba(25, 118, 210, 0.2);
-}
-
+}:root,
 [data-theme="dark"],
 .dark {
   /* ============================================================
-     Dark mode — tactical command center (from vayunet-palette (1).css)
+     VAYUNET — Sovereign Dark Theme (Universal Default Across All Browsers)
      ============================================================ */
   --bg:               #0B1220;
   --surface:          #111827;
@@ -147,10 +63,33 @@
   --live-red:         #ef4444;
   --online-green:     #34D399;
 
-  --accent-blue:      var(--primary);
-  --accent-cyan:      var(--accent);
-  --shadow-card:      0 2px 12px rgba(0, 0, 0, 0.5);
-  --glow-blue:        0 0 16px rgba(56, 189, 248, 0.25);
+  /* Typography */
+  --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  /* Radii */
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
+
+  /* Legacy aliases */
+  --thunderstorm:   var(--hazard-thunder);
+  --cloudburst:     var(--hazard-burst);
+  --flood:          var(--hazard-flood);
+  --risk-low:       var(--sev-low);
+  --risk-moderate:  var(--sev-moderate);
+  --risk-high:      var(--sev-high);
+  --risk-severe:    var(--sev-severe);
+  --risk-extreme:   var(--sev-extreme);
+  --accent-blue:    var(--primary);
+  --accent-cyan:    var(--accent);
+  --radius-sm:      var(--r-sm);
+  --radius-md:      var(--r-md);
+  --radius-lg:      var(--r-lg);
+  --shadow-card:    0 2px 12px rgba(0, 0, 0, 0.5);
+  --glow-blue:      0 0 16px rgba(56, 189, 248, 0.25);
 }
 
 html, body {
@@ -843,3 +782,49 @@ html, body {
   gap: 5px;
 }
 
+@layer base {
+  .theme {
+    --animate-aurora: aurora 8s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+    transform: rotate(-5deg) scale(0.9);
+  }
+  25% {
+    background-position: 50% 100%;
+    transform: rotate(5deg) scale(1.1);
+  }
+  50% {
+    background-position: 100% 50%;
+    transform: rotate(-3deg) scale(0.95);
+  }
+  75% {
+    background-position: 50% 0%;
+    transform: rotate(3deg) scale(1.05);
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: rotate(-5deg) scale(0.9);
+  }
+}
+
+/* Hide Google Translate UI */
+body {
+  top: 0 !important;
+}
+.skiptranslate {
+  display: none !important;
+}
+.goog-te-banner-frame {
+  display: none !important;
+}
+#goog-gt-tt {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}

@@ -34,8 +34,34 @@ def validate_coordinates(lat: float, lng: float) -> None:
         raise ValueError(f"Longitude {lng} is out of valid range [-180.0, 180.0].")
 
 
-def get_cache_key(lat: float, lng: float) -> str:
-    """Generates normalized cache key rounded to 4 decimal places (~11m resolution)."""
+def check_weather_sanity(current: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+    """
+    Validates physical plausibility of meteorological observations.
+    Returns (True, None) if plausible, or (False, reason) if invalid.
+    """
+    temp = current.get("temperature_2m")
+    rh = current.get("relative_humidity_2m")
+    pressure = current.get("surface_pressure")
+    rain = current.get("rain") if current.get("rain") is not None else current.get("precipitation")
+    wind = current.get("wind_speed_10m")
+
+    if temp is not None and (temp < -40.0 or temp > 55.0):
+        return False, f"Temperature {temp}°C outside physical bounds [-40, 55]"
+    if rh is not None and (rh < 0.0 or rh > 100.0):
+        return False, f"Relative humidity {rh}% outside physical bounds [0, 100]"
+    if pressure is not None and (pressure < 500.0 or pressure > 1085.0):
+        return False, f"Surface pressure {pressure} hPa outside physical bounds [500, 1085]"
+    if rain is not None and rain < 0.0:
+        return False, f"Negative precipitation {rain} mm"
+    if wind is not None and (wind < 0.0 or wind > 300.0):
+        return False, f"Wind speed {wind} km/h outside physical bounds [0, 300]"
+    return True, None
+
+
+def get_cache_key(lat: float, lng: float, location_id: Optional[str] = None) -> str:
+    """Generates location-identity specific cache key to prevent cross-location contamination."""
+    if location_id:
+        return f"weather:{location_id.strip().lower()}"
     return f"weather:{round(lat, 4):.4f}:{round(lng, 4):.4f}"
 
 
@@ -47,13 +73,13 @@ def format_ist_timestamp(dt: Optional[datetime] = None) -> str:
     return dt_ist.strftime("%Y-%m-%dT%H:%M:%S+05:30")
 
 
-async def fetch_open_meteo_weather(lat: float, lng: float) -> Dict[str, Any]:
+async def fetch_open_meteo_weather(lat: float, lng: float, location_id: Optional[str] = None) -> Dict[str, Any]:
     """
     Asynchronously queries Open-Meteo API for live and recent hourly meteorological variables.
-    Handles network timeouts, retries, and schema normalization.
+    Handles network timeouts, retries, physical sanity checks, and schema normalization.
     """
     validate_coordinates(lat, lng)
-    cache_key = get_cache_key(lat, lng)
+    cache_key = get_cache_key(lat, lng, location_id)
     now = time.time()
 
     # Check 5-minute cache
@@ -78,7 +104,7 @@ async def fetch_open_meteo_weather(lat: float, lng: float) -> Dict[str, Any]:
         "longitude": round(lng, 4),
         "current": (
             "temperature_2m,relative_humidity_2m,surface_pressure,"
-            "precipitation,rain,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
+            "precipitation,rain,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code"
         ),
         "hourly": (
             "temperature_2m,relative_humidity_2m,surface_pressure,"
@@ -98,12 +124,12 @@ async def fetch_open_meteo_weather(lat: float, lng: float) -> Dict[str, Any]:
     except httpx.TimeoutException as e:
         logger.warning("Open-Meteo request timed out for (%f, %f): %s", lat, lng, e)
         return {
-            "status": "degraded",
+            "status": "DATA_UNAVAILABLE",
             "source": {
                 "provider": "Open-Meteo",
                 "data_type": "model-derived-current"
             },
-            "location": {"lat": lat, "lng": lng},
+            "location": {"lat": lat, "lng": lng, "id": location_id},
             "error": {
                 "code": "WEATHER_PROVIDER_TIMEOUT",
                 "message": "Current weather data provider timed out after 10 seconds."
@@ -112,20 +138,30 @@ async def fetch_open_meteo_weather(lat: float, lng: float) -> Dict[str, Any]:
     except Exception as e:
         logger.error("Open-Meteo request failed for (%f, %f): %s", lat, lng, e)
         return {
-            "status": "degraded",
+            "status": "DATA_UNAVAILABLE",
             "source": {
                 "provider": "Open-Meteo",
                 "data_type": "model-derived-current"
             },
-            "location": {"lat": lat, "lng": lng},
+            "location": {"lat": lat, "lng": lng, "id": location_id},
             "error": {
                 "code": "WEATHER_PROVIDER_UNAVAILABLE",
                 "message": f"Current weather data is temporarily unavailable: {str(e)}"
             }
         }
 
-    # Parse and normalize variables
+    # Physical range sanity check
     current = data.get("current", {})
+    is_sane, sanity_reason = check_weather_sanity(current)
+    if not is_sane:
+        logger.warning("[WEATHER SANITY FAIL] (%f, %f): %s", lat, lng, sanity_reason)
+        return {
+            "status": "DATA_UNAVAILABLE",
+            "source": {"provider": "Open-Meteo", "data_type": "model-derived-current"},
+            "location": {"lat": lat, "lng": lng, "id": location_id},
+            "error": {"code": "PHYSICAL_SANITY_FAILED", "message": sanity_reason}
+        }
+
     hourly = data.get("hourly", {})
     retrieved_at_str = format_ist_timestamp()
 
@@ -161,20 +197,24 @@ async def fetch_open_meteo_weather(lat: float, lng: float) -> Dict[str, Any]:
 
     # Extract past genuine 4-hour temporal series for model adapter
     hourly_times = hourly.get("time", [])
-    num_frames = min(4, len(hourly_times))
-    recent_indices = list(range(len(hourly_times) - num_frames, len(hourly_times)))
+    # Use the 4 most recent completed hours leading up to current observation
+    num_frames = 4
+    if len(hourly_times) >= num_frames:
+        recent_indices = list(range(len(hourly_times) - num_frames, len(hourly_times)))
+    else:
+        recent_indices = list(range(len(hourly_times)))
 
     temporal_sequence = {
-        "available_frames": num_frames,
+        "available_frames": len(recent_indices),
         "timestamps": [hourly_times[i] for i in recent_indices] if hourly_times else [],
         "temperature_2m": [hourly.get("temperature_2m", [])[i] for i in recent_indices if i < len(hourly.get("temperature_2m", []))],
         "relative_humidity_2m": [hourly.get("relative_humidity_2m", [])[i] for i in recent_indices if i < len(hourly.get("relative_humidity_2m", []))],
         "surface_pressure": [hourly.get("surface_pressure", [])[i] for i in recent_indices if i < len(hourly.get("surface_pressure", []))],
         "precipitation": [hourly.get("precipitation", [])[i] for i in recent_indices if i < len(hourly.get("precipitation", []))],
         "wind_speed_10m": [hourly.get("wind_speed_10m", [])[i] for i in recent_indices if i < len(hourly.get("wind_speed_10m", []))],
-        "cape": [cape_list[i] if i < len(cape_list) else 0.0 for i in recent_indices],
-        "cin": [cin_list[i] if i < len(cin_list) else 0.0 for i in recent_indices],
-        "iwv": [iwv_list[i] if i < len(iwv_list) and iwv_list[i] is not None else latest_iwv for i in recent_indices]
+        "cape": [cape_list[i] if (i < len(cape_list) and cape_list[i] is not None) else latest_cape for i in recent_indices],
+        "cin": [cin_list[i] if (i < len(cin_list) and cin_list[i] is not None) else latest_cin for i in recent_indices],
+        "iwv": [iwv_list[i] if (i < len(iwv_list) and iwv_list[i] is not None) else latest_iwv for i in recent_indices]
     }
 
     result = {

@@ -1,773 +1,628 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './AnalysisView.css';
 import { 
-  CloudRain, 
   MapPin, 
-  Calendar, 
-  Brain,
-  Lightbulb,
+  ChevronDown, 
+  AlertTriangle,
+  Clock,
+  Activity,
+  Snowflake,
   Droplets,
   Zap,
-  ThermometerSnowflake,
+  Mountain,
   Wind,
-  Layout,
-  Share2,
-  Activity,
-  Layers,
-  Mountain
+  Thermometer,
+  Droplet,
+  CloudSnow,
+  Lightbulb,
+  Plus,
+  Minus
 } from 'lucide-react';
-import { predictNowcast, getRealtimeWeather } from '../services/apiService';
+import { Polygon, Polyline, Marker } from 'react-leaflet';
+import L from 'leaflet';
+import { SHARED_EVENTS } from '../data/sharedEventData';
+import OperationalMap from './OperationalMap';
+import { analysisApi } from '../services/api/analysis';
 
-const ANALYSIS_SECTORS = {
-  'Wayanad, Kerala': {
-    name: 'Wayanad (Meppadi Ridge)',
-    lat: 11.5564,
-    lng: 76.1320,
-    locationId: 'wayanad',
-    state: 'Kerala',
-    terrainDesc: 'Western Ghats Orographic Escarpment'
-  },
-  'Chamoli, Uttarakhand': {
-    name: 'Chamoli (Alaknanda Basin)',
-    lat: 30.4100,
-    lng: 79.3200,
-    locationId: 'chamoli',
-    state: 'Uttarakhand',
-    terrainDesc: 'Alaknanda Deep Gorge Funneling'
-  },
-  'Kangra, Himachal Pradesh': {
-    name: 'Kangra (Dharamsala Basin)',
-    lat: 32.2190,
-    lng: 76.3234,
-    locationId: 'kangra',
-    state: 'Himachal Pradesh',
-    terrainDesc: 'Dhauladhar Mountain Barrier'
-  },
-  'Mumbai, Maharashtra': {
-    name: 'Mumbai Metropolitan Region',
-    lat: 19.0760,
-    lng: 72.8777,
-    locationId: 'mumbai',
-    state: 'Maharashtra',
-    terrainDesc: 'Coastal Estuarine Convergence'
-  },
-  'Rudraprayag, Uttarakhand': {
-    name: 'Rudraprayag Sector',
-    lat: 30.2844,
-    lng: 78.9811,
-    locationId: 'rudraprayag',
-    state: 'Uttarakhand',
-    terrainDesc: 'Mandakini-Alaknanda River Confluence'
-  },
-  'Pithoragarh, Uttarakhand': {
-    name: 'Pithoragarh Sector',
-    lat: 29.5829,
-    lng: 80.2182,
-    locationId: 'pithoragarh',
-    state: 'Uttarakhand',
-    terrainDesc: 'Sojur Valley High Ridge'
-  },
-  'Uttarkashi, Uttarakhand': {
-    name: 'Uttarkashi (Bhagirathi Basin)',
-    lat: 30.7268,
-    lng: 78.4354,
-    locationId: 'uttarkashi',
-    state: 'Uttarakhand',
-    terrainDesc: 'Bhagirathi Deep Canyon Corridor'
-  }
-};
-
-// CTT Satellite Infrared Visualizer Component
-function CttSatelliteVisual({ cttDrop }) {
-  return (
-    <svg viewBox="0 0 320 180" width="100%" height="100%" style={{ display: 'block', background: '#040814' }}>
-      <defs>
-        <radialGradient id="cttCore" cx="52%" cy="48%" r="48%">
-          <stop offset="0%" stopColor="#ec4899" stopOpacity="0.95" />
-          <stop offset="25%" stopColor="#ef4444" stopOpacity="0.9" />
-          <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.75" />
-          <stop offset="75%" stopColor="#0284c7" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#040814" stopOpacity="0.1" />
-        </radialGradient>
-      </defs>
-
-      <line x1="0" y1="45" x2="320" y2="45" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="90" x2="320" y2="90" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="135" x2="320" y2="135" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="80" y1="0" x2="80" y2="180" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="160" y1="0" x2="160" y2="180" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="240" y1="0" x2="240" y2="180" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-
-      <path d="M0 130 Q60 110 120 125 T240 95 T320 110 L320 180 L0 180 Z" fill="#081426" opacity="0.7" />
-      <path d="M0 150 Q80 135 160 145 T320 130 L320 180 L0 180 Z" fill="#0d213a" opacity="0.8" />
-
-      <ellipse cx="165" cy="85" rx="100" ry="60" fill="url(#cttCore)" />
-      
-      <ellipse cx="165" cy="85" rx="65" ry="40" fill="none" stroke="#facc15" strokeWidth="1.2" opacity="0.6" strokeDasharray="4 2" />
-      <ellipse cx="165" cy="85" rx="38" ry="24" fill="none" stroke="#ef4444" strokeWidth="1.5" opacity="0.85" />
-      <ellipse cx="165" cy="85" rx="16" ry="11" fill="#fdf2f8" opacity="0.9" />
-
-      <text x="10" y="20" fill="#94a3b8" fontSize="9" fontFamily="monospace" opacity="0.8">INSAT-3DR TIR-1 (10.8 µm)</text>
-      <text x="10" y="32" fill="#38bdf8" fontSize="9" fontFamily="monospace">CTT Drop: {cttDrop != null ? cttDrop : -14.1}°C/h</text>
-    </svg>
-  );
+// Custom DivIcon creator for crisp map badges and markers
+function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
+  return L.divIcon({
+    html,
+    className: 'ana-leaflet-div-icon',
+    iconSize: size,
+    iconAnchor: anchor,
+  });
 }
 
-// IWV Atmospheric Water Vapor Moisture Flux Visualizer
-function IwvMoistureVisual({ iwv }) {
-  const iwvVal = iwv != null ? Number(iwv).toFixed(1) : '52.4';
-  return (
-    <svg viewBox="0 0 320 180" width="100%" height="100%" style={{ display: 'block', background: '#030813' }}>
-      <defs>
-        <linearGradient id="iwvPlume" x1="0%" y1="100%" x2="80%" y2="20%">
-          <stop offset="0%" stopColor="#0284c7" stopOpacity="0.2" />
-          <stop offset="40%" stopColor="#06b6d4" stopOpacity="0.6" />
-          <stop offset="70%" stopColor="#eab308" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="#ef4444" stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
+const SECTOR_OPTIONS = [
+  'Chamoli, Uttarakhand',
+  'Kangra, Himachal Pradesh',
+  'Wayanad, Kerala',
+  'Mumbai MMR, Maharashtra',
+  'Rudraprayag, Uttarakhand',
+  'Pithoragarh, Uttarakhand',
+  'Uttarkashi, Uttarakhand',
+];
 
-      <line x1="0" y1="45" x2="320" y2="45" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="90" x2="320" y2="90" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="135" x2="320" y2="135" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+export default function AnalysisView({ onNavigateTab, globalSelectedLocation, setGlobalSelectedLocation }) {
+  const selectedEventId = globalSelectedLocation && globalSelectedLocation.startsWith('VN-EVT') 
+    ? globalSelectedLocation 
+    : 'VN-EVT-2026-0922-CHM';
 
-      <path
-        d="M20 180 C80 150, 110 110, 160 85 C210 60, 260 50, 310 30 L320 60 C260 85, 210 105, 170 130 C120 160, 80 180, 40 180 Z"
-        fill="url(#iwvPlume)"
-        opacity="0.85"
-      />
-      
-      <path
-        d="M120 120 C150 95, 180 80, 220 70 C190 95, 160 115, 135 135 Z"
-        fill="#ef4444"
-        opacity="0.7"
-      />
+  const eventData = SHARED_EVENTS.find(e => e.id === selectedEventId) || SHARED_EVENTS.find(e => e.id === 'VN-EVT-2026-0922-CHM');
+  const selectedSector = eventData.location;
+  const setSelectedSector = setGlobalSelectedLocation || (() => {});
+  const [isSectorOpen, setIsSectorOpen] = useState(false);
+  const [activeLayer, setActiveLayer] = useState('satellite'); // 'satellite' | 'radar'
 
-      <path d="M60 160 Q110 120 170 95" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="6 3" fill="none" opacity="0.8" />
-      <path d="M90 175 Q140 135 200 110" stroke="#facc15" strokeWidth="1.5" strokeDasharray="6 3" fill="none" opacity="0.8" />
-      <path d="M120 150 Q170 115 230 90" stroke="#f97316" strokeWidth="1.5" strokeDasharray="6 3" fill="none" opacity="0.8" />
+  // Coordinates for Chamoli, Uttarakhand
+  const chamoliCenter = [30.41, 79.32];
+  const [currentCenter, setCurrentCenter] = useState(chamoliCenter);
+  const [currentZoom, setCurrentZoom] = useState(9);
 
-      <polygon points="172,93 162,91 168,99" fill="#38bdf8" />
-      <polygon points="202,108 192,106 198,114" fill="#facc15" />
-      <polygon points="232,88 222,86 228,94" fill="#f97316" />
+  const [analysisData, setAnalysisData] = useState(null);
+  const [isLoadingAnalysis, setIsLoadingAnalysis] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('live');
 
-      <text x="10" y="20" fill="#94a3b8" fontSize="9" fontFamily="monospace" opacity="0.8">Bolton Saturation Plume</text>
-      <text x="10" y="32" fill="#38bdf8" fontSize="9" fontFamily="monospace">Column IWV: {iwvVal} kg/m²</text>
-    </svg>
-  );
-}
-
-// CAPE Thermodynamic Convective Energy Visualizer
-function CapeEnergyVisual({ cape, cin }) {
-  const capeVal = cape != null ? Math.round(cape) : 1950;
-  return (
-    <svg viewBox="0 0 320 180" width="100%" height="100%" style={{ display: 'block', background: '#030814' }}>
-      <defs>
-        <radialGradient id="capeCore" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
-          <stop offset="35%" stopColor="#f97316" stopOpacity="0.75" />
-          <stop offset="65%" stopColor="#eab308" stopOpacity="0.6" />
-          <stop offset="85%" stopColor="#10b981" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#0284c7" stopOpacity="0.1" />
-        </radialGradient>
-      </defs>
-
-      <line x1="0" y1="45" x2="320" y2="45" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="90" x2="320" y2="90" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-      <line x1="0" y1="135" x2="320" y2="135" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
-
-      <path d="M0 140 Q80 120 160 135 T320 110 L320 180 L0 180 Z" fill="#071324" opacity="0.75" />
-
-      <circle cx="160" cy="90" r="75" fill="url(#capeCore)" />
-
-      <circle cx="160" cy="90" r="55" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="5 2.5" opacity="0.8" />
-      <circle cx="160" cy="90" r="32" fill="none" stroke="#ef4444" strokeWidth="1.5" opacity="0.9" />
-      <circle cx="160" cy="90" r="14" fill="#fef08a" opacity="0.8" />
-
-      <path d="M145 130 L155 98" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 2" />
-      <path d="M175 130 L165 98" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 2" />
-
-      <text x="10" y="20" fill="#94a3b8" fontSize="9" fontFamily="monospace" opacity="0.8">ERA5 / IMDAA Sounding Profile</text>
-      <text x="10" y="32" fill="#eab308" fontSize="9" fontFamily="monospace">CAPE: {capeVal} J/kg (High Instability)</text>
-    </svg>
-  );
-}
-
-export default function AnalysisView({ onNavigateTab }) {
-  const [activeNav, setActiveNav] = useState('overview');
-  const [selectedSector, setSelectedSector] = useState('Wayanad, Kerala');
-  const [liveData, setLiveData] = useState(null);
-  const [liveWeather, setLiveWeather] = useState(null);
-  const [weatherStatus, setWeatherStatus] = useState('LIVE');
-  const [istTimestamp, setIstTimestamp] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const navItems = [
-    { id: 'overview', icon: Layout, label: 'Overview' },
-    { id: 'attribution', icon: Share2, label: 'Feature Attribution' },
-    { id: 'evidence', icon: Activity, label: 'Atmospheric Evidence' },
-    { id: 'profile', icon: Layers, label: 'Vertical Profile' },
-    { id: 'terrain', icon: Mountain, label: 'Terrain Influence' },
-  ];
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        timeZone: 'Asia/Kolkata',
-      });
-      const timeStr = now.toLocaleTimeString('en-IN', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-        timeZone: 'Asia/Kolkata',
-      });
-      setIstTimestamp(`${dateStr}, ${timeStr} IST`);
+  React.useEffect(() => {
+    const fetchAnalysis = async () => {
+      setIsLoadingAnalysis(true);
+      setConnectionStatus('syncing');
+      try {
+         const data = await analysisApi.getRiskAnalysis(selectedSector);
+         setAnalysisData(data);
+         setConnectionStatus(data.status === 'fallback' ? 'fallback' : 'live');
+      } catch (err) {
+         setConnectionStatus('fallback');
+      } finally {
+         setIsLoadingAnalysis(false);
+      }
     };
-    updateTime();
-    const timer = setInterval(updateTime, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-    const sector = ANALYSIS_SECTORS[selectedSector] || ANALYSIS_SECTORS['Wayanad, Kerala'];
-    setIsLoading(true);
-
-    Promise.allSettled([
-      predictNowcast({ lat: sector.lat, lng: sector.lng, leadTimeHours: 2, locationId: sector.locationId }),
-      getRealtimeWeather(sector.lat, sector.lng)
-    ]).then(([predRes, weatherRes]) => {
-      if (!isMounted) return;
-      setIsLoading(false);
-      if (predRes.status === 'fulfilled' && predRes.value) {
-        setLiveData(predRes.value);
-      }
-      if (weatherRes.status === 'fulfilled' && weatherRes.value?.status === 'success') {
-        setLiveWeather(weatherRes.value);
-        setWeatherStatus('LIVE');
-      } else {
-        setWeatherStatus('DEGRADED');
-      }
-    });
-
-    return () => { isMounted = false; };
+    fetchAnalysis();
   }, [selectedSector]);
 
-  const currentSector = ANALYSIS_SECTORS[selectedSector] || ANALYSIS_SECTORS['Wayanad, Kerala'];
-  const weather = liveWeather?.weather || liveData?.weather || {};
-
-  const precursors = liveData?.atmospheric_precursors || {
-    iwv_mm: weather.total_column_water_vapour_kg_m2 ?? 41.0,
-    cape_j_kg: weather.cape_j_kg ?? 980,
-    cin_j_kg: weather.cin_j_kg ?? 5,
-    ctt_drop_rate_c_hr: -14.1,
-    wind_shear_0_6km_kt: weather.wind_speed_10m_kmh ? Math.round(weather.wind_speed_10m_kmh * 0.54) : 15,
-  };
-
-  const xaiContrib = liveData?.xai?.contributions || {
-    iwv_moisture_flux: Math.min(60, Math.round(((precursors.iwv_mm || 40) / 65) * 45)),
-    cape_instability: Math.min(50, Math.round(((precursors.cape_j_kg || 1000) / 2500) * 35)),
-    dem_slope_funneling: 22,
-    ctt_drop_rate: 18,
-  };
-
-  const tsScore = liveData?.predictions?.thunderstorm?.risk_score ?? (liveData?.predictions?.thunderstorm_probability ? liveData.predictions.thunderstorm_probability / 100 : 0.74);
-  const cbScore = liveData?.predictions?.cloudburst?.risk_score ?? (liveData?.predictions?.cloudburst_probability ? liveData.predictions.cloudburst_probability / 100 : 0.52);
-  const ffScore = liveData?.predictions?.flash_flood?.risk_score ?? (liveData?.predictions?.flash_flood_probability ? liveData.predictions.flash_flood_probability / 100 : 0.88);
-  const maxRisk = Math.max(tsScore, cbScore, ffScore);
-
-  let topHazard = 'Flash Flood';
-  if (tsScore >= ffScore && tsScore >= cbScore) topHazard = 'Thunderstorm';
-  else if (cbScore >= ffScore) topHazard = 'Cloudburst';
-
-  const threatLevel = liveData?.active_threat_level || (
-    maxRisk >= 0.80 ? 'RED ALERT' :
-    maxRisk >= 0.60 ? 'ORANGE ALERT' :
-    maxRisk >= 0.35 ? 'YELLOW WATCH' : 'GREEN NOMINAL'
-  );
-
-  const features = [
-    { label: 'Integrated Water Vapor (IWV Flux)', pct: xaiContrib.iwv_moisture_flux || 42, color: '#3b82f6' },
-    { label: 'CAPE (Convective Instability)', pct: xaiContrib.cape_instability || 28, color: '#38bdf8' },
-    { label: 'CartoDEM Topography & Slope', pct: xaiContrib.dem_slope_funneling || 18, color: '#22c55e' },
-    { label: 'CTT Drop Rate (Cloud Top Cooling)', pct: xaiContrib.ctt_drop_rate || 12, color: '#ef4444' },
-    { label: 'Deep Layer Wind Shear', pct: 6, color: '#a855f7' },
+  // Multi-band Doppler radar convective plume contours (Chamoli - Alaknanda Valley)
+  const radarOuterHalo = [
+    [30.82, 79.15], [30.86, 79.35], [30.80, 79.58], [30.68, 79.72],
+    [30.55, 79.88], [30.40, 80.05], [30.22, 80.08], [30.08, 79.92],
+    [30.02, 79.70], [30.06, 79.45], [30.15, 79.22], [30.28, 79.08],
+    [30.44, 78.96], [30.60, 78.98], [30.74, 79.05]
   ];
 
-  const thresholds = [
-    { param: 'IWV (Water Vapor)', observed: `${precursors.iwv_mm != null ? precursors.iwv_mm.toFixed(1) : '41.0'} mm`, limit: '> 58 mm', status: (precursors.iwv_mm || 0) > 58 ? 'Breached' : 'Nominal' },
-    { param: 'CAPE (Instability)', observed: `${precursors.cape_j_kg != null ? Math.round(precursors.cape_j_kg) : '980'} J/kg`, limit: '> 2,000 J/kg', status: (precursors.cape_j_kg || 0) > 2000 ? 'Breached' : 'Nominal' },
-    { param: 'CIN (Inhibition)', observed: `${precursors.cin_j_kg != null ? Math.round(precursors.cin_j_kg) : '5'} J/kg`, limit: '> -25 J/kg', status: (precursors.cin_j_kg || 0) > -25 ? 'Breached' : 'Nominal' },
-    { param: 'Surface Pressure', observed: `${weather.surface_pressure_hpa != null ? weather.surface_pressure_hpa.toFixed(1) : '918.2'} hPa`, limit: '< 980 hPa (Highland)', status: (weather.surface_pressure_hpa || 1013) < 980 ? 'Breached' : 'Nominal' },
-    { param: 'Wind Speed', observed: `${weather.wind_speed_10m_kmh != null ? weather.wind_speed_10m_kmh.toFixed(1) : '7.6'} km/h`, limit: '> 25 km/h', status: (weather.wind_speed_10m_kmh || 0) > 25 ? 'Breached' : 'Nominal' }
+  const radarGreenBand = [
+    [30.74, 79.22], [30.76, 79.42], [30.68, 79.62], [30.52, 79.78],
+    [30.36, 79.92], [30.20, 79.88], [30.12, 79.68], [30.15, 79.45],
+    [30.24, 79.28], [30.38, 79.14], [30.55, 79.12], [30.66, 79.16]
+  ];
+
+  const radarYellowBand = [
+    [30.66, 79.28], [30.68, 79.45], [30.58, 79.62], [30.45, 79.72],
+    [30.32, 79.78], [30.22, 79.65], [30.20, 79.48], [30.28, 79.32],
+    [30.42, 79.22], [30.56, 79.22]
+  ];
+
+  const radarOrangeBand = [
+    [30.58, 79.34], [30.58, 79.48], [30.48, 79.58], [30.38, 79.64],
+    [30.28, 79.58], [30.26, 79.44], [30.32, 79.32], [30.44, 79.28],
+    [30.52, 79.30]
+  ];
+
+  const radarCorePlume = [
+    [30.52, 79.36], [30.50, 79.45], [30.42, 79.50], [30.34, 79.48],
+    [30.30, 79.40], [30.32, 79.34], [30.40, 79.30], [30.48, 79.32]
+  ];
+
+  const radarExtremeCore = [
+    [30.46, 79.36], [30.44, 79.42], [30.38, 79.42], [30.34, 79.36],
+    [30.36, 79.32], [30.42, 79.32]
+  ];
+
+  // Hydrological River Network (Alaknanda River)
+  const alaknandaRiver = [
+    [30.744, 79.493], // Badrinath
+    [30.650, 79.520],
+    [30.556, 79.566], // Joshimath
+    [30.490, 79.430],
+    [30.410, 79.320], // Chamoli
+    [30.350, 79.260],
+    [30.258, 79.217], // Karnaprayag
+    [30.285, 78.981], // Rudraprayag
+    [30.145, 78.597]  // Devprayag
+  ];
+
+  // 5 Contributing Factors data
+  const contributingFactors = [
+    {
+      name: 'Cloud-Top Temperature Drop',
+      pct: 38,
+      icon: Snowflake,
+      color: '#f87171',
+      barGradient: 'linear-gradient(90deg, #f87171, #ef4444)',
+    },
+    {
+      name: 'Moisture (Integrated Water Vapor)',
+      pct: 26,
+      icon: Droplets,
+      color: '#38bdf8',
+      barGradient: 'linear-gradient(90deg, #0ea5e9, #38bdf8)',
+    },
+    {
+      name: 'CAPE (Convective Instability)',
+      pct: 22,
+      icon: Zap,
+      color: '#facc15',
+      barGradient: 'linear-gradient(90deg, #eab308, #facc15)',
+    },
+    {
+      name: 'Terrain / Orography',
+      pct: 8,
+      icon: Mountain,
+      color: '#4ade80',
+      barGradient: 'linear-gradient(90deg, #22c55e, #4ade80)',
+    },
+    {
+      name: 'Wind Shear',
+      pct: 6,
+      icon: Wind,
+      color: '#c084fc',
+      barGradient: 'linear-gradient(90deg, #a855f7, #c084fc)',
+    }
   ];
 
   return (
-    <div className="ana-root">
-      
-      {/* Sidebar */}
-      <div className="ana-sidebar">
-        <div className="ana-sidebar-top">
-          <div>
-            <div className="ana-sidebar-title">Analysis</div>
-            <div className="ana-sidebar-desc">Understand why the model predicts severe weather</div>
-          </div>
-          
-          <div className="ana-nav-list">
-            {navItems.map(item => {
-              const Icon = item.icon;
-              return (
-                <div 
-                  key={item.id} 
-                  className={`ana-nav-item ${activeNav === item.id ? 'active' : ''}`}
-                  onClick={() => setActiveNav(item.id)}
-                >
-                  <Icon size={18} />
-                  <span>{item.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="ana-sidebar-bottom">
-          <Lightbulb size={24} color="#eab308" />
-          <div className="ana-sidebar-bot-text">
-            <div>From data to clearer answers.</div>
-            <div style={{ color: '#cbd5e1', marginTop: '4px' }}>VAYUNET</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="ana-main">
+    <div className="ana-page-wrapper">
+      <div className="ana-container">
         
-        {/* Header */}
-        <div className="ana-header">
-          <div className="ana-header-left">
-            <CloudRain size={36} className="ana-header-icon" />
-            <div>
-              <div className="ana-header-title">{topHazard} Physics Analysis</div>
-              <div className="ana-header-subtitle">Explainable AI insights & real-time telemetry</div>
+        {/* =========================================================
+            1. TOP BAR / TITLE & FILTER SECTION
+            ========================================================= */}
+        <div className="ana-top-bar">
+          <div className="ana-top-left">
+            <h1 className="ana-page-title">Analysis</h1>
+            <p className="ana-page-subtitle">Understand why VAYUNET predicts this weather event</p>
+            <div className="ana-event-id-tag">
+              <span className="ana-event-id-label">EVENT</span>
+              <span className="ana-event-id-val">{eventData.id} &middot; {eventData.location}</span>
             </div>
-          </div>
-          <div className="ana-header-right">
-            <div className="ana-pill" style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <MapPin size={14} className="ana-pill-icon" />
-              <select
-                value={selectedSector}
-                onChange={(e) => setSelectedSector(e.target.value)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#ffffff',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  outline: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                {Object.keys(ANALYSIS_SECTORS).map((s) => (
-                  <option key={s} value={s} style={{ background: '#0b1329', color: '#ffffff' }}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="ana-pill">
-              <Calendar size={14} className="ana-pill-icon" />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span className="ana-pill-label">Analysis Time</span>
-                <span style={{ fontSize: '12px', fontWeight: '500' }}>{istTimestamp || 'Live IST'}</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '6px' }}>
-              <div 
-                className="ana-conf-circle"
-                style={{
-                  borderColor: threatLevel.includes('RED') ? '#ef4444' : threatLevel.includes('ORANGE') ? '#f97316' : '#38bdf8'
-                }}
-              >
-                <span>{maxRisk.toFixed(2)}</span>
-              </div>
-              <div className="ana-conf-text">
-                <span style={{ fontSize: '11px', color: '#94a3b8' }}>Live Risk Score</span>
-                <span style={{ fontSize: '18px', fontWeight: 600, color: threatLevel.includes('RED') ? '#ef4444' : threatLevel.includes('ORANGE') ? '#f97316' : '#ffffff' }}>
-                  {maxRisk.toFixed(2)}
-                </span>
-              </div>
-              <span 
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  background: threatLevel.includes('RED') ? 'rgba(239, 68, 68, 0.2)' : threatLevel.includes('ORANGE') ? 'rgba(249, 115, 22, 0.2)' : 'rgba(56, 189, 248, 0.2)',
-                  color: threatLevel.includes('RED') ? '#ef4444' : threatLevel.includes('ORANGE') ? '#f97316' : '#38bdf8',
-                  border: `1px solid ${threatLevel.includes('RED') ? 'rgba(239, 68, 68, 0.4)' : threatLevel.includes('ORANGE') ? 'rgba(249, 115, 22, 0.4)' : 'rgba(56, 189, 248, 0.4)'}`
-                }}
-              >
-                {threatLevel}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* EXECUTIVE SCIENTIFIC DIAGNOSIS (ONE-SENTENCE VERDICT) */}
-        <div className="ana-verdict-banner">
-          <div className="ana-verdict-badge">
-            <span className="ana-verdict-dot"></span>
-            <span>STAGE 2: SCIENTIFIC EXPLANATION (UNDERSTAND)</span>
-          </div>
-          <div className="ana-verdict-statement">
-            {liveData?.scientific_verdict || `“VAYUNET predicts ${threatLevel} (${(maxRisk * 100).toFixed(0)}%) for ${currentSector.name} driven by ${topHazard.toLowerCase()} atmospheric precursors.”`}
-          </div>
-          <div className="ana-verdict-meta-bar">
-            <div className="ana-verdict-metric">
-              <span className="ana-vm-label">PRIMARY ATTRIBUTION</span>
-              <span className="ana-vm-val" style={{ color: '#ef4444' }}>
-                CTT Drop ({precursors.ctt_drop_rate_c_hr != null ? precursors.ctt_drop_rate_c_hr.toFixed(1) : '-14.1'} °C/hr)
-              </span>
-            </div>
-            <div className="ana-verdict-metric">
-              <span className="ana-vm-label">ATMOSPHERIC MOISTURE</span>
-              <span className="ana-vm-val" style={{ color: '#38bdf8' }}>
-                IWV Saturation ({precursors.iwv_mm != null ? precursors.iwv_mm.toFixed(1) : '41.0'} mm)
-              </span>
-            </div>
-            <div className="ana-verdict-metric">
-              <span className="ana-vm-label">CONVECTIVE POTENTIAL</span>
-              <span className="ana-vm-val" style={{ color: '#eab308' }}>
-                CAPE ({precursors.cape_j_kg != null ? Math.round(precursors.cape_j_kg) : '980'} J/kg)
-              </span>
-            </div>
-            <div className="ana-verdict-metric">
-              <span className="ana-vm-label">TERRAIN FORCING</span>
-              <span className="ana-vm-val" style={{ color: '#22c55e' }}>
-                {currentSector.terrain}
-              </span>
-            </div>
-          </div>
-          <div style={{ fontSize: '10px', color: '#94a3b8', fontStyle: 'italic', marginTop: '6px' }}>
-            * AI-generated risk assessment - not an official warning.
           </div>
 
-          <div className="ana-pipeline-nav-bar">
-            <button
-              type="button"
-              className="ana-pipeline-btn secondary"
-              onClick={() => onNavigateTab && onNavigateTab('nowcast')}
-              title="Return to operational map and live detection"
-            >
-              ← 1. Live Nowcast (SEE)
-            </button>
-            <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="ana-top-center">
+            {/* Sector Selector Dropdown */}
+            <div className="ana-sector-wrapper">
               <button
                 type="button"
-                className="ana-pipeline-btn primary"
-                onClick={() => onNavigateTab && onNavigateTab('events')}
-                title="Verify how VAYUNET performed in similar past disasters"
+                className="ana-sector-pill"
+                onClick={() => setIsSectorOpen((prev) => !prev)}
+                aria-expanded={isSectorOpen}
               >
-                3. Historical Validation (PROVE) →
+                <MapPin size={14} className="ana-sector-pin" />
+                <span className="ana-sector-name">{selectedSector}</span>
+                <ChevronDown size={14} className="ana-sector-chevron" />
               </button>
-              <button
-                type="button"
-                className="ana-pipeline-btn dispatch"
-                onClick={() => onNavigateTab && onNavigateTab('alerts')}
-                title="Proceed to alert generation and CAP 1.2 broadcast"
-              >
-                4. Create / Dispatch Alert (ACT) →
-              </button>
+
+              {isSectorOpen && (
+                <div className="ana-sector-dropdown-menu">
+                  {SECTOR_OPTIONS.map((sec) => (
+                    <button
+                      key={sec}
+                      type="button"
+                      className={`ana-sector-option ${sec === selectedSector ? 'active' : ''}`}
+                      onClick={() => {
+                        const matchingEvent = SHARED_EVENTS.find(e => e.location === sec);
+                        if (matchingEvent) {
+                          setSelectedSector(matchingEvent.id);
+                        } else {
+                          setSelectedSector(sec);
+                        }
+                        setIsSectorOpen(false);
+                      }}
+                    >
+                      <MapPin size={12} />
+                      <span>{sec}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="ana-top-right">
+            <div className="ana-live-pill">
+              <span className="ana-timestamp-text">08 Sep 2026, 11:52 PM IST</span>
+              {connectionStatus === 'syncing' && <span className="ana-live-dot" style={{ backgroundColor: '#eab308' }} />}
+              {connectionStatus === 'syncing' && <span className="ana-live-text" style={{ color: '#eab308' }}>Syncing...</span>}
+              {connectionStatus === 'live' && <span className="ana-live-dot" />}
+              {connectionStatus === 'live' && <span className="ana-live-text">Live</span>}
+              {connectionStatus === 'fallback' && <span className="ana-live-dot" style={{ backgroundColor: '#ef4444' }} />}
+              {connectionStatus === 'fallback' && <span className="ana-live-text" style={{ color: '#ef4444' }}>Offline</span>}
             </div>
           </div>
         </div>
 
-        {/* Why Prediction & Feature Attribution */}
-        <div className="ana-grid-2">
+        {/* =========================================================
+            2. MAIN DASHBOARD 2-COLUMN GRID
+            ========================================================= */}
+        <div className="ana-main-grid">
           
-          {/* Left Card */}
-          <div className="ana-card">
-            <div className="ana-card-title">
-              <Brain size={20} color="#38bdf8" /> Why this prediction?
-            </div>
-            <div className="ana-why-text">
-              {liveData?.scientific_verdict 
-                ? liveData.scientific_verdict
-                : `Real-time atmospheric telemetry over ${currentSector.name} indicates surface temperature of ${weather.temperature_2m_c != null ? weather.temperature_2m_c.toFixed(1) + ' °C' : '28.4 °C'} with relative humidity at ${weather.relative_humidity_2m_pct != null ? weather.relative_humidity_2m_pct + '%' : '82%'}. Deep learning inference computes ${topHazard.toLowerCase()} risk at ${(maxRisk * 100).toFixed(0)}% in the 1–2 hour lead window.`
-              }
-            </div>
-            <div className="ana-insight-box">
-              <Lightbulb size={20} color="#eab308" style={{ marginTop: '2px', flexShrink: 0 }} />
-              <div>
-                <div className="ana-insight-title">Key Insight</div>
-                <div className="ana-insight-text">
-                  Observed IWV at {precursors.iwv_mm != null ? precursors.iwv_mm.toFixed(1) : '41.0'} mm combined with CAPE of {precursors.cape_j_kg != null ? Math.round(precursors.cape_j_kg) : '980'} J/kg and {currentSector.terrain} orographic forcing creates favorable trigger conditions.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Card */}
-          <div className="ana-card">
-            <div className="ana-card-title">
-              Feature Attribution <span style={{ color: '#64748b', fontSize: '12px', fontWeight: 'normal', cursor: 'help' }}>ⓘ</span>
-            </div>
-            <div className="ana-fa-subtitle">% contribution to prediction confidence (Illustrative factor contribution)</div>
+          {/* ---------------- LEFT COLUMN ---------------- */}
+          <div className="ana-left-col">
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
-              {features.map((f, i) => (
-                <div key={i} className="ana-fa-row">
-                  <div className="ana-fa-label">{f.label}</div>
-                  <div className="ana-fa-bar-bg">
-                    <div className="ana-fa-bar-fill" style={{ width: `${f.pct}%`, background: f.color }} />
+            {/* CARD 1: Current Situation (Map) */}
+            <div className="ana-card ana-map-card">
+              <div className="ana-card-header">
+                <div className="ana-card-header-left">
+                  <div className="ana-icon-badge-blue">
+                    <Activity size={18} color="#ffffff" strokeWidth={2.5} />
                   </div>
-                  <div className="ana-fa-pct">{f.pct}%</div>
+                  <div>
+                    <h2 className="ana-card-title">Current Situation</h2>
+                    <p className="ana-card-subtitle">Satellite + Radar view with key atmospheric indicators</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-        </div>
-
-        {/* Maps Grid */}
-        <div className="ana-maps-grid">
-          
-          {/* CTT Map */}
-          <div className="ana-map-card">
-            <div className="ana-map-header">
-              <span className="ana-map-title">Satellite — Cloud Top Temperature</span>
-              <span className="ana-map-time">{istTimestamp || 'Live IST'}</span>
-            </div>
-            <div className="ana-map-body">
-              <CttSatelliteVisual cttDrop={precursors.ctt_drop_rate_c_hr} />
-              <div className="ana-marker">
-                <div className="ana-marker-dot"/> {currentSector.name.split(',')[0]}
-              </div>
-              <div style={{ position: 'absolute', bottom: '8px', left: '8px', fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>{currentSector.terrainDesc}</div>
-              
-              <div className="ana-scale-box vertical">
-                <span style={{ fontSize: '10px' }}>CTT (°C)</span>
-                <span style={{ marginTop: '4px' }}>-80</span>
-                <span style={{ marginTop: '12px' }}>-60</span>
-                <span style={{ marginTop: '12px' }}>-40</span>
-                <span style={{ marginTop: '12px' }}>-20</span>
-                <span style={{ marginTop: '12px' }}>0</span>
-                <span style={{ marginTop: '12px' }}>20</span>
-                <div className="ana-scale-ramp-v" style={{ position: 'absolute', right: '4px', top: '24px', height: 'calc(100% - 32px)', width: '6px' }} />
-              </div>
-            </div>
-          </div>
-
-          {/* IWV Map */}
-          <div className="ana-map-card">
-            <div className="ana-map-header">
-              <span className="ana-map-title">Integrated Water Vapor (IWV)</span>
-            </div>
-            <div className="ana-map-body">
-              <IwvMoistureVisual iwv={precursors.iwv_mm} />
-              <div className="ana-marker">
-                <div className="ana-marker-dot"/> {currentSector.name.split(',')[0]}
-              </div>
-              <div className="ana-scale-box horizontal">
-                <div className="ana-scale-ramp-h" />
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', padding: '0 4px', boxSizing: 'border-box' }}>
-                  <span>0</span><span>20</span><span>40</span><span>60</span><span>mm</span>
+                <div className="ana-layer-toggle-group">
+                  <button
+                    type="button"
+                    className={`ana-layer-toggle-btn ${activeLayer === 'satellite' ? 'active' : ''}`}
+                    onClick={() => setActiveLayer('satellite')}
+                  >
+                    Satellite
+                  </button>
+                  <button
+                    type="button"
+                    className={`ana-layer-toggle-btn ${activeLayer === 'radar' ? 'active' : ''}`}
+                    onClick={() => setActiveLayer('radar')}
+                  >
+                    Radar
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* CAPE Map */}
-          <div className="ana-map-card">
-            <div className="ana-map-header">
-              <span className="ana-map-title">CAPE (Convective Available PE)</span>
-            </div>
-            <div className="ana-map-body">
-              <CapeEnergyVisual cape={precursors.cape_j_kg} cin={precursors.cin_j_kg} />
-              <div className="ana-marker">
-                <div className="ana-marker-dot"/> {currentSector.name.split(',')[0]}
-              </div>
-              <div className="ana-scale-box horizontal">
-                <div className="ana-scale-ramp-h" style={{ background: 'linear-gradient(to right, #0284c7, #10b981, #facc15, #f97316, #ef4444)' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', padding: '0 4px', boxSizing: 'border-box' }}>
-                  <span>0</span><span>500</span><span>1,000</span><span>1,500</span><span>2,000 J/kg</span>
-                </div>
-              </div>
-            </div>
-          </div>
+              {/* Interactive Map View */}
+              <div className="ana-map-container-inner">
+                <OperationalMap 
+                  mode="analysis" 
+                  eventData={{ ...eventData, coords: currentCenter }}
+                >
+                  {/* Multi-Band Convective Radar Overlay */}
+                  <Polygon
+                    positions={radarOuterHalo}
+                    pathOptions={{
+                      color: '#00e5ff',
+                      fillColor: '#00b4d8',
+                      fillOpacity: 0.38,
+                      weight: 1,
+                    }}
+                  />
+                  <Polygon
+                    positions={radarGreenBand}
+                    pathOptions={{
+                      color: '#22c55e',
+                      fillColor: '#16a34a',
+                      fillOpacity: 0.48,
+                      weight: 1,
+                    }}
+                  />
+                  <Polygon
+                    positions={radarYellowBand}
+                    pathOptions={{
+                      color: '#eab308',
+                      fillColor: '#ca8a04',
+                      fillOpacity: 0.58,
+                      weight: 1,
+                    }}
+                  />
+                  <Polygon
+                    positions={radarOrangeBand}
+                    pathOptions={{
+                      color: '#f97316',
+                      fillColor: '#ea580c',
+                      fillOpacity: 0.72,
+                      weight: 1.2,
+                    }}
+                  />
+                  <Polygon
+                    positions={radarCorePlume}
+                    pathOptions={{
+                      color: '#ef4444',
+                      fillColor: '#dc2626',
+                      fillOpacity: 0.88,
+                      weight: 1.5,
+                    }}
+                  />
+                  <Polygon
+                    positions={radarExtremeCore}
+                    pathOptions={{
+                      color: '#991b1b',
+                      fillColor: '#7f1d1d',
+                      fillOpacity: 0.96,
+                      weight: 1.5,
+                    }}
+                  />
 
-          {/* Vertical Profile Chart */}
-          <div className="ana-map-card">
-            <div className="ana-map-header">
-              <span className="ana-map-title">Vertical Atmospheric Profile</span>
-            </div>
-            <div className="ana-map-body" style={{ background: '#040914', padding: '16px' }}>
-               {/* Decorative Chart */}
-               <div style={{ position: 'relative', width: '100%', height: '100%', borderLeft: '1px solid #334155', borderBottom: '1px solid #334155' }}>
-                  <div style={{ position: 'absolute', top: -14, right: 0, display: 'flex', gap: '12px', fontSize: '9px', color: '#94a3b8' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }}/> Temperature (°C)</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8' }}/> Dew Point (°C)</div>
-                  </div>
-                  
-                  {/* Y Axis */}
-                  <div style={{ position: 'absolute', left: '-30px', top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '9px', color: '#64748b', textAlign: 'right', width: '24px' }}>
-                    <span>100</span><span>200</span><span>300</span><span>500</span><span>700</span><span>850</span><span>1000</span>
-                  </div>
-                  <div style={{ position: 'absolute', left: '-44px', top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: '9px', color: '#94a3b8' }}>Pressure (hPa)</div>
+                  {/* Alaknanda River Polyline */}
+                  <Polyline
+                    positions={alaknandaRiver}
+                    pathOptions={{ color: '#00b4d8', weight: 2.8, opacity: 0.9 }}
+                  />
 
-                  {/* X Axis */}
-                  <div style={{ position: 'absolute', bottom: '-16px', width: '100%', display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#64748b' }}>
-                    <span>-60</span><span>-40</span><span>-20</span><span>0</span><span>20</span><span>40</span>
-                  </div>
-                  <div style={{ position: 'absolute', bottom: '-28px', width: '100%', textAlign: 'center', fontSize: '9px', color: '#94a3b8' }}>Temperature (°C)</div>
-
-                  {/* Lines & Box */}
-                  <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: 'absolute' }}>
-                    {/* Temperature Line */}
-                    <path d="M 20 0 L 40 40 L 55 70 L 60 100" fill="none" stroke="#ef4444" strokeWidth="2" />
-                    {/* Dew Point Line */}
-                    <path d="M 10 0 L 30 40 L 45 70 L 48 100" fill="none" stroke="#38bdf8" strokeWidth="2" />
-                    
-                    {/* Highlight Box */}
-                    <rect x="45" y="40" width="40" height="30" fill="rgba(239, 68, 68, 0.1)" stroke="rgba(239, 68, 68, 0.5)" strokeDasharray="2,2" />
-                  </svg>
-
-                  <div style={{ position: 'absolute', top: '50px', left: '85px', fontSize: '9px', color: '#cbd5e1', whiteSpace: 'nowrap', textShadow: '0 1px 2px black' }}>
-                    Instability Index<br/>(CAPE: {precursors.cape_j_kg != null ? Math.round(precursors.cape_j_kg) : '980'} J/kg)
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Row */}
-        <div className="ana-bot-grid">
-          
-          {/* Atmospheric State */}
-          <div className="ana-bot-card">
-            <div className="ana-card-title">Atmospheric State <span style={{ color: '#64748b', fontSize: '12px', fontWeight: 'normal' }}>({currentSector.name})</span></div>
-            
-            <div className="ana-state-icons">
-              <div className="ana-state-col">
-                <Droplets size={24} className="ana-state-icon" />
-                <div className="ana-state-label">IWV</div>
-                <div className="ana-state-val">{precursors.iwv_mm != null ? precursors.iwv_mm.toFixed(1) : '41.0'} <span style={{ fontSize: '12px', fontWeight: 'normal' }}>mm</span></div>
-              </div>
-
-              <div className="ana-state-col">
-                <Zap size={24} className="ana-state-icon" />
-                <div className="ana-state-label">CAPE</div>
-                <div className="ana-state-val">{precursors.cape_j_kg != null ? Math.round(precursors.cape_j_kg) : '980'}</div>
-                <div className="ana-state-sub">J/kg</div>
-              </div>
-
-              <div className="ana-state-col">
-                <ThermometerSnowflake size={24} className="ana-state-icon" style={{ color: '#94a3b8' }} />
-                <div className="ana-state-label">CIN</div>
-                <div className="ana-state-val">{precursors.cin_j_kg != null ? Math.round(precursors.cin_j_kg) : '5'}<span style={{ fontSize: '10px', fontWeight: 'normal' }}>J/kg</span></div>
-              </div>
-
-              <div className="ana-state-col">
-                <ThermometerSnowflake size={24} className="ana-state-icon" style={{ color: '#38bdf8' }} />
-                <div className="ana-state-label">CTT Rate</div>
-                <div className="ana-state-val">{precursors.ctt_drop_rate_c_hr != null ? precursors.ctt_drop_rate_c_hr.toFixed(1) : '-14.1'} <span style={{ fontSize: '12px', fontWeight: 'normal' }}>°C</span></div>
-                <div className="ana-state-sub">1 hr</div>
-              </div>
-
-              <div className="ana-state-col">
-                <Wind size={24} className="ana-state-icon" style={{ color: '#cbd5e1' }} />
-                <div className="ana-state-label">Wind</div>
-                <div className="ana-state-val">{weather.wind_speed_10m_kmh != null ? weather.wind_speed_10m_kmh.toFixed(1) : '7.6'} <span style={{ fontSize: '12px', fontWeight: 'normal' }}>km/h</span></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Precursor Threshold */}
-          <div className="ana-bot-card">
-            <div className="ana-card-title">Precursor Threshold Reference</div>
-            
-            <table className="ana-thresh-table">
-              <thead>
-                <tr>
-                  <th>Parameter</th>
-                  <th>Observed Value</th>
-                  <th>Alert Threshold</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {thresholds.map((t, i) => (
-                  <tr key={i}>
-                    <td>{t.param}</td>
-                    <td>{t.observed}</td>
-                    <td style={{ color: '#64748b' }}>{t.limit}</td>
-                    <td>
-                      <div className="ana-thresh-status">
-                        <div className={`ana-status-dot ${t.status.toLowerCase()}`} />
-                        <span className={`ana-status-text ${t.status.toLowerCase()}`}>{t.status}</span>
+                  {/* Chamoli Target Marker with badge */}
+                  <Marker
+                    position={chamoliCenter}
+                    icon={createHtmlIcon(`
+                      <div class="ana-map-target-cluster">
+                        <div class="ana-target-outer-ring">
+                          <div class="ana-target-inner-core"></div>
+                        </div>
+                        <div class="ana-target-label-badge">Chamoli</div>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    `, [120, 24], [8, 12])}
+                  />
 
-          {/* Temporal Evolution */}
-          <div className="ana-bot-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div className="ana-card-title" style={{ fontSize: '13px' }}>Temporal Evolution (Last 3 Hours)</div>
-              <div style={{ display: 'flex', gap: '8px', fontSize: '10px', color: '#cbd5e1' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8' }}/> IWV</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }}/> CAPE</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#a855f7' }}/> CTT Rate</div>
+                  {/* Joshimath Marker */}
+                  <Marker
+                    position={[30.556, 79.566]}
+                    icon={createHtmlIcon(`
+                      <div class="ana-map-loc-cluster">
+                        <div class="ana-loc-dot"></div>
+                        <div class="ana-loc-text">Joshimath</div>
+                      </div>
+                    `, [90, 20], [4, 10])}
+                  />
+
+                  {/* Rudraprayag Marker */}
+                  <Marker
+                    position={[30.285, 78.981]}
+                    icon={createHtmlIcon(`
+                      <div class="ana-map-loc-cluster">
+                        <div class="ana-loc-dot"></div>
+                        <div class="ana-loc-text">Rudraprayag</div>
+                      </div>
+                    `, [100, 20], [4, 10])}
+                  />
+
+                  {/* Alaknanda River Marker Callout */}
+                  <Marker
+                    position={[30.27, 79.35]}
+                    icon={createHtmlIcon(`
+                      <div class="ana-map-river-cluster">
+                        <div class="ana-river-dot"></div>
+                        <div class="ana-river-text">Alaknanda River</div>
+                      </div>
+                    `, [120, 20], [4, 10])}
+                  />
+                </OperationalMap>
+
+                {/* Overlaid Compass Rose (Top-Left) */}
+                <div className="ana-map-compass-badge" title="North orientation">
+                  <span className="ana-compass-arrow">▲</span>
+                  <span className="ana-compass-n">N</span>
+                </div>
+
+                {/* Overlaid Distance Scale Bar (Bottom-Left) */}
+                <div className="ana-map-scale-bar">
+                  <div className="ana-scale-ticks">
+                    <span className="ana-scale-tick tick-0">0</span>
+                    <span className="ana-scale-tick tick-10">10</span>
+                    <span className="ana-scale-tick tick-20">20</span>
+                    <span className="ana-scale-tick tick-40">40 km</span>
+                  </div>
+                  <div className="ana-scale-ruler">
+                    <div className="ana-ruler-segment seg-1" />
+                    <div className="ana-ruler-segment seg-2" />
+                    <div className="ana-ruler-segment seg-3" />
+                  </div>
+                </div>
+
+                {/* Overlaid Precipitation Intensity Legend (Bottom-Right) */}
+                <div className="ana-map-legend-box">
+                  <div className="ana-legend-title">Precipitation Intensity (mm/hr)</div>
+                  <div className="ana-legend-gradient-bar" />
+                  <div className="ana-legend-values">
+                    <span>0</span>
+                    <span>10</span>
+                    <span>20</span>
+                    <span>50</span>
+                    <span>100</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* CARD 2: Atmospheric Conditions (Current) */}
+            <div className="ana-card ana-atmospheric-card">
+              <h2 className="ana-section-title">Atmospheric Conditions (Current)</h2>
+
+              <div className="ana-atm-metrics-grid">
+                {/* Metric 1: CAPE */}
+                <div className="ana-atm-box">
+                  <div className="ana-atm-box-left">
+                    <Thermometer size={24} color="#ef4444" className="ana-atm-icon" />
+                  </div>
+                  <div className="ana-atm-box-content">
+                    <span className="ana-atm-label">CAPE</span>
+                    <span className="ana-atm-val" style={{ color: '#ef4444' }}>2450 J/kg</span>
+                    <span className="ana-atm-badge badge-high">High</span>
+                  </div>
+                </div>
+
+                {/* Metric 2: IWV */}
+                <div className="ana-atm-box">
+                  <div className="ana-atm-box-left">
+                    <Droplet size={24} color="#38bdf8" className="ana-atm-icon" />
+                  </div>
+                  <div className="ana-atm-box-content">
+                    <span className="ana-atm-label">IWV</span>
+                    <span className="ana-atm-val" style={{ color: '#f8fafc' }}>48 mm</span>
+                    <span className="ana-atm-badge badge-high">High</span>
+                  </div>
+                </div>
+
+                {/* Metric 3: Vertical Shear */}
+                <div className="ana-atm-box">
+                  <div className="ana-atm-box-left">
+                    <Wind size={24} color="#38bdf8" className="ana-atm-icon" />
+                  </div>
+                  <div className="ana-atm-box-content">
+                    <span className="ana-atm-label">Vertical Shear</span>
+                    <span className="ana-atm-val" style={{ color: '#f8fafc' }}>18 m/s</span>
+                    <span className="ana-atm-badge badge-mod">Moderate</span>
+                  </div>
+                </div>
+
+                {/* Metric 4: CTT Drop Rate */}
+                <div className="ana-atm-box">
+                  <div className="ana-atm-box-left">
+                    <CloudSnow size={24} color="#cbd5e1" className="ana-atm-icon" />
+                  </div>
+                  <div className="ana-atm-box-content">
+                    <span className="ana-atm-label">CTT Drop Rate</span>
+                    <span className="ana-atm-val" style={{ color: '#f8fafc' }}>-12 °C/hr</span>
+                    <span className="ana-atm-badge badge-high">High</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ---------------- RIGHT COLUMN ---------------- */}
+          <div className="ana-right-col">
             
-            <div style={{ flex: 1, position: 'relative', background: '#040914', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.05)', marginTop: '8px', padding: '12px 24px' }}>
-              {/* Fake Line Chart */}
-              <div style={{ position: 'absolute', left: '8px', top: '12px', bottom: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '9px', color: '#64748b' }}>
-                <span>80</span><span>60</span><span>40</span><span>20</span><span>0</span>
+            {/* CARD 1: AI Analysis */}
+            <div className="ana-card ana-ai-analysis-card" style={{ position: 'relative' }}>
+              {isLoadingAnalysis && (
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15,23,42,0.7)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>
+                  <span style={{ color: '#38bdf8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                     <span className="ana-spinner" style={{ width: '16px', height: '16px', border: '2px solid rgba(56, 189, 248, 0.3)', borderTopColor: '#38bdf8', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></span>
+                     Analyzing...
+                  </span>
+                </div>
+              )}
+              <div className="ana-ai-header-row">
+                <div className="ana-ai-header-left">
+                  <AlertTriangle size={24} color="#ef4444" strokeWidth={2.2} />
+                  <span className="ana-ai-title">AI Analysis</span>
+                  <span className="ana-ai-conf-badge">High Confidence ({analysisData?.confidence || eventData.confidence || '82%'})</span>
+                </div>
+
+                <div className="ana-ai-header-right">
+                  <span className="ana-risk-label">Risk Level</span>
+                  <span className="ana-risk-val">{analysisData?.riskLevel || eventData.peakRisk || eventData.currentRisk || 'HIGH'}</span>
+                  <div className="ana-risk-time-row">
+                    <Clock size={12} color="#94a3b8" />
+                    <span>Likely within</span>
+                    <strong>{eventData.leadTime || '1h 45m'}</strong>
+                  </div>
+                </div>
               </div>
-              <div style={{ position: 'absolute', left: '-12px', top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: '9px', color: '#94a3b8' }}>IWV (mm)</div>
 
-              <div style={{ position: 'absolute', right: '8px', top: '12px', bottom: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '9px', color: '#64748b' }}>
-                <span>3K</span><span>2K</span><span>1K</span><span>0</span>
+              <div className="ana-ai-body">
+                <h3 className="ana-ai-lead-headline">
+                  <span className="ana-headline-alert">Elevated {eventData.hazard.toLowerCase()} risk</span>{' '}
+                  <span className="ana-headline-cause">due to rapid cloud-top cooling and high moisture convergence.</span>
+                </h3>
+                <p className="ana-ai-paragraph">
+                  Strong convective activity is developing over the {eventData.location.split(',')[0]} region, with favorable atmospheric conditions for intense rainfall in the next 1–3 hours.
+                </p>
+                <div className="ana-ai-actions">
+                  <button 
+                    className="ana-btn-secondary"
+                    onClick={() => {
+                      if(setGlobalSelectedLocation) setGlobalSelectedLocation(eventData.id);
+                      if(onNavigateTab) onNavigateTab('events');
+                    }}
+                  >
+                    View Event &rarr;
+                  </button>
+                  <button 
+                    className="ana-btn-primary"
+                    onClick={() => {
+                      if(setGlobalSelectedLocation) setGlobalSelectedLocation(eventData.id);
+                      if(onNavigateTab) onNavigateTab('alerts');
+                    }}
+                  >
+                    Create Alert &rarr;
+                  </button>
+                </div>
               </div>
-              <div style={{ position: 'absolute', right: '-12px', top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: '9px', color: '#94a3b8' }}>CAPE (J/kg)</div>
+            </div>
 
-              <div style={{ position: 'absolute', bottom: '8px', left: '24px', right: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#64748b' }}>
-                <span>20:00</span><span>20:30</span><span>21:00</span><span>21:30</span><span>22:00</span><span>22:30</span><span>23:00</span>
+            {/* CARD 2: Key Contributing Factors */}
+            <div className="ana-card ana-factors-card">
+              <div className="ana-card-header">
+                <div className="ana-card-header-left">
+                  <div className="ana-icon-badge-teal">
+                    <Activity size={18} color="#2dd4bf" strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h2 className="ana-card-title">Key Contributing Factors</h2>
+                    <p className="ana-card-subtitle">How much each factor influences the prediction</p>
+                  </div>
+                </div>
               </div>
 
-              <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: 'absolute', left: '24px', width: 'calc(100% - 48px)', top: '12px', height: 'calc(100% - 36px)' }}>
-                {/* Now Line */}
-                <line x1="85" y1="0" x2="85" y2="100" stroke="#64748b" strokeWidth="1" strokeDasharray="3,3" />
-                
-                {/* IWV (Blue) */}
-                <path d="M 0 90 L 16 80 L 33 75 L 50 68 L 66 62 L 85 55 L 100 50" fill="none" stroke="#38bdf8" strokeWidth="2" />
-                <circle cx="85" cy="55" r="3" fill="#38bdf8" />
-                
-                {/* CAPE (Red) */}
-                <path d="M 0 85 L 16 65 L 33 60 L 50 50 L 66 30 L 85 20 L 100 25" fill="none" stroke="#ef4444" strokeWidth="2" />
-                <circle cx="85" cy="20" r="3" fill="#ef4444" />
-                
-                {/* CTT Rate (Purple) */}
-                <path d="M 0 95 L 16 93 L 33 92 L 50 94 L 66 95 L 85 85 L 100 65" fill="none" stroke="#a855f7" strokeWidth="2" />
-                <circle cx="85" cy="85" r="3" fill="#a855f7" />
-              </svg>
+              <div className="ana-factors-list">
+                {contributingFactors.map((factor) => {
+                  const IconComponent = factor.icon;
+                  return (
+                    <div key={factor.name} className="ana-factor-row">
+                      <div className="ana-factor-info">
+                        <IconComponent size={15} color="#38bdf8" className="ana-factor-icon" />
+                        <span className="ana-factor-name">{factor.name}</span>
+                      </div>
 
-              <div style={{ position: 'absolute', top: '2px', left: 'calc(24px + 85%)', transform: 'translateX(-50%)', background: '#1e293b', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', color: '#fff' }}>Now</div>
+                      <div className="ana-factor-bar-wrapper">
+                        <div className="ana-factor-bar-track">
+                          <div 
+                            className="ana-factor-bar-fill" 
+                            style={{ 
+                              width: `${factor.pct}%`, 
+                              background: factor.barGradient 
+                            }} 
+                          />
+                        </div>
+                        <span className="ana-factor-pct" style={{ color: factor.color }}>
+                          {factor.pct}%
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
+            {/* CARD 3: What This Means */}
+            <div className="ana-card ana-what-means-card">
+              <div className="ana-what-means-content">
+                <div className="ana-bulb-badge">
+                  <Lightbulb size={24} color="#2dd4bf" strokeWidth={2} />
+                </div>
+                <div className="ana-what-means-text">
+                  <h3 className="ana-what-means-title">What This Means</h3>
+                  <p className="ana-what-means-desc">
+                    Rapid cloud-top cooling, high moisture and orographic uplift over the Himalayan terrain increase the probability of a cloudburst. Continued monitoring is advised.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
+
+        {/* =========================================================
+            3. DATA SOURCES FOOTER
+            ========================================================= */}
+        <div className="ana-data-sources-footer">
+          <div className="ana-ds-left">
+            <span className="ana-ds-title">DATA SOURCES</span>
+            <span className="ana-ds-list">INSAT-3D/3DR &middot; IMDAA &middot; CartoDEM &middot; IMD Observations</span>
+          </div>
+          <div className="ana-ds-right">
+            <span className="ana-ds-live-dot" />
+            <span className="ana-ds-live-text">LIVE &middot; Updated 2 min ago</span>
+          </div>
+        </div>
+
       </div>
     </div>
   );

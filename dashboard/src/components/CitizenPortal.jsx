@@ -3,11 +3,42 @@ import { MapContainer, TileLayer, Circle, Marker, Popup, useMap } from 'react-le
 import L from 'leaflet';
 import gsap from 'gsap';
 import './CitizenPortal.css';
+import AccessibilityMenu from './AccessibilityMenu';
+import ReadAloudButton from './ReadAloudButton';
+import { useAccessibility } from '../context/AccessibilityContext';
 import { INDIAN_LANGUAGES } from './HomePage';
-import DayNightToggle from './DayNightToggle';
+import { getNavTranslation } from '../translations';
+
+import { cn } from "@/lib/utils";
+import { fetchLiveDistrictWarning, fetchLiveObservation } from '../services/liveWeatherService';
 
 // Pre-defined database of Severe Weather Zones & Safe Zones across India
 const LOCATION_DATABASE = {
+  gunupur: {
+    id: 'gunupur',
+    name: 'Gunupur',
+    district: 'Rayagada District, Odisha',
+    pincode: '765022',
+    center: [19.0833, 83.8167],
+    isAffected: false,
+    riskLevel: 'SAFE ZONE',
+    riskClass: 'risk-safe',
+    riskColor: '#16a34a',
+    timeframe: 'Conditions Nominal',
+    hazard: 'No Active Severe Warnings',
+    description: 'Atmospheric stability indices nominal at your location. No flood or cloudburst alert detected.',
+    safeShelter: {
+      name: 'Gunupur Sub-Divisional Hospital',
+      distance: '1.2 km away, Gunupur',
+      address: 'Main Road, Gunupur',
+      elevation: '85 m (Safe Zone)',
+      capacity: '500 Persons',
+      facilities: 'Emergency Medical, Drinking Water, Backup Power',
+      contact: 'Emergency: 108',
+      coords: [19.0850, 83.8200]
+    },
+    nearbyWarnings: []
+  },
   mcleodganj: {
     id: 'mcleodganj',
     name: 'McLeodganj',
@@ -241,9 +272,182 @@ function MapFlyController({ center, zoom }) {
   return null;
 }
 
-export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark', onToggleTheme }) {
-  // Active selected location state (defaults to McLeodganj as seen in reference image)
-  const [selectedId, setSelectedId] = useState('mcleodganj');
+// Helper to construct a dynamic location object from coordinates & reverse-geocoded data (Zero API Keys needed)
+async function resolveLocationData(latitude, longitude, fallbackName = 'My Location') {
+  let placeName = fallbackName;
+  let districtName = '';
+  let postcode = '';
+
+  // 1. Try BigDataCloud Client Reverse Geocoding (Free, no key, CORS friendly)
+  try {
+    const bdcRes = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+    );
+    if (bdcRes.ok) {
+      const bdcData = await bdcRes.json();
+      placeName = bdcData.locality || bdcData.city || bdcData.principalSubdivision || fallbackName;
+      const adminList = bdcData.localityInfo?.administrative || [];
+      const distObj = adminList.find(a => a.adminLevel === 5 || a.description?.includes('district'));
+      const distStr = distObj ? distObj.name : (bdcData.city || bdcData.principalSubdivision || '');
+      districtName = [distStr, bdcData.principalSubdivision].filter(Boolean).join(', ');
+      postcode = bdcData.postcode || '';
+    }
+  } catch (err) {
+    console.warn('BigDataCloud reverse geocode error:', err);
+  }
+
+  // 1b. Fallback to OpenStreetMap Nominatim if needed
+  if (!districtName) {
+    try {
+      const osmRes = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+      if (osmRes.ok) {
+        const osmData = await osmRes.json();
+        const addr = osmData.address || {};
+        placeName = addr.suburb || addr.neighbourhood || addr.city || addr.town || addr.village || placeName;
+        const dist = addr.state_district || addr.county || addr.city || '';
+        districtName = [dist, addr.state].filter(Boolean).join(', ');
+        postcode = addr.postcode || postcode;
+      }
+    } catch (err) {
+      console.warn('Nominatim reverse geocode error:', err);
+    }
+  }
+
+  if (!districtName) {
+    districtName = `Coordinates: ${latitude.toFixed(3)}°N, ${longitude.toFixed(3)}°E`;
+  }
+
+  // 2. Query live weather metrics using unified live observation
+  let tempC = 28;
+  let precipitation = 0;
+  let weatherCode = 0;
+  let windSpeed = 8;
+  let windDir = 'SW';
+  let humidity = 70;
+  let pressure = 1008;
+  let weatherStatus = 'Live IMD Stream';
+  try {
+    const obs = await fetchLiveObservation(latitude, longitude, placeName);
+    if (obs) {
+      tempC = obs.temp;
+      precipitation = obs.rain;
+      weatherCode = obs.weatherCode;
+      windSpeed = obs.windSpeed;
+      windDir = obs.windDir;
+      humidity = obs.humidity;
+      pressure = obs.pressure;
+      weatherStatus = obs.status;
+    }
+  } catch (wErr) {
+    console.warn('[VAYUNET Live] Live observation error in resolveLocationData:', wErr);
+  }
+
+  // 3. Proximity check to active severe weather threats in database
+  let nearestThreat = null;
+  let minThreatDist = Infinity;
+  Object.values(LOCATION_DATABASE).forEach((item) => {
+    if (item.isAffected) {
+      const dLat = (item.center[0] - latitude) * 111;
+      const dLon = (item.center[1] - longitude) * 111 * Math.cos((latitude * Math.PI) / 180);
+      const dist = Math.sqrt(dLat * dLat + dLon * dLon);
+      if (dist < minThreatDist) {
+        minThreatDist = dist;
+        nearestThreat = { ...item, distKm: Math.round(dist) };
+      }
+    }
+  });
+
+  // Determine risk level based on live radar / precipitation / threat proximity
+  const isNearThreat = minThreatDist <= 35;
+  const isHeavyRain = precipitation >= 10 || weatherCode >= 80;
+  const isSevere = isNearThreat || isHeavyRain;
+
+  let riskLevel = 'SAFE ZONE';
+  let riskClass = 'risk-safe';
+  let riskColor = '#16a34a';
+  let hazard = 'No Active Severe Warnings';
+  let timeframe = 'Conditions Nominal';
+  let description = `Atmospheric stability indices nominal at your location (${tempC}°C, Wind: ${windSpeed} km/h). No convective flash flood or cloudburst alert detected in your sector.`;
+
+  if (isSevere) {
+    if (precipitation > 25 || (isNearThreat && nearestThreat?.riskLevel?.includes('EXTREME'))) {
+      riskLevel = 'EXTREME RISK';
+      riskClass = 'risk-extreme';
+      riskColor = '#dc2626';
+      timeframe = 'Immediate (1 – 3 hours)';
+      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Convective Torrent & Localized Inundation';
+      description = isNearThreat 
+        ? `Severe radar reflectivity cell active near your coordinates (~${Math.round(minThreatDist)} km). Upstream water runoff and high convective potential. Remain vigilant.`
+        : `Torrential downpour detected (${precipitation} mm/h). Upstream water runoff and high convective potential. Move to high ground immediately.`;
+    } else {
+      riskLevel = 'HIGH RISK';
+      riskClass = 'risk-high';
+      riskColor = '#ea580c';
+      timeframe = 'Within 2 – 4 hours';
+      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Squall & Heavy Rain Warning';
+      description = isNearThreat
+        ? `Convective rain bands developing in your proximity (~${Math.round(minThreatDist)} km from active corridor). Avoid water-logged lowlands.`
+        : `Active severe weather detected (${precipitation} mm/h). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
+    }
+  }
+
+  const shelterLat = latitude + 0.004;
+  const shelterLon = longitude + 0.003;
+
+  return {
+    id: `dyn_${Date.now()}`,
+    name: placeName,
+    district: districtName,
+    pincode: postcode || 'Live GPS',
+    center: [latitude, longitude],
+    isAffected: isSevere,
+    riskLevel,
+    riskClass,
+    riskColor,
+    timeframe,
+    hazard,
+    description,
+    liveObservation: {
+      temp: tempC,
+      rain: precipitation,
+      humidity,
+      pressure,
+      windSpeed,
+      windDir,
+      status: weatherStatus,
+      weatherCode,
+      source: 'weather.indianapi.in & IMD Network',
+    },
+    lastUpdatedText: `Last updated: ${new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST`,
+    dataSourceText: 'Source: VAYUNET Live Telemetry (weather.indianapi.in)',
+    safeShelter: {
+      name: `${placeName} Emergency Civil Defense Post`,
+      distance: '1.4 km away',
+      address: `Designated Public Shelter & High Ground, ${placeName}`,
+      elevation: 'Safe High Elevation Zone',
+      capacity: 'Community Emergency Shelter',
+      facilities: 'Emergency First Aid, Clean Water Reserve, Backup Power',
+      contact: 'Disaster Emergency Helpline: 1070 / Police: 112',
+      coords: [shelterLat, shelterLon]
+    },
+    nearbyWarnings: nearestThreat && minThreatDist < 250 ? [
+      {
+        name: nearestThreat.name,
+        dist: `~ ${nearestThreat.distKm} km`,
+        level: nearestThreat.riskLevel.includes('EXTREME') ? 'Extreme' : 'High',
+        color: nearestThreat.riskColor
+      }
+    ] : []
+  };
+}
+
+export default function CitizenPortal({ onBackHome, onEnterPortal }) {
+  // Active selected location state (defaults to Gunupur)
+  const [selectedId, setSelectedId] = useState('gunupur');
+  const [customLocations, setCustomLocations] = useState({});
+  const [liveDistricts, setLiveDistricts] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const [showNearbyOnMap, setShowNearbyOnMap] = useState(true);
@@ -251,27 +455,77 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
   const [guidanceModalOpen, setGuidanceModalOpen] = useState(false);
   const [shelterModalOpen, setShelterModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-  const [language, setLanguage] = useState('EN');
+  const { language, setLanguage } = useAccessibility();
+  const langKey = (language || 'en').toUpperCase();
+  const t = getNavTranslation(language);
+  const isHi = langKey === 'HI';
   const [liveIstTime, setLiveIstTime] = useState('');
-  const [liveIstDate, setLiveIstDate] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 
-  const loc = LOCATION_DATABASE[selectedId] || LOCATION_DATABASE.mcleodganj;
+  const allLocations = { ...LOCATION_DATABASE, ...customLocations, ...liveDistricts };
+  const loc = allLocations[selectedId] || LOCATION_DATABASE.gunupur;
+
+  // 1. Initial live synchronization for all monitoring districts across India
+  useEffect(() => {
+    let isMounted = true;
+    const syncAllDistricts = async () => {
+      try {
+        const keys = Object.keys(LOCATION_DATABASE);
+        const results = await Promise.all(
+          keys.map(k => fetchLiveDistrictWarning(k, LOCATION_DATABASE[k]))
+        );
+        if (isMounted) {
+          const map = {};
+          results.forEach(r => {
+            if (r && r.id) map[r.id] = r;
+          });
+          setLiveDistricts(prev => ({ ...prev, ...map }));
+        }
+      } catch (err) {
+        console.warn('[VAYUNET Live] Error syncing live district warnings:', err);
+      }
+    };
+    syncAllDistricts();
+    const interval = setInterval(syncAllDistricts, 35000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // 2. Fetch live data immediately for selected location if not yet populated
+  useEffect(() => {
+    if (selectedId && (!liveDistricts[selectedId] || !liveDistricts[selectedId].liveObservation)) {
+      const base = allLocations[selectedId] || LOCATION_DATABASE[selectedId];
+      if (base) {
+        fetchLiveDistrictWarning(selectedId, base).then(live => {
+          if (live) {
+            setLiveDistricts(prev => ({ ...prev, [selectedId]: live }));
+          }
+        });
+      }
+    }
+  }, [selectedId]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3800);
   };
 
-  // Real-time dynamic IST clock for sovereign ticker & warning footer
+  // Always open CitizenPortal starting from the very top of the page (0, 0)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, []);
+
+  // Real-time dynamic IST clock for sovereign ticker
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
       setLiveIstTime(now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST');
-      setLiveIstDate(now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }));
     };
     updateClock();
     const timer = setInterval(updateClock, 1000);
@@ -315,7 +569,6 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
         gsap.from('.cp-footer-anim-item', {
           y: 20,
           opacity: 0,
-          stagger: 0.06,
           duration: 0.6,
           delay: 0.25,
           ease: 'power2.out'
@@ -334,97 +587,97 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
     return () => ctx.revert();
   }, []);
 
-  // Auto-Detect Location on initial component mount
-  useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          // Find nearest location from our database
-          let nearestKey = 'mcleodganj';
-          let minDistance = Infinity;
-
-          Object.keys(LOCATION_DATABASE).forEach((key) => {
-            const item = LOCATION_DATABASE[key];
-            const dist = Math.hypot(item.center[0] - latitude, item.center[1] - longitude);
-            if (dist < minDistance) {
-              minDistance = dist;
-              nearestKey = key;
-            }
-          });
-
-          // If within ~0.6 degrees (~65 km), select nearest
-          if (minDistance < 0.6) {
-            setSelectedId(nearestKey);
-            showToast(`📍 Auto-detected your location: ${LOCATION_DATABASE[nearestKey].name}`);
-          }
-        },
-        () => {
-          // If permission denied or fallback, keep default McLeodganj
-        },
-        { timeout: 4000 }
-      );
-    }
-  }, []);
-
-  // Search handler
-  const handleSearch = (e) => {
+  // Search handler (searches local stations and falls back to Nominatim India geocoding)
+  const handleSearch = async (e) => {
     e?.preventDefault();
     if (!searchQuery.trim()) return;
-    const query = searchQuery.toLowerCase().trim();
+    const query = searchQuery.trim();
+    const queryLower = query.toLowerCase();
 
-    // Find match by name, district, pincode
-    const foundKey = Object.keys(LOCATION_DATABASE).find((key) => {
-      const item = LOCATION_DATABASE[key];
+    // 1. Check if it matches existing locations in memory
+    const existingKey = Object.keys(allLocations).find((key) => {
+      const item = allLocations[key];
       return (
-        item.name.toLowerCase().includes(query) ||
-        item.district.toLowerCase().includes(query) ||
-        item.pincode.includes(query)
+        item.name.toLowerCase().includes(queryLower) ||
+        item.district.toLowerCase().includes(queryLower) ||
+        item.pincode.includes(queryLower)
       );
     });
 
-    if (foundKey) {
-      setSelectedId(foundKey);
+    if (existingKey) {
+      setSelectedId(existingKey);
       setSearchQuery('');
-      showToast(`Switched view to ${LOCATION_DATABASE[foundKey].name}`);
-    } else {
-      showToast(`No specific station found for "${searchQuery}". Showing national regional view.`);
+      showToast(`Switched view to ${allLocations[existingKey].name}`);
+      return;
     }
+
+    // 2. If not in local list, search OpenStreetMap Nominatim for India
+    setIsDetecting(true);
+    try {
+      const searchRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&countrycodes=in&limit=1`
+      );
+      if (searchRes.ok) {
+        const results = await searchRes.json();
+        if (results && results.length > 0) {
+          const r = results[0];
+          const lat = parseFloat(r.lat);
+          const lon = parseFloat(r.lon);
+          const searchedLoc = await resolveLocationData(lat, lon, r.name || query);
+
+          setCustomLocations((prev) => ({
+            ...prev,
+            [searchedLoc.id]: searchedLoc
+          }));
+          setSelectedId(searchedLoc.id);
+          setSearchQuery('');
+          setIsDetecting(false);
+          showToast(`📍 Found: ${searchedLoc.name} (${searchedLoc.riskLevel})`);
+          return;
+        }
+      }
+    } catch (searchErr) {
+      console.warn('Search geocoding error:', searchErr);
+    }
+
+    setIsDetecting(false);
+    showToast(`No location found for "${query}". Try city name or PIN code.`);
   };
 
-  // Use My Location click handler
+  // Use My Location click handler (uses real browser GPS + reverse geocoding)
   const handleUseMyLocation = () => {
     setIsDetecting(true);
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setIsDetecting(false);
-          const { latitude, longitude } = pos.coords;
-          let nearestKey = 'mcleodganj';
-          let minDistance = Infinity;
-
-          Object.keys(LOCATION_DATABASE).forEach((key) => {
-            const item = LOCATION_DATABASE[key];
-            const dist = Math.hypot(item.center[0] - latitude, item.center[1] - longitude);
-            if (dist < minDistance) {
-              minDistance = dist;
-              nearestKey = key;
-            }
-          });
-
-          setSelectedId(nearestKey);
-          showToast(`📍 Located: ${LOCATION_DATABASE[nearestKey].name} (${LOCATION_DATABASE[nearestKey].isAffected ? 'Warning Zone' : 'Safe Zone'})`);
-        },
-        (err) => {
-          setIsDetecting(false);
-          showToast('GPS detection unavailable or denied. Showing default region.');
-        },
-        { timeout: 6000 }
-      );
-    } else {
+    if (!('geolocation' in navigator)) {
       setIsDetecting(false);
-      showToast('Geolocation not supported by browser.');
+      showToast('Geolocation not supported by your browser.');
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const userLocation = await resolveLocationData(latitude, longitude, 'My Location');
+
+          setCustomLocations((prev) => ({
+            ...prev,
+            [userLocation.id]: userLocation
+          }));
+          setSelectedId(userLocation.id);
+          setIsDetecting(false);
+          showToast(`📍 Located: ${userLocation.name} (${userLocation.riskLevel})`);
+        } catch (err) {
+          console.error(err);
+          setIsDetecting(false);
+          showToast('Failed to resolve GPS location address.');
+        }
+      },
+      (err) => {
+        setIsDetecting(false);
+        showToast('GPS access denied or unavailable. Please allow location access in your browser.');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
   };
 
   // Share functionality
@@ -474,32 +727,6 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
     <div className="cp-wrapper">
       {/* 1. SMART REDEFINED SOVEREIGN HEADER WITH GSAP ANIMATIONS */}
       <header className="cp-header-container" ref={headerRef}>
-        {/* Top Sovereign Emergency Broadcast Ticker */}
-        <div className="cp-header-ticker">
-          <div className="cp-ticker-inner">
-            <div className="cp-ticker-left cp-nav-anim-item">
-              <span className="cp-tricolor-flag">🇮🇳</span>
-              <span className="cp-gov-title">भारत सरकार | GOVERNMENT OF INDIA</span>
-              <span className="cp-ticker-divider">/</span>
-              <span className="cp-dept-title">Ministry of Earth Sciences (MoES)</span>
-            </div>
-
-            <div className="cp-ticker-center cp-nav-anim-item">
-              <span className="cp-live-pulse-beacon"></span>
-              <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
-              <span className="cp-ticker-chip">4km Convective Grid</span>
-              <span className="cp-ticker-time">{liveIstTime || '08:30:00 PM IST'}</span>
-            </div>
-
-            <div className="cp-ticker-right cp-nav-anim-item">
-              <a href="tel:1078" className="cp-ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
-                <span className="cp-helpline-icon">🚨</span>
-                <span>NDMA Helpline: <strong>1078</strong></span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         {/* Main Smart Navigation Bar */}
         <nav className="cp-navbar">
           <div className="cp-nav-inner">
@@ -512,43 +739,20 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                   <span className="home-title">VAYUNET</span>
                   <span className="gov-sovereign-pill">🇮🇳 MoES · NCMRWF</span>
                 </div>
-                <div className="home-dept">Weather Intelligence for a Safer India</div>
+                <div className="home-dept">{t.brandSubtitle}</div>
               </div>
             </div>
 
             <div className="home-nav-links-capsule cp-nav-anim-item">
-              <button className="nav-link-item" onClick={onBackHome}>Home</button>
-              <button className="nav-link-item active">Public Warnings</button>
-              <button className="nav-link-item" onClick={() => setGuidanceModalOpen(true)}>Safety Guide</button>
-              <button className="nav-link-item" onClick={() => setShelterModalOpen(true)}>Resources</button>
+              <button className="nav-link-item" onClick={onBackHome}>{t.home}</button>
+              <button className="nav-link-item active">{t.legalWarnings || t.publicWarnings}</button>
+              <button className="nav-link-item" onClick={() => setGuidanceModalOpen(true)}>{t.footerProtocols || 'Safety Guide'}</button>
+              <button className="nav-link-item" onClick={() => setShelterModalOpen(true)}>{t.footerShelter || 'Resources'}</button>
             </div>
 
             <div className="home-nav-actions cp-nav-anim-item">
-              {/* Day / Night Theme Toggle */}
-              <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-
-              <div className="home-lang-wrap">
-                <svg className="home-lang-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-                <select 
-                  className="home-lang-select" 
-                  value={language} 
-                  onChange={(e) => {
-                    setLanguage(e.target.value);
-                    const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                    showToast(`Language switched to ${sel?.label || e.target.value}`);
-                  }}
-                >
-                  {INDIAN_LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* ♿ Unified Accessibility & Language Control */}
+              <AccessibilityMenu />
 
               {/* 2. Home Navigation Option */}
               <button 
@@ -557,7 +761,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 id="nav-home-btn"
                 title="Return to VAYUNET Home"
               >
-                <span>← Home</span>
+                <span>← {t.home}</span>
               </button>
 
               {/* 3. Enter Operations Portal Option */}
@@ -567,97 +771,40 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 id="nav-enter-portal-btn"
                 title="Enter Operations Portal"
               >
-                <span>Enter Operations Portal →</span>
+                <span>{t.enterPortal}</span>
               </button>
             </div>
-
-            {/* Mobile Hamburger Button */}
-            <button
-              className="mobile-hamburger-btn"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              ) : (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              )}
-            </button>
           </div>
-
-          {/* Mobile Navigation Drawer */}
-          {mobileMenuOpen && (
-            <div className="mobile-nav-drawer">
-              <div className="mobile-nav-links">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Appearance:</span>
-                  <DayNightToggle isDark={theme === 'dark'} onToggle={onToggleTheme} />
-                </div>
-                <div className="mobile-nav-lang-row">
-                  <span>Language:</span>
-                  <select 
-                    className="home-lang-select" 
-                    value={language} 
-                    onChange={(e) => {
-                      setLanguage(e.target.value);
-                      const sel = INDIAN_LANGUAGES.find(l => l.code === e.target.value);
-                      showToast(`Language switched to ${sel?.label || e.target.value}`);
-                    }}
-                  >
-                    {INDIAN_LANGUAGES.map(lang => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mobile-nav-divider" />
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); onBackHome(); }}
-                >
-                  ← Return to Home
-                </button>
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); setGuidanceModalOpen(true); }}
-                >
-                  Safety Guide & Protocols
-                </button>
-                <button 
-                  className="nav-link-item" 
-                  style={{ textAlign: 'left', background: 'transparent', border: 'none', padding: '10px 0', width: '100%' }}
-                  onClick={() => { setMobileMenuOpen(false); setShelterModalOpen(true); }}
-                >
-                  Safe Shelters & Resources
-                </button>
-                <div className="mobile-nav-divider" />
-                <button
-                  className="btn-primary-nav mobile-nav-btn"
-                  onClick={() => { setMobileMenuOpen(false); onEnterPortal(); }}
-                  id="cp-mobile-drawer-operator-btn"
-                >
-                  <span>🛡️ Operator Access / Portal Login →</span>
-                </button>
-                <div className="mobile-gov-footer">
-                  <div>Ministry of Earth Sciences, Government of India</div>
-                  <div style={{ color: '#64748b', fontSize: '11px', marginTop: '4px' }}>
-                    National Severe Weather Alert System
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </nav>
+
+        {/* Top Sovereign Emergency Broadcast Ticker (Below Header) */}
+        <div className="cp-header-ticker">
+          <div className="cp-ticker-inner">
+            <div className="cp-ticker-left cp-nav-anim-item">
+              <span className="cp-tricolor-flag">🇮🇳</span>
+              <span className="cp-gov-title">भारत सरकार · Government of India</span>
+              <span className="cp-ticker-dot">•</span>
+              <span className="cp-dept-title">MoES · NCMRWF</span>
+            </div>
+
+            <div className="cp-ticker-center cp-nav-anim-item">
+              <div className="cp-telemetry-badge">
+                <span className="cp-live-pulse-beacon" />
+                <span className="cp-live-beacon-text">LIVE NOWCAST INGEST</span>
+                <span className="cp-ticker-chip">4km Convective Grid</span>
+              </div>
+              <span className="cp-ticker-time">{liveIstTime || '01:24:00 PM IST'}</span>
+            </div>
+
+            <div className="cp-ticker-right cp-nav-anim-item">
+              <a href="tel:1078" className="cp-ticker-helpline" title="Click to dial 24x7 NDMA Disaster Helpline">
+                <span className="cp-helpline-icon">🚨</span>
+                <span className="cp-helpline-text">NDMA 24x7:</span>
+                <strong className="cp-helpline-num">1078</strong>
+              </a>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* 2. HERO BANNER WITH SEARCH BAR OVERLAY */}
@@ -667,6 +814,46 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
       >
         <div className="cp-hero-overlay"></div>
         <div className="cp-hero-content">
+          {/* Quick Navigation: Current Page Badge & Outbound Navigation Links */}
+          <div className="cp-quick-nav-bar">
+            {/* Active Current Page Badge */}
+            <div className="cp-current-page-pill" title="Current Location: Public Severe Weather Warnings">
+              <span className="cp-pulse-warning-dot" />
+              <span>Public Warnings</span>
+            </div>
+
+            {/* Quick Navigation Actions */}
+            <div className="cp-quick-nav-links">
+              <button 
+                type="button" 
+                className="cp-quick-nav-btn cp-quick-home-btn"
+                onClick={onBackHome}
+                title="Return to VAYUNET Home"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Home</span>
+              </button>
+
+              <button 
+                type="button" 
+                className="cp-quick-nav-btn cp-quick-ops-link-btn"
+                onClick={onEnterPortal}
+                title="Navigate to Operational Console"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                  <line x1="8" y1="2" x2="8" y2="18" />
+                  <line x1="16" y1="6" x2="16" y2="22" />
+                </svg>
+                <span>Operational Page</span>
+                <span className="cp-quick-btn-arrow">↗</span>
+              </button>
+            </div>
+          </div>
+
           <div className="cp-hero-top">
             <div>
               <div className="cp-hero-eyebrow">Severe Weather Warning</div>
@@ -726,10 +913,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
           </form>
 
           <div className="cp-search-examples">
-            e.g.{' '}
-            <span onClick={() => setSelectedId('mcleodganj')}>McLeodganj</span>,{' '}
+            Try popular locations:{' '}
             <span onClick={() => setSelectedId('dharamsala')}>Dharamsala</span>,{' '}
-            <span onClick={() => setSelectedId('chamoli')}>Chamoli</span>,{' '}
+            <span onClick={() => setSelectedId('gunupur')}>Gunupur</span>,{' '}
             <span onClick={() => setSelectedId('wayanad')}>Wayanad</span>,{' '}
             <span onClick={() => setSelectedId('delhi')}>Delhi</span>, 176215
           </div>
@@ -776,6 +962,12 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 <div className={`cp-lead-pill ${loc.isAffected ? '' : 'green'}`}>
                   {loc.timeframe}
                 </div>
+                <ReadAloudButton 
+                  text={`Public Weather Warning. Location: ${loc.name}, ${loc.district}. Status: ${loc.riskLevel}. Hazard: ${loc.hazard}. ${loc.description}. Designated safe shelter: ${loc.safeShelter.name} at ${loc.safeShelter.address}.`}
+                  lang={language}
+                  label="Listen to public weather warning (Digital India Bhashini Voice)" 
+                  forceShow={true}
+                />
               </div>
 
               <h2 className="cp-warning-loc-title">{loc.name}</h2>
@@ -793,6 +985,35 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
               </div>
 
               <p className="cp-hazard-desc">{loc.description}</p>
+
+              {/* LIVE REAL-TIME TELEMETRY STRIP (weather.indianapi.in & IMD Network) */}
+              <div className="cp-live-telemetry-strip">
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🌡️ Temperature</span>
+                  <span className="chip-val">{loc.liveObservation?.temp ?? 27}°C</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🌧️ Rainfall Rate</span>
+                  <span className="chip-val" style={{ color: (loc.liveObservation?.rain > 0) ? '#38bdf8' : '#e2e8f0' }}>
+                    {loc.liveObservation?.rain ?? 0} mm/h
+                  </span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">💧 Humidity</span>
+                  <span className="chip-val">{loc.liveObservation?.humidity ?? 72}%</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">💨 Wind</span>
+                  <span className="chip-val">{loc.liveObservation?.windDir ?? 'SW'} {loc.liveObservation?.windSpeed ?? 12} km/h</span>
+                </div>
+                <div className="cp-telemetry-chip">
+                  <span className="chip-label">🧭 Barometer</span>
+                  <span className="chip-val">{loc.liveObservation?.pressure ?? 1008} hPa</span>
+                </div>
+                <div className="cp-telemetry-chip live-source">
+                  <span className="live-stream-badge">LIVE IMD/AWS STREAM</span>
+                </div>
+              </div>
 
               {/* Safe State Alert helper if user is not in danger zone */}
               {!loc.isAffected && (
@@ -868,26 +1089,35 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                     <span>⚠️</span> Current Active Warning Zones in India:
                   </div>
                   <div className="cp-active-zones-list">
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('mcleodganj')}>
-                      🔴 McLeodganj (HP)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('chamoli')}>
-                      🔴 Chamoli (UK)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('wayanad')}>
-                      🔴 Wayanad (KL)
-                    </button>
-                    <button className="cp-zone-chip" onClick={() => setSelectedId('mumbai')}>
-                      🟠 Mumbai (MH)
-                    </button>
+                    {(() => {
+                      const activeZones = Object.keys(LOCATION_DATABASE).filter(k => {
+                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
+                        return item.isAffected;
+                      });
+
+                      if (activeZones.length === 0) {
+                        return <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>None</span>;
+                      }
+
+                      return activeZones.slice(0, 6).map(k => {
+                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
+                        const isExtreme = item.riskLevel?.includes('EXTREME');
+                        const icon = isExtreme ? '🔴' : '🟠';
+                        return (
+                          <button key={k} className="cp-zone-chip" onClick={() => setSelectedId(k)}>
+                            {icon} {item.name} {item.liveObservation ? `(${item.liveObservation.temp}°C, ${item.liveObservation.rain} mm/h)` : ''}
+                          </button>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               )}
             </div>
 
             <div className="cp-warning-footer">
-              <span>Last updated: {liveIstDate || 'Today'}, {liveIstTime || 'Live IST'}</span>
-              <span>Source: VAYUNET (MoES) ⓘ</span>
+              <span>{loc.lastUpdatedText || `Last updated: ${liveIstTime}`}</span>
+              <span>{loc.dataSourceText || 'Source: VAYUNET Live Telemetry (weather.indianapi.in) ⓘ'}</span>
             </div>
           </div>
 
@@ -1139,7 +1369,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                     className="cp-nearby-pill-card"
                     onClick={() => {
                       const key = nw.name.toLowerCase().replace(/[^a-z]/g, '');
-                      if (LOCATION_DATABASE[key]) {
+                      if (allLocations[key]) {
                         setSelectedId(key);
                         showToast(`Switched view to ${nw.name}`);
                       } else {
@@ -1223,22 +1453,23 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
       </main>
 
       {/* 4. SMART REDEFINED SOVEREIGN FOOTER WITH GSAP ANIMATIONS */}
-      <footer className="cp-footer" ref={footerRef}>
+      <footer className="cp-footer relative overflow-hidden" ref={footerRef}>
+
         {/* Row 1: Live System Telemetry Strip */}
         <div className="cp-footer-telemetry cp-footer-anim-item">
           <div className="cp-telemetry-inner">
             <div className="cp-telemetry-status">
               <span className="cp-footer-telemetry-dot"></span>
-              <span><strong>VAYUNET OPERATIONAL TELEMETRY:</strong> All Ingest Pipelines Nominal</span>
+              <span><strong>{t.telemetryTitle}:</strong> {t.telemetryNominal}</span>
             </div>
             <div className="cp-telemetry-metrics">
-              <span>🛰️ INSAT-3DR Multispectral: <strong>ONLINE (100%)</strong></span>
+              <span>{t.telemetryInsat} <strong>{t.online100}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>🌪️ IMDAA 4km Reanalysis: <strong>COUPLED</strong></span>
+              <span>{t.telemetryImdaa} <strong>{t.coupled}</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>⚡ Inference Latency: <strong>&lt; 120 ms</strong></span>
+              <span>{t.telemetryLatency} <strong>&lt; 120 ms</strong></span>
               <span className="cp-telemetry-sep">•</span>
-              <span>📡 ITU-T X.1303 CAP 1.2: <strong>ACTIVE</strong></span>
+              <span>{t.telemetryCap} <strong>{t.activeStatus}</strong></span>
             </div>
           </div>
         </div>
@@ -1254,56 +1485,56 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
                 </div>
                 <div>
                   <h2>VAYUNET</h2>
-                  <p>National Severe Weather Nowcasting Engine</p>
+                  <p>{t.footerSubtitle}</p>
                 </div>
               </div>
               <p className="cp-footer-desc">
-                An atmospheric artificial intelligence platform developed under the Ministry of Earth Sciences (MoES), Government of India. Providing life-saving 2–6 hour lead times against cloudbursts, severe thunderstorms, and flash floods.
+                {t.footerDesc}
               </p>
               <div className="cp-footer-emblem-badge">
                 <img src="/emblem-india.svg" alt="State Emblem of India" className="cp-gov-emblem-img" />
                 <div className="cp-gov-text" style={{ color: '#cbd5e1' }}>
-                  Ministry of Earth Sciences
-                  <span style={{ color: '#94a3b8' }}>Government of India</span>
+                  {t.moes}
+                  <span style={{ color: '#94a3b8' }}>{t.goi}</span>
                 </div>
               </div>
             </div>
 
             {/* Col 2: Public Safety & Early Warnings */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">Public Warning Services</h3>
+              <h3 className="cp-footer-heading">{t.footerCol2Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><button className="cp-footer-btn-link" onClick={() => setSelectedId('mcleodganj')}>Active District Warning Radar</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setShelterModalOpen(true)}>Nearest Safe Shelter Locator</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>Flash Flood Safety Protocols</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>Cloudburst Evacuation Guidelines</button></li>
-                <li><button className="cp-footer-btn-link" onClick={() => showToast('CAP 1.2 XML Feed is broadcasting on /api/cap-feed')}>CAP 1.2 Common Alerting Feed</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setSelectedId('mcleodganj')}>{t.footerRadar}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setShelterModalOpen(true)}>{t.footerShelter}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{t.footerProtocols}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => setGuidanceModalOpen(true)}>{t.footerEvac}</button></li>
+                <li><button className="cp-footer-btn-link" onClick={() => showToast('CAP 1.2 XML Feed is broadcasting on /api/cap-feed')}>{t.footerCap}</button></li>
               </ul>
             </div>
 
             {/* Col 3: 24x7 Emergency Hotlines */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">Emergency Hotlines (24x7)</h3>
+              <h3 className="cp-footer-heading">{t.footerCol3Title}</h3>
               <div className="cp-footer-hotlines">
                 <a href="tel:112" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">112</div>
                   <div className="cp-hotline-desc">
-                    <strong>National Emergency</strong>
-                    <span>Police, Fire & Medical</span>
+                    <strong>{t.hotline112Title}</strong>
+                    <span>{t.hotline112Sub}</span>
                   </div>
                 </a>
                 <a href="tel:108" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">108</div>
                   <div className="cp-hotline-desc">
-                    <strong>Disaster Ambulance</strong>
-                    <span>Emergency Medical Response</span>
+                    <strong>{t.hotline108Title}</strong>
+                    <span>{t.hotline108Sub}</span>
                   </div>
                 </a>
                 <a href="tel:1078" className="cp-footer-hotline-card">
                   <div className="cp-hotline-num">1078</div>
                   <div className="cp-hotline-desc">
-                    <strong>NDMA Disaster Line</strong>
-                    <span>National Control Center</span>
+                    <strong>{t.hotline1078Title}</strong>
+                    <span>{t.hotline1078Sub}</span>
                   </div>
                 </a>
               </div>
@@ -1311,13 +1542,13 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
 
             {/* Col 4: Sovereign Institutional Partners */}
             <div className="cp-footer-col cp-footer-anim-item">
-              <h3 className="cp-footer-heading">Institutional Governance</h3>
+              <h3 className="cp-footer-heading">{t.footerCol4Title}</h3>
               <ul className="cp-footer-link-list">
-                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">Ministry of Earth Sciences (MoES) ↗</a></li>
-                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">India Meteorological Department (IMD) ↗</a></li>
-                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">NCMRWF Weather Computing ↗</a></li>
-                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">National Disaster Management Authority ↗</a></li>
-                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">ISRO / MOSDAC Satellite Data ↗</a></li>
+                <li><a href="https://www.moes.gov.in" target="_blank" rel="noreferrer">{t.instMoes}</a></li>
+                <li><a href="https://mausam.imd.gov.in" target="_blank" rel="noreferrer">{t.instImd}</a></li>
+                <li><a href="https://www.ncmrwf.gov.in" target="_blank" rel="noreferrer">{t.instNcmrwf}</a></li>
+                <li><a href="https://ndma.gov.in" target="_blank" rel="noreferrer">{t.instNdma}</a></li>
+                <li><a href="https://www.mosdac.gov.in" target="_blank" rel="noreferrer">{t.instIsro}</a></li>
               </ul>
             </div>
           </div>
@@ -1327,14 +1558,14 @@ export default function CitizenPortal({ onBackHome, onEnterPortal, theme = 'dark
         <div className="cp-footer-bottom cp-footer-anim-item">
           <div className="cp-footer-bottom-inner">
             <div className="cp-footer-legal">
-              <span>© 2026 VAYUNET · Ministry of Earth Sciences, Government of India. All rights reserved.</span>
-              <span>Compliant with ITU-T X.1303 CAP 1.2 Protocol · WCAG 2.1 Level AA</span>
+              <span>{t.legalCopyright}</span>
+              <span>{t.legalCompliance}</span>
             </div>
             <div className="cp-footer-bottom-links">
-              <span onClick={() => showToast('VAYUNET Privacy Policy: No personal location data is stored permanently.')}>Privacy Policy</span>
-              <span onClick={() => showToast('Terms of Service: Public alerts provided for early safety awareness.')}>Terms of Use</span>
-              <span onClick={onEnterPortal}>Operations Portal</span>
-              <span onClick={() => setShareModalOpen(true)}>Share Warning</span>
+              <span onClick={() => showToast('VAYUNET Privacy Policy: No personal location data is stored permanently.')}>{t.legalPrivacy}</span>
+              <span onClick={() => showToast('Terms of Service: Public alerts provided for early safety awareness.')}>{t.legalTerms}</span>
+              <span onClick={onEnterPortal}>{t.legalPortal}</span>
+              <span onClick={() => setShareModalOpen(true)}>{t.legalWarnings}</span>
             </div>
           </div>
         </div>

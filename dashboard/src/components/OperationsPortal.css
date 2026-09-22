@@ -46,6 +46,101 @@
 }
 
 /* ==========================================================================
+   OPERATIONS PORTAL MAIN BODY CONTAINER
+   Ensures clean clearance beneath the 60px fixed header (.home-nav)
+   ========================================================================== */
+.ops-portal-body {
+  width: 100%;
+  padding-top: 60px;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   MOBILE OPERATIONAL NAV TOGGLES (Exclusively below header in phone view)
+   ========================================================================== */
+.ops-mobile-nav-bar {
+  display: none;
+}
+
+@media (max-width: 1080px) {
+  .ops-mobile-nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    background: #030814;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 99998;
+    padding: 0 12px;
+    box-sizing: border-box;
+  }
+
+  .ops-mobile-capsule {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+    background: rgba(3, 15, 22, 0.85);
+    border: 1px solid rgba(98, 192, 191, 0.2);
+    padding: 3px 5px;
+    border-radius: 999px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+  }
+
+  .ops-mobile-capsule .nav-link-item {
+    flex: 1;
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border-radius: 999px;
+    color: #8da9b6;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+  }
+
+  .ops-mobile-capsule .nav-link-item:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .ops-mobile-capsule .nav-link-item.active {
+    color: #62c0bf !important;
+    font-weight: 700 !important;
+    background: rgba(98, 192, 191, 0.14) !important;
+    border: 1px solid rgba(98, 192, 191, 0.35) !important;
+    box-shadow: 0 0 12px rgba(98, 192, 191, 0.25);
+  }
+
+  .ops-portal-body {
+    padding-top: 108px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .ops-mobile-nav-bar {
+    top: 54px !important;
+  }
+
+  .ops-portal-body {
+    padding-top: 102px !important;
+  }
+}
+
+/* ==========================================================================
    PRIMARY NAVIGATION HEADER
    ========================================================================== */
 
@@ -133,6 +228,8 @@
   font-weight: 600;
   letter-spacing: 0.7px;
   padding: 6px 14px;
+  min-width: 90px;
+  justify-content: center;
   border-radius: var(--ops-radius-xs);
   cursor: pointer;
   transition: all 0.15s ease;

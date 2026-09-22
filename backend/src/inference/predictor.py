@@ -152,38 +152,76 @@ class VayunetPredictor:
             }
 
         w = live_weather.get("weather", {})
-        cur_rain = float(w.get("rain_mm", 0.0) or w.get("precipitation_mm", 0.0) or 0.0)
-        cur_cape = float(w.get("cape_j_kg", 0.0) or 0.0)
-        cur_iwv = float(w.get("iwv_kg_m2", 0.0) or w.get("total_column_water_vapour_kg_m2", 0.0) or 30.0)
+        cur_rain = float(w.get("rain_mm") if w.get("rain_mm") is not None else w.get("rain") if w.get("rain") is not None else w.get("precipitation_mm") if w.get("precipitation_mm") is not None else w.get("precipitation", 0.0) or 0.0)
+        cur_cape = float(w.get("cape_j_kg") if w.get("cape_j_kg") is not None else w.get("cape", 0.0) or 0.0)
+        cur_iwv = float(w.get("iwv_kg_m2") if w.get("iwv_kg_m2") is not None else w.get("total_column_water_vapour_kg_m2") if w.get("total_column_water_vapour_kg_m2") is not None else w.get("total_column_water_vapour", 30.0) or 30.0)
 
         match_pct = float(hist_eval.get("precursor_match_pct", 15.0))
         match_ratio = match_pct / 100.0
         prim_hazard = hist_eval.get("primary_hazard", "cloudburst")
 
-        # Determine baseline weather severity
-        is_calm = (cur_rain < 0.2) and (cur_cape < 900) and (cur_iwv < 42.0)
+        # Calibrate raw focal-loss-biased outputs to true [0, 1] probability
+        # Neural quiescent baseline: ts ~ 0.70, cb ~ 0.35, ff ~ 0.74
+        neural_ts_signal = float(np.clip((raw_ts - 0.70) / 0.27, 0.0, 1.0))
+        neural_cb_signal = float(np.clip((raw_cb - 0.35) / 0.55, 0.0, 1.0))
+        neural_ff_signal = float(np.clip((raw_ff - 0.74) / 0.24, 0.0, 1.0))
 
-        if is_calm:
-            # Baseline quiet conditions: scale to safe nominal levels (0.05 to 0.25)
-            base_scale = 0.12 * (0.6 + 0.4 * match_ratio)
-            ts = np.clip(raw_ts * 0.15 + base_scale * 0.5, 0.04, 0.25)
-            cb = np.clip(raw_cb * 0.15 + base_scale * 0.5, 0.04, 0.25)
-            ff = np.clip(raw_ff * 0.15 + base_scale * 0.5, 0.04, 0.25)
+        # Quiet / benign condition check: no rain and low instability
+        is_dry_calm = (cur_rain < 0.2) and (cur_cape < 800)
+
+        if is_dry_calm:
+            # Baseline quiet conditions: nominal safe levels (0.05 to 0.25)
+            base_scale = 0.10 * (0.6 + 0.4 * match_ratio)
+            ts = np.clip(neural_ts_signal * 0.15 + base_scale, 0.05, 0.25)
+            cb = np.clip(neural_cb_signal * 0.10 + base_scale * 0.5, 0.03, 0.20)
+            ff = np.clip(neural_ff_signal * 0.12 + base_scale * 0.6, 0.04, 0.22)
         else:
-            # Dynamic active weather: weight neural response with historical precursor correlation
-            weight_nn = 0.55
-            weight_hist = 0.45
-            ts = np.clip(weight_nn * raw_ts + weight_hist * match_ratio, 0.08, 0.98)
-            cb = np.clip(weight_nn * raw_cb + weight_hist * match_ratio, 0.08, 0.98)
-            ff = np.clip(weight_nn * raw_ff + weight_hist * match_ratio, 0.08, 0.98)
+            # Dynamic active weather: weight calibrated neural response with historical precursor correlation
+            # If the neural model is untrained, rely heavily on meteorological heuristics
+            is_trained = getattr(self.mgr, 'is_trained', False)
+            weight_nn = 0.60 if is_trained else 0.10
+            weight_hist = 0.40 if is_trained else 0.90
+            
+            ts_dyn = weight_nn * neural_ts_signal + weight_hist * match_ratio
+            cb_dyn = weight_nn * neural_cb_signal + weight_hist * match_ratio
+            ff_dyn = weight_nn * neural_ff_signal + weight_hist * match_ratio
 
-        # Boost the region's historically proven primary hazard to break ties logically
-        if prim_hazard == "cloudburst":
-            cb = min(0.98, cb * 1.15)
-        elif prim_hazard == "flash_flood":
-            ff = min(0.98, ff * 1.15)
-        elif prim_hazard == "thunderstorm":
-            ts = min(0.98, ts * 1.15)
+            # Physical meteorological gating:
+            # 1. Cloudburst requires significant rainfall intensity or extreme atmospheric sounding
+            if cur_rain < 1.0 and cur_cape < 1500:
+                cb_dyn = min(cb_dyn, 0.28)
+            elif cur_rain < 5.0 and cur_cape < 2000:
+                cb_dyn = min(cb_dyn, 0.55)
+            elif cur_rain >= 30.0 or (cur_rain >= 15.0 and cur_cape >= 2000):
+                cb_dyn = max(cb_dyn, 0.75)
+
+            # 2. Flash flood requires substantial rain or antecedent accumulation
+            if cur_rain < 1.0:
+                ff_dyn = min(ff_dyn, 0.30)
+            elif cur_rain < 5.0:
+                ff_dyn = min(ff_dyn, 0.55)
+            elif cur_rain >= 25.0:
+                ff_dyn = max(ff_dyn, 0.75)
+
+            # 3. Thunderstorm requires moderate CAPE or active rain
+            # We must not clamp too aggressively if rain is 0, because we need to FORECAST incoming storms
+            if cur_cape < 1000 and cur_rain < 0.5:
+                ts_dyn = min(ts_dyn, 0.30)
+            elif cur_cape >= 2000 and cur_rain >= 5.0:
+                ts_dyn = max(ts_dyn, 0.70)
+
+            ts = np.clip(ts_dyn, 0.05, 0.98)
+            cb = np.clip(cb_dyn, 0.03, 0.98)
+            ff = np.clip(ff_dyn, 0.04, 0.98)
+
+        # Boost the region's historically proven primary hazard if conditions are active
+        if not is_dry_calm and (ts >= 0.35 or cb >= 0.35 or ff >= 0.35):
+            if prim_hazard == "cloudburst" and cur_rain >= 2.0:
+                cb = min(0.98, cb * 1.15)
+            elif prim_hazard == "flash_flood" and cur_rain >= 2.0:
+                ff = min(0.98, ff * 1.15)
+            elif prim_hazard == "thunderstorm" and cur_cape >= 1000:
+                ts = min(0.98, ts * 1.15)
 
         return {
             "thunderstorm": float(ts),
@@ -236,10 +274,10 @@ class VayunetPredictor:
         max_pct = max(cb_pct, ff_pct, ts_pct)
 
         w = live_weather.get("weather", {}) if live_weather else {}
-        cur_temp = w.get("temperature_2m_c", "--")
-        cur_rain = w.get("rain_mm", w.get("precipitation_mm", 0.0))
-        cur_cape = w.get("cape_j_kg", "--")
-        cur_iwv = w.get("iwv_kg_m2", w.get("total_column_water_vapour_kg_m2", "--"))
+        cur_temp = w.get("temperature_2m_c") if w.get("temperature_2m_c") is not None else w.get("temperature", "--")
+        cur_rain = w.get("rain_mm") if w.get("rain_mm") is not None else w.get("rain") if w.get("rain") is not None else w.get("precipitation_mm") if w.get("precipitation_mm") is not None else w.get("precipitation", 0.0) or 0.0
+        cur_cape = w.get("cape_j_kg") if w.get("cape_j_kg") is not None else w.get("cape", "--")
+        cur_iwv = w.get("iwv_kg_m2") if w.get("iwv_kg_m2") is not None else w.get("total_column_water_vapour_kg_m2") if w.get("total_column_water_vapour_kg_m2") is not None else w.get("total_column_water_vapour", "--")
 
         if hist_eval:
             b_event = hist_eval.get("benchmark_event", "historical events")

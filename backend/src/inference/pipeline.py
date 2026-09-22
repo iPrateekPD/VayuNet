@@ -27,7 +27,7 @@ class VayunetInferencePipeline:
     """
     def __init__(
         self,
-        checkpoint_path: Optional[str] = "checkpoints/vayunet_mtl_best.pt",
+        checkpoint_path: Optional[str] = "checkpoints/vayunet_mtl_v3_best.pt",
         device: str = "auto"
     ):
         if device == "auto":
@@ -110,7 +110,7 @@ class VayunetInferencePipeline:
         xai_breakdown, verdict = self._compute_xai_attribution(x, cb_pct, ff_pct)
 
         return {
-            "model_version": "VAYUNET-MTL-v2.0",
+            "model_version": "VAYUNET-MTL-V3.0",
             "inference_latency_ms": latency_ms,
             "status": status,
             "hazard_probabilities": {

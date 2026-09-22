@@ -28,7 +28,7 @@ export default function XAIPanel({ factors }) {
 
   return (
     <div className="panel">
-      <div className="panel-title">XAI — Factor Contribution (Illustrative)</div>
+      <div className="panel-title">XAI — Feature Attribution</div>
       <div className="xai-section">
         {items.map(({ key, label, val }) => (
           <div key={key} className="xai-factor-row">
@@ -42,7 +42,7 @@ export default function XAIPanel({ factors }) {
           </div>
         ))}
         <div style={{ fontSize: 9, color: 'var(--text-faint)', fontFamily: 'var(--font-mono)', paddingTop: 6 }}>
-          Illustrative factor contribution · Indicative precursor weighting
+          Captum integrated gradients · % contribution to active alert
         </div>
       </div>
     </div>

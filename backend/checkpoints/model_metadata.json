@@ -23,14 +23,16 @@
       "name": "ctt_drop_rate_c_hr",
       "unit": "degC/hr",
       "min": -25.0,
-      "max": 5.0
+      "max": 5.0,
+      "v2_note": "BROADCAST CONSTANT in processed tensors (spatial std=0). Himawari HSD decode falls back to constant default for most frames."
     },
     {
       "index": 3,
       "name": "cape_j_kg",
       "unit": "J/kg",
       "min": 0.0,
-      "max": 1296.078857421875
+      "max": 1296.078857421875,
+      "v2_note": "Approximated from surface 2m T/RH via Theta-e proxy. Not a proper sounding integral."
     },
     {
       "index": 4,
@@ -51,7 +53,8 @@
       "name": "shear_0_6km_kt",
       "unit": "kt",
       "min": 35.0,
-      "max": 36.0
+      "max": 36.0,
+      "v2_note": "BROADCAST CONSTANT in processed tensors (spatial std=0). Wind shear derived from 10m winds only (no upper-air data)."
     },
     {
       "index": 7,
@@ -65,21 +68,24 @@
       "name": "moisture_flux_850",
       "unit": "g/kg/s",
       "min": 0.014999999664723873,
-      "max": 1.0149999996647239
+      "max": 1.0149999996647239,
+      "v2_note": "BROADCAST CONSTANT in processed tensors (spatial std=0). Moisture flux derived from 10m wind divergence proxy."
     },
     {
       "index": 9,
       "name": "elevation_m",
       "unit": "m",
       "min": 0.0,
-      "max": 1310.4029541015625
+      "max": 1310.4029541015625,
+      "v2_note": "REAL CartoDEM data for Wayanad (11-12N, 75-76E). Procedurally synthesized for all other operational locations."
     },
     {
       "index": 10,
       "name": "slope_deg",
       "unit": "deg",
       "min": 0.0,
-      "max": 8.463739395141602
+      "max": 8.463739395141602,
+      "v2_note": "Derived from CartoDEM for Wayanad. At 3.5km resolution, original 30m slopes are heavily smoothed."
     },
     {
       "index": 11,
@@ -99,7 +105,8 @@
       "hits": 55057,
       "misses": 0,
       "false_alarms": 1315,
-      "correct_negatives": 14284
+      "correct_negatives": 14284,
+      "evaluation_note": "Thunderstorm label uses TIR input as label criterion (cold anvil TIR<240K). Potential circular dependency between input and label."
     },
     "cloudburst": {
       "csi": 0.0,
@@ -110,7 +117,8 @@
       "hits": 0,
       "misses": 0,
       "false_alarms": 0,
-      "correct_negatives": 70656
+      "correct_negatives": 70656,
+      "evaluation_note": "INVALID EVALUATION. Zero positive samples in test set (Aug 17-25 outside hardcoded Aug 15-18 label window). CSI/POD/F1 are NOT_MEANINGFUL. These metrics cannot be presented as evidence of cloudburst detection capability."
     },
     "flash_flood": {
       "csi": 1.0,
@@ -121,8 +129,28 @@
       "hits": 10902,
       "misses": 0,
       "false_alarms": 0,
-      "correct_negatives": 59754
+      "correct_negatives": 59754,
+      "evaluation_note": "INVALID EVALUATION. Flash flood label mask is STATIC across ALL test samples (exactly 158 positive pixels per sample, all identical). Model predicts this static terrain mask and achieves CSI=1.0 trivially. This is label leakage via static terrain mask, not genuine flash flood detection capability."
     },
-    "mean_inference_latency_ms": 7.79
-  }
-}
+    "mean_inference_latency_ms": 16.75
+  },
+  "data_integrity_issues": [
+    "Cloudburst: 0 positive pixels in test set (cloudburst label only fires Aug 15-18)",
+    "Flash flood: STATIC label mask across all 69 test samples (158/1024 pixels per sample)",
+    "Ch2 CTT rate: broadcast constant (spatial std=0)",
+    "Ch6 wind shear: broadcast constant (spatial std=0)",
+    "Ch8 moisture flux: broadcast constant (spatial std=0)",
+    "Terrain (Ch9-11): REAL data only for Wayanad; synthetic for all other locations",
+    "CAPE/CIN: surface proxy, not sounding integral"
+  ],
+  "terrain_note": "CartoDEM data (real) covers Wayanad only (11-12N, 75-76E). All operational locations outside this tile use procedurally synthesized terrain (not real CartoDEM).",
+  "xai_note": "Attribution method is heuristic channel magnitude (mean absolute activation). NOT neural XAI (not Captum/SHAP/Integrated Gradients). Must be labeled as heuristic in all UI and documentation.",
+  "v3_planned": true,
+  "v3_objectives": [
+    "Fix cloudburst labels: remove date filter, use continuous threshold",
+    "Fix flash flood labels: time-varying rain component",
+    "Fix CTT rate: proper Himawari HSD decode or satpy-based decode",
+    "Add honest terrain source metadata per location",
+    "Conduct Himawari ablation study to prove/disprove satellite contribution"
+  ]
+}

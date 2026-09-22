@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const ACTIVE_ALERTS = [
   {
@@ -38,11 +38,72 @@ const ACTIVE_ALERTS = [
 
 export default function AlertHubView({ showToast }) {
   const [dispatched, setDispatched] = useState({ 'AL-002': true });
-  const [capForm, setCapForm] = useState({ hazard: 'Cloudburst', sev: 'Extreme', area: 'Dharamsala, HP', validTime: 'T+2h' });
+  const [capForm, setCapForm] = useState({ hazard: 'Cloudburst', sev: 'Extreme', area: 'Dharamsala, HP', validTime: '2' });
+  const [isAILoading, setIsAILoading] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioPlayerRef = useRef(null);
+
+  const toggleAudioPlayback = (base64Audio) => {
+    if (isPlayingAudio && audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current = null;
+      setIsPlayingAudio(false);
+      return;
+    }
+    if (!base64Audio) return;
+
+    try {
+      const audio = new Audio(`data:audio/wav;base64,${base64Audio}`);
+      audioPlayerRef.current = audio;
+      audio.onplay = () => setIsPlayingAudio(true);
+      audio.onended = () => {
+        setIsPlayingAudio(false);
+        audioPlayerRef.current = null;
+      };
+      audio.onerror = () => {
+        setIsPlayingAudio(false);
+        audioPlayerRef.current = null;
+      };
+      audio.play();
+    } catch (e) {
+      console.warn('Audio playback error:', e);
+      setIsPlayingAudio(false);
+    }
+  };
+
+  const dispatchAIAlert = async () => {
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current = null;
+      setIsPlayingAudio(false);
+    }
+    setIsAILoading(true);
+    setAiResult(null);
+    try {
+      const response = await fetch('https://vayunet-api.onrender.com/api/alerts/ai-dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          hazard_type: capForm.hazard, 
+          severity: capForm.sev, 
+          location_name: capForm.area, 
+          lead_time_hours: capForm.validTime 
+        }),
+      });
+      const data = await response.json();
+      setAiResult(data.generated_content);
+      showToast(`AI Warning generated with Bhashini Regional Speech!`);
+    } catch (e) {
+      showToast(`AI Dispatch failed: ${e.message}`);
+    } finally {
+      setIsAILoading(false);
+    }
+  };
 
   const dispatch = async (id) => {
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ alertId: id, protocol: 'CAP-1.2' }),
@@ -54,7 +115,7 @@ export default function AlertHubView({ showToast }) {
 
   const broadcastNew = async () => {
     try {
-      await fetch('http://localhost:8000/api/alerts/broadcast', {
+      await fetch('https://vayunet-api.onrender.com/api/alerts/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...capForm, protocol: 'CAP-1.2', source: 'VAYUNET-OPS' }),
@@ -151,17 +212,73 @@ export default function AlertHubView({ showToast }) {
               />
             </div>
             <div className="cap-field">
-              <label>Valid Time Window</label>
+              <label>Lead Time (Hours)</label>
               <select value={capForm.validTime} onChange={e => setCapForm(p => ({ ...p, validTime: e.target.value }))}>
-                <option>T+2h</option>
-                <option>T+4h</option>
-                <option>T+6h</option>
+                <option value="2">2 Hours</option>
+                <option value="4">4 Hours</option>
+                <option value="6">6 Hours</option>
               </select>
             </div>
 
-            <button className="btn-cap-broadcast" onClick={broadcastNew}>
-              Broadcast to NDMA SACHET
-            </button>
+            <div className="ai-dispatch-actions" style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+              <button 
+                className="btn-ai-dispatch" 
+                onClick={dispatchAIAlert} 
+                disabled={isAILoading}
+              >
+                {isAILoading ? 'AI Analyzing...' : '✨ Generate AI Multi-Lingual Alert'}
+              </button>
+              
+              <button className="btn-cap-broadcast" onClick={broadcastNew}>
+                Manual CAP Broadcast
+              </button>
+            </div>
+
+            {aiResult && (
+              <div className="ai-dispatch-result" style={{ border: '1px solid rgba(6, 182, 212, 0.4)', borderRadius: '8px', padding: '10px' }}>
+                <div className="ai-dispatch-source" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span>Generated by {aiResult.source}</span>
+                  {aiResult.bhashini_verified && (
+                    <span style={{ fontSize: '10px', background: 'rgba(6, 182, 212, 0.2)', color: '#22d3ee', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(34, 211, 238, 0.3)' }}>
+                      🇮🇳 Bhashini TTS
+                    </span>
+                  )}
+                </div>
+                <div className="ai-alert-box" style={{ marginTop: '6px' }}>
+                  <strong>EN:</strong> {aiResult.english}
+                </div>
+                <div className="ai-alert-box regional-text" style={{ marginTop: '4px' }}>
+                  <strong>{aiResult.language_name || 'Regional'}:</strong> {aiResult.regional}
+                </div>
+                {aiResult.audio_base64 && (
+                  <button
+                    type="button"
+                    onClick={() => toggleAudioPlayback(aiResult.audio_base64)}
+                    style={{
+                      marginTop: '8px',
+                      width: '100%',
+                      background: isPlayingAudio ? 'rgba(239, 68, 68, 0.25)' : 'rgba(6, 182, 212, 0.2)',
+                      border: isPlayingAudio ? '1px solid #ef4444' : '1px solid #22d3ee',
+                      color: isPlayingAudio ? '#fca5a5' : '#67e8f9',
+                      padding: '7px 12px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span>{isPlayingAudio ? '⏹ Stop Voice Broadcast' : `🔊 Listen to ${aiResult.language_name || 'Regional'} Voice Alert`}</span>
+                  </button>
+                )}
+                <button className="btn-cap-broadcast" style={{ width: '100%', marginTop: '8px', background: '#22c55e', borderColor: '#16a34a' }} onClick={broadcastNew}>
+                  Approve & Dispatch to NDMA
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
