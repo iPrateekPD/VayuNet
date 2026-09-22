@@ -128,7 +128,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           
           <div className="aira-weather-footer">
             <span>Fetched: Just now</span>
-            <span>Source: Live Sensors</span>
+            <span>LIVE</span>
           </div>
         </div>
       </div>
@@ -293,7 +293,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         
         <div className="aira-weather-footer">
           <span>Updated 5s ago</span>
-          <span>Source: Live Sensors</span>
+          <span>LIVE</span>
         </div>
       </div>
 

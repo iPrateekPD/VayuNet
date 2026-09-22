@@ -432,7 +432,7 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
       source: 'weather.indianapi.in & IMD Network',
     },
     lastUpdatedText: `Last updated: ${new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST`,
-    dataSourceText: 'Source: VAYUNET Live Telemetry (weather.indianapi.in)',
+    dataSourceText: 'LIVE WEATHER',
     safeShelter: {
       name: `${placeName} Emergency Civil Defense Post`,
       distance: '1.4 km away',
@@ -1177,7 +1177,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 </div>
                 <div className="cp-telemetry-chip live-source">
                   <span className={loc.liveObservation?.isLive ? "live-stream-badge" : "stale-stream-badge"} style={{ backgroundColor: loc.liveObservation?.isLive ? 'rgba(239, 68, 68, 0.15)' : 'rgba(148, 163, 184, 0.15)', color: loc.liveObservation?.isLive ? '#f87171' : '#cbd5e1' }}>
-                    {loc.liveObservation?.isLive ? '● LIVE' : '● STALE'} {loc.liveObservation?.source || 'Source Unknown'}
+                    {loc.liveObservation?.isLive ? '● LIVE' : '● STALE'}
                   </span>
                 </div>
               </div>
@@ -1186,7 +1186,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
                   <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Live Weather</div>
-                  <div style={{ fontWeight: '600' }}>{loc.liveObservation?.source || 'Live Data'}</div>
+                  <div style={{ fontWeight: '600' }}>Updated {loc.liveObservation?.isLive ? 'moments ago' : 'recently'}</div>
                 </div>
                 <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
                   <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Model</div>
@@ -1309,7 +1309,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
             <div className="cp-warning-footer">
               <span>{loc.lastUpdatedText || `Last updated: ${liveIstTime}`}</span>
-              <span>{loc.dataSourceText || 'Source: VAYUNET Live Telemetry (weather.indianapi.in) ⓘ'}</span>
+              <span>{loc.dataSourceText || 'LIVE WEATHER ⓘ'}</span>
             </div>
           </div>
 
@@ -1351,7 +1351,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                       <div className="cp-layers-grouptitle">WEATHER</div>
                       <label className="cp-checkbox-label">
                         <input type="checkbox" checked={owmCloudLayer} onChange={(e) => setOwmCloudLayer(e.target.checked)} />
-                        Clouds (OpenWeatherMap)
+                        Cloud Cover
                       </label>
                       {owmCloudLayer && (
                         <div className="cp-opacity-slider">
@@ -1402,16 +1402,14 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               <div className="cp-weather-legends">
                 {owmCloudLayer && (
                   <div className="cp-weather-legend-box">
-                    <strong>CLOUDS (OWM)</strong><br/>
-                    <span style={{color:'#64748b'}}>Source: OpenWeatherMap</span><br/>
+                    <strong>CLOUD COVER</strong><br/>
                     <span className="cp-live-dot">● LIVE</span> {new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}
                   </div>
                 )}
                 {rainLayer && (
                   <div className="cp-weather-legend-box">
                     <strong>RAINFALL</strong><br/>
-                    <span style={{color:'#64748b'}}>Proxy: RainViewer</span><br/>
-                    <span className="cp-live-dot">● LIVE</span> Timestamp: {radarTimestamp}
+                    <span className="cp-live-dot">● LIVE</span> {radarTimestamp ? new Date(radarTimestamp * 1000).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) : 'Loading...'}
                   </div>
                 )}
               </div>

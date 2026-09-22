@@ -373,7 +373,7 @@ export async function fetchLiveDistrictWarning(districtKey, baseLocationData) {
       vayunetHazards: hazards,
       modelProvenance: riskData.model,
       lastUpdatedText: `Updated: ${liveDateStr}, ${liveIstTime}`,
-      dataSourceText: isUnavailable ? `Data temporarily unavailable` : (obs.status === 'LIVE_FALLBACK' ? `LIVE • ${obs.source_label || obs.source}` : `Source: ${obs.source_label || obs.source || 'Unknown'}`),
+      dataSourceText: isUnavailable ? `Weather data temporarily unavailable` : `LIVE WEATHER`,
       isStale: isUnavailable
     };
   } catch (err) {
