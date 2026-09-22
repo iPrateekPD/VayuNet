@@ -63,7 +63,7 @@ const CACHE_TTL_MS = 60 * 1000; // 60 seconds TTL
 export async function fetchLiveObservation(lat, lon, cityName = '') {
   let region = cityName || 'Unknown';
   try {
-    const res = await fetch(`http://localhost:8000/api/weather/imd/current?region=${encodeURIComponent(region)}`);
+    const res = await fetch(`http://localhost:8000/api/weather/imd/current?region=${encodeURIComponent(region)}&lat=${lat}&lon=${lon}`);
     if (res.ok) {
       const data = await res.json();
       return {

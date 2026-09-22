@@ -167,7 +167,7 @@ class VayunetPredictor:
         neural_ff_signal = float(np.clip((raw_ff - 0.74) / 0.24, 0.0, 1.0))
 
         # Quiet / benign condition check: no rain and low instability
-        is_dry_calm = (cur_rain < 0.2) and (cur_cape < 1200)
+        is_dry_calm = (cur_rain < 0.2) and (cur_cape < 800)
 
         if is_dry_calm:
             # Baseline quiet conditions: nominal safe levels (0.05 to 0.25)
@@ -177,8 +177,10 @@ class VayunetPredictor:
             ff = np.clip(neural_ff_signal * 0.12 + base_scale * 0.6, 0.04, 0.22)
         else:
             # Dynamic active weather: weight calibrated neural response with historical precursor correlation
-            weight_nn = 0.60
-            weight_hist = 0.40
+            # If the neural model is untrained, rely heavily on meteorological heuristics
+            is_trained = getattr(self.mgr, 'is_trained', False)
+            weight_nn = 0.60 if is_trained else 0.10
+            weight_hist = 0.40 if is_trained else 0.90
             
             ts_dyn = weight_nn * neural_ts_signal + weight_hist * match_ratio
             cb_dyn = weight_nn * neural_cb_signal + weight_hist * match_ratio
@@ -202,7 +204,8 @@ class VayunetPredictor:
                 ff_dyn = max(ff_dyn, 0.75)
 
             # 3. Thunderstorm requires moderate CAPE or active rain
-            if cur_cape < 800 and cur_rain < 0.5:
+            # We must not clamp too aggressively if rain is 0, because we need to FORECAST incoming storms
+            if cur_cape < 1000 and cur_rain < 0.5:
                 ts_dyn = min(ts_dyn, 0.30)
             elif cur_cape >= 2000 and cur_rain >= 5.0:
                 ts_dyn = max(ts_dyn, 0.70)

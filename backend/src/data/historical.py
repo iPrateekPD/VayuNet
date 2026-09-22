@@ -205,6 +205,24 @@ HISTORICAL_EVENTS: List[Dict[str, Any]] = [
 
 # Verified regional disaster baselines and critical trigger thresholds
 HISTORICAL_DISASTER_BASELINES: Dict[str, Dict[str, Any]] = {
+    "default_urban": {
+        "location_id": "default_urban",
+        "location_name": "Generic Urban Zone",
+        "benchmark_event": "Standard Urban Pluvial Flood",
+        "benchmark_date": "2023-01-01",
+        "primary_hazard": "thunderstorm",
+        "secondary_hazard": "flash_flood",
+        "applicable_disaster": "Urban Flooding & Severe Convection",
+        "terrain_profile": "Standard Flat/Urban Terrain - high impervious surface fraction",
+        "critical_precursors": {
+            "cape_j_kg": 3000,
+            "iwv_mm": 65.0,
+            "rain_rate_mm_h": 40.0,
+            "wind_speed_kmh": 50.0,
+            "ctt_drop_c_h": -15.0
+        },
+        "historical_impact": "Intense localized convection overwhelming municipal drainage capacity."
+    },
     "kangra": {
         "location_id": "kangra",
         "location_name": "Kangra / Dharamsala Basin",
@@ -369,8 +387,8 @@ def evaluate_historical_disaster_proximity(
     """
     baseline = get_disaster_baseline(location_id)
     if not baseline:
-        # Fallback to general regional baseline
-        baseline = HISTORICAL_DISASTER_BASELINES["wayanad"]
+        # Fallback to generic urban baseline for unknown locations instead of Wayanad escarpment
+        baseline = HISTORICAL_DISASTER_BASELINES["default_urban"]
 
     w = live_weather.get("weather", {})
     triggers = baseline["critical_precursors"]

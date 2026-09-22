@@ -488,8 +488,18 @@ async def get_unified_risk(region: str, bypass_cache: bool = False):
                 primary_hazard = None
                 primary_level = "SAFE"
 
-            vayunet_payload["xai_attribution"] = pred_res.get("xai_attribution", {})
-            vayunet_payload["scientific_verdict"] = pred_res.get("verdict", "")
+            xai_contributions = pred_res.get("xai", {}).get("contributions", {})
+            if xai_contributions:
+                vayunet_payload["xai_attribution"] = {
+                    "Cloud-Top Temperature Drop": xai_contributions.get("ctt_drop_rate", 0) / 100.0,
+                    "Terrain / Orography": xai_contributions.get("dem_slope_funneling", 0) / 100.0,
+                    "CAPE (Convective Instability)": xai_contributions.get("cape_instability", 0) / 100.0,
+                    "Moisture (Integrated Water Vapor)": xai_contributions.get("iwv_moisture_flux", 0) / 100.0
+                }
+            else:
+                vayunet_payload["xai_attribution"] = {}
+                
+            vayunet_payload["scientific_verdict"] = pred_res.get("scientific_verdict", "")
 
             # Mandatory logging
             logging.info(

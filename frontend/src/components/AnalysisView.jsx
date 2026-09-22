@@ -4,6 +4,7 @@ import {
   MapPin, 
   ChevronDown, 
   AlertTriangle,
+  ShieldCheck,
   Clock,
   Activity,
   Snowflake,
@@ -102,14 +103,45 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
   }, [selectedSector]);
 
   const awsData = apiData?.observations?.aws || {};
-  const hazardData = apiData?.vayunet?.hazards?.thunderstorm || {};
+  const primaryHazardKey = apiData?.primary_hazard || 'thunderstorm';
+  const hazardData = apiData?.vayunet?.hazards?.[primaryHazardKey] || {};
   const isDataAvailable = awsData.status !== 'DATA_UNAVAILABLE' && awsData.status !== undefined;
 
+  const getRiskColor = (level) => {
+    switch(level) {
+      case 'SAFE': return '#22c55e'; // Green
+      case 'MODERATE': return '#eab308'; // Yellow
+      case 'HIGH': return '#f97316'; // Orange
+      case 'EXTREME': return '#ef4444'; // Red
+      default: return '#9ca3af'; // Gray
+    }
+  };
+  
+  const getRiskBg = (level) => {
+    switch(level) {
+      case 'SAFE': return 'rgba(34, 197, 94, 0.12)';
+      case 'MODERATE': return 'rgba(234, 179, 8, 0.12)';
+      case 'HIGH': return 'rgba(249, 115, 22, 0.12)';
+      case 'EXTREME': return 'rgba(239, 68, 68, 0.12)';
+      default: return 'rgba(156, 163, 175, 0.12)';
+    }
+  };
 
-  // Coordinates for Chamoli, Uttarakhand
+  const riskColor = getRiskColor(hazardData.risk_level);
+  const riskBg = getRiskBg(hazardData.risk_level);
+
+  // Coordinates for map center
   const chamoliCenter = [30.41, 79.32];
   const [currentCenter, setCurrentCenter] = useState(chamoliCenter);
   const [currentZoom, setCurrentZoom] = useState(9);
+
+  React.useEffect(() => {
+    if (apiData?.location?.lat && apiData?.location?.lng) {
+      setCurrentCenter([apiData.location.lat, apiData.location.lng]);
+    }
+  }, [apiData]);
+
+  const isChamoli = selectedSector.includes('Chamoli');
 
   // Multi-band Doppler radar convective plume contours (Chamoli - Alaknanda Valley)
   const radarOuterHalo = [
@@ -160,44 +192,31 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
     [30.145, 78.597]  // Devprayag
   ];
 
-  // 5 Contributing Factors data
-  const contributingFactors = [
-    {
-      name: 'Cloud-Top Temperature Drop',
-      pct: 38,
-      icon: Snowflake,
-      color: '#f87171',
-      barGradient: 'linear-gradient(90deg, #f87171, #ef4444)',
-    },
-    {
-      name: 'Moisture (Integrated Water Vapor)',
-      pct: 26,
-      icon: Droplets,
-      color: '#38bdf8',
-      barGradient: 'linear-gradient(90deg, #0ea5e9, #38bdf8)',
-    },
-    {
-      name: 'CAPE (Convective Instability)',
-      pct: 22,
-      icon: Zap,
-      color: '#facc15',
-      barGradient: 'linear-gradient(90deg, #eab308, #facc15)',
-    },
-    {
-      name: 'Terrain / Orography',
-      pct: 8,
-      icon: Mountain,
-      color: '#4ade80',
-      barGradient: 'linear-gradient(90deg, #22c55e, #4ade80)',
-    },
-    {
-      name: 'Wind Shear',
-      pct: 6,
-      icon: Wind,
-      color: '#c084fc',
-      barGradient: 'linear-gradient(90deg, #a855f7, #c084fc)',
-    }
-  ];
+  const rawXai = apiData?.vayunet?.xai_attribution || {};
+  const hasXai = Object.keys(rawXai).length > 0;
+
+  const xaiConfig = {
+    'Cloud-Top Temperature Drop': { icon: Snowflake, color: '#f87171', barGradient: 'linear-gradient(90deg, #f87171, #ef4444)' },
+    'Moisture (Integrated Water Vapor)': { icon: Droplets, color: '#38bdf8', barGradient: 'linear-gradient(90deg, #0ea5e9, #38bdf8)' },
+    'CAPE (Convective Instability)': { icon: Zap, color: '#facc15', barGradient: 'linear-gradient(90deg, #eab308, #facc15)' },
+    'Terrain / Orography': { icon: Mountain, color: '#4ade80', barGradient: 'linear-gradient(90deg, #22c55e, #4ade80)' },
+    'Wind Shear': { icon: Wind, color: '#c084fc', barGradient: 'linear-gradient(90deg, #a855f7, #c084fc)' },
+    'default': { icon: Activity, color: '#94a3b8', barGradient: 'linear-gradient(90deg, #64748b, #94a3b8)' }
+  };
+
+  const contributingFactors = hasXai 
+    ? Object.entries(rawXai)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([name, val]) => {
+          const config = xaiConfig[name] || xaiConfig['default'];
+          return {
+            name,
+            pct: Math.round(val * 100),
+            ...config
+          };
+        })
+    : [];
 
   return (
     <div className="ana-page-wrapper">
@@ -298,7 +317,7 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
               {/* Interactive Map View */}
               <div className="ana-map-container-inner">
                 <MapContainer
-                  center={chamoliCenter}
+                  center={currentCenter}
                   zoom={currentZoom}
                   scrollWheelZoom={false}
                   className="ana-clean-leaflet-container"
@@ -332,112 +351,35 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
                     </>
                   )}
 
-                  {/* Multi-Band Convective Radar Overlay */}
-                  <Polygon
-                    positions={radarOuterHalo}
-                    pathOptions={{
-                      color: '#00e5ff',
-                      fillColor: '#00b4d8',
-                      fillOpacity: 0.38,
-                      weight: 1,
-                    }}
-                  />
-                  <Polygon
-                    positions={radarGreenBand}
-                    pathOptions={{
-                      color: '#22c55e',
-                      fillColor: '#16a34a',
-                      fillOpacity: 0.48,
-                      weight: 1,
-                    }}
-                  />
-                  <Polygon
-                    positions={radarYellowBand}
-                    pathOptions={{
-                      color: '#eab308',
-                      fillColor: '#ca8a04',
-                      fillOpacity: 0.58,
-                      weight: 1,
-                    }}
-                  />
-                  <Polygon
-                    positions={radarOrangeBand}
-                    pathOptions={{
-                      color: '#f97316',
-                      fillColor: '#ea580c',
-                      fillOpacity: 0.72,
-                      weight: 1.2,
-                    }}
-                  />
-                  <Polygon
-                    positions={radarCorePlume}
-                    pathOptions={{
-                      color: '#ef4444',
-                      fillColor: '#dc2626',
-                      fillOpacity: 0.88,
-                      weight: 1.5,
-                    }}
-                  />
-                  <Polygon
-                    positions={radarExtremeCore}
-                    pathOptions={{
-                      color: '#991b1b',
-                      fillColor: '#7f1d1d',
-                      fillOpacity: 0.96,
-                      weight: 1.5,
-                    }}
-                  />
+                  {/* Multi-Band Convective Radar Overlay (Chamoli Only) */}
+                  {isChamoli && (
+                    <>
+                      <Polygon positions={radarOuterHalo} pathOptions={{ color: '#00e5ff', fillColor: '#00b4d8', fillOpacity: 0.38, weight: 1 }} />
+                      <Polygon positions={radarGreenBand} pathOptions={{ color: '#22c55e', fillColor: '#16a34a', fillOpacity: 0.48, weight: 1 }} />
+                      <Polygon positions={radarYellowBand} pathOptions={{ color: '#eab308', fillColor: '#ca8a04', fillOpacity: 0.58, weight: 1 }} />
+                      <Polygon positions={radarOrangeBand} pathOptions={{ color: '#f97316', fillColor: '#ea580c', fillOpacity: 0.72, weight: 1.2 }} />
+                      <Polygon positions={radarCorePlume} pathOptions={{ color: '#ef4444', fillColor: '#dc2626', fillOpacity: 0.88, weight: 1.5 }} />
+                      <Polygon positions={radarExtremeCore} pathOptions={{ color: '#991b1b', fillColor: '#7f1d1d', fillOpacity: 0.96, weight: 1.5 }} />
+                      
+                      <Polyline positions={alaknandaRiver} pathOptions={{ color: '#00b4d8', weight: 2.8, opacity: 0.9 }} />
 
-                  {/* Alaknanda River Polyline */}
-                  <Polyline
-                    positions={alaknandaRiver}
-                    pathOptions={{ color: '#00b4d8', weight: 2.8, opacity: 0.9 }}
-                  />
+                      <Marker position={[30.556, 79.566]} icon={createHtmlIcon(`<div class="ana-map-loc-cluster"><div class="ana-loc-dot"></div><div class="ana-loc-text">Joshimath</div></div>`, [90, 20], [4, 10])} />
+                      <Marker position={[30.285, 78.981]} icon={createHtmlIcon(`<div class="ana-map-loc-cluster"><div class="ana-loc-dot"></div><div class="ana-loc-text">Rudraprayag</div></div>`, [100, 20], [4, 10])} />
+                      <Marker position={[30.27, 79.35]} icon={createHtmlIcon(`<div class="ana-map-river-cluster"><div class="ana-river-dot"></div><div class="ana-river-text">Alaknanda River</div></div>`, [120, 20], [4, 10])} />
+                    </>
+                  )}
 
-                  {/* Chamoli Target Marker with badge */}
+                  {/* Target Marker with badge */}
                   <Marker
-                    position={chamoliCenter}
+                    position={currentCenter}
                     icon={createHtmlIcon(`
                       <div class="ana-map-target-cluster">
                         <div class="ana-target-outer-ring">
                           <div class="ana-target-inner-core"></div>
                         </div>
-                        <div class="ana-target-label-badge">Chamoli</div>
+                        <div class="ana-target-label-badge">${apiData?.location?.name || selectedSector.split(',')[0]}</div>
                       </div>
                     `, [120, 24], [8, 12])}
-                  />
-
-                  {/* Joshimath Marker */}
-                  <Marker
-                    position={[30.556, 79.566]}
-                    icon={createHtmlIcon(`
-                      <div class="ana-map-loc-cluster">
-                        <div class="ana-loc-dot"></div>
-                        <div class="ana-loc-text">Joshimath</div>
-                      </div>
-                    `, [90, 20], [4, 10])}
-                  />
-
-                  {/* Rudraprayag Marker */}
-                  <Marker
-                    position={[30.285, 78.981]}
-                    icon={createHtmlIcon(`
-                      <div class="ana-map-loc-cluster">
-                        <div class="ana-loc-dot"></div>
-                        <div class="ana-loc-text">Rudraprayag</div>
-                      </div>
-                    `, [100, 20], [4, 10])}
-                  />
-
-                  {/* Alaknanda River Marker Callout */}
-                  <Marker
-                    position={[30.27, 79.35]}
-                    icon={createHtmlIcon(`
-                      <div class="ana-map-river-cluster">
-                        <div class="ana-river-dot"></div>
-                        <div class="ana-river-text">Alaknanda River</div>
-                      </div>
-                    `, [120, 20], [4, 10])}
                   />
 
                   {/* Zoom Controls */}
@@ -536,14 +478,20 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
             <div className="ana-card ana-ai-analysis-card">
               <div className="ana-ai-header-row">
                 <div className="ana-ai-header-left">
-                  <AlertTriangle size={24} color={isDataAvailable ? "#ef4444" : "#9ca3af"} strokeWidth={2.2} />
+                  {hazardData.risk_level === 'SAFE' ? (
+                    <ShieldCheck size={24} color={isDataAvailable ? riskColor : "#9ca3af"} strokeWidth={2.2} />
+                  ) : (
+                    <AlertTriangle size={24} color={isDataAvailable ? riskColor : "#9ca3af"} strokeWidth={2.2} />
+                  )}
                   <span className="ana-ai-title">AI Analysis ({apiData?.vayunet?.model_version || 'V4.0'})</span>
-                  <span className="ana-ai-conf-badge">{isDataAvailable ? `Confidence (${Math.round(hazardData.probability * 100 || 0)}%)` : 'DATA UNAVAILABLE'}</span>
+                  <span className="ana-ai-conf-badge" style={{ color: riskColor, borderColor: riskColor, backgroundColor: riskBg }}>
+                    {isDataAvailable ? `Confidence (${Math.round(hazardData.probability * 100 || 0)}%)` : 'DATA UNAVAILABLE'}
+                  </span>
                 </div>
 
                 <div className="ana-ai-header-right">
                   <span className="ana-risk-label">Risk Level</span>
-                  <span className="ana-risk-val">{hazardData.risk_level || 'UNKNOWN'}</span>
+                  <span className="ana-risk-val" style={{ color: riskColor }}>{hazardData.risk_level || 'UNKNOWN'}</span>
                   <div className="ana-risk-time-row">
                     <Clock size={12} color="#94a3b8" />
                     <span>Likely within</span>
@@ -554,11 +502,15 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
 
               <div className="ana-ai-body">
                 <h3 className="ana-ai-lead-headline">
-                  <span className="ana-headline-alert">Elevated cloudburst risk</span>{' '}
-                  <span className="ana-headline-cause">due to rapid cloud-top cooling and high moisture convergence.</span>
+                  <span className={hazardData.risk_level === 'SAFE' ? "ana-headline-safe" : "ana-headline-alert"} style={hazardData.risk_level === 'SAFE' ? { color: '#22c55e', fontWeight: '700' } : {}}>
+                    {hazardData.risk_level === 'SAFE' ? `No elevated ${primaryHazardKey.replace('_', ' ')} risk` : `Elevated ${primaryHazardKey.replace('_', ' ')} risk`}
+                  </span>{' '}
+                  <span className="ana-headline-cause">
+                    {hazardData.risk_level === 'SAFE' ? 'detected across the region.' : 'detected by VAYUNET monitoring system.'}
+                  </span>
                 </h3>
-                <p className="ana-ai-paragraph">
-                  Strong convective activity is developing over the Chamoli region, with favorable atmospheric conditions for intense rainfall in the next 1–3 hours.
+                <p className="ana-ai-paragraph" style={{ marginTop: '6px' }}>
+                  Atmospheric conditions over the {apiData?.location?.name || selectedSector.split(',')[0]} region indicate a {hazardData.risk_level || 'UNKNOWN'} risk of {primaryHazardKey.replace('_', ' ')} in the next 1-3 hours.
                 </p>
               </div>
             </div>
@@ -577,34 +529,40 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
                 </div>
               </div>
 
-              <div className="ana-factors-list">
-                {contributingFactors.map((factor) => {
-                  const IconComponent = factor.icon;
-                  return (
-                    <div key={factor.name} className="ana-factor-row">
-                      <div className="ana-factor-info">
-                        <IconComponent size={15} color="#38bdf8" className="ana-factor-icon" />
-                        <span className="ana-factor-name">{factor.name}</span>
-                      </div>
-
-                      <div className="ana-factor-bar-wrapper">
-                        <div className="ana-factor-bar-track">
-                          <div 
-                            className="ana-factor-bar-fill" 
-                            style={{ 
-                              width: `${factor.pct}%`, 
-                              background: factor.barGradient 
-                            }} 
-                          />
+              {contributingFactors.length > 0 ? (
+                <div className="ana-factors-list">
+                  {contributingFactors.map((factor) => {
+                    const IconComponent = factor.icon;
+                    return (
+                      <div key={factor.name} className="ana-factor-row">
+                        <div className="ana-factor-info">
+                          <IconComponent size={15} color="#38bdf8" className="ana-factor-icon" />
+                          <span className="ana-factor-name">{factor.name}</span>
                         </div>
-                        <span className="ana-factor-pct" style={{ color: factor.color }}>
-                          {factor.pct}%
-                        </span>
+
+                        <div className="ana-factor-bar-wrapper">
+                          <div className="ana-factor-bar-track">
+                            <div 
+                              className="ana-factor-bar-fill" 
+                              style={{ 
+                                width: `${factor.pct}%`, 
+                                background: factor.barGradient 
+                              }} 
+                            />
+                          </div>
+                          <span className="ana-factor-pct" style={{ color: factor.color }}>
+                            {factor.pct}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{ padding: '16px 0', color: '#64748b', fontSize: '13px', textAlign: 'center', fontStyle: 'italic' }}>
+                  No significant contributing factors active for this region.
+                </div>
+              )}
             </div>
 
             {/* CARD 3: What This Means */}
@@ -616,7 +574,7 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
                 <div className="ana-what-means-text">
                   <h3 className="ana-what-means-title">What This Means</h3>
                   <p className="ana-what-means-desc">
-                    Rapid cloud-top cooling, high moisture and orographic uplift over the Himalayan terrain increase the probability of a cloudburst. Continued monitoring is advised.
+                    {apiData?.vayunet?.scientific_verdict || `Conditions in ${apiData?.location?.name || selectedSector.split(',')[0]} increase the probability of a ${primaryHazardKey.replace('_', ' ')}. Continued monitoring is advised.`}
                   </p>
                 </div>
               </div>

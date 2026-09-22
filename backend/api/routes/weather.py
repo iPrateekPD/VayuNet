@@ -31,7 +31,9 @@ from src.config.locations import get_location
 
 @router.get("/api/weather/imd/current")
 async def get_imd_current_weather(
-    region: str = Query(..., description="Region name or ID to fetch weather for")
+    region: str = Query(..., description="Region name or ID to fetch weather for"),
+    lat_val: Optional[float] = Query(None, alias="lat"),
+    lon_val: Optional[float] = Query(None, alias="lon")
 ):
     """Fetch current observations prioritizing IMD AWS, falling back to IMD Current, then Open-Meteo."""
     aws_service = registry.get("imd_aws")
@@ -44,10 +46,14 @@ async def get_imd_current_weather(
         lat, lon = loc["lat"], loc["lng"]
         canonical_name = loc["name"]
     else:
-        # Fallback to Gunupur (canonical basin of VAYUNET) if unknown, never 20.5937, 78.9629!
-        default_loc = get_location("gunupur") or {"name": "Gunupur", "lat": 19.0805, "lng": 83.8166}
-        lat, lon = default_loc["lat"], default_loc["lng"]
-        canonical_name = default_loc["name"]
+        # Use provided lat/lon if available, else fallback to Gunupur
+        if lat_val is not None and lon_val is not None:
+            lat, lon = lat_val, lon_val
+            canonical_name = region
+        else:
+            default_loc = get_location("gunupur") or {"name": "Gunupur", "lat": 19.0805, "lng": 83.8166}
+            lat, lon = default_loc["lat"], default_loc["lng"]
+            canonical_name = default_loc["name"]
 
     # 1. Try IMD AWS first
     if aws_service:
@@ -250,3 +256,85 @@ async def generate_broadcast_script(req: ScriptRequest):
             script += f"The nearest safe location is {req.shelter_name}, {req.shelter_distance}. "
             
         return {"script": script}
+
+import math
+import httpx
+
+@router.get("/api/weather/wind-field")
+async def get_wind_field(
+    north: float = Query(...),
+    south: float = Query(...),
+    east: float = Query(...),
+    west: float = Query(...),
+    resolution: int = Query(8) # 8x8 grid
+):
+    """Generate a wind field grid for Earth Nullschool-style visualization."""
+    if north <= south or east <= west:
+        raise HTTPException(status_code=400, detail="Invalid bounding box")
+        
+    lat_step = (north - south) / (resolution - 1)
+    lon_step = (east - west) / (resolution - 1)
+    
+    latitudes = []
+    longitudes = []
+    
+    for i in range(resolution):
+        lat = south + (i * lat_step)
+        for j in range(resolution):
+            lon = west + (j * lon_step)
+            latitudes.append(round(lat, 4))
+            longitudes.append(round(lon, 4))
+            
+    lat_str = ",".join(map(str, latitudes))
+    lon_str = ",".join(map(str, longitudes))
+    
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat_str}&longitude={lon_str}&current=wind_speed_10m,wind_direction_10m"
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(url)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            grid_u = [[0.0 for _ in range(resolution)] for _ in range(resolution)]
+            grid_v = [[0.0 for _ in range(resolution)] for _ in range(resolution)]
+            grid_s = [[0.0 for _ in range(resolution)] for _ in range(resolution)]
+            
+            timestamp = datetime.now(timezone.utc).isoformat()
+            if isinstance(data, list) and len(data) > 0:
+                timestamp = data[0].get("current", {}).get("time", timestamp)
+                for idx, loc_data in enumerate(data):
+                    current = loc_data.get("current", {})
+                    speed_kmh = current.get("wind_speed_10m", 0.0) or 0.0
+                    direction = current.get("wind_direction_10m", 0.0) or 0.0
+                    
+                    speed_ms = speed_kmh / 3.6
+                    rad = math.radians(direction)
+                    u = -speed_ms * math.sin(rad)
+                    v = -speed_ms * math.cos(rad)
+                    
+                    i = idx // resolution
+                    j = idx % resolution
+                    
+                    grid_u[i][j] = round(u, 2)
+                    grid_v[i][j] = round(v, 2)
+                    grid_s[i][j] = round(speed_kmh, 1)
+            
+            lats_uniq = [round(south + (i * lat_step), 4) for i in range(resolution)]
+            lons_uniq = [round(west + (j * lon_step), 4) for j in range(resolution)]
+            
+            return {
+                "source": "Open-Meteo",
+                "timestamp": timestamp,
+                "grid": {
+                    "latitudes": lats_uniq,
+                    "longitudes": lons_uniq,
+                    "u": grid_u,
+                    "v": grid_v,
+                    "speed": grid_s
+                }
+            }
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Wind field error: {e}")
+        raise HTTPException(status_code=502, detail="Unable to fetch wind data")
