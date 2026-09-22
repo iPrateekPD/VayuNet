@@ -93,7 +93,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           <div className="aira-weather-header">
             <div className="aira-wh-left">
               <CloudRainIcon />
-              <span>REAL-TIME WEATHER (OPEN-METEO)</span>
+              <span>REAL-TIME WEATHER</span>
             </div>
             <div className="aira-wh-live" style={{ color: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', borderColor: 'rgba(56, 189, 248, 0.2)' }}>LIVE</div>
           </div>
@@ -128,7 +128,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
           
           <div className="aira-weather-footer">
             <span>Fetched: Just now</span>
-            <span>Source: Open-Meteo API</span>
+            <span>Source: Live Sensors</span>
           </div>
         </div>
       </div>
@@ -293,7 +293,7 @@ export default function AIRiskAssessmentPanel({ predictions, severity }) {
         
         <div className="aira-weather-footer">
           <span>Updated 5s ago</span>
-          <span>Source: Open-Meteo (Direct)</span>
+          <span>Source: Live Sensors</span>
         </div>
       </div>
 

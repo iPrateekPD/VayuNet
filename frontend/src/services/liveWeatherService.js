@@ -75,7 +75,7 @@ export async function fetchLiveObservation(lat, lon, cityName = '') {
         windDir: degreesToCardinal(data.wind_direction_deg),
         status: data.condition || wmoCodeToImdStatus(data.weather_code, data.rainfall_mm) || data.status || 'DATA_UNAVAILABLE',
         weatherCode: data.weather_code || 0,
-        source: data.source || 'Open-Meteo',
+        source: data.source || 'Live Data',
         isLive: data.is_live || data.status === 'LIVE' || data.status === 'LIVE_FALLBACK'
       };
     }

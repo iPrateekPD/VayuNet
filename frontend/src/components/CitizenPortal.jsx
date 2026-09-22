@@ -1186,7 +1186,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
                   <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Live Weather</div>
-                  <div style={{ fontWeight: '600' }}>{loc.liveObservation?.source || 'Open-Meteo'}</div>
+                  <div style={{ fontWeight: '600' }}>{loc.liveObservation?.source || 'Live Data'}</div>
                 </div>
                 <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
                   <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Model</div>
