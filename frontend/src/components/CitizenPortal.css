@@ -2109,3 +2109,249 @@
   box-shadow: 0 0 8px #10b981;
   animation: pulse-dot-anim 1.5s infinite;
 }
+
+
+/* Phase 4: Unified Layout Setup */
+.cp-wrapper { background: #F6F8FB; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0f172a; }
+.cp-dashboard-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px; margin-bottom: 40px; align-items: start; }
+.cp-data-column { display: flex; flex-direction: column; gap: 16px; }
+
+/* Premium Map Card Styling */
+.cp-map-column { 
+  height: 650px; 
+  border-radius: 24px; 
+  overflow: hidden; 
+  border: 1px solid rgba(0,0,0,0.06); 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02); 
+  position: sticky; 
+  top: 24px;
+  background: #ffffff;
+  padding: 8px; /* Inner padding like premium apps */
+}
+
+.cp-map-card { 
+  width: 100%; 
+  height: 100%; 
+  border: none; 
+  border-radius: 16px; 
+  overflow: hidden;
+  position: relative;
+}
+
+.cp-map-viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Force Leaflet to respect border radius */
+.cp-map-viewport .leaflet-container {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .cp-dashboard-grid { grid-template-columns: 1fr; gap: 24px; }
+  .cp-map-column { min-height: 400px; height: 50vh; position: relative; top: 0; padding: 4px; border-radius: 20px; }
+  .cp-map-card, .cp-map-viewport, .cp-map-viewport .leaflet-container { border-radius: 14px; }
+}
+
+/* Glossy Card Finish */
+/* Give the page background a subtle gradient so the glass effect is visible */
+.cp-wrapper {
+  background: radial-gradient(circle at 0% 0%, #dbeafe 0%, #f8fafc 30%, #f1f5f9 70%, #e0e7ff 100%) !important;
+}
+
+.cp-unified-card, .cp-map-column {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 12px 32px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+}
+
+/* Hide Leaflet Attribution */
+.cp-map-viewport .leaflet-control-attribution {
+  display: none !important;
+}
+
+
+/* Map Layers Control Panel */
+.cp-layers-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cp-layers-btn {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cp-layers-btn svg {
+  color: #38bdf8;
+  transition: transform 0.3s ease;
+}
+
+.cp-layers-btn:hover {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.95), rgba(30, 41, 59, 0.98));
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cp-layers-btn:hover svg {
+  transform: scale(1.1);
+}
+
+.cp-layers-panel {
+  margin-top: 8px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  width: 260px;
+  padding: 16px;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  font-family: 'Inter', sans-serif;
+  animation: slideDownFade 0.3s ease forwards;
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cp-layers-header {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
+}
+
+.cp-layers-group {
+  margin-bottom: 16px;
+}
+
+.cp-layers-group:last-child {
+  margin-bottom: 0;
+}
+
+.cp-layers-grouptitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.cp-radio-label, .cp-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  cursor: pointer;
+  color: #e2e8f0;
+  transition: color 0.2s;
+}
+
+.cp-radio-label:hover, .cp-checkbox-label:hover {
+  color: #fff;
+}
+
+.cp-radio-label input, .cp-checkbox-label input {
+  accent-color: #3b82f6;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.cp-checkbox-label.disabled {
+  color: #64748b;
+  cursor: not-allowed;
+}
+.cp-checkbox-label.disabled input {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cp-opacity-slider {
+  margin-left: 22px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.cp-opacity-slider input {
+  width: 100px;
+  accent-color: #3b82f6;
+}
+
+/* Weather Legends */
+.cp-weather-legends {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.cp-weather-legend-box {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  pointer-events: auto;
+}
+
+.cp-weather-legend-box strong {
+  font-size: 12px;
+  color: #e2e8f0;
+}
+
+.cp-live-dot {
+  color: #10b981;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+}

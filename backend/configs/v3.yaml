@@ -1,0 +1,256 @@
+# VAYUNET V3 Configuration
+# Single source of truth for all V3 pipeline stages.
+# Run: python scripts/run_v3_pipeline.py --stage <stage>
+
+# ─── Dataset ────────────────────────────────────────────────────────────────
+dataset:
+  # Geographic domain: Wayanad / Northern Kerala Convective Basin
+  bbox_north: 12.0
+  bbox_south: 11.0
+  bbox_east: 76.0
+  bbox_west: 75.0
+  grid_size: 32
+  target_resolution_km: 3.5
+
+  # Himawari
+  himawari_dir: "data/raw/satellite/himawari_2018-08"
+  himawari_bands: ["B08", "B13"]
+  himawari_cadence_minutes: 180  # 3-hourly (actual data frequency)
+  himawari_decode_library: "satpy"  # "satpy" | "manual"
+
+  # DEM
+  dem_dir: "data/raw/dem/P5_PAN_CD_N11_000_E075_000_30m"
+  dem_source: "ISRO_CartoDEM_30m"
+  dem_real: true
+
+  # Reanalysis
+  reanalysis_hourly_dir: "data/raw/reanalysis/hourly_dataset"
+  reanalysis_pressure_dir: "data/raw/reanalysis/pressure_dataset"
+
+  # Ground truth
+  imd_rainfall_dir: "data/raw/ground_truth/imd_rainfall/IMD_rainfall_NetCdf"
+  landslide_dir: "data/raw/ground_truth/landslides/landslide_kerala_2018"
+
+  # Event-based chronological splits
+  # WARNING: these must NOT produce overlapping event windows
+  splits:
+    train:
+      start: "2018-08-01"
+      end: "2018-08-11"
+    val:
+      start: "2018-08-12"
+      end: "2018-08-16"
+    test:
+      start: "2018-08-17"
+      end: "2018-08-25"
+
+  # V3 temporal design
+  # Number of input frames (T=4 at 3h cadence = 12h lookback)
+  num_frames: 4
+
+  # Target horizons in hours
+  forecast_horizons_h: [1, 3, 6]
+
+  # Output paths
+  processed_dir: "data/processed/v3"
+
+# ─── Input Channels ─────────────────────────────────────────────────────────
+# Status: REAL | APPROXIMATE | SYNTHETIC | CONSTANT_BROADCAST
+channels:
+  - index: 0
+    name: "himawari_wv_b08"
+    description: "Himawari-8 Water Vapor 6.2um Brightness Temperature"
+    unit: "K"
+    source: "Himawari-8 AHI B08"
+    status: "PARTIALLY_REAL"
+    phys_min: 180.0
+    phys_max: 320.0
+
+  - index: 1
+    name: "himawari_tir_b13"
+    description: "Himawari-8 Thermal IR 10.4um Brightness Temperature"
+    unit: "K"
+    source: "Himawari-8 AHI B13"
+    status: "PARTIALLY_REAL"
+    phys_min: 180.0
+    phys_max: 320.0
+
+  - index: 2
+    name: "ctt_drop_rate"
+    description: "Cloud-Top Temperature cooling rate (backward finite difference)"
+    unit: "K/hr"
+    source: "Derived from Himawari B13"
+    status: "CONSTANT_BROADCAST_IN_V2"  # Must fix in V3
+    phys_min: -25.0
+    phys_max: 5.0
+
+  - index: 3
+    name: "cape"
+    description: "Convective Available Potential Energy"
+    unit: "J/kg"
+    source: "IMDAA reanalysis (proxy from 2m T/RH in V2)"
+    status: "APPROXIMATE"
+    phys_min: 0.0
+    phys_max: 4500.0
+
+  - index: 4
+    name: "cin"
+    description: "Convective Inhibition"
+    unit: "J/kg"
+    source: "IMDAA reanalysis (proxy in V2)"
+    status: "APPROXIMATE"
+    phys_min: -300.0
+    phys_max: 0.0
+
+  - index: 5
+    name: "lcl_m"
+    description: "Lifted Condensation Level"
+    unit: "m"
+    source: "Derived from IMDAA 2m T/RH (Espy formula)"
+    status: "APPROXIMATE"
+    phys_min: 200.0
+    phys_max: 2500.0
+
+  - index: 6
+    name: "shear_0_6km_kt"
+    description: "0-6km bulk wind shear"
+    unit: "knots"
+    source: "IMDAA 10m winds (proxy, no upper-air data)"
+    status: "CONSTANT_BROADCAST_IN_V2"
+    phys_min: 0.0
+    phys_max: 70.0
+
+  - index: 7
+    name: "iwv_mm"
+    description: "Integrated Water Vapor"
+    unit: "mm"
+    source: "Derived from IMDAA specific humidity (proxy)"
+    status: "APPROXIMATE"
+    phys_min: 10.0
+    phys_max: 75.0
+
+  - index: 8
+    name: "moisture_flux"
+    description: "850 hPa Moisture Flux Convergence"
+    unit: "g/kg/s"
+    source: "Derived from IMDAA 10m divergence (proxy)"
+    status: "CONSTANT_BROADCAST_IN_V2"
+    phys_min: -0.05
+    phys_max: 0.05
+
+  - index: 9
+    name: "elevation_m"
+    description: "Surface elevation"
+    unit: "m"
+    source: "ISRO CartoDEM 30m (real data)"
+    status: "REAL"
+    phys_min: 0.0
+    phys_max: 2500.0
+
+  - index: 10
+    name: "slope_deg"
+    description: "Topographic slope (Sobel gradient)"
+    unit: "degrees"
+    source: "Derived from CartoDEM"
+    status: "REAL_DERIVED"
+    phys_min: 0.0
+    phys_max: 60.0
+
+  - index: 11
+    name: "flow_accum_log"
+    description: "Log flow accumulation (drainage proxy)"
+    unit: "log(1+A)"
+    source: "Derived from CartoDEM (inverted elevation + Laplacian)"
+    status: "REAL_DERIVED"
+    phys_min: 0.0
+    phys_max: 15.0
+
+# ─── V3 Model Architecture ──────────────────────────────────────────────────
+model:
+  version: "VAYUNET-MTL-V3"
+  img_size: 32
+  patch_size: 4
+  in_channels: 12
+  num_frames: 4
+  embed_dim: 128
+  depth: 4
+  num_heads: 8
+  mlp_ratio: 2.0
+  dropout: 0.1
+
+  # Separate encoders (future: enable per-modality encoding)
+  separate_modality_encoders: false  # Set true once satpy decode is verified
+
+  # Multi-horizon prediction
+  forecast_horizons_h: [1, 3, 6]
+
+  # Whether to produce spatial grids
+  spatial_output: true
+
+# ─── Loss Function ──────────────────────────────────────────────────────────
+loss:
+  # Focal loss for severe class imbalance
+  type: "focal"
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+
+  # Per-task weights (adjust after class balance audit)
+  # These should be tuned to reflect actual class frequency
+  weights:
+    thunderstorm: 1.0
+    cloudburst: 10.0  # Heavily underrepresented
+    flash_flood: 3.0
+
+  # Topographic regularization (from V2)
+  topo_reg_weight: 0.3
+
+# ─── Training ───────────────────────────────────────────────────────────────
+training:
+  seed: 42
+  epochs: 60
+  batch_size: 8
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  optimizer: "AdamW"
+  scheduler: "CosineAnnealingLR"
+  scheduler_T_max: 60
+  early_stopping_patience: 15
+  gradient_clip_norm: 1.0
+  mixed_precision: false  # Enable if CUDA GPU available
+  num_workers: 0
+
+# ─── Checkpoints ────────────────────────────────────────────────────────────
+checkpoints:
+  v2_checkpoint: "checkpoints/vayunet_mtl_best.pt"
+  v3_best_checkpoint: "checkpoints/vayunet_mtl_v3_best.pt"
+  v3_metadata: "checkpoints/v3_model_metadata.json"
+  v3_calibration: "checkpoints/v3_calibration.json"
+
+# ─── Evaluation ─────────────────────────────────────────────────────────────
+evaluation:
+  # Threshold for binary predictions from probabilities
+  threshold: 0.5
+  # Metrics to compute
+  metrics: ["csi", "pod", "far", "f1", "precision", "recall", "brier", "roc_auc"]
+  # If test set has 0 positives for a class, report metric as NOT_MEANINGFUL
+  fail_on_zero_test_positives: true
+
+# ─── Ablation Study ─────────────────────────────────────────────────────────
+ablation:
+  # Train 4 model variants on same test set
+  models:
+    A: {name: "Atmospheric only", channels: [3, 4, 5, 6, 7, 8]}
+    B: {name: "Atmospheric + Terrain", channels: [3, 4, 5, 6, 7, 8, 9, 10, 11]}
+    C: {name: "Atmospheric + Himawari", channels: [0, 1, 2, 3, 4, 5, 6, 7, 8]}
+    D: {name: "All channels (full V3)", channels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}
+
+# ─── Reports ────────────────────────────────────────────────────────────────
+reports:
+  dir: "reports"
+  v2_baseline: "reports/v2_baseline.json"
+  v3_evaluation: "reports/v3_evaluation.json"
+  ablation: "reports/ablation_study.json"
+  ablation_md: "reports/ablation_study.md"
+  v2_vs_v3: "reports/v2_vs_v3.json"
+  lead_time: "reports/lead_time_analysis.json"
+  final_report: "reports/VAYUNET_V3_FINAL_REPORT.md"

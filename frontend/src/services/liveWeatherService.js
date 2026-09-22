@@ -61,124 +61,28 @@ const CACHE_TTL_MS = 60 * 1000; // 60 seconds TTL
  * Fetch live data for coordinates using Indian API or real-time calibrated open meteorology feed
  */
 export async function fetchLiveObservation(lat, lon, cityName = '') {
-  const cacheKey = `${lat.toFixed(3)},${lon.toFixed(3)}`;
-  const now = Date.now();
-  if (liveCache.has(cacheKey)) {
-    const cached = liveCache.get(cacheKey);
-    if (now - cached.timestamp < CACHE_TTL_MS) {
-      return cached.data;
+  let region = cityName || 'Unknown';
+  try {
+    const res = await fetch(`http://localhost:8000/api/weather/imd/current?region=${encodeURIComponent(region)}`);
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        temp: data.temperature_c || 0,
+        rain: data.rainfall_mm != null ? Math.round(data.rainfall_mm * 10) / 10 : 0,
+        humidity: data.humidity_pct || 0,
+        pressure: data.pressure_hpa || 1000,
+        windSpeed: data.wind_speed_ms != null ? Math.round(data.wind_speed_ms * 3.6 * 10) / 10 : 0,
+        windDir: degreesToCardinal(data.wind_direction_deg),
+        status: data.condition || wmoCodeToImdStatus(data.weather_code, data.rainfall_mm) || data.status || 'DATA_UNAVAILABLE',
+        weatherCode: data.weather_code || 0,
+        source: data.source || 'Open-Meteo',
+        isLive: data.is_live || data.status === 'LIVE' || data.status === 'LIVE_FALLBACK'
+      };
     }
+  } catch (err) {
+    console.error('V4 API Error:', err);
   }
-
-  let liveData = null;
-
-  // 1. Primary Attempt: Query OpenWeatherMap via our secure backend proxy
-  if (cityName) {
-    try {
-      const backendProxyUrl = `http://localhost:8000/api/weather/openweathermap?city=${encodeURIComponent(cityName)}`;
-      const res = await fetch(backendProxyUrl, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' },
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json && json.main) {
-          const temp = json.main.temp;
-          const rain = json.rain ? (json.rain['1h'] || 0) : 0;
-          const humidity = json.main.humidity;
-          const pressure = json.main.pressure;
-          const windSpeed = (json.wind?.speed || 0) * 3.6; // Convert m/s to km/h
-          const windDir = degreesToCardinal(json.wind?.deg || 0);
-          const status = (json.weather && json.weather.length > 0) ? json.weather[0].description : 'Live Observed';
-          let weatherCode = 1;
-          if (json.weather && json.weather.length > 0) {
-            const owmCode = json.weather[0].id;
-            // Map OWM codes (e.g. 501) to WMO codes roughly (e.g. 61 for rain, 95 for thunder)
-            if (owmCode >= 200 && owmCode < 300) weatherCode = 95; // Thunderstorm
-            else if (owmCode >= 300 && owmCode < 400) weatherCode = 51; // Drizzle
-            else if (owmCode >= 500 && owmCode < 600) weatherCode = rain >= 10 ? 65 : 61; // Rain
-            else if (owmCode >= 600 && owmCode < 700) weatherCode = 71; // Snow
-            else if (owmCode >= 700 && owmCode < 800) weatherCode = 45; // Fog/Atmosphere
-            else if (owmCode === 800) weatherCode = 1; // Clear
-            else if (owmCode > 800) weatherCode = 3; // Clouds
-          }
-
-          if (temp != null) {
-            liveData = {
-              temp: Math.round(Number(temp)),
-              rain: Math.round(Number(rain) * 10) / 10,
-              humidity: Math.round(Number(humidity)),
-              pressure: pressure,
-              windSpeed: Math.round(windSpeed),
-              windDir: windDir,
-              status: status.charAt(0).toUpperCase() + status.slice(1), // capitalize
-              weatherCode: weatherCode,
-              source: 'OpenWeatherMap Live',
-              isLive: true,
-            };
-          }
-        }
-      }
-    } catch (err) {
-      // Graceful fallback to real-time Doppler/satellite calibrated stream
-      console.warn(`[VAYUNET Live] indianapi.in queried for ${cityName}, falling back to live synoptic stream:`, err);
-    }
-  }
-
-  // 2. High-precision Real-Time Subcontinent Stream (Open-Meteo WMO-calibrated live stream)
-  if (!liveData) {
-    try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m`;
-      const res = await fetch(url);
-      if (res.ok) {
-        const json = await res.json();
-        const cur = json.current;
-        if (cur) {
-          const temp = Math.round(cur.temperature_2m);
-          const rain = Math.round((cur.precipitation || cur.rain || cur.showers || 0) * 10) / 10;
-          const humidity = Math.round(cur.relative_humidity_2m || 65);
-          const pressure = Math.round(cur.surface_pressure || 1006);
-          const windSpeed = Math.round(cur.wind_speed_10m || 10);
-          const windDir = degreesToCardinal(cur.wind_direction_10m);
-          const status = wmoCodeToImdStatus(cur.weather_code, rain);
-
-          liveData = {
-            temp,
-            rain,
-            humidity,
-            pressure,
-            windSpeed,
-            windDir,
-            status,
-            weatherCode: cur.weather_code,
-            source: 'IMD / MoES Live Radar Grid',
-            isLive: true,
-          };
-        }
-      }
-    } catch (err) {
-      console.warn(`[VAYUNET Live] Live stream error at [${lat}, ${lon}]:`, err);
-    }
-  }
-
-  // 3. Sensible meteorological fallback if network completely offline
-  if (!liveData) {
-    liveData = {
-      temp: 28,
-      rain: 0,
-      humidity: 75,
-      pressure: 1004,
-      windSpeed: 12,
-      windDir: 'WSW',
-      status: 'Live Station Connected',
-      weatherCode: 1,
-      source: 'Station Telemetry Sync',
-      isLive: true,
-    };
-  }
-
-  liveCache.set(cacheKey, { timestamp: now, data: liveData });
-  return liveData;
+  return null;
 }
 
 /**
@@ -342,68 +246,105 @@ export async function fetchLiveDistrictWarning(districtKey, baseLocationData) {
   if (!baseLocationData || !baseLocationData.center) return baseLocationData;
 
   const [lat, lon] = baseLocationData.center;
-  const cityName = baseLocationData.name || districtKey;
+  const targetQuery = baseLocationData.id || districtKey || baseLocationData.name;
 
   try {
-    const obs = await fetchLiveObservation(lat, lon, cityName);
-    const now = new Date();
-    const liveIstTime = now.toLocaleTimeString('en-IN', {
+    const riskRes = await fetch(`http://localhost:8000/api/risk/${encodeURIComponent(targetQuery)}`);
+    if (!riskRes.ok) throw new Error("Risk API unavailable");
+    const riskData = await riskRes.json();
+    
+    const obs = riskData.observations?.aws || {};
+    // Ensure we handle stale/unavailable data correctly
+    const isUnavailable = obs.status === "DATA_UNAVAILABLE";
+    
+    // 1. Unified Timestamp Extraction
+    const fetchDate = riskData.timestamp ? new Date(riskData.timestamp) : now;
+    const dataDate = riskData.data_timestamp ? new Date(riskData.data_timestamp) : fetchDate;
+    
+    const liveIstTime = fetchDate.toLocaleTimeString('en-IN', {
       timeZone: 'Asia/Kolkata',
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
     }) + ' IST';
-    const liveDateStr = now.toLocaleDateString('en-IN', {
+    
+    const liveDateStr = fetchDate.toLocaleDateString('en-IN', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     });
+    
+    const obsIstTime = dataDate.toLocaleTimeString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }) + ' IST';
 
-    // Real-time evaluation of risk level from live data
-    const isHeavy = obs.rain >= 15 || obs.weatherCode >= 80;
-    const isModerate = obs.rain >= 3 || obs.weatherCode >= 61 || obs.status.includes('Rain');
-    const isThunder = obs.weatherCode >= 95 || obs.status.includes('Thunder');
+    // 2. Exact Model Severities (No frontend guessing)
+    const hazards = riskData.vayunet?.hazards || {};
+    let highestRiskLevel = riskData.primary_level || 'SAFE';
+    let primaryHazard = riskData.primary_hazard 
+      ? riskData.primary_hazard.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) 
+      : 'No Active Severe Warnings';
+
+    const horizonText = Array.isArray(riskData.forecast_horizon_hours) && riskData.forecast_horizon_hours.length > 0
+      ? `Within ${riskData.forecast_horizon_hours[0]} – ${riskData.forecast_horizon_hours[riskData.forecast_horizon_hours.length - 1]} hours`
+      : 'Active Alert';
 
     let isAffected = false;
     let riskLevel = 'SAFE ZONE';
     let riskClass = 'risk-safe';
     let riskColor = '#16a34a';
     let timeframe = 'Conditions Nominal';
-    let hazard = 'No Active Severe Warnings';
-    let description = `Atmospheric stability indices nominal at your location (${obs.temp}°C, Humidity: ${obs.humidity}%, Wind: ${obs.windDir} ${obs.windSpeed} km/h). No flood or cloudburst alert detected.`;
+    let description = `Atmospheric stability indices nominal at your location (${obs.temperature_c ?? '--'}°C). No severe hazard detected.`;
 
-    if (obs.rain >= 25) {
+    // Only apply severity if inference actually ran
+    if (riskData.vayunet?.status === 'INFERENCE_UNAVAILABLE') {
+      riskLevel = 'MODEL INFERENCE UNAVAILABLE';
+      riskClass = 'risk-stale';
+      riskColor = '#94a3b8';
+      description = 'VAYUNET ML inference is temporarily unavailable for this location.';
+      primaryHazard = 'Inference Offline';
+      timeframe = '';
+    } else if (highestRiskLevel === 'EXTREME') {
       isAffected = true;
       riskLevel = 'EXTREME RISK';
       riskClass = 'risk-extreme';
       riskColor = '#dc2626';
-      timeframe = 'Immediate (1 – 3 hours)';
-      hazard = isThunder ? 'Severe Thunderstorm + Flash Flood' : 'Torrential Deluge & Cloudburst Alert';
-      description = `Live precipitation rate is ${obs.rain} mm/h with active convective updrafts (${obs.temp}°C, Wind: ${obs.windDir} ${obs.windSpeed} km/h). Rapid water accumulation expected. Move to high ground immediately.`;
-    } else if (obs.rain >= 15 || (isThunder && obs.rain >= 10)) {
+      timeframe = horizonText;
+      description = `VAYUNET has detected an extreme risk for ${primaryHazard} based on current telemetry. Move to high ground immediately.`;
+    } else if (highestRiskLevel === 'HIGH') {
       isAffected = true;
       riskLevel = 'HIGH RISK';
       riskClass = 'risk-high';
       riskColor = '#ea580c';
-      timeframe = 'Within 2 – 4 hours';
-      hazard = isThunder ? 'Severe Thunderstorm + Flood Watch' : 'Intense Precipitation & Squall Line';
-      description = `Active severe weather detected (${obs.rain} mm/h, Barometer: ${obs.pressure} hPa). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
-    } else if (isThunder) {
+      timeframe = horizonText;
+      description = `High risk detected for ${primaryHazard}. Exercise extreme caution in low-lying areas.`;
+    } else if (highestRiskLevel === 'MODERATE') {
       isAffected = true;
       riskLevel = 'MODERATE WATCH';
       riskClass = 'risk-high';
       riskColor = '#ca8a04';
-      timeframe = 'Next 3 – 6 hours';
-      hazard = 'Thunderstorm Warning';
-      description = `Thunderstorm activity detected (${obs.status}, ${obs.temp}°C). Rainfall is currently light (${obs.rain} mm/h). Stay indoors and avoid open areas.`;
-    } else if (isModerate || isHeavy) {
-      isAffected = true;
-      riskLevel = 'MODERATE WATCH';
-      riskClass = 'risk-high';
-      riskColor = '#ca8a04';
-      timeframe = 'Next 3 – 6 hours';
-      hazard = 'Convective Showers & Wet Ground';
-      description = `Live rain rate at ${obs.rain} mm/h (${obs.status}). Soil saturation increasing. Keep emergency numbers saved and stay tuned to radar updates.`;
+      timeframe = horizonText;
+      description = `Moderate watch issued for ${primaryHazard}. Stay tuned to radar updates.`;
+    }
+
+    if (isUnavailable) {
+       riskLevel = 'DATA UNAVAILABLE';
+       riskClass = 'risk-stale';
+       riskColor = '#94a3b8';
+       description = 'Live telemetry temporarily unavailable. Risk assessment cannot be performed.';
+       primaryHazard = 'Status Unknown';
+    }
+
+    // Determine wind direction
+    const deg = obs.wind_direction_deg;
+    let windDir = 'CALM';
+    if (deg != null) {
+      const val = Math.floor((deg / 22.5) + 0.5);
+      const arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+      windDir = arr[val % 16];
     }
 
     return {
@@ -413,24 +354,37 @@ export async function fetchLiveDistrictWarning(districtKey, baseLocationData) {
       riskClass,
       riskColor,
       timeframe,
-      hazard,
+      hazard: primaryHazard,
       description,
       liveObservation: {
-        temp: obs.temp,
-        rain: obs.rain,
-        humidity: obs.humidity,
-        pressure: obs.pressure,
-        windSpeed: obs.windSpeed,
-        windDir: obs.windDir,
-        status: obs.status,
-        weatherCode: obs.weatherCode,
-        source: obs.source,
+        lat: baseLocationData.center[0],
+        lng: baseLocationData.center[1],
+        temp: obs.temperature_c,
+        rain: obs.rainfall_mm != null ? Math.round(obs.rainfall_mm * 10) / 10 : 0,
+        humidity: obs.humidity_pct,
+        pressure: obs.pressure_hpa,
+        windSpeed: obs.wind_speed_ms != null ? Math.round(obs.wind_speed_ms * 3.6 * 10) / 10 : '--',
+        windDir: windDir,
+        status: obs.condition || obs.status,
+        weatherCode: obs.weather_code,
+        source: obs.source_label || obs.source || 'Unknown',
+        isLive: obs.is_live
       },
-      lastUpdatedText: `Last updated: ${liveDateStr}, ${liveIstTime}`,
-      dataSourceText: `Source: VAYUNET Live Feed (${obs.source})`,
+      vayunetHazards: hazards,
+      modelProvenance: riskData.model,
+      lastUpdatedText: `Updated: ${liveDateStr}, ${liveIstTime}`,
+      dataSourceText: isUnavailable ? `Data temporarily unavailable` : (obs.status === 'LIVE_FALLBACK' ? `LIVE • ${obs.source_label || obs.source}` : `Source: ${obs.source_label || obs.source || 'Unknown'}`),
+      isStale: isUnavailable
     };
   } catch (err) {
     console.warn('[VAYUNET Live] Failed to evaluate district warning:', err);
-    return baseLocationData;
+    return {
+      ...baseLocationData,
+      liveObservation: { status: 'DATA_UNAVAILABLE', isLive: false },
+      isStale: true,
+      riskLevel: 'UNAVAILABLE',
+      riskColor: '#94a3b8',
+      dataSourceText: 'API Failure'
+    };
   }
 }

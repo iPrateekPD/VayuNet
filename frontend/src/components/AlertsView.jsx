@@ -95,71 +95,7 @@ function createHtmlIcon(html, size = [20, 20], anchor = [10, 10]) {
   });
 }
 
-const INITIAL_INCIDENTS = [
-  {
-    id: 'CAP-2041',
-    sev: 'HIGH',
-    sevBadge: 'high',
-    location: 'Chamoli, Uttarakhand',
-    center: [30.41, 79.32],
-    zoom: 9,
-    hazard: 'Flash Flood + Cloudburst',
-    eta: '1h 45m',
-    status: 'ACTIVE',
-    lastUpdated: '11:52 PM',
-    area: 'Alaknanda River Catchment (Joshimath, Pipalkoti, Helang)',
-    confidence: '82%',
-    validFrom: '08 Sep 2026 · 23:50 IST',
-    validUntil: '09 Sep 2026 · 03:50 IST',
-    headline: 'CRITICAL: Severe Flash Flood Warning for Alaknanda Valley',
-    description: 'Convective cloudburst signature detected upstream with peak precipitation rate of 124 mm. Sudden surge in river levels anticipated in downstream gorges.',
-    instructions: 'Evacuate all low-lying riverbeds, temporary settlements, and ghats immediately. Restrict pedestrian transit across suspension bridges.',
-    metric1: '124 mm', metric1Label: 'Est. rainfall (next 2h)', metric1Icon: '💧',
-    metric2: '412 km²', metric2Label: 'Affected area', metric2Icon: '🗺️',
-  },
-  {
-    id: 'CAP-2040',
-    sev: 'MODERATE',
-    sevBadge: 'mod',
-    location: 'Greater Mumbai, Maharashtra',
-    center: [19.076, 72.877],
-    zoom: 10,
-    hazard: 'Severe Thunderstorm & Squall',
-    eta: '3h 00m',
-    status: 'MONITORING',
-    lastUpdated: '11:30 PM',
-    area: 'Mumbai Suburban & Coastal Thane Corridor',
-    confidence: '71%',
-    validFrom: '09 Sep 2026 · 01:00 IST',
-    validUntil: '09 Sep 2026 · 05:00 IST',
-    headline: 'ADVISORY: Severe Thunderstorm & Urban Waterlogging Risk',
-    description: 'Organized convective line moving eastward from Arabian Sea. Gusty surface winds exceeding 65 km/h with localized street flooding.',
-    instructions: 'Commuters advised to avoid subway underpasses and shoreline promenades. Pre-position dewatering mobile pump units.',
-    metric1: '65 km/h', metric1Label: 'Max Gust Speed', metric1Icon: '💨',
-    metric2: '210 km²', metric2Label: 'Affected area', metric2Icon: '🗺️',
-  },
-  {
-    id: 'CAP-2039',
-    sev: 'WATCH',
-    sevBadge: 'watch',
-    location: 'Wayanad, Kerala',
-    center: [11.685, 76.132],
-    zoom: 10,
-    hazard: 'Slope Runoff & Saturated Soil',
-    eta: '4h 15m',
-    status: 'ADVISORY',
-    lastUpdated: '11:15 PM',
-    area: 'Vythiri, Meppadi, and Chooralmala Slopes',
-    confidence: '68%',
-    validFrom: '09 Sep 2026 · 02:30 IST',
-    validUntil: '09 Sep 2026 · 08:30 IST',
-    headline: 'WATCH: Orographic Rainfall & Landslip Advisory',
-    description: 'Continuous moderate-to-heavy rainfall maintaining elevated pore pressure across vulnerable tea estate slopes.',
-    instructions: 'Monitor nullah discharge gauges. Keep night emergency shelter teams on standby.',
-    metric1: '85 mm', metric1Label: 'Est. rainfall (next 4h)', metric1Icon: '💧',
-    metric2: '54 km²', metric2Label: 'High Risk Zones', metric2Icon: '🗺️',
-  },
-];
+const INITIAL_INCIDENTS = [];
 
 const DESTINATIONS = [
   { name: 'NDMA / SACHET Gateway', role: 'XML v1.2 Feed', status: 'Connected', badge: 'connected' },
@@ -178,15 +114,36 @@ const INITIAL_AUDIT = [
 
 export default function AlertsView({ showToast, onNavigateTab, globalSelectedLocation, setGlobalSelectedLocation }) {
   const [incidents, setIncidents] = useState(INITIAL_INCIDENTS);
-  const [selectedIncident, setSelectedIncident] = useState(INITIAL_INCIDENTS[0]);
+  const [selectedIncident, setSelectedIncident] = useState(null);
+
+  // Fetch Active Alerts from V4 API
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/alerts/active');
+        if (res.ok) {
+          const data = await res.json();
+          setIncidents(data.alerts || []);
+          if (data.alerts && data.alerts.length > 0) {
+            setSelectedIncident(data.alerts[0]);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch active alerts', err);
+      }
+    };
+    fetchAlerts();
+    const interval = setInterval(fetchAlerts, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Synchronize when global location changes
   useEffect(() => {
-    if (globalSelectedLocation) {
-      const match = INITIAL_INCIDENTS.find(inc => inc.location === globalSelectedLocation);
+    if (globalSelectedLocation && incidents.length > 0) {
+      const match = incidents.find(inc => inc.region === globalSelectedLocation || inc.district === globalSelectedLocation);
       if (match) setSelectedIncident(match);
     }
-  }, [globalSelectedLocation]);
+  }, [globalSelectedLocation, incidents]);
 
   const handleSelectIncident = (inc) => {
     setSelectedIncident(inc);

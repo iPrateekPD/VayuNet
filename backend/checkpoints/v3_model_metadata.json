@@ -1,0 +1,197 @@
+{
+  "model_version": "VAYUNET-MTL-v3.0",
+  "trained_at": "2026-09-21T22:24:27.333798",
+  "dataset_version": "v3",
+  "training_config": {
+    "epochs_requested": 5,
+    "epochs_trained": 5,
+    "best_epoch": 5,
+    "batch_size": 8,
+    "lr": 0.0003,
+    "weight_decay": 0.01,
+    "optimizer": "AdamW",
+    "scheduler": "CosineAnnealingLR",
+    "loss": "FocalLoss(gamma=2.0, alpha=0.75)",
+    "loss_weights": {
+      "thunderstorm": 1.0,
+      "cloudburst": 10.0,
+      "flash_flood": 3.0
+    },
+    "seed": 42
+  },
+  "model_config": {
+    "img_size": 32,
+    "patch_size": 4,
+    "in_channels": 12,
+    "num_frames": 4,
+    "embed_dim": 128,
+    "depth": 4,
+    "num_heads": 8,
+    "n_parameters": 1302019
+  },
+  "best_val_metrics": {
+    "thunderstorm": {
+      "csi": 0.9786,
+      "pod": 0.9995,
+      "far": 0.021,
+      "positives": 20379
+    },
+    "cloudburst": {
+      "csi": "N/A",
+      "pod": "N/A",
+      "far": "N/A",
+      "positives": 0
+    },
+    "flash_flood": {
+      "csi": "N/A",
+      "pod": "N/A",
+      "far": "N/A",
+      "positives": 0
+    }
+  },
+  "best_val_loss": 0.009821616113185883,
+  "train_log": [
+    {
+      "epoch": 1,
+      "train_loss": 0.215883,
+      "val_loss": 0.061269,
+      "val_metrics": {
+        "thunderstorm": {
+          "csi": 0.9148,
+          "pod": 1.0,
+          "far": 0.0852,
+          "positives": 20379
+        },
+        "cloudburst": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        },
+        "flash_flood": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        }
+      },
+      "elapsed_s": 3.99
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.038553,
+      "val_loss": 0.019566,
+      "val_metrics": {
+        "thunderstorm": {
+          "csi": 0.9723,
+          "pod": 0.999,
+          "far": 0.0268,
+          "positives": 20379
+        },
+        "cloudburst": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        },
+        "flash_flood": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        }
+      },
+      "elapsed_s": 3.82
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.017379,
+      "val_loss": 0.012044,
+      "val_metrics": {
+        "thunderstorm": {
+          "csi": 0.9753,
+          "pod": 0.9995,
+          "far": 0.0242,
+          "positives": 20379
+        },
+        "cloudburst": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        },
+        "flash_flood": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        }
+      },
+      "elapsed_s": 3.87
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.013132,
+      "val_loss": 0.010266,
+      "val_metrics": {
+        "thunderstorm": {
+          "csi": 0.9787,
+          "pod": 0.9994,
+          "far": 0.0208,
+          "positives": 20379
+        },
+        "cloudburst": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        },
+        "flash_flood": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        }
+      },
+      "elapsed_s": 3.48
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.011792,
+      "val_loss": 0.009822,
+      "val_metrics": {
+        "thunderstorm": {
+          "csi": 0.9786,
+          "pod": 0.9995,
+          "far": 0.021,
+          "positives": 20379
+        },
+        "cloudburst": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        },
+        "flash_flood": {
+          "csi": "N/A",
+          "pod": "N/A",
+          "far": "N/A",
+          "positives": 0
+        }
+      },
+      "elapsed_s": 3.67
+    }
+  ],
+  "v3_fixes_vs_v2": [
+    "Cloudburst labels: date filter removed",
+    "Flash flood labels: time-varying rain component",
+    "Loss: focal loss with class weights (was BCE in V2)",
+    "Optimizer: same AdamW"
+  ],
+  "v3_limitations": [
+    "Himawari HSD decode: satpy not available; partial manual decode",
+    "Cloudburst positives may still be sparse",
+    "Dataset size: ~191 samples (same as V2 due to same Himawari timestamps)"
+  ],
+  "checkpoint_path": "D:\\PROJECTS\\VayuNet-main\\backend\\checkpoints\\vayunet_mtl_v3_best.pt"
+}

@@ -375,11 +375,11 @@ def evaluate_historical_disaster_proximity(
     w = live_weather.get("weather", {})
     triggers = baseline["critical_precursors"]
 
-    # Extract current physical soundings
-    cur_cape = float(w.get("cape_j_kg", 0.0) or 0.0)
-    cur_iwv = float(w.get("iwv_kg_m2", 0.0) or w.get("total_column_water_vapour_kg_m2", 0.0) or 25.0)
-    cur_rain = float(w.get("rain_mm", 0.0) or w.get("precipitation_mm", 0.0) or 0.0)
-    cur_wind = float(w.get("wind_speed_kmh", 0.0) or w.get("wind_speed_10m_kmh", 0.0) or 0.0)
+    # Extract current physical soundings supporting both standard and open-meteo key formats
+    cur_cape = float(w.get("cape_j_kg") if w.get("cape_j_kg") is not None else w.get("cape", 0.0) or 0.0)
+    cur_iwv = float(w.get("iwv_kg_m2") if w.get("iwv_kg_m2") is not None else w.get("total_column_water_vapour_kg_m2") if w.get("total_column_water_vapour_kg_m2") is not None else w.get("total_column_water_vapour", 25.0) or 25.0)
+    cur_rain = float(w.get("rain_mm") if w.get("rain_mm") is not None else w.get("rain") if w.get("rain") is not None else w.get("precipitation_mm") if w.get("precipitation_mm") is not None else w.get("precipitation", 0.0) or 0.0)
+    cur_wind = float(w.get("wind_speed_kmh") if w.get("wind_speed_kmh") is not None else w.get("wind_speed_10m_kmh") if w.get("wind_speed_10m_kmh") is not None else w.get("wind_speed", 0.0) or 0.0)
 
     # Calculate ratios against verified historical disaster trigger thresholds
     cape_ratio = round(cur_cape / max(1.0, float(triggers["cape_j_kg"])), 3)

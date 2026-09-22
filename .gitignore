@@ -85,3 +85,5 @@ datasets/
 *.sqlite
 *.npy
 *.npz
+*.zip
+

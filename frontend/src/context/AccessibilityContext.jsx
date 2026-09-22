@@ -183,41 +183,97 @@ export function AccessibilityProvider({ children }) {
     setBhashiniActive(false);
   }, []);
 
-  // Primary speak function: Tries Digital India Bhashini TTS first, falls back to Web Speech
+  // Primary speak function: Tries ElevenLabs (if key exists), then Google Cloud TTS, falls back to Web Speech
   const speakContent = useCallback((text, overrideLang) => {
     stopSpeaking();
     if (!text || !text.trim()) return;
 
     const targetLang = (overrideLang || language || 'hi').toLowerCase().slice(0, 2);
 
-    try {
-      const streamUrl = `/api/bhashini/stream?text=${encodeURIComponent(text.trim())}&lang=${targetLang}&gender=female`;
-      const audio = new Audio(streamUrl);
-      currentAudioRef.current = audio;
+    const playGoogleTTS = () => {
+      try {
+        const streamUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${targetLang}&q=${encodeURIComponent(text.trim().substring(0, 200))}`;
+        const audio = new Audio(streamUrl);
+        currentAudioRef.current = audio;
 
-      audio.onplay = () => {
-        setIsSpeaking(true);
-        setBhashiniActive(true);
-      };
+        audio.onplay = () => {
+          setIsSpeaking(true);
+          setBhashiniActive(true);
+        };
 
-      audio.onended = () => {
-        setIsSpeaking(false);
-        setBhashiniActive(false);
-        currentAudioRef.current = null;
-      };
+        audio.onended = () => {
+          setIsSpeaking(false);
+          setBhashiniActive(false);
+          currentAudioRef.current = null;
+        };
 
-      audio.onerror = () => {
-        // Backend not reachable or error, fallback to browser synthesis
-        currentAudioRef.current = null;
+        audio.onerror = () => {
+          currentAudioRef.current = null;
+          fallbackBrowserSpeak(text, targetLang);
+        };
+
+        audio.play().catch(() => {
+          currentAudioRef.current = null;
+          fallbackBrowserSpeak(text, targetLang);
+        });
+      } catch (_) {
         fallbackBrowserSpeak(text, targetLang);
-      };
+      }
+    };
 
-      audio.play().catch(() => {
-        currentAudioRef.current = null;
-        fallbackBrowserSpeak(text, targetLang);
+    const elevenLabsKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
+    if (elevenLabsKey && targetLang === 'en') {
+      // Use "Sarah - Mature, Reassuring, Confident" (Allowed on Free Tier)
+      const voiceId = "EXAVITQu4vr4xnSDxMaL"; 
+      fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?optimize_streaming_latency=3`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': elevenLabsKey
+        },
+        body: JSON.stringify({
+          text: text.trim().substring(0, 500),
+          model_id: "eleven_multilingual_v2",
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("ElevenLabs API failed");
+        return res.blob();
+      })
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        currentAudioRef.current = audio;
+
+        audio.onplay = () => {
+          setIsSpeaking(true);
+          setBhashiniActive(true);
+        };
+
+        audio.onended = () => {
+          setIsSpeaking(false);
+          setBhashiniActive(false);
+          currentAudioRef.current = null;
+          URL.revokeObjectURL(url); // Cleanup
+        };
+
+        audio.onerror = () => {
+          currentAudioRef.current = null;
+          playGoogleTTS();
+        };
+
+        audio.play().catch(() => {
+          currentAudioRef.current = null;
+          playGoogleTTS();
+        });
+      })
+      .catch(err => {
+        console.warn("ElevenLabs failed, falling back to Google TTS", err);
+        playGoogleTTS();
       });
-    } catch (_) {
-      fallbackBrowserSpeak(text, targetLang);
+    } else {
+      playGoogleTTS();
     }
   }, [language, stopSpeaking, fallbackBrowserSpeak]);
 
