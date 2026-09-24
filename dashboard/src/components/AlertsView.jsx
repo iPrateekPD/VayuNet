@@ -45,19 +45,19 @@ export default function AlertsView({ showToast, globalSelectedLocation, setGloba
   // Fetch API data
   useEffect(() => {
     const fetchAlerts = async () => {
+      setIsLoading(true);
       setConnectionStatus('syncing');
       try {
         const response = await alertsApi.getActiveAlerts();
-        if (response.data && Array.isArray(response.data)) {
+        if (response.data) {
           setAlerts(response.data);
-          // if we have no selected ID or if the selected ID is no longer in the list, set to the first one
-          if (!response.data.find(a => a.id === selectedAlertId) && response.data.length > 0) {
-              setSelectedAlertId(response.data[0].id);
-          }
+          setConnectionStatus(response.status || 'live');
         }
-        setConnectionStatus(response.status === 'fallback' ? 'fallback' : 'live');
-      } catch (error) {
+      } catch (err) {
+        console.error("Failed to load alerts:", err);
         setConnectionStatus('fallback');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchAlerts();

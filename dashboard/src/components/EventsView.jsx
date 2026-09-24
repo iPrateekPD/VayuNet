@@ -38,15 +38,19 @@ export default function EventsView({ globalSelectedLocation, setGlobalSelectedLo
   // Fetch API data
   useEffect(() => {
     const fetchEvents = async () => {
+      setIsLoading(true);
       setConnectionStatus('syncing');
       try {
         const response = await eventsApi.getAllEvents();
-        if (response.data && Array.isArray(response.data)) {
+        if (response.data) {
           setEvents(response.data);
+          setConnectionStatus(response.status || 'live');
         }
-        setConnectionStatus(response.status === 'fallback' ? 'fallback' : 'live');
-      } catch (error) {
+      } catch (err) {
+        console.error("Failed to load events:", err);
         setConnectionStatus('fallback');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchEvents();

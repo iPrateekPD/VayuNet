@@ -63,19 +63,28 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
   const [analysisData, setAnalysisData] = useState(null);
   const [isLoadingAnalysis, setIsLoadingAnalysis] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('live');
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  React.useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000); // update every minute
+    return () => clearInterval(timer);
+  }, []);
 
   React.useEffect(() => {
     const fetchAnalysis = async () => {
       setIsLoadingAnalysis(true);
       setConnectionStatus('syncing');
       try {
-         const data = await analysisApi.getRiskAnalysis(selectedSector);
-         setAnalysisData(data);
-         setConnectionStatus(data.status === 'fallback' ? 'fallback' : 'live');
+        const response = await analysisApi.getRiskAnalysis(selectedSector);
+        if (response.data) {
+          setAnalysisData(response.data);
+          setConnectionStatus(response.status || 'live');
+        }
       } catch (err) {
-         setConnectionStatus('fallback');
+        console.error("Failed to load analysis:", err);
+        setConnectionStatus('fallback');
       } finally {
-         setIsLoadingAnalysis(false);
+        setIsLoadingAnalysis(false);
       }
     };
     fetchAnalysis();
@@ -228,7 +237,12 @@ export default function AnalysisView({ onNavigateTab, globalSelectedLocation, se
 
           <div className="ana-top-right">
             <div className="ana-live-pill">
-              <span className="ana-timestamp-text">08 Sep 2026, 11:52 PM IST</span>
+              <span className="ana-timestamp-text">
+                {currentTime.toLocaleString('en-IN', {
+                  day: '2-digit', month: 'short', year: 'numeric',
+                  hour: '2-digit', minute: '2-digit', hour12: true
+                }).toUpperCase()} IST
+              </span>
               {connectionStatus === 'syncing' && <span className="ana-live-dot" style={{ backgroundColor: '#eab308' }} />}
               {connectionStatus === 'syncing' && <span className="ana-live-text" style={{ color: '#eab308' }}>Syncing...</span>}
               {connectionStatus === 'live' && <span className="ana-live-dot" />}

@@ -1,11 +1,12 @@
 import { apiClient } from './client';
 import { SHARED_EVENTS as eventData } from '../../data/sharedEventData';
 
-/**
- * Events Service Adapter
- */
 export const eventsApi = {
   getAllEvents: async () => {
+    if (import.meta.env.VITE_DEMO_MODE === 'true') {
+      return { status: 'live', data: eventData };
+    }
+
     try {
       return await apiClient.get('/api/events');
     } catch (error) {
@@ -15,6 +16,11 @@ export const eventsApi = {
   },
 
   getEventById: async (eventId) => {
+    if (import.meta.env.VITE_DEMO_MODE === 'true') {
+      const mockEvent = eventData.find(e => e.id === eventId) || eventData[0];
+      return { status: 'live', data: mockEvent };
+    }
+
     try {
       return await apiClient.get(`/api/events/${eventId}`);
     } catch (error) {
@@ -25,6 +31,10 @@ export const eventsApi = {
   },
   
   getEventsByLocation: async (locationId) => {
+    if (import.meta.env.VITE_DEMO_MODE === 'true') {
+      return { status: 'live', data: eventData };
+    }
+
     try {
       return await apiClient.get(`/api/locations/${locationId}/events`);
     } catch (error) {

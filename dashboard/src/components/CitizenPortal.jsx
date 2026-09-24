@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Circle, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, LayersControl, Polygon, Polyline, Tooltip, useMap } from 'react-leaflet';
+import WindOverlay from './WindOverlay';
 import L from 'leaflet';
 import gsap from 'gsap';
 import './CitizenPortal.css';
@@ -19,7 +20,7 @@ const LOCATION_DATABASE = {
     name: 'Gunupur',
     district: 'Rayagada District, Odisha',
     pincode: '765022',
-    center: [19.0833, 83.8167],
+    center: [19.0805, 83.8166],
     isAffected: false,
     riskLevel: 'SAFE ZONE',
     riskClass: 'risk-safe',
@@ -45,7 +46,7 @@ const LOCATION_DATABASE = {
     district: 'Kangra District, Himachal Pradesh',
     pincode: '176219',
     center: [32.2426, 76.3213],
-    isAffected: true,
+    isAffected: false,
     riskLevel: 'HIGH RISK',
     riskClass: 'risk-high',
     riskColor: '#dc2626',
@@ -74,7 +75,7 @@ const LOCATION_DATABASE = {
     district: 'Kangra District, Himachal Pradesh',
     pincode: '176215',
     center: [32.2190, 76.3234],
-    isAffected: true,
+    isAffected: false,
     riskLevel: 'HIGH RISK',
     riskClass: 'risk-high',
     riskColor: '#dc2626',
@@ -103,7 +104,7 @@ const LOCATION_DATABASE = {
     district: 'Chamoli District, Uttarakhand',
     pincode: '246443',
     center: [30.4124, 79.3243],
-    isAffected: true,
+    isAffected: false,
     riskLevel: 'EXTREME RISK',
     riskClass: 'risk-extreme',
     riskColor: '#dc2626',
@@ -132,7 +133,7 @@ const LOCATION_DATABASE = {
     district: 'Wayanad District, Kerala',
     pincode: '673577',
     center: [11.5564, 76.1320],
-    isAffected: true,
+    isAffected: false,
     riskLevel: 'EXTREME RISK',
     riskClass: 'risk-extreme',
     riskColor: '#dc2626',
@@ -161,7 +162,7 @@ const LOCATION_DATABASE = {
     district: 'Mumbai Suburban, Maharashtra',
     pincode: '400001',
     center: [19.0760, 72.8777],
-    isAffected: true,
+    isAffected: false,
     riskLevel: 'HIGH RISK',
     riskClass: 'risk-high',
     riskColor: '#ea580c',
@@ -197,6 +198,31 @@ const LOCATION_DATABASE = {
     timeframe: 'Conditions Nominal',
     hazard: 'No Active Severe Warnings',
     description: 'Atmospheric stability indices (CAPE, IWV, CTT) are within nominal thresholds. No flood, cloudburst or squall alerts in effect.',
+    safeShelter: {
+      name: 'Connaught Place Civil Defense Center',
+      distance: '1.2 km away, New Delhi',
+      address: 'Palika Kendra, Sansad Marg',
+      elevation: '216 m (Standard Urban Ground)',
+      capacity: 'Civil Defense Headquarters',
+      facilities: 'Information Hub, Emergency Operations Relay',
+      contact: 'Delhi Disaster Management: 1077',
+      coords: [28.6280, 77.2150]
+    },
+    nearbyWarnings: []
+  },
+  newdelhi: {
+    id: 'newdelhi',
+    name: 'New Delhi',
+    district: 'National Capital Territory of Delhi',
+    pincode: '110001',
+    center: [28.6139, 77.2090],
+    isAffected: false,
+    riskLevel: 'SAFE ZONE',
+    riskClass: 'risk-safe',
+    riskColor: '#16a34a',
+    timeframe: 'Conditions Nominal',
+    hazard: 'No Active Severe Warnings',
+    description: 'Atmospheric stability indices nominal at your location.',
     safeShelter: {
       name: 'Connaught Place Civil Defense Center',
       distance: '1.2 km away, New Delhi',
@@ -261,6 +287,14 @@ const LOCATION_DATABASE = {
   }
 };
 
+// Canonical ID aliases mapping to existing entries
+LOCATION_DATABASE.chamoli_joshimath = { ...LOCATION_DATABASE.chamoli, id: 'chamoli_joshimath' };
+LOCATION_DATABASE.wayanad_meppadi = { ...LOCATION_DATABASE.wayanad, id: 'wayanad_meppadi' };
+LOCATION_DATABASE.mumbai_coastal_delta = { ...LOCATION_DATABASE.mumbai, id: 'mumbai_coastal_delta' };
+LOCATION_DATABASE.new_delhi = { ...LOCATION_DATABASE.delhi, id: 'new_delhi' };
+LOCATION_DATABASE.bengaluru_urban = { ...LOCATION_DATABASE.bengaluru, id: 'bengaluru_urban' };
+LOCATION_DATABASE.chandigarh_tricity = { ...LOCATION_DATABASE.chandigarh, id: 'chandigarh_tricity' };
+
 // Smooth Leaflet Controller
 function MapFlyController({ center, zoom }) {
   const map = useMap();
@@ -273,7 +307,7 @@ function MapFlyController({ center, zoom }) {
 }
 
 // Helper to construct a dynamic location object from coordinates & reverse-geocoded data (Zero API Keys needed)
-async function resolveLocationData(latitude, longitude, fallbackName = 'My Location') {
+async function resolvelocationData(latitude, longitude, fallbackName = 'My location') {
   let placeName = fallbackName;
   let districtName = '';
   let postcode = '';
@@ -341,7 +375,7 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
       weatherStatus = obs.status;
     }
   } catch (wErr) {
-    console.warn('[VAYUNET Live] Live observation error in resolveLocationData:', wErr);
+    console.warn('[VAYUNET Live] Live observation error in resolvelocationData:', wErr);
   }
 
   // 3. Proximity check to active severe weather threats in database
@@ -362,36 +396,14 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
   // Determine risk level based on live radar / precipitation / threat proximity
   const isNearThreat = minThreatDist <= 35;
   const isHeavyRain = precipitation >= 10 || weatherCode >= 80;
-  const isSevere = isNearThreat || isHeavyRain;
-
-  let riskLevel = 'SAFE ZONE';
-  let riskClass = 'risk-safe';
-  let riskColor = '#16a34a';
-  let hazard = 'No Active Severe Warnings';
-  let timeframe = 'Conditions Nominal';
-  let description = `Atmospheric stability indices nominal at your location (${tempC}°C, Wind: ${windSpeed} km/h). No convective flash flood or cloudburst alert detected in your sector.`;
-
-  if (isSevere) {
-    if (precipitation > 25 || (isNearThreat && nearestThreat?.riskLevel?.includes('EXTREME'))) {
-      riskLevel = 'EXTREME RISK';
-      riskClass = 'risk-extreme';
-      riskColor = '#dc2626';
-      timeframe = 'Immediate (1 – 3 hours)';
-      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Convective Torrent & Localized Inundation';
-      description = isNearThreat 
-        ? `Severe radar reflectivity cell active near your coordinates (~${Math.round(minThreatDist)} km). Upstream water runoff and high convective potential. Remain vigilant.`
-        : `Torrential downpour detected (${precipitation} mm/h). Upstream water runoff and high convective potential. Move to high ground immediately.`;
-    } else {
-      riskLevel = 'HIGH RISK';
-      riskClass = 'risk-high';
-      riskColor = '#ea580c';
-      timeframe = 'Within 2 – 4 hours';
-      hazard = isNearThreat && nearestThreat ? nearestThreat.hazard : 'Squall & Heavy Rain Warning';
-      description = isNearThreat
-        ? `Convective rain bands developing in your proximity (~${Math.round(minThreatDist)} km from active corridor). Avoid water-logged lowlands.`
-        : `Active severe weather detected (${precipitation} mm/h). Low-lying roads and stream catchments subject to rapid inundation. Exercise extreme caution.`;
-    }
-  }
+  
+  // NEVER equate weather directly to hazard risk! Let the backend model decide.
+  let riskLevel = 'EVALUATING...';
+  let riskClass = 'risk-stale';
+  let riskColor = '#94a3b8';
+  let hazard = 'Awaiting Model Inference';
+  let timeframe = '';
+  let description = `Fetching VAYUNET deep learning telemetry for your coordinates. Please wait...`;
 
   const shelterLat = latitude + 0.004;
   const shelterLon = longitude + 0.003;
@@ -402,7 +414,7 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
     district: districtName,
     pincode: postcode || 'Live GPS',
     center: [latitude, longitude],
-    isAffected: isSevere,
+    isAffected: false,
     riskLevel,
     riskClass,
     riskColor,
@@ -421,7 +433,7 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
       source: 'weather.indianapi.in & IMD Network',
     },
     lastUpdatedText: `Last updated: ${new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST`,
-    dataSourceText: 'Source: VAYUNET Live Telemetry (weather.indianapi.in)',
+    dataSourceText: 'LIVE WEATHER',
     safeShelter: {
       name: `${placeName} Emergency Civil Defense Post`,
       distance: '1.4 km away',
@@ -446,8 +458,8 @@ async function resolveLocationData(latitude, longitude, fallbackName = 'My Locat
 export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   // Active selected location state (defaults to Gunupur)
   const [selectedId, setSelectedId] = useState('gunupur');
-  const [customLocations, setCustomLocations] = useState({});
-  const [liveDistricts, setLiveDistricts] = useState({});
+  const [islocationSwitching, setIslocationSwitching] = useState(false);
+  const [customlocations, setCustomlocations] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const [showNearbyOnMap, setShowNearbyOnMap] = useState(true);
@@ -461,53 +473,247 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   const isHi = langKey === 'HI';
   const [liveIstTime, setLiveIstTime] = useState('');
 
+  const [dynamicShelter, setDynamicShelter] = useState(null);
+  const [evaluatingShelter, setEvaluatingShelter] = useState(false);
+
+  // Map Layer Controls
+  const [layersOpen, setLayersOpen] = useState(false);
+  const [baseMap, setBaseMap] = useState('streets');
+  const [cloudLayer, setCloudLayer] = useState(false);
+  const [owmCloudLayer, setOwmCloudLayer] = useState(false);
+  const [rainLayer, setRainLayer] = useState(false);
+  const [cloudTempLayer, setCloudTempLayer] = useState(false);
+  const [waterVapourLayer, setWaterVapourLayer] = useState(false);
+  const [windLayer, setWindLayer] = useState(false);
+  const [windStatus, setWindStatus] = useState({ state: 'unavailable', timestamp: null });
+  const [cloudOpacity, setCloudOpacity] = useState(0.65);
+  const [radarTimestamp, setRadarTimestamp] = useState('latest');
+  const [terrainLayer, setTerrainLayer] = useState(false);
+  const [riskLayer, setRiskLayer] = useState(true);
+  const [shelterLayer, setShelterLayer] = useState(true);
+  const [liveWeather, setLiveWeather] = useState(null);
+  const [broadcastScript, setBroadcastScript] = useState("");
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [dynamicApiRisk, setDynamicApiRisk] = useState(null);
+  const [omForecast, setOmForecast] = useState(null);
+
+  // WMO Code to weather condition string
+  const getWmoCondition = (code) => {
+    const map = {
+      0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+      45: 'Fog', 48: 'Depositing rime fog', 51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',
+      61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain', 71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',
+      80: 'Slight rain showers', 81: 'Moderate rain showers', 82: 'Violent rain showers',
+      95: 'Thunderstorm', 96: 'Thunderstorm with slight hail', 99: 'Thunderstorm with heavy hail'
+    };
+    return map[code] || 'Unknown Conditions';
+  };
+
+
+
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 
-  const allLocations = { ...LOCATION_DATABASE, ...customLocations, ...liveDistricts };
-  const loc = allLocations[selectedId] || LOCATION_DATABASE.gunupur;
+  const alllocations = { ...LOCATION_DATABASE, ...customlocations };
+  const loc = alllocations[selectedId] || LOCATION_DATABASE.gunupur;
 
-  // 1. Initial live synchronization for all monitoring districts across India
+  // Dynamic Risk is now calculated from the detailed forecast below to support ANY location
+  // No longer calling backend /api/risk/ as it only supports predefined locations.
+
+  const displayLoc = dynamicApiRisk ? { ...loc, ...dynamicApiRisk } : loc;
+
+  // Dynamic Safe Shelter Routing
   useEffect(() => {
     let isMounted = true;
-    const syncAllDistricts = async () => {
+    const fetchDynamicShelter = async () => {
+      if (!loc || !loc.center) return;
+      setEvaluatingShelter(true);
+      setDynamicShelter(null);
       try {
-        const keys = Object.keys(LOCATION_DATABASE);
-        const results = await Promise.all(
-          keys.map(k => fetchLiveDistrictWarning(k, LOCATION_DATABASE[k]))
-        );
-        if (isMounted) {
-          const map = {};
-          results.forEach(r => {
-            if (r && r.id) map[r.id] = r;
-          });
-          setLiveDistricts(prev => ({ ...prev, ...map }));
+        const res = await fetch(`http://localhost:8000/api/locations/${loc.id}/safe-shelter?lat=${loc.center[0]}&lng=${loc.center[1]}`);
+        const data = await res.json();
+        if (isMounted && data.status === 'success' && data.data && data.data.safest) {
+          setDynamicShelter(data.data.safest.shelter);
         }
-      } catch (err) {
-        console.warn('[VAYUNET Live] Error syncing live district warnings:', err);
+      } catch (error) {
+        console.error("Safe shelter resolution failed:", error);
+      } finally {
+        if (isMounted) setEvaluatingShelter(false);
       }
     };
-    syncAllDistricts();
-    const interval = setInterval(syncAllDistricts, 35000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  // 2. Fetch live data immediately for selected location if not yet populated
-  useEffect(() => {
-    if (selectedId && (!liveDistricts[selectedId] || !liveDistricts[selectedId].liveObservation)) {
-      const base = allLocations[selectedId] || LOCATION_DATABASE[selectedId];
-      if (base) {
-        fetchLiveDistrictWarning(selectedId, base).then(live => {
-          if (live) {
-            setLiveDistricts(prev => ({ ...prev, [selectedId]: live }));
-          }
-        });
-      }
+    
+    // Only fetch if it's a real location ID (not dynamic GPS which is dyn_...)
+    if (!loc.id.startsWith('dyn_')) {
+      fetchDynamicShelter();
+    } else {
+      setEvaluatingShelter(false);
     }
+    
+    return () => { isMounted = false; };
+  }, [displayLoc?.id, displayLoc?.center[0], displayLoc?.center[1]]);
+  
+  const currentShelter = dynamicShelter || displayLoc.safeShelter;
+
+  useEffect(() => {
+    const fetchTimestamp = () => {
+      fetch('http://localhost:8000/api/warnings/map/timestamps')
+        .then(r => r.json())
+        .then(d => {
+          if (d.radar_timestamp) setRadarTimestamp(d.radar_timestamp);
+        })
+        .catch(e => console.warn('Radar timestamp fetch failed:', e));
+
+      const displayLocId = selectedId;
+      const displayLocObj = alllocations[displayLocId] || LOCATION_DATABASE.gunupur;
+      const displayLocName = displayLocObj ? displayLocObj.name : 'Gunupur';
+
+      if (displayLocId) {
+        setWeatherLoading(true);
+        fetch(`http://localhost:8000/api/weather/imd/current?region=${encodeURIComponent(displayLocName)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.temperature) {
+              setLiveWeather(data);
+            } else {
+              setLiveWeather(null);
+            }
+          })
+          .catch(err => {
+            console.error('Weather fetch error:', err);
+            setLiveWeather(null);
+          })
+          .finally(() => setWeatherLoading(false));
+
+        // Fetch detailed Forecast for ANY location and compute risk + live telemetry
+        if (displayLocObj && displayLocObj.center) {
+          const lat = displayLocObj.center[0];
+          const lon = displayLocObj.center[1];
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=precipitation_probability,weather_code&timezone=Asia/Kolkata`)
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.current) {
+                // Find max precipitation probability for next 12 hours
+                let maxProb = 0;
+                if (data.hourly && data.hourly.precipitation_probability) {
+                  const currentHourIdx = data.hourly.time.findIndex(t => new Date(t).getTime() > Date.now());
+                  if (currentHourIdx >= 0) {
+                    const next12Probs = data.hourly.precipitation_probability.slice(currentHourIdx, currentHourIdx + 12);
+                    maxProb = Math.max(...next12Probs);
+                  }
+                }
+                
+                const conditionStr = getWmoCondition(data.current.weather_code);
+                const currentPrecip = data.current.precipitation;
+                const temp = data.current.temperature_2m;
+                const humidity = data.current.relative_humidity_2m;
+                const windSpeed = data.current.wind_speed_10m;
+                const windDeg = data.current.wind_direction_10m;
+                const pressure = data.current.surface_pressure;
+
+                // Convert wind degrees to compass direction
+                const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+                const windDir = dirs[Math.round(windDeg / 22.5) % 16] || '--';
+                
+                setOmForecast({
+                  condition: conditionStr,
+                  precip: currentPrecip,
+                  precipProb: maxProb
+                });
+
+                // Compute local risk heuristics based on weather conditions
+                let isAffected = false;
+                let riskLevelStr = "SAFE ZONE";
+                let riskClassStr = "risk-safe";
+                let riskColorStr = "#16a34a";
+                let hazardStr = "No Active Severe Warnings";
+                let descStr = `Current conditions: ${conditionStr}. Temperature ${temp}°C, humidity ${humidity}%, wind ${windSpeed} km/h ${windDir}.`;
+
+                // Logic based on WMO codes and precipitation thresholds
+                const code = data.current.weather_code;
+                if (code >= 95) {
+                  isAffected = true;
+                  riskLevelStr = "SEVERE RISK";
+                  riskClassStr = "risk-severe";
+                  riskColorStr = "#dc2626";
+                  hazardStr = "THUNDERSTORM WARNING";
+                  descStr = `Active thunderstorm detected. Temperature ${temp}°C with ${windSpeed} km/h winds. Stay indoors and avoid open areas.`;
+                } else if (currentPrecip > 15.0) {
+                  isAffected = true;
+                  riskLevelStr = "EXTREME RISK";
+                  riskClassStr = "risk-extreme";
+                  riskColorStr = "#991b1b";
+                  hazardStr = "FLASH FLOOD WARNING";
+                  descStr = `Heavy rainfall of ${currentPrecip} mm/h detected. Flash flooding likely in low-lying areas.`;
+                } else if (currentPrecip > 5.0 || [63, 65, 81, 82].includes(code)) {
+                  isAffected = true;
+                  riskLevelStr = "MODERATE RISK";
+                  riskClassStr = "risk-severe";
+                  riskColorStr = "#ea580c";
+                  hazardStr = "HEAVY RAIN WARNING";
+                  descStr = `Moderate to heavy rain (${currentPrecip} mm/h). Use caution while traveling.`;
+                }
+
+                setDynamicApiRisk({
+                  isAffected,
+                  riskLevel: riskLevelStr,
+                  riskClass: riskClassStr,
+                  riskColor: riskColorStr,
+                  hazard: hazardStr,
+                  description: descStr,
+                  liveObservation: {
+                    temp: temp,
+                    rain: currentPrecip,
+                    humidity: humidity,
+                    windSpeed: windSpeed,
+                    windDir: windDir,
+                    pressure: Math.round(pressure * 10) / 10,
+                    lat: lat,
+                    lng: lon,
+                    isLive: true
+                  }
+                });
+              }
+            })
+            .catch(err => console.error('Forecast fetch error:', err));
+        }
+      }
+    };
+
+    fetchTimestamp();
+    const interval = setInterval(fetchTimestamp, 5 * 60 * 1000); // refresh every 5 mins
+    return () => clearInterval(interval);
   }, [selectedId]);
+
+  // Fetch the dynamic broadcast script from backend whenever weather or location changes
+  useEffect(() => {
+    const displayLocObj = alllocations[selectedId] || LOCATION_DATABASE['gunupur'];
+    const currentShelterObj = dynamicShelter || displayLocObj.safeShelter;
+    
+    // Fallback script if backend fetch fails
+    const fallbackScript = `Attention residents of ${displayLocObj.name}, ${displayLocObj.district}. A ${displayLocObj.riskLevel.toLowerCase()} level warning is currently active for ${displayLocObj.hazard}. ${displayLocObj.description}. Please proceed to the nearest safe zone: ${currentShelterObj?.name}.`;
+    
+    fetch('http://localhost:8000/api/weather/broadcast-script', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: displayLocObj.name,
+        district: displayLocObj.district,
+        risk_level: displayLocObj.riskLevel,
+        hazard: displayLocObj.hazard,
+        description: displayLocObj.description,
+        temperature: liveWeather?.temperature || 0.0,
+        rain_mm: liveWeather?.rain_mm || 0.0,
+        wind_speed: liveWeather?.wind_speed || 0.0,
+        shelter_name: currentShelterObj?.name || "",
+        shelter_distance: currentShelterObj?.distance || ""
+      })
+    })
+      .then(res => res.json())
+      .then(data => setBroadcastScript(data.script || fallbackScript))
+      .catch(() => setBroadcastScript(fallbackScript));
+  }, [selectedId, liveWeather, dynamicShelter]);
+
+
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -523,12 +729,12 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
   // Real-time dynamic IST clock for sovereign ticker
   useEffect(() => {
-    const updateClock = () => {
+    const updateCdisplayLock = () => {
       const now = new Date();
       setLiveIstTime(now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST');
     };
-    updateClock();
-    const timer = setInterval(updateClock, 1000);
+    updateCdisplayLock();
+    const timer = setInterval(updateCdisplayLock, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -587,7 +793,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     return () => ctx.revert();
   }, []);
 
-  // Search handler (searches local stations and falls back to Nominatim India geocoding)
+  // Search handler (searches displayLocal stations and falls back to Nominatim India geocoding)
   const handleSearch = async (e) => {
     e?.preventDefault();
     if (!searchQuery.trim()) return;
@@ -595,8 +801,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     const queryLower = query.toLowerCase();
 
     // 1. Check if it matches existing locations in memory
-    const existingKey = Object.keys(allLocations).find((key) => {
-      const item = allLocations[key];
+    const existingKey = Object.keys(alllocations).find((key) => {
+      const item = alllocations[key];
       return (
         item.name.toLowerCase().includes(queryLower) ||
         item.district.toLowerCase().includes(queryLower) ||
@@ -607,11 +813,11 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     if (existingKey) {
       setSelectedId(existingKey);
       setSearchQuery('');
-      showToast(`Switched view to ${allLocations[existingKey].name}`);
+      showToast(`Switched view to ${alllocations[existingKey].name}`);
       return;
     }
 
-    // 2. If not in local list, search OpenStreetMap Nominatim for India
+    // 2. If not in displayLocal list, search OpenStreetMap Nominatim for India
     setIsDetecting(true);
     try {
       const searchRes = await fetch(
@@ -623,9 +829,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           const r = results[0];
           const lat = parseFloat(r.lat);
           const lon = parseFloat(r.lon);
-          const searchedLoc = await resolveLocationData(lat, lon, r.name || query);
+          const searchedLoc = await resolvelocationData(lat, lon, r.name || query);
 
-          setCustomLocations((prev) => ({
+          setCustomlocations((prev) => ({
             ...prev,
             [searchedLoc.id]: searchedLoc
           }));
@@ -644,8 +850,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     showToast(`No location found for "${query}". Try city name or PIN code.`);
   };
 
-  // Use My Location click handler (uses real browser GPS + reverse geocoding)
-  const handleUseMyLocation = () => {
+  // Use My location click handler (uses real browser GPS + reverse geocoding)
+  const handleUseMylocation = () => {
     setIsDetecting(true);
     if (!('geolocation' in navigator)) {
       setIsDetecting(false);
@@ -657,15 +863,15 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
       async (pos) => {
         try {
           const { latitude, longitude } = pos.coords;
-          const userLocation = await resolveLocationData(latitude, longitude, 'My Location');
+          const userlocation = await resolvelocationData(latitude, longitude, 'My location');
 
-          setCustomLocations((prev) => ({
+          setCustomlocations((prev) => ({
             ...prev,
-            [userLocation.id]: userLocation
+            [userlocation.id]: userlocation
           }));
-          setSelectedId(userLocation.id);
+          setSelectedId(userlocation.id);
           setIsDetecting(false);
-          showToast(`📍 Located: ${userLocation.name} (${userLocation.riskLevel})`);
+          showToast(`📍 Located: ${userlocation.name} (${userlocation.riskLevel})`);
         } catch (err) {
           console.error(err);
           setIsDetecting(false);
@@ -682,8 +888,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
   // Share functionality
   const handleShare = () => {
-    const shareTitle = `⚠️ VAYUNET Weather Warning: ${loc.name}`;
-    const shareText = `${loc.isAffected ? '⚠️ SEVERE WEATHER WARNING' : '✅ Safe Status'} for ${loc.name} (${loc.district}): ${loc.hazard}. Check your nearest safe shelter on VAYUNET.`;
+    const shareTitle = `⚠️ VAYUNET Weather Warning: ${displayLoc.name}`;
+    const shareText = `${displayLoc.isAffected ? '⚠️ SEVERE WEATHER WARNING' : '✅ Safe Status'} for ${displayLoc.name} (${displayLoc.district}): ${displayLoc.hazard}. Check your nearest safe shelter on VAYUNET.`;
     const shareUrl = window.location.href;
 
     if (navigator.share) {
@@ -706,7 +912,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
   };
 
   const openGoogleDirections = () => {
-    const dest = `${loc.safeShelter.coords[0]},${loc.safeShelter.coords[1]}`;
+    const dest = `${currentShelter?.coords[0]},${currentShelter?.coords[1]}`;
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${dest}`, '_blank');
   };
 
@@ -715,8 +921,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
     className: 'cp-target-map-pin',
     html: `
       <div style="position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-        <div style="position: absolute; width: 32px; height: 32px; border-radius: 50%; background: ${loc.riskColor}; opacity: 0.25; animation: cpPulse 1.8s infinite;"></div>
-        <div style="position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; border: 3px solid ${loc.riskColor}; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>
+        <div style="position: absolute; width: 32px; height: 32px; border-radius: 50%; background: ${displayLoc.riskColor}; opacity: 0.25; animation: cpPulse 1.8s infinite;"></div>
+        <div style="position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; border: 3px solid ${displayLoc.riskColor}; box-shadow: 0 0 10px rgba(0,0,0,0.35);"></div>
       </div>
     `,
     iconSize: [32, 32],
@@ -817,7 +1023,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           {/* Quick Navigation: Current Page Badge & Outbound Navigation Links */}
           <div className="cp-quick-nav-bar">
             {/* Active Current Page Badge */}
-            <div className="cp-current-page-pill" title="Current Location: Public Severe Weather Warnings">
+            <div className="cp-current-page-pill" title="Current location: Public Severe Weather Warnings">
               <span className="cp-pulse-warning-dot" />
               <span>Public Warnings</span>
             </div>
@@ -898,7 +1104,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             <button 
               type="button" 
               className="cp-locate-btn"
-              onClick={handleUseMyLocation}
+              onClick={handleUseMylocation}
               disabled={isDetecting}
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -908,7 +1114,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 <line x1="12" y1="6" x2="12" y2="2"></line>
                 <line x1="12" y1="22" x2="12" y2="18"></line>
               </svg>
-              {isDetecting ? 'Locating...' : 'Use My Location'}
+              {isDetecting ? 'Locating...' : 'Use My location'}
             </button>
           </form>
 
@@ -923,8 +1129,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           <div className="cp-location-pill-banner">
             <div className="cp-pulse-dot"></div>
             <span>
-              Viewing area: <strong>{loc.name}</strong> ({loc.district}) &mdash;{' '}
-              {loc.isAffected ? '⚠️ Active Alert Zone' : '✅ Nominal Conditions (Safe Zone)'}
+              Viewing area: <strong>{displayLoc.name}</strong> ({displayLoc.district}) &mdash;{' '}
+              {displayLoc.isAffected ? '⚠️ Active Alert Zone' : '✅ Nominal Conditions (Safe Zone)'}
             </span>
           </div>
         </div>
@@ -935,18 +1141,25 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
         {/* Top Grid: Warning Card + Interactive Map */}
         <div className="cp-top-grid">
           {/* Left: Status / Warning Card */}
-          <div className={`cp-warning-card ${loc.riskClass}`}>
+          <div className={`cp-warning-card ${displayLoc.riskClass}`}>
+            {islocationSwitching ? (
+              <div style={{ padding: '60px 20px', textAlign: 'center' }}>
+                <div className="cp-spinner" style={{ margin: '0 auto 16px auto', width: '36px', height: '36px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#38bdf8', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>Evaluating Live VAYUNET Telemetry...</div>
+                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>Executing universal VAYUNET-MTL inference for {displayLoc.name}</div>
+              </div>
+            ) : (
             <div>
               <div className="cp-badge-row">
-                <div className={`cp-risk-badge ${loc.isAffected ? (loc.riskLevel.includes('EXTREME') ? 'red' : 'red') : 'green'}`}>
-                  {loc.isAffected ? (
+                <div className={`cp-risk-badge ${displayLoc.isAffected ? (displayLoc.riskLevel.includes('EXTREME') ? 'red' : 'red') : 'green'}`}>
+                  {displayLoc.isAffected ? (
                     <>
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                         <line x1="12" y1="9" x2="12" y2="13"></line>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                       </svg>
-                      {loc.riskLevel}
+                      {displayLoc.riskLevel}
                     </>
                   ) : (
                     <>
@@ -954,69 +1167,145 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         <polyline points="9 12 11 14 15 10"></polyline>
                       </svg>
-                      {loc.riskLevel}
+                      {displayLoc.riskLevel}
                     </>
                   )}
                 </div>
 
-                <div className={`cp-lead-pill ${loc.isAffected ? '' : 'green'}`}>
-                  {loc.timeframe}
+                <div className={`cp-lead-pill ${displayLoc.isAffected ? '' : 'green'}`}>
+                  {displayLoc.timeframe}
                 </div>
                 <ReadAloudButton 
-                  text={`Public Weather Warning. Location: ${loc.name}, ${loc.district}. Status: ${loc.riskLevel}. Hazard: ${loc.hazard}. ${loc.description}. Designated safe shelter: ${loc.safeShelter.name} at ${loc.safeShelter.address}.`}
+                  text={broadcastScript}
                   lang={language}
-                  label="Listen to public weather warning (Digital India Bhashini Voice)" 
+                  label="Listen to public weather warning" 
                   forceShow={true}
                 />
               </div>
 
-              <h2 className="cp-warning-loc-title">{loc.name}</h2>
-              <p className="cp-warning-loc-sub">{loc.district}</p>
+              <h2 className="cp-warning-loc-title">{displayLoc.name}</h2>
+              <p className="cp-warning-loc-sub">{displayLoc.district}</p>
 
               <div className="cp-hazard-name">
-                {loc.isAffected ? (
+                {displayLoc.isAffected ? (
                   <>
-                    <span className="highlight">{loc.hazard.split(' + ')[0]}</span>
-                    {loc.hazard.includes(' + ') && ` + ${loc.hazard.split(' + ')[1]}`}
+                    <span className="highlight">{displayLoc.hazard.split(' + ')[0]}</span>
+                    {displayLoc.hazard.includes(' + ') && ` + ${displayLoc.hazard.split(' + ')[1]}`}
                   </>
                 ) : (
-                  <span style={{ color: '#16a34a' }}>{loc.hazard}</span>
+                  <span style={{ color: '#16a34a' }}>{displayLoc.hazard}</span>
                 )}
               </div>
 
-              <p className="cp-hazard-desc">{loc.description}</p>
+              <p className="cp-hazard-desc">{displayLoc.description}</p>
+
+              {/* VAYUNET Hazard Breakdown */}
+              <div style={{ marginTop: '16px', padding: '12px', background: 'var(--card-bg-2)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                <h4 style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>VAYUNET Risk Breakdown</h4>
+                {displayLoc.vayunetHazards ? Object.entries(displayLoc.vayunetHazards).map(([hName, hObj]) => (
+                  <div key={hName} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '14px', textTransform: 'capitalize' }}>
+                    <span>{hName.replace('_', ' ')}</span>
+                    <span style={{ fontWeight: 'bold', color: hObj.risk_level === 'EXTREME' ? '#dc2626' : hObj.risk_level === 'HIGH' ? '#ea580c' : hObj.risk_level === 'MODERATE' ? '#ca8a04' : '#16a34a' }}>
+                      {hObj.risk_level}
+                    </span>
+                  </div>
+                )) : (
+                  <div style={{ fontSize: '14px', color: '#94a3b8' }}>Risk inference unavailable</div>
+                )}
+              </div>
 
               {/* LIVE REAL-TIME TELEMETRY STRIP (weather.indianapi.in & IMD Network) */}
               <div className="cp-live-telemetry-strip">
                 <div className="cp-telemetry-chip">
                   <span className="chip-label">🌡️ Temperature</span>
-                  <span className="chip-val">{loc.liveObservation?.temp ?? 27}°C</span>
+                  <span className="chip-val">{displayLoc.liveObservation?.temp ?? '--'}°C</span>
                 </div>
                 <div className="cp-telemetry-chip">
                   <span className="chip-label">🌧️ Rainfall Rate</span>
-                  <span className="chip-val" style={{ color: (loc.liveObservation?.rain > 0) ? '#38bdf8' : '#e2e8f0' }}>
-                    {loc.liveObservation?.rain ?? 0} mm/h
+                  <span className="chip-val" style={{ color: (displayLoc.liveObservation?.rain > 0) ? '#38bdf8' : '#e2e8f0' }}>
+                    {displayLoc.liveObservation?.rain ?? 0} mm/h
                   </span>
                 </div>
                 <div className="cp-telemetry-chip">
                   <span className="chip-label">💧 Humidity</span>
-                  <span className="chip-val">{loc.liveObservation?.humidity ?? 72}%</span>
+                  <span className="chip-val">{displayLoc.liveObservation?.humidity ?? '--'}%</span>
                 </div>
                 <div className="cp-telemetry-chip">
                   <span className="chip-label">💨 Wind</span>
-                  <span className="chip-val">{loc.liveObservation?.windDir ?? 'SW'} {loc.liveObservation?.windSpeed ?? 12} km/h</span>
+                  <span className="chip-val">{displayLoc.liveObservation?.windSpeed ?? '--'} km/h · {displayLoc.liveObservation?.windDir ?? '--'}</span>
                 </div>
                 <div className="cp-telemetry-chip">
                   <span className="chip-label">🧭 Barometer</span>
-                  <span className="chip-val">{loc.liveObservation?.pressure ?? 1008} hPa</span>
+                  <span className="chip-val">{displayLoc.liveObservation?.pressure ?? '--'} hPa</span>
                 </div>
                 <div className="cp-telemetry-chip live-source">
-                  <span className="live-stream-badge">LIVE IMD/AWS STREAM</span>
+                  <span className={displayLoc.liveObservation?.isLive ? "live-stream-badge" : "stale-stream-badge"} style={{ backgroundColor: displayLoc.liveObservation?.isLive ? 'rgba(239, 68, 68, 0.15)' : 'rgba(148, 163, 184, 0.15)', color: displayLoc.liveObservation?.isLive ? '#f87171' : '#cbd5e1' }}>
+                    {displayLoc.liveObservation?.isLive ? '● LIVE' : '● STALE'}
+                  </span>
+                </div>
+              </div>
+
+              {/* DETAILED FORECAST */}
+              {omForecast && (
+                <div style={{ marginTop: '16px', padding: '14px', background: 'var(--card-bg-2)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                    Detailed Weather Forecast
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '11px', color: '#94a3b8' }}>Current Condition</span>
+                      <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-color)' }}>
+                        {omForecast.condition}
+                      </span>
+                    </div>
+                    
+                    <div style={{ width: '1px', height: '30px', background: 'var(--border-color)' }} />
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '11px', color: '#94a3b8' }}>Precipitation</span>
+                      <span style={{ fontSize: '15px', fontWeight: '600', color: omForecast.precip > 0 ? '#38bdf8' : 'var(--text-color)' }}>
+                        {omForecast.precip > 0 ? `${omForecast.precip} mm (Raining)` : 'None (No Rain)'}
+                      </span>
+                    </div>
+
+                    <div style={{ width: '1px', height: '30px', background: 'var(--border-color)' }} />
+
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '11px', color: '#94a3b8' }}>Chance of Rain (Next 12h)</span>
+                      <span style={{ fontSize: '15px', fontWeight: '600', color: omForecast.precipProb > 50 ? '#38bdf8' : 'var(--text-color)' }}>
+                        {omForecast.precipProb}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* DATA / AI PROVENANCE STRIP */}
+              <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
+                  <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Live Weather</div>
+                  <div style={{ fontWeight: '600' }}>Updated {displayLoc.liveObservation?.isLive ? 'moments ago' : 'recently'}</div>
+                </div>
+                <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
+                  <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Model</div>
+                  <div style={{ fontWeight: '600' }}>
+                    {displayLoc.modelProvenance?.name 
+                      ? `${displayLoc.modelProvenance.name.replace(/-$/, '')}-${displayLoc.modelProvenance.version || 'V3'}`.replace(/--+/g, '-').replace(/-V3-V3/g, '-V3') 
+                      : 'VAYUNET-MTL-V3'}
+                  </div>
+                </div>
+                <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
+                  <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Inference</div>
+                  <div style={{ fontWeight: '600', color: displayLoc.modelProvenance?.inference_executed ? '#16a34a' : '#94a3b8' }}>{displayLoc.modelProvenance?.inference_executed ? 'Executed' : 'Unavailable'}</div>
+                </div>
+                <div style={{ padding: '8px 12px', background: 'var(--card-bg-2)', borderRadius: '6px', border: '1px solid var(--border-color)', fontSize: '12px', flex: '1' }}>
+                  <div style={{ color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Updated</div>
+                  <div style={{ fontWeight: '600' }}>{displayLoc.modelProvenance?.inference_timestamp ? new Date(displayLoc.modelProvenance.inference_timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ' IST' : '--'}</div>
                 </div>
               </div>
 
               {/* Safe State Alert helper if user is not in danger zone */}
-              {!loc.isAffected && (
+              {!displayLoc.isAffected && (
                 <div className="cp-safe-state-box">
                   <div className="cp-safe-icon">🛡️</div>
                   <div>
@@ -1031,7 +1320,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
               {/* Action Buttons */}
               <div className="cp-warning-actions">
-                {loc.isAffected ? (
+                {displayLoc.isAffected ? (
                   <>
                     <button 
                       className="cp-btn-primary-action"
@@ -1082,42 +1371,12 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 </button>
               </div>
 
-              {/* Quick links to active affected zones if safe */}
-              {!loc.isAffected && (
-                <div className="cp-active-zones-banner">
-                  <div className="cp-active-zones-title">
-                    <span>⚠️</span> Current Active Warning Zones in India:
-                  </div>
-                  <div className="cp-active-zones-list">
-                    {(() => {
-                      const activeZones = Object.keys(LOCATION_DATABASE).filter(k => {
-                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
-                        return item.isAffected;
-                      });
-
-                      if (activeZones.length === 0) {
-                        return <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>None</span>;
-                      }
-
-                      return activeZones.slice(0, 6).map(k => {
-                        const item = liveDistricts[k] || LOCATION_DATABASE[k];
-                        const isExtreme = item.riskLevel?.includes('EXTREME');
-                        const icon = isExtreme ? '🔴' : '🟠';
-                        return (
-                          <button key={k} className="cp-zone-chip" onClick={() => setSelectedId(k)}>
-                            {icon} {item.name} {item.liveObservation ? `(${item.liveObservation.temp}°C, ${item.liveObservation.rain} mm/h)` : ''}
-                          </button>
-                        );
-                      });
-                    })()}
-                  </div>
-                </div>
-              )}
             </div>
+            )}
 
             <div className="cp-warning-footer">
-              <span>{loc.lastUpdatedText || `Last updated: ${liveIstTime}`}</span>
-              <span>{loc.dataSourceText || 'Source: VAYUNET Live Telemetry (weather.indianapi.in) ⓘ'}</span>
+              <span>{displayLoc.lastUpdatedText || `Last updated: ${liveIstTime}`}</span>
+              <span>{displayLoc.dataSourceText || 'LIVE WEATHER ⓘ'}</span>
             </div>
           </div>
 
@@ -1125,26 +1384,172 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
           <div className="cp-map-card" id="cp-leaflet-map">
             <div className="cp-map-viewport">
 
+              {/* LAYERS BUTTON & PANEL */}
+              <div className="cp-layers-container">
+                <button 
+                  className="cp-layers-btn"
+                  onClick={() => setLayersOpen(!layersOpen)}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                  LAYERS
+                </button>
+
+                {layersOpen && (
+                  <div className="cp-layers-panel">
+                    <div className="cp-layers-header">MAP LAYERS</div>
+                    
+                    <div className="cp-layers-group">
+                      <div className="cp-layers-grouptitle">BASE</div>
+                      <label className="cp-radio-label">
+                        <input type="radio" checked={baseMap === 'streets'} onChange={() => setBaseMap('streets')} />
+                        Streets
+                      </label>
+                      <label className="cp-radio-label">
+                        <input type="radio" checked={baseMap === 'satellite'} onChange={() => setBaseMap('satellite')} />
+                        Satellite
+                      </label>
+                    </div>
+
+                    <div className="cp-layers-group">
+                      <div className="cp-layers-grouptitle">WEATHER</div>
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={owmCloudLayer} onChange={(e) => setOwmCloudLayer(e.target.checked)} />
+                        Cloud Cover
+                      </label>
+                      {owmCloudLayer && (
+                        <div className="cp-opacity-slider">
+                          <span>Opacity</span>
+                          <input 
+                            type="range" 
+                            min="0" max="100" 
+                            value={cloudOpacity * 100} 
+                            onChange={(e) => setCloudOpacity(e.target.value / 100)} 
+                          />
+                        </div>
+                      )}
+                      
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={rainLayer} onChange={(e) => setRainLayer(e.target.checked)} />
+                        Rainfall
+                      </label>
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={windLayer} onChange={(e) => setWindLayer(e.target.checked)} />
+                        Wind
+                      </label>
+                    </div>
+
+                    <div className="cp-layers-group">
+                      <div className="cp-layers-grouptitle">TERRAIN</div>
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={terrainLayer} onChange={(e) => setTerrainLayer(e.target.checked)} />
+                        Elevation / Terrain
+                      </label>
+                    </div>
+
+                    <div className="cp-layers-group">
+                      <div className="cp-layers-grouptitle">VAYUNET</div>
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={riskLayer} onChange={(e) => setRiskLayer(e.target.checked)} />
+                        Hazard Risk Zones
+                      </label>
+                    </div>
+
+                    <div className="cp-layers-group">
+                      <div className="cp-layers-grouptitle">SAFETY</div>
+                      <label className="cp-checkbox-label">
+                        <input type="checkbox" checked={shelterLayer} onChange={(e) => setShelterLayer(e.target.checked)} />
+                        Shelters
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Dynamic Legend for Weather Layers */}
+              <div className="cp-weather-legends">
+                {owmCloudLayer && (
+                  <div className="cp-weather-legend-box">
+                    <strong>CLOUD COVER</strong><br/>
+                    <span className="cp-live-dot">● LIVE</span> {new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}
+                  </div>
+                )}
+                {rainLayer && (
+                  <div className="cp-weather-legend-box">
+                    <strong>RAINFALL</strong><br/>
+                    <span className="cp-live-dot">● LIVE</span> {radarTimestamp ? new Date(radarTimestamp * 1000).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) : 'Loading...'}
+                  </div>
+                )}
+                {windLayer && (
+                  <div className="cp-weather-legend-box">
+                    <strong>WIND SPEED</strong><br/>
+                    {windStatus.state === 'unavailable' ? (
+                      <span style={{color: '#ef4444'}}>Wind data unavailable</span>
+                    ) : (
+                      <>
+                        <div style={{display: 'flex', gap: '2px', height: '6px', width: '120px', marginTop: '4px', marginBottom: '4px', background: 'linear-gradient(to right, #3b82f6, #2dd4bf, #facc15, #f97316, #ef4444)', borderRadius: '3px'}}></div>
+                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#64748b', width: '120px', marginBottom: '2px'}}>
+                          <span>0</span><span>20</span><span>40</span><span>60+ km/h</span>
+                        </div>
+                        <span className="cp-live-dot">● LIVE</span> {windStatus.timestamp ? new Date(windStatus.timestamp).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) : 'Loading...'}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
+
               <MapContainer
-                center={loc.center}
+                center={displayLoc.center}
                 zoom={11}
                 scrollWheelZoom={true}
                 style={{ width: '100%', height: '100%' }}
                 zoomControl={false}
               >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution="&copy; OpenStreetMap contributors"
-                />
+                {baseMap === 'streets' && (
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" zIndex={1} />
+                )}
+                {baseMap === 'satellite' && (
+                  <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" zIndex={1} />
+                )}
+                
+                {terrainLayer && (
+                  <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" opacity={0.5} zIndex={2} />
+                )}
+                
+                {owmCloudLayer && (
+                  <TileLayer 
+                    url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${import.meta.env.VITE_OPENWEATHER_API_KEY || ''}`} 
+                    opacity={cloudOpacity} 
+                    zIndex={3}
+                    maxNativeZoom={9}
+                    maxZoom={18}
+                  />
+                )}
+                
+                <WindOverlay enabled={windLayer} onDataStatus={(state, ts) => setWindStatus({ state, timestamp: ts })} />
+                
+                {rainLayer && (
+                  <TileLayer 
+                    url={`http://localhost:8000/api/warnings/map/tiles/rainfall/{z}/{x}/{y}?time_param=${radarTimestamp}`}
+                    opacity={0.7} 
+                    zIndex={4}
+                    maxNativeZoom={12}
+                    maxZoom={18}
+                  />
+                )}
 
-                <MapFlyController center={loc.center} zoom={loc.isAffected ? 12 : 10} />
+                <MapFlyController center={displayLoc.center} zoom={displayLoc.isAffected ? 12 : 10} />
 
                 {/* Concentric Risk Heat Zones if affected */}
-                {loc.isAffected && (
+                {(displayLoc.isAffected && riskLayer) && (
                   <>
                     {/* Outermost: Advisory Blue */}
                     <Circle
-                      center={loc.center}
+                      center={displayLoc.center}
                       radius={12000}
                       pathOptions={{
                         color: '#3b82f6',
@@ -1156,7 +1561,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     />
                     {/* Outer: Moderate Yellow */}
                     <Circle
-                      center={loc.center}
+                      center={displayLoc.center}
                       radius={8500}
                       pathOptions={{
                         color: '#eab308',
@@ -1167,7 +1572,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     />
                     {/* Mid: High Orange */}
                     <Circle
-                      center={loc.center}
+                      center={displayLoc.center}
                       radius={5000}
                       pathOptions={{
                         color: '#f97316',
@@ -1178,7 +1583,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     />
                     {/* Core: Extreme Red */}
                     <Circle
-                      center={loc.center}
+                      center={displayLoc.center}
                       radius={2800}
                       pathOptions={{
                         color: '#dc2626',
@@ -1190,9 +1595,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                   </>
                 )}
 
-                {/* Safe Shelter Marker */}
+                {shelterLayer && currentShelter && (
                 <Marker
-                  position={loc.safeShelter.coords}
+                  position={currentShelter?.coords}
                   icon={L.divIcon({
                     className: 'cp-shelter-marker',
                     html: `
@@ -1207,8 +1612,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                   <Popup>
                     <div style={{ padding: '4px' }}>
                       <strong style={{ color: '#16a34a' }}>🏛️ Designated Safe Shelter</strong>
-                      <div style={{ fontWeight: 700, fontSize: '13px', marginTop: '2px' }}>{loc.safeShelter.name}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>{loc.safeShelter.address}</div>
+                      <div style={{ fontWeight: 700, fontSize: '13px', marginTop: '2px' }}>{currentShelter?.name}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b' }}>{currentShelter?.address}</div>
                       <button 
                         onClick={openGoogleDirections}
                         style={{ marginTop: '6px', background: '#0284c7', color: '#fff', border: 'none', borderRadius: '4px', padding: '4px 8px', fontSize: '11px', cursor: 'pointer' }}
@@ -1218,14 +1623,15 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                     </div>
                   </Popup>
                 </Marker>
+                )}
 
-                {/* Central Location Pin */}
-                <Marker position={loc.center} icon={targetPinIcon}>
+                {/* Central location Pin */}
+                <Marker position={[displayLoc.liveObservation?.lat ?? displayLoc.center[0], displayLoc.liveObservation?.lng ?? displayLoc.center[1]]} icon={targetPinIcon}>
                   <Popup>
                     <div>
-                      <strong>{loc.name}</strong>
-                      <div>{loc.hazard}</div>
-                      <div style={{ fontSize: '11px', color: loc.riskColor, fontWeight: 700 }}>{loc.riskLevel}</div>
+                      <strong>{displayLoc.name}</strong>
+                      <div>{displayLoc.hazard}</div>
+                      <div style={{ fontSize: '11px', color: displayLoc.riskColor, fontWeight: 700 }}>{displayLoc.riskLevel}</div>
                     </div>
                   </Popup>
                 </Marker>
@@ -1283,15 +1689,15 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             <ul className="cp-means-list">
               <li className="cp-means-item">
                 <span className="cp-means-icon">👤</span>
-                <span>{loc.isAffected ? 'Flash flooding in low-lying areas' : 'Normal water flow in rivers and local drains'}</span>
+                <span>{displayLoc.isAffected ? 'Flash flooding in low-lying areas' : 'Normal water flow in rivers and local drains'}</span>
               </li>
               <li className="cp-means-item">
                 <span className="cp-means-icon">〰️</span>
-                <span>{loc.isAffected ? 'Sudden rises in streams and rivers' : 'Streams operating within seasonal bounds'}</span>
+                <span>{displayLoc.isAffected ? 'Sudden rises in streams and rivers' : 'Streams operating within seasonal bounds'}</span>
               </li>
               <li className="cp-means-item">
                 <span className="cp-means-icon">⚠️</span>
-                <span>{loc.isAffected ? 'Road closures and unsafe travel' : 'Standard transit routes fully operational'}</span>
+                <span>{displayLoc.isAffected ? 'Road closures and unsafe travel' : 'Standard transit routes fully operational'}</span>
               </li>
             </ul>
           </div>
@@ -1304,20 +1710,20 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             </div>
             <ul className="cp-steps-list">
               <li className="cp-step-item">
-                <div className="cp-step-num" style={{ background: loc.isAffected ? '#dc2626' : '#16a34a' }}>1</div>
-                <span>{loc.isAffected ? 'Move to higher and safer ground' : 'Keep emergency numbers saved'}</span>
+                <div className="cp-step-num" style={{ background: displayLoc.isAffected ? '#dc2626' : '#16a34a' }}>1</div>
+                <span>{displayLoc.isAffected ? 'Move to higher and safer ground' : 'Keep emergency numbers saved'}</span>
               </li>
               <li className="cp-step-item">
-                <div className="cp-step-num" style={{ background: loc.isAffected ? '#dc2626' : '#16a34a' }}>2</div>
-                <span>{loc.isAffected ? 'Avoid rivers, streams and low-lying roads' : 'Charge power banks and mobile devices'}</span>
+                <div className="cp-step-num" style={{ background: displayLoc.isAffected ? '#dc2626' : '#16a34a' }}>2</div>
+                <span>{displayLoc.isAffected ? 'Avoid rivers, streams and low-lying roads' : 'Charge power banks and mobile devices'}</span>
               </li>
               <li className="cp-step-item">
-                <div className="cp-step-num" style={{ background: loc.isAffected ? '#dc2626' : '#16a34a' }}>3</div>
-                <span>{loc.isAffected ? 'Do not travel unless necessary' : 'Check regional warnings before traveling'}</span>
+                <div className="cp-step-num" style={{ background: displayLoc.isAffected ? '#dc2626' : '#16a34a' }}>3</div>
+                <span>{displayLoc.isAffected ? 'Do not travel unless necessary' : 'Check regional warnings before traveling'}</span>
               </li>
               <li className="cp-step-item">
-                <div className="cp-step-num" style={{ background: loc.isAffected ? '#dc2626' : '#16a34a' }}>4</div>
-                <span>{loc.isAffected ? 'Follow official instructions' : 'Stay tuned to official weather advisories'}</span>
+                <div className="cp-step-num" style={{ background: displayLoc.isAffected ? '#dc2626' : '#16a34a' }}>4</div>
+                <span>{displayLoc.isAffected ? 'Follow official instructions' : 'Stay tuned to official weather advisories'}</span>
               </li>
             </ul>
           </div>
@@ -1330,8 +1736,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               <span className="cp-card-badge">Verified Shelter</span>
             </div>
 
-            <h4 className="cp-safe-shelter-name">{loc.safeShelter.name}</h4>
-            <div className="cp-safe-shelter-dist">{loc.safeShelter.distance}</div>
+            <h4 className="cp-safe-shelter-name">{currentShelter?.name}</h4>
+            <div className="cp-safe-shelter-dist">{currentShelter?.distance}</div>
 
             <div className="cp-shelter-actions">
               <button className="cp-btn-directions" onClick={openGoogleDirections}>
@@ -1361,9 +1767,9 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               </span>
             </div>
 
-            {loc.nearbyWarnings.length > 0 ? (
+            {displayLoc.nearbyWarnings.length > 0 ? (
               <div className="cp-nearby-pills-row">
-                {loc.nearbyWarnings.map((nw, i) => (
+                {displayLoc.nearbyWarnings.map((nw, i) => (
                   <div 
                     key={i} 
                     className="cp-nearby-pill-card"
@@ -1589,7 +1995,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
               <div className="cp-share-options">
                 <a 
                   className="cp-share-btn whatsapp"
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`⚠️ VAYUNET ALERT for ${loc.name} (${loc.district}): ${loc.hazard}. Read official warning & safe shelter details: ${window.location.href}`)}`}
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`⚠️ VAYUNET ALERT for ${displayLoc.name} (${displayLoc.district}): ${displayLoc.hazard}. Read official warning & safe shelter details: ${window.location.href}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setShareModalOpen(false)}
@@ -1599,7 +2005,7 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
 
                 <a 
                   className="cp-share-btn twitter"
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚠️ Emergency Weather Warning for ${loc.name} (${loc.district}): ${loc.hazard}. Check nearest safe location via VAYUNET: ${window.location.href}`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚠️ Emergency Weather Warning for ${displayLoc.name} (${displayLoc.district}): ${displayLoc.hazard}. Check nearest safe location via VAYUNET: ${window.location.href}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setShareModalOpen(false)}
@@ -1651,8 +2057,8 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <span style={{ background: '#dc2626', color: '#fff', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '12px', flexShrink: 0 }}>3</span>
                   <div>
-                    <strong style={{ fontSize: '14px', color: '#0f172a' }}>Head to {loc.safeShelter.name}</strong>
-                    <p style={{ margin: '2px 0 0 0', fontSize: '12.5px', color: '#64748b' }}>Located {loc.safeShelter.distance}. Equipped with power backup, clean water, and SDRF contact.</p>
+                    <strong style={{ fontSize: '14px', color: '#0f172a' }}>Head to {currentShelter?.name}</strong>
+                    <p style={{ margin: '2px 0 0 0', fontSize: '12.5px', color: '#64748b' }}>Located {currentShelter?.distance}. Equipped with power backup, clean water, and SDRF contact.</p>
                   </div>
                 </div>
 
@@ -1697,16 +2103,16 @@ export default function CitizenPortal({ onBackHome, onEnterPortal }) {
             </div>
             <div className="cp-modal-body">
               <div style={{ marginBottom: '16px' }}>
-                <h4 style={{ fontSize: '18px', color: '#0f172a', margin: '0 0 4px 0' }}>{loc.safeShelter.name}</h4>
-                <div style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>{loc.safeShelter.distance}</div>
+                <h4 style={{ fontSize: '18px', color: '#0f172a', margin: '0 0 4px 0' }}>{currentShelter?.name}</h4>
+                <div style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>{currentShelter?.distance}</div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#334155' }}>
-                <div><strong>Address:</strong> {loc.safeShelter.address}</div>
-                <div><strong>Elevation:</strong> {loc.safeShelter.elevation}</div>
-                <div><strong>Authorized Capacity:</strong> {loc.safeShelter.capacity}</div>
-                <div><strong>Available Facilities:</strong> {loc.safeShelter.facilities}</div>
-                <div><strong>Helpline:</strong> <span style={{ color: '#0284c7', fontWeight: 700 }}>{loc.safeShelter.contact}</span></div>
+                <div><strong>Address:</strong> {currentShelter?.address}</div>
+                <div><strong>Elevation:</strong> {currentShelter?.elevation}</div>
+                <div><strong>Authorized Capacity:</strong> {currentShelter?.capacity}</div>
+                <div><strong>Available Facilities:</strong> {currentShelter?.facilities}</div>
+                <div><strong>Helpline:</strong> <span style={{ color: '#0284c7', fontWeight: 700 }}>{currentShelter?.contact}</span></div>
               </div>
 
               <div style={{ marginTop: '22px', display: 'flex', gap: '12px' }}>

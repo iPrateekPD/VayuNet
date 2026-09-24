@@ -124,10 +124,10 @@ export default function TacticalNowcastView({ showToast, onNavigateTab, globalSe
       setConnectionStatus('syncing');
       try {
         const locId = sectorIdMap[selectedSector] || selectedSector.split(',')[0].toLowerCase().trim();
-        const data = await nowcastApi.getNowcastByLocation(locId, leadTime);
+        const data = await nowcastApi.getNowcastByLocation(locId, selectedStep);
         if (data) {
           setAiPredictions(data);
-          setConnectionStatus(data.status === 'fallback' ? 'fallback' : 'live');
+          setConnectionStatus(data.status || 'live');
         }
       } catch (e) {
         console.error("AI inference error", e);
@@ -215,6 +215,7 @@ export default function TacticalNowcastView({ showToast, onNavigateTab, globalSe
             {connectionStatus === 'live' && <span className="tac-clean-live-dot" />}
             {connectionStatus === 'live' && <span style={{ color: '#22c55e', fontWeight: 700 }}>Live Sync</span>}
             
+
             {connectionStatus === 'fallback' && <span className="tac-clean-live-dot" style={{ backgroundColor: '#ef4444', animation: 'none' }} />}
             {connectionStatus === 'fallback' && <span style={{ color: '#ef4444', fontWeight: 700 }}>Offline (Mock Data)</span>}
           </div>

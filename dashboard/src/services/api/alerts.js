@@ -1,16 +1,17 @@
 import { apiClient } from './client';
-import { MOCK_ALERTS } from '../../data/alertsMockData';
+import { SHARED_ALERTS } from '../../data/sharedEventData';
 
-/**
- * Alerts Service Adapter
- */
 export const alertsApi = {
   getActiveAlerts: async () => {
+    if (import.meta.env.VITE_DEMO_MODE === 'true') {
+      return { status: 'live', data: SHARED_ALERTS };
+    }
+
     try {
       return await apiClient.get('/api/alerts/active');
     } catch (error) {
       console.warn('Falling back to mock data for active alerts:', error);
-      return { status: 'fallback', data: MOCK_ALERTS };
+      return { status: 'fallback', data: SHARED_ALERTS };
     }
   }
 };
